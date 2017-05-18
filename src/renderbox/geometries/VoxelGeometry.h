@@ -29,6 +29,7 @@ namespace renderbox {
 
         std::unordered_map<int, SparseVoxelChunkPlane *> voxelChunkPlanes;
 
+        void addMarchingCube(int x, int y, int z, float isolevel);
         void addCube(int x, int y, int z);
 
     public:

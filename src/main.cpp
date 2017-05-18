@@ -66,11 +66,9 @@ void update() {
     testCube->visible = false;
     if (cameraRay->intersectObject(terrain, worldPositions)) {
         renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry();
-        glm::vec3 testLocation = floor(worldPositions[0] - cameraRay->getDirection() * 0.05f);
-        if (!terrainGeometry->isOccupied(testLocation)) {
-            testCube->visible = true;
-             testCube->setTranslation(testLocation + glm::vec3(0.5f));
-        }
+        glm::vec3 testLocation = floor(worldPositions[0] + glm::vec3(0.5f));
+        testCube->visible = true;
+        testCube->setTranslation(testLocation);
     }
 
     // Camera
@@ -109,10 +107,19 @@ void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
             if (cameraRay->intersectObject(terrain, worldPositions)) {
                 glm::vec3 objectPosition = floor(renderbox::dehomogenize(
                         glm::inverse(terrain->getWorldMatrix())
-                        * glm::vec4(worldPositions[0] - cameraRay->getDirection() * 0.05f, 1.0f)));
+                        * glm::vec4(worldPositions[0] + glm::vec3(0.5f), 1.0f)));
 
                 renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry();
-                terrainGeometry->setOccupancy(objectPosition, 1.0f);
+
+                terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, 0, 0), 1.0f);
+                terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, 0, 0), 1.0f);
+                terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, -1, 0), 1.0f);
+                terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, -1, 0), 1.0f);
+                terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, 0, -1), 1.0f);
+                terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, 0, -1), 1.0f);
+                terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, -1, -1), 1.0f);
+                terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, -1, -1), 1.0f);
+
                 terrainGeometry->updateGeometry(isolevel);
                 renderer->loadObject(terrain);
             }
