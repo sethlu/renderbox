@@ -11,7 +11,7 @@ renderbox::Object *cameraRig;
 renderbox::Mesh *terrain;
 renderbox::Mesh *testCube;
 
-double cameraDistance = 20;
+double cameraDistance = 40;
 double cameraAngle = glm::radians(-90.0f);
 double cameraAngularVelocity = 0.0f;
 
@@ -27,8 +27,8 @@ void init() {
 
     // Voxel terrain
     renderbox::VoxelGeometry *voxelGeometry = new renderbox::VoxelGeometry();
-    for (int x = -4; x < 4; ++x) {
-        for (int y = -4; y < 4; ++y) {
+    for (int x = -32; x < 32; ++x) {
+        for (int y = -32; y < 32; ++y) {
             voxelGeometry->setOccupancy(x, y, 0, 1.0f);
         }
     }
@@ -165,7 +165,7 @@ int main(int argc, char **argv) {
         double currentTime = glfwGetTime();
         ++nFrames;
         if (currentTime - lastTime >= 1.0){
-            // fprintf(stdout, "%.1f ms/frame\t%d fps\n", 1000.0 / double(nFrames), nFrames);
+            fprintf(stdout, "%.1f ms/frame\t%d fps\n", 1000.0 / double(nFrames), nFrames);
             nFrames = 0;
             lastTime = currentTime;
         }

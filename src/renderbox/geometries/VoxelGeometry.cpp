@@ -23,19 +23,19 @@ namespace renderbox {
         int iy = remainder(y, VOXEL_CHUNK_DIMENSION);
         int iz = remainder(z, VOXEL_CHUNK_DIMENSION);
 
-        auto it0 = voxelChunkPlanes.find(cy);
+        auto it0 = voxelChunkPlanes.find(cz);
         if (it0 == voxelChunkPlanes.end()) {
             return false;
         }
         SparseVoxelChunkPlane *chunkPlane = it0->second;
 
-        auto it1 = chunkPlane->voxelChunkLines.find(cx);
+        auto it1 = chunkPlane->voxelChunkLines.find(cy);
         if (it1 == chunkPlane->voxelChunkLines.end()) {
             return false;
         }
         SparseVoxelChunkList *chunkList = it1->second;
 
-        auto it2 = chunkList->voxelChunks.find(cz);
+        auto it2 = chunkList->voxelChunks.find(cx);
         if (it2 == chunkList->voxelChunks.end()) {
             return false;
         }
@@ -66,29 +66,32 @@ namespace renderbox {
         int iy = remainder(y, VOXEL_CHUNK_DIMENSION);
         int iz = remainder(z, VOXEL_CHUNK_DIMENSION);
 
-        auto it0 = voxelChunkPlanes.find(cy);
+        auto it0 = voxelChunkPlanes.find(cz);
         SparseVoxelChunkPlane *chunkPlane;
         if (it0 == voxelChunkPlanes.end()) {
             chunkPlane = new SparseVoxelChunkPlane();
-            voxelChunkPlanes[cy] = chunkPlane;
+            chunkPlane->index = cz;
+            voxelChunkPlanes[cz] = chunkPlane;
         } else {
             chunkPlane = it0->second;
         }
 
-        auto it1 = chunkPlane->voxelChunkLines.find(cx);
+        auto it1 = chunkPlane->voxelChunkLines.find(cy);
         SparseVoxelChunkList *chunkList;
         if (it1 == chunkPlane->voxelChunkLines.end()) {
             chunkList = new SparseVoxelChunkList();
-            chunkPlane->voxelChunkLines[cx] = chunkList;
+            chunkList->index = cy;
+            chunkPlane->voxelChunkLines[cy] = chunkList;
         } else {
             chunkList = it1->second;
         }
 
-        auto it2 = chunkList->voxelChunks.find(cz);
+        auto it2 = chunkList->voxelChunks.find(cx);
         VoxelChunk *voxelChunk;
         if (it2 == chunkList->voxelChunks.end()) {
             voxelChunk = new VoxelChunk();
-            chunkList->voxelChunks[cz] = voxelChunk;
+            voxelChunk->index = cx;
+            chunkList->voxelChunks[cx] = voxelChunk;
         } else {
             voxelChunk = it2->second;
         }
@@ -563,10 +566,28 @@ namespace renderbox {
         vertices.clear();
         faces.clear();
 
-        for (int x = -20; x < 20; ++x) {
-            for (int y = -20; y < 20; ++y) {
-                for (int z = -20; z < 20; ++z) {
-                    addMarchingCube(x, y, z, isolevel);
+        for (auto it0 = voxelChunkPlanes.begin(); it0 != voxelChunkPlanes.end(); ++it0) {
+            SparseVoxelChunkPlane *chunkPlane = it0->second;
+            int cz = chunkPlane->index;
+
+            for (auto it1 = chunkPlane->voxelChunkLines.begin(); it1 != chunkPlane->voxelChunkLines.end(); ++it1) {
+                SparseVoxelChunkList *chunkList = it1->second;
+                int cy = chunkList->index;
+
+                for (auto it2 = chunkList->voxelChunks.begin(); it2 != chunkList->voxelChunks.end(); ++it2) {
+                    VoxelChunk *voxelChunk = it2->second;
+                    int cx = voxelChunk->index;
+
+                    for (int ix = 0; ix < VOXEL_CHUNK_DIMENSION; ++ix) {
+                        for (int iy = 0; iy < VOXEL_CHUNK_DIMENSION; ++iy) {
+                            for (int iz = 0; iz < VOXEL_CHUNK_DIMENSION; ++iz) {
+                                addMarchingCube(cx * VOXEL_CHUNK_DIMENSION + ix,
+                                                cy * VOXEL_CHUNK_DIMENSION + iy,
+                                                cz * VOXEL_CHUNK_DIMENSION + iz,
+                                                isolevel);
+                            }
+                        }
+                    }
                 }
             }
         }

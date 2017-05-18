@@ -12,5 +12,5 @@ in vec3 vertexPosition;
 
 void main() {
     gl_Position = worldProjectionMatrix * vec4(vertexPosition, 1.0f);
-    vertexColor = vec4(0.5 + sin(vertexPosition / 4) * 0.4, 1.0f);
+    vertexColor = vec4(0.7 + sin(vertexPosition / 4) * 0.2, 1.0f);
 }

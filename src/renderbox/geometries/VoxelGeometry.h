@@ -16,14 +16,17 @@ namespace renderbox {
         };
 
         struct VoxelChunk {
+            int index;
             Voxel voxels[VOXEL_CHUNK_DIMENSION][VOXEL_CHUNK_DIMENSION][VOXEL_CHUNK_DIMENSION];
         };
 
         struct SparseVoxelChunkList {
+            int index;
             std::unordered_map<int, VoxelChunk *> voxelChunks;
         };
 
         struct SparseVoxelChunkPlane {
+            int index;
             std::unordered_map<int, SparseVoxelChunkList *> voxelChunkLines;
         };
 
