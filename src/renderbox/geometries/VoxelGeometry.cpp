@@ -14,32 +14,73 @@ namespace renderbox {
         return a - div(a, b) * b;
     }
 
+    VoxelGeometry::VoxelChunk *VoxelGeometry::getVoxelChunk(int cx, int cy, int cz, bool createIfNotExists) {
+
+        auto it0 = voxelChunkPlanes.find(cz);
+        SparseVoxelChunkPlane *chunkPlane;
+        if (it0 == voxelChunkPlanes.end()) {
+            if (!createIfNotExists) {
+                return nullptr;
+            } else {
+                chunkPlane = new SparseVoxelChunkPlane();
+                chunkPlane->index = cz;
+                voxelChunkPlanes[cz] = chunkPlane;
+            }
+        } else {
+            chunkPlane = it0->second;
+        }
+
+        auto it1 = chunkPlane->voxelChunkLines.find(cy);
+        SparseVoxelChunkList *chunkList;
+        if (it1 == chunkPlane->voxelChunkLines.end()) {
+            if (!createIfNotExists) {
+                return nullptr;
+            } else {
+                chunkList = new SparseVoxelChunkList();
+                chunkList->index = cy;
+                chunkPlane->voxelChunkLines[cy] = chunkList;
+            }
+        } else {
+            chunkList = it1->second;
+        }
+
+        auto it2 = chunkList->voxelChunks.find(cx);
+        VoxelChunk *voxelChunk;
+        if (it2 == chunkList->voxelChunks.end()) {
+            if (!createIfNotExists) {
+                return nullptr;
+            } else {
+                voxelChunk = new VoxelChunk();
+                voxelChunk->index = cx;
+                chunkList->voxelChunks[cx] = voxelChunk;
+            }
+        } else {
+            voxelChunk = it2->second;
+        }
+
+        return voxelChunk;
+
+    }
+
+    VoxelGeometry::VoxelChunk *VoxelGeometry::getVoxelChunkByVoxel(int x, int y, int z, bool createIfNotExists) {
+
+        return getVoxelChunk(div(x, VOXEL_CHUNK_DIMENSION),
+                             div(y, VOXEL_CHUNK_DIMENSION),
+                             div(z, VOXEL_CHUNK_DIMENSION),
+                             createIfNotExists);
+
+    }
+
     float VoxelGeometry::getOccupancy(int x, int y, int z) {
 
-        int cx = div(x, VOXEL_CHUNK_DIMENSION);
-        int cy = div(y, VOXEL_CHUNK_DIMENSION);
-        int cz = div(z, VOXEL_CHUNK_DIMENSION);
+        VoxelChunk *voxelChunk = getVoxelChunkByVoxel(x, y, z);
+        if (voxelChunk == nullptr) {
+            return false;
+        }
+
         int ix = remainder(x, VOXEL_CHUNK_DIMENSION);
         int iy = remainder(y, VOXEL_CHUNK_DIMENSION);
         int iz = remainder(z, VOXEL_CHUNK_DIMENSION);
-
-        auto it0 = voxelChunkPlanes.find(cz);
-        if (it0 == voxelChunkPlanes.end()) {
-            return false;
-        }
-        SparseVoxelChunkPlane *chunkPlane = it0->second;
-
-        auto it1 = chunkPlane->voxelChunkLines.find(cy);
-        if (it1 == chunkPlane->voxelChunkLines.end()) {
-            return false;
-        }
-        SparseVoxelChunkList *chunkList = it1->second;
-
-        auto it2 = chunkList->voxelChunks.find(cx);
-        if (it2 == chunkList->voxelChunks.end()) {
-            return false;
-        }
-        VoxelChunk *voxelChunk = it2->second;
 
         return voxelChunk->voxels[ix][iy][iz].occupancy;
 
@@ -59,44 +100,45 @@ namespace renderbox {
 
     void VoxelGeometry::setOccupancy(int x, int y, int z, float occupancy) {
 
-        int cx = div(x, VOXEL_CHUNK_DIMENSION);
-        int cy = div(y, VOXEL_CHUNK_DIMENSION);
-        int cz = div(z, VOXEL_CHUNK_DIMENSION);
+        VoxelChunk *voxelChunk = getVoxelChunkByVoxel(x, y, z, true);
+
         int ix = remainder(x, VOXEL_CHUNK_DIMENSION);
         int iy = remainder(y, VOXEL_CHUNK_DIMENSION);
         int iz = remainder(z, VOXEL_CHUNK_DIMENSION);
 
-        auto it0 = voxelChunkPlanes.find(cz);
-        SparseVoxelChunkPlane *chunkPlane;
-        if (it0 == voxelChunkPlanes.end()) {
-            chunkPlane = new SparseVoxelChunkPlane();
-            chunkPlane->index = cz;
-            voxelChunkPlanes[cz] = chunkPlane;
-        } else {
-            chunkPlane = it0->second;
-        }
-
-        auto it1 = chunkPlane->voxelChunkLines.find(cy);
-        SparseVoxelChunkList *chunkList;
-        if (it1 == chunkPlane->voxelChunkLines.end()) {
-            chunkList = new SparseVoxelChunkList();
-            chunkList->index = cy;
-            chunkPlane->voxelChunkLines[cy] = chunkList;
-        } else {
-            chunkList = it1->second;
-        }
-
-        auto it2 = chunkList->voxelChunks.find(cx);
-        VoxelChunk *voxelChunk;
-        if (it2 == chunkList->voxelChunks.end()) {
-            voxelChunk = new VoxelChunk();
-            voxelChunk->index = cx;
-            chunkList->voxelChunks[cx] = voxelChunk;
-        } else {
-            voxelChunk = it2->second;
-        }
-
         voxelChunk->voxels[ix][iy][iz].occupancy = occupancy;
+        voxelChunk->voxelUpdated = true;
+
+        // Pre generate neighboring chunks
+
+        getVoxelChunkByVoxel(x - 1, y + 1, z - 1, true);
+        getVoxelChunkByVoxel(x,     y + 1, z - 1, true);
+        getVoxelChunkByVoxel(x + 1, y + 1, z - 1, true);
+        getVoxelChunkByVoxel(x - 1, y,     z - 1, true);
+        getVoxelChunkByVoxel(x,     y,     z - 1, true);
+        getVoxelChunkByVoxel(x + 1, y,     z - 1, true);
+        getVoxelChunkByVoxel(x - 1, y - 1, z - 1, true);
+        getVoxelChunkByVoxel(x,     y - 1, z - 1, true);
+        getVoxelChunkByVoxel(x + 1, y - 1, z - 1, true);
+
+        getVoxelChunkByVoxel(x - 1, y + 1, z    , true);
+        getVoxelChunkByVoxel(x,     y + 1, z    , true);
+        getVoxelChunkByVoxel(x + 1, y + 1, z    , true);
+        getVoxelChunkByVoxel(x - 1, y,     z    , true);
+        getVoxelChunkByVoxel(x + 1, y,     z    , true);
+        getVoxelChunkByVoxel(x - 1, y - 1, z    , true);
+        getVoxelChunkByVoxel(x,     y - 1, z    , true);
+        getVoxelChunkByVoxel(x + 1, y - 1, z    , true);
+
+        getVoxelChunkByVoxel(x - 1, y + 1, z + 1, true);
+        getVoxelChunkByVoxel(x,     y + 1, z + 1, true);
+        getVoxelChunkByVoxel(x + 1, y + 1, z + 1, true);
+        getVoxelChunkByVoxel(x - 1, y,     z + 1, true);
+        getVoxelChunkByVoxel(x,     y,     z + 1, true);
+        getVoxelChunkByVoxel(x + 1, y,     z + 1, true);
+        getVoxelChunkByVoxel(x - 1, y - 1, z + 1, true);
+        getVoxelChunkByVoxel(x,     y - 1, z + 1, true);
+        getVoxelChunkByVoxel(x + 1, y - 1, z + 1, true);
 
     }
 
@@ -409,7 +451,10 @@ namespace renderbox {
         return p1 + (p2 - p1) * (isolevel - v1) / (v2 - v1);
     }
 
-    void VoxelGeometry::addMarchingCube(int x, int y, int z, float isolevel) {
+    void VoxelGeometry::addCube(int x, int y, int z,
+                                float isolevel,
+                                std::vector<glm::vec3> &vertices,
+                                std::vector<glm::uvec3> &faces) {
 
         float cubeVertexOccupancies[8] = {
                 getOccupancy(x - 1, y    , z - 1),
@@ -522,44 +567,7 @@ namespace renderbox {
 
     }
 
-    void VoxelGeometry::addCube(int x, int y, int z) {
 
-        if (!isOccupied(x, y, z)) {return;}
-
-        float length = 1.0f, width = 1.0f, height = 1.0f;
-        float length2 = length / 2, width2 = width / 2, height2 = height / 2;
-        float px = length * x + length2, py = width * y + width2, pz = height * z + height2;
-
-        unsigned long i = vertices.size();
-
-        vertices.push_back(glm::vec3(px + length2, py + width2, pz + height2));
-        vertices.push_back(glm::vec3(px - length2, py + width2, pz + height2));
-        vertices.push_back(glm::vec3(px - length2, py - width2, pz + height2));
-        vertices.push_back(glm::vec3(px + length2, py - width2, pz + height2));
-        vertices.push_back(glm::vec3(px + length2, py + width2, pz - height2));
-        vertices.push_back(glm::vec3(px - length2, py + width2, pz - height2));
-        vertices.push_back(glm::vec3(px - length2, py - width2, pz - height2));
-        vertices.push_back(glm::vec3(px + length2, py - width2, pz - height2));
-
-        faces.push_back(glm::vec3(i + 0, i + 1, i + 2));
-        faces.push_back(glm::vec3(i + 2, i + 3, i + 0));
-
-        faces.push_back(glm::vec3(i + 3, i + 2, i + 6));
-        faces.push_back(glm::vec3(i + 6, i + 7, i + 3));
-
-        faces.push_back(glm::vec3(i + 7, i + 6, i + 5));
-        faces.push_back(glm::vec3(i + 5, i + 4, i + 7));
-
-        faces.push_back(glm::vec3(i + 4, i + 5, i + 1));
-        faces.push_back(glm::vec3(i + 1, i + 0, i + 4));
-
-        faces.push_back(glm::vec3(i + 4, i + 0, i + 3));
-        faces.push_back(glm::vec3(i + 3, i + 7, i + 4));
-
-        faces.push_back(glm::vec3(i + 1, i + 5, i + 6));
-        faces.push_back(glm::vec3(i + 6, i + 2, i + 1));
-
-    }
 
     void VoxelGeometry::updateGeometry(float isolevel) {
 
@@ -578,16 +586,65 @@ namespace renderbox {
                     VoxelChunk *voxelChunk = it2->second;
                     int cx = voxelChunk->index;
 
-                    for (int ix = 0; ix < VOXEL_CHUNK_DIMENSION; ++ix) {
-                        for (int iy = 0; iy < VOXEL_CHUNK_DIMENSION; ++iy) {
-                            for (int iz = 0; iz < VOXEL_CHUNK_DIMENSION; ++iz) {
-                                addMarchingCube(cx * VOXEL_CHUNK_DIMENSION + ix,
-                                                cy * VOXEL_CHUNK_DIMENSION + iy,
-                                                cz * VOXEL_CHUNK_DIMENSION + iz,
-                                                isolevel);
+                    // Cache non-edge voxel geometry
+
+                    if (voxelChunk->voxelUpdated) {
+                        voxelChunk->voxelUpdated = false;
+
+                        voxelChunk->vertices.clear();
+                        voxelChunk->faces.clear();
+
+                        // Generate geometry for the current chunk
+
+                        for (int ix = 0; ix < VOXEL_CHUNK_DIMENSION; ++ix) {
+                            for (int iy = 0; iy < VOXEL_CHUNK_DIMENSION; ++iy) {
+                                for (int iz = 0; iz < VOXEL_CHUNK_DIMENSION; ++iz) {
+                                    addCube(cx * VOXEL_CHUNK_DIMENSION + ix,
+                                            cy * VOXEL_CHUNK_DIMENSION + iy,
+                                            cz * VOXEL_CHUNK_DIMENSION + iz,
+                                            isolevel,
+                                            voxelChunk->vertices,
+                                            voxelChunk->faces);
+                                }
                             }
                         }
                     }
+
+                    // Add all vertices in chunk to the vertices array
+
+                    unsigned int numVertices = (unsigned int) vertices.size();
+                    vertices.insert(vertices.end(), voxelChunk->vertices.begin(), voxelChunk->vertices.end());
+                    for (glm::uvec3 face : voxelChunk->faces) {
+                        faces.push_back(glm::uvec3(numVertices) + face);
+                    }
+
+                    // Non-cached faces
+
+                    for (int ix = 0; ix < VOXEL_CHUNK_DIMENSION; ++ix) {
+                        for (int iy = 0; iy < VOXEL_CHUNK_DIMENSION; ++iy) {
+                            addCube(cx * VOXEL_CHUNK_DIMENSION + ix,
+                                    cy * VOXEL_CHUNK_DIMENSION + iy,
+                                    cz * VOXEL_CHUNK_DIMENSION,
+                                    isolevel, vertices, faces);
+                        }
+                    }
+                    for (int ix = 0; ix < VOXEL_CHUNK_DIMENSION; ++ix) {
+                        for (int iz = 1; iz < VOXEL_CHUNK_DIMENSION; ++iz) {
+                            addCube(cx * VOXEL_CHUNK_DIMENSION + ix,
+                                    cy * VOXEL_CHUNK_DIMENSION,
+                                    cz * VOXEL_CHUNK_DIMENSION + iz,
+                                    isolevel, vertices, faces);
+                        }
+                    }
+                    for (int iy = 1; iy < VOXEL_CHUNK_DIMENSION; ++iy) {
+                        for (int iz = 1; iz < VOXEL_CHUNK_DIMENSION; ++iz) {
+                            addCube(cx * VOXEL_CHUNK_DIMENSION,
+                                    cy * VOXEL_CHUNK_DIMENSION + iy,
+                                    cz * VOXEL_CHUNK_DIMENSION + iz,
+                                    isolevel, vertices, faces);
+                        }
+                    }
+
                 }
             }
         }

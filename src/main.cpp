@@ -11,12 +11,13 @@ renderbox::Object *cameraRig;
 renderbox::Mesh *terrain;
 renderbox::Mesh *testCube;
 
-double cameraDistance = 40;
-double cameraAngle = glm::radians(-90.0f);
-double cameraAngularVelocity = 0.0f;
+float cameraDistance = 40.0f;
+float cameraAngle = glm::radians(-90.0f);
+float cameraAngularVelocity = 0.0f;
+float cameraVelocity[] = {0.0f, 0.0f};
 
-double lastTime = glfwGetTime();
-double mouseX = 0.0f, mouseY = 0.0f;
+float lastTime = (float) glfwGetTime();
+double mouseX = -1, mouseY = -1, startMouseX = -1, startMouseY = -1;
 
 float isolevel = 0.5f;
 
@@ -47,14 +48,14 @@ void init() {
     camera->setTranslation(glm::vec3(0, 0, cameraDistance));
     cameraRig = new renderbox::Object();
     cameraRig->addChild(camera);
-    cameraRig->rotate(glm::vec3(1.0f, 0, 0), glm::radians(60.0f));
+    cameraRig->rotate(glm::vec3(1.0f, 0, 0), glm::radians(45.0f));
 
 }
 
 void update() {
 
-    double currentTime = glfwGetTime();
-    double deltaTime = currentTime - lastTime;
+    float currentTime = (float) glfwGetTime();
+    float deltaTime = currentTime - lastTime;
 
     // Terrain
 
@@ -73,6 +74,10 @@ void update() {
 
     // Camera
 
+    glm::vec3 cameraDirection = camera->getRay()->getDirection();
+    glm::vec3 forward = glm::normalize(glm::vec3(cameraDirection.x, cameraDirection.y, 0));
+    glm::vec3 right = glm::normalize(glm::vec3(cameraDirection.y, - cameraDirection.x, 0));
+    cameraRig->translate(glm::vec3(right * cameraVelocity[0] * deltaTime + forward * cameraVelocity[1] * deltaTime));
     cameraRig->rotate(glm::vec3(0, 0, 1.0f), cameraAngularVelocity * deltaTime);
 
     // Render
@@ -88,42 +93,138 @@ void windowSizeCallback(GLFWwindow *window, int width, int height) {
 }
 
 void keyCallback(GLFWwindow *window, int key, int scanCode, int action, int mods) {
-    if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
-        cameraAngularVelocity = -glm::radians(180.0f);
-    } else if (key == GLFW_KEY_E && action == GLFW_PRESS) {
-        cameraAngularVelocity = glm::radians(180.0f);
-    } else if ((key == GLFW_KEY_Q || key == GLFW_KEY_E) && action == GLFW_RELEASE) {
-        cameraAngularVelocity = 0.0f;
+    if (key == GLFW_KEY_Q) {
+        if (action == GLFW_PRESS) {
+            cameraAngularVelocity -= glm::radians(180.0f);
+        } else if (action == GLFW_RELEASE) {
+            cameraAngularVelocity += glm::radians(180.0f);
+        }
+    } else if (key == GLFW_KEY_E) {
+        if (action == GLFW_PRESS) {
+            cameraAngularVelocity += glm::radians(180.0f);
+        } else if (action == GLFW_RELEASE) {
+            cameraAngularVelocity -= glm::radians(180.0f);
+        }
+    } else if (key == GLFW_KEY_W) {
+        if (action == GLFW_PRESS) {
+            cameraVelocity[1] += 50.0f;
+        } else if (action == GLFW_RELEASE) {
+            cameraVelocity[1] -= 50.0f;
+        }
+    } else if (key == GLFW_KEY_S) {
+        if (action == GLFW_PRESS) {
+            cameraVelocity[1] -= 50.0f;
+        } else if (action == GLFW_RELEASE) {
+            cameraVelocity[1] += 50.0f;
+        }
+    } else if (key == GLFW_KEY_D) {
+        if (action == GLFW_PRESS) {
+            cameraVelocity[0] += 50.0f;
+        } else if (action == GLFW_RELEASE) {
+            cameraVelocity[0] -= 50.0f;
+        }
+    } else if (key == GLFW_KEY_A) {
+        if (action == GLFW_PRESS) {
+            cameraVelocity[0] -= 50.0f;
+        } else if (action == GLFW_RELEASE) {
+            cameraVelocity[0] += 50.0f;
+        }
     }
+}
+
+void mousedown(GLFWwindow *window) {
+
+}
+
+void mousemove(GLFWwindow *window) {
+
+}
+
+void mouseup(GLFWwindow *window) {
+
+}
+
+void mouseclick(GLFWwindow *window) {
+
+    renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderer->getWindowWidth() - 1.0f,
+                                                         1.0f - 2 * mouseY / renderer->getWindowHeight()));
+    std::vector<glm::vec3> worldPositions;
+    if (cameraRay->intersectObject(terrain, worldPositions)) {
+        glm::vec3 objectPosition = floor(renderbox::dehomogenize(
+                glm::inverse(terrain->getWorldMatrix())
+                * glm::vec4(worldPositions[0] + glm::vec3(0.5f), 1.0f)));
+
+        renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry();
+
+        terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, 0, 0), 1.0f);
+        terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, 0, 0), 1.0f);
+        terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, -1, 0), 1.0f);
+        terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, -1, 0), 1.0f);
+        terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, 0, -1), 1.0f);
+        terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, 0, -1), 1.0f);
+        terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, -1, -1), 1.0f);
+        terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, -1, -1), 1.0f);
+
+        terrainGeometry->updateGeometry(isolevel);
+        renderer->loadObject(terrain);
+    }
+
+}
+
+double mouseLastSync = glfwGetTime();
+
+void mousedrag(GLFWwindow *window) {
+
+    double currentTime = glfwGetTime();
+    if (currentTime - mouseLastSync < 0.08f) return;
+    mouseLastSync = currentTime;
+
+    renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderer->getWindowWidth() - 1.0f,
+                                                         1.0f - 2 * mouseY / renderer->getWindowHeight()));
+    std::vector<glm::vec3> worldPositions;
+    if (cameraRay->intersectObject(terrain, worldPositions)) {
+        glm::vec3 objectPosition = floor(renderbox::dehomogenize(
+                glm::inverse(terrain->getWorldMatrix())
+                * glm::vec4(worldPositions[0] + glm::vec3(0.5f), 1.0f)));
+
+        renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry();
+
+        terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, 0, 0), 1.0f);
+        terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, 0, 0), 1.0f);
+        terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, -1, 0), 1.0f);
+        terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, -1, 0), 1.0f);
+        terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, 0, -1), 1.0f);
+        terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, 0, -1), 1.0f);
+        terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, -1, -1), 1.0f);
+        terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, -1, -1), 1.0f);
+
+        terrainGeometry->updateGeometry(isolevel);
+        renderer->loadObject(terrain);
+    }
+
+}
+
+void mousedrop(GLFWwindow *window) {
+
 }
 
 void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_LEFT) {
         if (action == GLFW_PRESS) {
-
-            renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderer->getWindowWidth() - 1.0f,
-                                                                 1.0f - 2 * mouseY / renderer->getWindowHeight()));
-            std::vector<glm::vec3> worldPositions;
-            if (cameraRay->intersectObject(terrain, worldPositions)) {
-                glm::vec3 objectPosition = floor(renderbox::dehomogenize(
-                        glm::inverse(terrain->getWorldMatrix())
-                        * glm::vec4(worldPositions[0] + glm::vec3(0.5f), 1.0f)));
-
-                renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry();
-
-                terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, 0, 0), 1.0f);
-                terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, 0, 0), 1.0f);
-                terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, -1, 0), 1.0f);
-                terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, -1, 0), 1.0f);
-                terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, 0, -1), 1.0f);
-                terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, 0, -1), 1.0f);
-                terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, -1, -1), 1.0f);
-                terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, -1, -1), 1.0f);
-
-                terrainGeometry->updateGeometry(isolevel);
-                renderer->loadObject(terrain);
+            startMouseX = mouseX;
+            startMouseY = mouseY;
+            mousedown(window);
+        }
+        if (action == GLFW_RELEASE) {
+            mouseup(window);
+            if (fabs(startMouseX - mouseX) >= 5
+                && fabs(startMouseY - mouseY) >= 5) {
+                mousedrop(window);
+            } else {
+                mouseclick(window);
             }
-
+            startMouseX = -1;
+            startMouseY = -1;
         }
     }
 }
@@ -131,10 +232,19 @@ void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
 void cursorPosCallback(GLFWwindow *window, double x, double y) {
     mouseX = x;
     mouseY = y;
+    mousemove(window);
+    if (startMouseX != -1 && startMouseY != -1
+        && (fabs(startMouseX - mouseX) >= 5
+            || fabs(startMouseY - mouseY) >= 5)) {
+        mousedrag(window);
+    }
 }
 
 void scrollCallback(GLFWwindow *window, double deltaX, double deltaY) {
-
+    glm::vec3 cameraDirection = camera->getRay()->getDirection();
+    glm::vec3 forward = glm::normalize(glm::vec3(cameraDirection.x, cameraDirection.y, 0));
+    glm::vec3 right = glm::normalize(glm::vec3(cameraDirection.y, - cameraDirection.x, 0));
+    cameraRig->translate(+ forward * (float) deltaY - right * (float) deltaX);
 }
 
 void uninit() {

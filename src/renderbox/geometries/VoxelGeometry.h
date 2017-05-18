@@ -9,7 +9,7 @@ namespace renderbox {
 
     class VoxelGeometry : public Geometry {
 
-        static const int VOXEL_CHUNK_DIMENSION = 16;
+        static const int VOXEL_CHUNK_DIMENSION = 3;
 
         struct Voxel {
             float occupancy;
@@ -18,6 +18,9 @@ namespace renderbox {
         struct VoxelChunk {
             int index;
             Voxel voxels[VOXEL_CHUNK_DIMENSION][VOXEL_CHUNK_DIMENSION][VOXEL_CHUNK_DIMENSION];
+            std::vector<glm::vec3> vertices;
+            std::vector<glm::uvec3> faces;
+            bool voxelUpdated = false;
         };
 
         struct SparseVoxelChunkList {
@@ -32,8 +35,13 @@ namespace renderbox {
 
         std::unordered_map<int, SparseVoxelChunkPlane *> voxelChunkPlanes;
 
-        void addMarchingCube(int x, int y, int z, float isolevel);
-        void addCube(int x, int y, int z);
+        VoxelChunk *getVoxelChunk(int cx, int cy, int cz, bool createIfNotExists = false);
+        VoxelChunk *getVoxelChunkByVoxel(int x, int y, int z, bool createIfNotExists = false);
+
+        void addCube(int x, int y, int z,
+                     float isolevel,
+                     std::vector<glm::vec3> &vertices,
+                     std::vector<glm::uvec3> &faces);
 
     public:
         bool isOccupied(int x, int y, int z);

@@ -18,7 +18,7 @@ namespace renderbox {
         glm::mat4x4 getProjectionMatrix();
         glm::mat4x4 getViewMatrix();
         // void lookAt(glm::vec3 position, glm::vec3 up = glm::vec3(1.0f, 0, 0));
-        virtual Ray *getRay(glm::vec2 coordinates = glm::vec2(1.0f));
+        virtual Ray *getRay(glm::vec2 coordinates = glm::vec2(0.0f));
     };
 
 }
