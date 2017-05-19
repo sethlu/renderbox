@@ -1,9 +1,9 @@
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include <map>
 #include "../../scenes/Scene.h"
 #include "../../cameras/Camera.h"
 #include "../../objects/Mesh.h"
+#include "../../../../libs/glfw/include/GLFW/glfw3.h"
 #include "OpenGLRenderTarget.h"
 #include "OpenGLRendererProperties.h"
 
