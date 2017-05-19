@@ -86,8 +86,12 @@ namespace renderbox {
     }
 
     void Object::rotate(glm::vec3 vector, float angle) {
-        // rotationMatrix = glm::rotate(rotationMatrix, angle, vector);
         rotationMatrix = glm::rotate(glm::mat4x4(1.0f), angle, vector) * rotationMatrix;
+        didTransform();
+    }
+
+    void Object::clearRotation() {
+        rotationMatrix = glm::mat4x4(1.0f);
         didTransform();
     }
 

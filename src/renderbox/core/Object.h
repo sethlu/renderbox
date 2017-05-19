@@ -90,6 +90,7 @@ namespace renderbox {
 
         glm::mat4x4 getRotationMatrix();
         void rotate(glm::vec3 vector, float angle);
+        void clearRotation();
 
         bool hasGeometry();
         Geometry *getGeometry();
