@@ -88,48 +88,8 @@ void update() {
 
 }
 
-void windowSizeCallback(GLFWwindow *window, int width, int height) {
-    camera->setPerspective(glm::radians(45.0f), (float) renderer->getWindowWidth() / (float) renderer->getWindowHeight());
-}
+void uninit() {
 
-void keyCallback(GLFWwindow *window, int key, int scanCode, int action, int mods) {
-    if (key == GLFW_KEY_Q) {
-        if (action == GLFW_PRESS) {
-            cameraAngularVelocity -= glm::radians(180.0f);
-        } else if (action == GLFW_RELEASE) {
-            cameraAngularVelocity += glm::radians(180.0f);
-        }
-    } else if (key == GLFW_KEY_E) {
-        if (action == GLFW_PRESS) {
-            cameraAngularVelocity += glm::radians(180.0f);
-        } else if (action == GLFW_RELEASE) {
-            cameraAngularVelocity -= glm::radians(180.0f);
-        }
-    } else if (key == GLFW_KEY_W) {
-        if (action == GLFW_PRESS) {
-            cameraVelocity[1] += 50.0f;
-        } else if (action == GLFW_RELEASE) {
-            cameraVelocity[1] -= 50.0f;
-        }
-    } else if (key == GLFW_KEY_S) {
-        if (action == GLFW_PRESS) {
-            cameraVelocity[1] -= 50.0f;
-        } else if (action == GLFW_RELEASE) {
-            cameraVelocity[1] += 50.0f;
-        }
-    } else if (key == GLFW_KEY_D) {
-        if (action == GLFW_PRESS) {
-            cameraVelocity[0] += 50.0f;
-        } else if (action == GLFW_RELEASE) {
-            cameraVelocity[0] -= 50.0f;
-        }
-    } else if (key == GLFW_KEY_A) {
-        if (action == GLFW_PRESS) {
-            cameraVelocity[0] -= 50.0f;
-        } else if (action == GLFW_RELEASE) {
-            cameraVelocity[0] += 50.0f;
-        }
-    }
 }
 
 void mousedown(GLFWwindow *window) {
@@ -208,23 +168,46 @@ void mousedrop(GLFWwindow *window) {
 
 }
 
-void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
-    if (button == GLFW_MOUSE_BUTTON_LEFT) {
+void windowSizeCallback(GLFWwindow *window, int width, int height) {
+    camera->setPerspective(glm::radians(45.0f), (float) renderer->getWindowWidth() / (float) renderer->getWindowHeight());
+}
+
+void keyCallback(GLFWwindow *window, int key, int scanCode, int action, int mods) {
+    if (key == GLFW_KEY_Q) {
         if (action == GLFW_PRESS) {
-            startMouseX = mouseX;
-            startMouseY = mouseY;
-            mousedown(window);
+            cameraAngularVelocity -= glm::radians(180.0f);
+        } else if (action == GLFW_RELEASE) {
+            cameraAngularVelocity += glm::radians(180.0f);
         }
-        if (action == GLFW_RELEASE) {
-            mouseup(window);
-            if (fabs(startMouseX - mouseX) >= 5
-                && fabs(startMouseY - mouseY) >= 5) {
-                mousedrop(window);
-            } else {
-                mouseclick(window);
-            }
-            startMouseX = -1;
-            startMouseY = -1;
+    } else if (key == GLFW_KEY_E) {
+        if (action == GLFW_PRESS) {
+            cameraAngularVelocity += glm::radians(180.0f);
+        } else if (action == GLFW_RELEASE) {
+            cameraAngularVelocity -= glm::radians(180.0f);
+        }
+    } else if (key == GLFW_KEY_W) {
+        if (action == GLFW_PRESS) {
+            cameraVelocity[1] += 50.0f;
+        } else if (action == GLFW_RELEASE) {
+            cameraVelocity[1] -= 50.0f;
+        }
+    } else if (key == GLFW_KEY_S) {
+        if (action == GLFW_PRESS) {
+            cameraVelocity[1] -= 50.0f;
+        } else if (action == GLFW_RELEASE) {
+            cameraVelocity[1] += 50.0f;
+        }
+    } else if (key == GLFW_KEY_D) {
+        if (action == GLFW_PRESS) {
+            cameraVelocity[0] += 50.0f;
+        } else if (action == GLFW_RELEASE) {
+            cameraVelocity[0] -= 50.0f;
+        }
+    } else if (key == GLFW_KEY_A) {
+        if (action == GLFW_PRESS) {
+            cameraVelocity[0] -= 50.0f;
+        } else if (action == GLFW_RELEASE) {
+            cameraVelocity[0] += 50.0f;
         }
     }
 }
@@ -247,8 +230,25 @@ void scrollCallback(GLFWwindow *window, double deltaX, double deltaY) {
     cameraRig->translate(+ forward * (float) deltaY - right * (float) deltaX);
 }
 
-void uninit() {
-
+void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT) {
+        if (action == GLFW_PRESS) {
+            startMouseX = mouseX;
+            startMouseY = mouseY;
+            mousedown(window);
+        }
+        if (action == GLFW_RELEASE) {
+            mouseup(window);
+            if (fabs(startMouseX - mouseX) >= 5
+                && fabs(startMouseY - mouseY) >= 5) {
+                mousedrop(window);
+            } else {
+                mouseclick(window);
+            }
+            startMouseX = -1;
+            startMouseY = -1;
+        }
+    }
 }
 
 int main(int argc, char **argv) {
@@ -260,9 +260,9 @@ int main(int argc, char **argv) {
 
     glfwSetWindowSizeCallback(window, windowSizeCallback);
     glfwSetKeyCallback(window, keyCallback);
-    glfwSetMouseButtonCallback(window, mouseButtonCallback);
     glfwSetCursorPosCallback(window, cursorPosCallback);
     glfwSetScrollCallback(window, scrollCallback);
+    glfwSetMouseButtonCallback(window, mouseButtonCallback);
 
     // Drawing loop
 
