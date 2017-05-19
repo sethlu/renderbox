@@ -251,6 +251,11 @@ void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
     }
 }
 
+void zoomCallback(GLFWwindow *window, double magnification) {
+    cameraDistance /= (1 + magnification);
+    camera->setTranslation(glm::vec3(0, 0, cameraDistance));
+}
+
 int main(int argc, char **argv) {
 
     renderer = new renderbox::Renderer();
@@ -263,6 +268,7 @@ int main(int argc, char **argv) {
     glfwSetCursorPosCallback(window, cursorPosCallback);
     glfwSetScrollCallback(window, scrollCallback);
     glfwSetMouseButtonCallback(window, mouseButtonCallback);
+    glfwSetZoomCallback(window, zoomCallback);
 
     // Drawing loop
 
