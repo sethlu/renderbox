@@ -1,3 +1,4 @@
 [submodule "libs/glfw"]
 	path = libs/glfw
 	url = git@github.com:sethlu/glfw.git
+	branch = gestures
