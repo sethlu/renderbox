@@ -55,7 +55,7 @@ namespace renderbox {
          */
         glm::mat4x4 rotationMatrix = glm::mat4x4(1.0f);
 
-        void didTransform();
+        virtual void didTransform();
 
         // Object description
 
