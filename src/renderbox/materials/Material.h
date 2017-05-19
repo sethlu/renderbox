@@ -1,6 +1,3 @@
-#include "../renderers/opengl/OpenGLProgram.h"
-
-
 #ifndef PARTICLESIM_MATERIAL_H
 #define PARTICLESIM_MATERIAL_H
 

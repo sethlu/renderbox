@@ -12,4 +12,5 @@ namespace renderbox {
     int Material::getMaterialID() {
         return id;
     }
+
 }

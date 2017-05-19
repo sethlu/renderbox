@@ -4,7 +4,6 @@
 #include "OpenGLRenderer.h"
 #include "../../objects/Mesh.h"
 #include "OpenGLProgram.h"
-#include "../../renderbox.h"
 
 
 namespace renderbox {

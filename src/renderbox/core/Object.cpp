@@ -1,8 +1,8 @@
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/matrix_access.hpp>
+#include "../math/Vector.h"
 #include "Object.h"
-#include "../renderbox.h"
 
 
 namespace renderbox {

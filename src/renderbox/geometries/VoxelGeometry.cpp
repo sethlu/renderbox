@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cfloat>
 #include "VoxelGeometry.h"
-#include "../renderbox.h"
 
 
 namespace renderbox {

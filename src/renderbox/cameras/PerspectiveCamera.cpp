@@ -1,7 +1,6 @@
 #include <glm/gtc/matrix_transform.hpp>
+#include "../math/Vector.h"
 #include "PerspectiveCamera.h"
-#include "../renderbox.h"
-
 
 namespace renderbox {
 
