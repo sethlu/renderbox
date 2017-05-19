@@ -7,10 +7,11 @@ namespace renderbox {
     void Camera::didTransform() {
         Object::didTransform();
         viewMatrix = glm::inverse(worldMatrix);
+        viewMatrixDidUpdate();
     }
 
     glm::mat4x4 Camera::getViewProjectionMatrix() {
-        return projectionMatrix * viewMatrix;
+        return viewProjectionMatrix;
     }
 
     glm::mat4x4 Camera::getProjectionMatrix() {
@@ -23,6 +24,14 @@ namespace renderbox {
 
     Ray *Camera::getRay(glm::vec2) {
         return nullptr;
+    }
+
+    void Camera::projectionMatrixDidUpdate() {
+        viewProjectionMatrix = projectionMatrix * viewMatrix;
+    }
+
+    void Camera::viewMatrixDidUpdate() {
+        viewProjectionMatrix = projectionMatrix * viewMatrix;
     }
 
 }

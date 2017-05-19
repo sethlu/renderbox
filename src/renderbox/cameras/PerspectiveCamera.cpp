@@ -11,6 +11,7 @@ namespace renderbox {
 
     void PerspectiveCamera::setPerspective(float fovy, float aspectRatio, float zNear, float zFar) {
         projectionMatrix = glm::perspective(fovy, aspectRatio, zNear, zFar);
+        projectionMatrixDidUpdate();
     }
 
     Ray *PerspectiveCamera::getRay(glm::vec2 coordinates) {

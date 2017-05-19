@@ -84,7 +84,7 @@ namespace renderbox {
     }
 
     void Renderer::renderObject(Object *object, Camera *camera) {
-        renderObject(object, camera, camera->getProjectionMatrix() * camera->getViewMatrix());
+        renderObject(object, camera, camera->getViewProjectionMatrix());
     }
 
     void Renderer::render(Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget, bool forceClear) {
