@@ -9,7 +9,7 @@ namespace renderbox {
 
     class VoxelGeometry : public Geometry {
 
-        static const int VOXEL_CHUNK_DIMENSION = 3;
+        static const int VOXEL_CHUNK_DIMENSION = 6;
 
         struct Voxel {
             float occupancy;

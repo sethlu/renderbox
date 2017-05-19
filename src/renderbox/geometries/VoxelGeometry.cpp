@@ -109,36 +109,15 @@ namespace renderbox {
         voxelChunk->voxels[ix][iy][iz].occupancy = occupancy;
         voxelChunk->voxelUpdated = true;
 
-        // Pre generate neighboring chunks
+        // Pre populate neighboring chunks for geometry generation of overlapping voxel chunk edges
 
-        getVoxelChunkByVoxel(x - 1, y + 1, z - 1, true);
-        getVoxelChunkByVoxel(x,     y + 1, z - 1, true);
-        getVoxelChunkByVoxel(x + 1, y + 1, z - 1, true);
-        getVoxelChunkByVoxel(x - 1, y,     z - 1, true);
-        getVoxelChunkByVoxel(x,     y,     z - 1, true);
-        getVoxelChunkByVoxel(x + 1, y,     z - 1, true);
-        getVoxelChunkByVoxel(x - 1, y - 1, z - 1, true);
-        getVoxelChunkByVoxel(x,     y - 1, z - 1, true);
-        getVoxelChunkByVoxel(x + 1, y - 1, z - 1, true);
-
-        getVoxelChunkByVoxel(x - 1, y + 1, z    , true);
-        getVoxelChunkByVoxel(x,     y + 1, z    , true);
-        getVoxelChunkByVoxel(x + 1, y + 1, z    , true);
-        getVoxelChunkByVoxel(x - 1, y,     z    , true);
-        getVoxelChunkByVoxel(x + 1, y,     z    , true);
-        getVoxelChunkByVoxel(x - 1, y - 1, z    , true);
-        getVoxelChunkByVoxel(x,     y - 1, z    , true);
-        getVoxelChunkByVoxel(x + 1, y - 1, z    , true);
-
-        getVoxelChunkByVoxel(x - 1, y + 1, z + 1, true);
-        getVoxelChunkByVoxel(x,     y + 1, z + 1, true);
         getVoxelChunkByVoxel(x + 1, y + 1, z + 1, true);
-        getVoxelChunkByVoxel(x - 1, y,     z + 1, true);
-        getVoxelChunkByVoxel(x,     y,     z + 1, true);
-        getVoxelChunkByVoxel(x + 1, y,     z + 1, true);
-        getVoxelChunkByVoxel(x - 1, y - 1, z + 1, true);
-        getVoxelChunkByVoxel(x,     y - 1, z + 1, true);
-        getVoxelChunkByVoxel(x + 1, y - 1, z + 1, true);
+        getVoxelChunkByVoxel(x + 1, y + 1, z, true);
+        getVoxelChunkByVoxel(x, y + 1, z + 1, true);
+        getVoxelChunkByVoxel(x, y + 1, z, true);
+        getVoxelChunkByVoxel(x + 1, y, z + 1, true);
+        getVoxelChunkByVoxel(x + 1, y, z, true);
+        getVoxelChunkByVoxel(x, y, z + 1, true);
 
     }
 

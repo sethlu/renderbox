@@ -176,7 +176,7 @@ double mouseLastSync = glfwGetTime();
 void mousedrag(GLFWwindow *window) {
 
     double currentTime = glfwGetTime();
-    if (currentTime - mouseLastSync < 0.08f) return;
+    if (currentTime - mouseLastSync < 0.06f) return;
     mouseLastSync = currentTime;
 
     renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderer->getWindowWidth() - 1.0f,
