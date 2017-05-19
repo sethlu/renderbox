@@ -5,7 +5,7 @@
 namespace renderbox {
 
     OpenGLObjectProperties *OpenGLRendererProperties::getObjectProperties(Object *object) {
-        std::map<int, OpenGLObjectProperties *>::iterator result = objectProperties.find(object->getObjectID());
+        std::unordered_map<int, OpenGLObjectProperties *>::iterator result = objectProperties.find(object->getObjectID());
         if (result != objectProperties.end()) {
             return result->second;
         }

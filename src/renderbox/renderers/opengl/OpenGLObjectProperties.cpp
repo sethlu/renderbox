@@ -4,10 +4,10 @@
 
 namespace renderbox {
 
-    std::map<int, OpenGLProgram *> OpenGLObjectProperties::programs;
+    std::unordered_map<int, OpenGLProgram *> OpenGLObjectProperties::programs;
 
     OpenGLBuffer *OpenGLObjectProperties::getBuffer(int index) {
-        std::map<int, OpenGLBuffer *>::iterator result = buffers.find(index);
+        std::unordered_map<int, OpenGLBuffer *>::iterator result = buffers.find(index);
         if (result != buffers.end()) {
             return result->second;
         }
@@ -17,7 +17,7 @@ namespace renderbox {
     }
 
     OpenGLVertexArray *OpenGLObjectProperties::getVertexArray(int index) {
-        std::map<int, OpenGLVertexArray *>::iterator result = vertexArrays.find(index);
+        std::unordered_map<int, OpenGLVertexArray *>::iterator result = vertexArrays.find(index);
         if (result != vertexArrays.end()) {
             return result->second;
         }
@@ -27,7 +27,7 @@ namespace renderbox {
     }
 
     OpenGLProgram *OpenGLObjectProperties::getProgram(Material *material) {
-        std::map<int, OpenGLProgram *>::iterator result = programs.find(material->getMaterialID());
+        std::unordered_map<int, OpenGLProgram *>::iterator result = programs.find(material->getMaterialID());
         if (result != programs.end()) {
             return result->second;
         }

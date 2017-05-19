@@ -1,5 +1,5 @@
 #include <GL/glew.h>
-#include <map>
+#include <unordered_map>
 #include <string>
 #include "../../objects/Mesh.h"
 #include "OpenGLObjectProperties.h"
@@ -12,7 +12,7 @@
 namespace renderbox {
 
     class OpenGLRendererProperties {
-        std::map<int, OpenGLObjectProperties *> objectProperties;
+        std::unordered_map<int, OpenGLObjectProperties *> objectProperties;
     public:
         OpenGLObjectProperties *getObjectProperties(Object *object);
     };
