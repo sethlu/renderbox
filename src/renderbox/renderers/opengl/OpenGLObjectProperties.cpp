@@ -35,6 +35,13 @@ namespace renderbox {
         }
         OpenGLProgram *program;
         switch (material->getMaterialType()) {
+            case MESH_BASIC_MATERIAL:
+                program = new OpenGLProgram(
+                    #include "../shaders/glsl/lib/mesh_basic_vert.glsl"
+                        ,
+                    #include "../shaders/glsl/lib/mesh_basic_frag.glsl"
+                );
+                break;
             case GLSL_SHADER_MATERIAL:
                 program = new OpenGLProgram(((GLSLShaderMaterial *) material)->getVertexShaderSource(),
                                             ((GLSLShaderMaterial *) material)->getFragmentShaderSource());

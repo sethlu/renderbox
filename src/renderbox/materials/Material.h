@@ -2,10 +2,13 @@
 #define PARTICLESIM_MATERIAL_H
 
 
+#include <string>
+
 namespace renderbox {
 
     enum MATERIAL {
         GLSL_SHADER_MATERIAL,
+        MESH_BASIC_MATERIAL
     };
 
     class Material {
@@ -16,6 +19,8 @@ namespace renderbox {
         int getMaterialID();
         virtual MATERIAL getMaterialType() = 0;
     };
+
+    char *copyString(std::string src);
 
 }
 

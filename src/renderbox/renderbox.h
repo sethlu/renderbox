@@ -15,6 +15,7 @@
 #include "geometries/VoxelGeometry.h"
 
 #include "materials/Material.h"
+#include "materials/MeshBasicMaterial.h"
 #include "materials/GLSLShaderMaterial.h"
 
 #include "objects/Mesh.h"

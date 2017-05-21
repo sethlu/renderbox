@@ -24,8 +24,9 @@ float isolevel = 0.5f;
 void init() {
 
     // Shared material
-    renderbox::Material *material = new renderbox::GLSLShaderMaterial(renderbox::readFile("shaders/debug_vert.glsl"),
-                                                                      renderbox::readFile("shaders/debug_frag.glsl"));
+//    renderbox::Material *material = new renderbox::GLSLShaderMaterial(renderbox::readFile("shaders/debug_vert.glsl"),
+//                                                                      renderbox::readFile("shaders/debug_frag.glsl"));
+    renderbox::Material *material = new renderbox::MeshBasicMaterial(glm::vec3(0.8, 0.8, 0.8));
 
     // Scene
     scene = new renderbox::Scene();

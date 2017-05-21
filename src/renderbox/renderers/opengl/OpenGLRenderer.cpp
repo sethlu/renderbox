@@ -2,8 +2,7 @@
 #include <GL/glew.h>
 #include <glm/gtc/type_ptr.hpp>
 #include "OpenGLRenderer.h"
-#include "../../objects/Mesh.h"
-#include "OpenGLProgram.h"
+#include "../../materials/MeshBasicMaterial.h"
 
 
 namespace renderbox {
@@ -58,10 +57,14 @@ namespace renderbox {
 
             OpenGLObjectProperties *objectProperties = properties->getObjectProperties(object);
             OpenGLVertexArray *vertexArray = objectProperties->getVertexArray(0);
-            OpenGLProgram *program = objectProperties->getProgram(object->getMaterial());
+            Material *material = object->getMaterial();
+            OpenGLProgram *program = objectProperties->getProgram(material);
 
-            // Set world-view-projection matrix
+            // Set common uniforms
             program->setUniform("worldProjectionMatrix", worldProjectionMatrix);
+            if (material->getMaterialType() == MESH_BASIC_MATERIAL) {
+                program->setUniform("diffuse", ((MeshBasicMaterial *) material)->color);
+            }
 
             // Use program and vertex array for drawing
             program->useProgram();

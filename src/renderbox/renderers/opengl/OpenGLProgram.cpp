@@ -3,6 +3,7 @@
 #include <fstream>
 #include <glm/gtc/type_ptr.hpp>
 #include "OpenGLProgram.h"
+#include "../../materials/Material.h"
 
 
 namespace renderbox {
@@ -86,6 +87,10 @@ namespace renderbox {
         programID = initProgram(vertexShaderSource, fragmentShaderSource);
     }
 
+    OpenGLProgram::OpenGLProgram(std::string vertexShaderSource, std::string fragmentShaderSource) {
+        OpenGLProgram(copyString(vertexShaderSource), copyString(fragmentShaderSource));
+    }
+
     GLuint OpenGLProgram::getProgramID() {
         return programID;
     }
@@ -103,6 +108,15 @@ namespace renderbox {
 
         GLint location = glGetUniformLocation(programID, name);
         glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+
+        stopProgram();
+    }
+
+    void OpenGLProgram::setUniform(const char *name, glm::vec3 &vector) {
+        useProgram();
+
+        GLint location = glGetUniformLocation(programID, name);
+        glUniform3fv(location, 1, glm::value_ptr(vector));
 
         stopProgram();
     }
