@@ -5,7 +5,7 @@
 
 renderbox::Scene *scene;
 renderbox::PerspectiveCamera *camera;
-renderbox::Renderer *renderer;
+renderbox::OpenGLRenderer *renderer;
 
 renderbox::Object *cameraRig;
 renderbox::Mesh *terrain;
@@ -279,7 +279,7 @@ void rotateCallback(GLFWwindow *window, double rotation) {
 
 int main(int argc, char **argv) {
 
-    renderer = new renderbox::Renderer();
+    renderer = new renderbox::OpenGLRenderer();
     GLFWwindow *window = renderer->getWindow();
 
     // Callbacks

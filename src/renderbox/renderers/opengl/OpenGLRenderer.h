@@ -14,14 +14,14 @@
 
 namespace renderbox {
 
-    class Renderer {
+    class OpenGLRenderer {
         GLFWwindow *window;
         OpenGLRendererProperties *properties = new OpenGLRendererProperties();
         void renderObject(Object *object, Camera *camera);
         void renderObject(Object *object, Camera *camera, glm::mat4x4 viewProjectionMatrix);
     public:
-        Renderer();
-        ~Renderer();
+        OpenGLRenderer();
+        ~OpenGLRenderer();
         GLFWwindow *getWindow();
         void render(Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget = nullptr, bool forceClear = false);
         void loadObject(Object *object);

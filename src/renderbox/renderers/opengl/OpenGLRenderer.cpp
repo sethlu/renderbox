@@ -7,7 +7,7 @@
 
 namespace renderbox {
 
-    void Renderer::loadObject(Object *object) {
+    void OpenGLRenderer::loadObject(Object *object) {
 
         // Needs to load the buffer when the vertices are not yet loaded or when vertices have been updated
 
@@ -47,7 +47,7 @@ namespace renderbox {
 
     }
 
-    void Renderer::renderObject(Object *object, Camera *camera, glm::mat4x4 viewProjectionMatrix) {
+    void OpenGLRenderer::renderObject(Object *object, Camera *camera, glm::mat4x4 viewProjectionMatrix) {
 
         if (!object->visible) return;
 
@@ -84,11 +84,11 @@ namespace renderbox {
 
     }
 
-    void Renderer::renderObject(Object *object, Camera *camera) {
+    void OpenGLRenderer::renderObject(Object *object, Camera *camera) {
         renderObject(object, camera, camera->getViewProjectionMatrix());
     }
 
-    void Renderer::render(Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget, bool forceClear) {
+    void OpenGLRenderer::render(Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget, bool forceClear) {
 
         // Use frame buffer from render target
         glBindFramebuffer(GL_FRAMEBUFFER, renderTarget ? renderTarget->getFramebufferID() : 0);
@@ -106,7 +106,7 @@ namespace renderbox {
 
     }
 
-    Renderer::Renderer() {
+    OpenGLRenderer::OpenGLRenderer() {
 
         // GLFW
 
@@ -150,33 +150,33 @@ namespace renderbox {
 
     }
 
-    Renderer::~Renderer() {
+    OpenGLRenderer::~OpenGLRenderer() {
         glfwDestroyWindow(window);
     }
 
-    GLFWwindow *Renderer::getWindow() {
+    GLFWwindow *OpenGLRenderer::getWindow() {
         return window;
     }
 
-    int Renderer::getWindowWidth() {
+    int OpenGLRenderer::getWindowWidth() {
         int width, height;
         glfwGetWindowSize(window, &width, &height);
         return width;
     }
 
-    int Renderer::getWindowHeight() {
+    int OpenGLRenderer::getWindowHeight() {
         int width, height;
         glfwGetWindowSize(window, &width, &height);
         return height;
     }
 
-    int Renderer::getFramebufferWidth() {
+    int OpenGLRenderer::getFramebufferWidth() {
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
         return width;
     }
 
-    int Renderer::getFramebufferHeight() {
+    int OpenGLRenderer::getFramebufferHeight() {
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
         return height;
