@@ -22,19 +22,13 @@ namespace renderbox {
         throw 2; // TODO: Find error no
     }
 
-    GLuint initShader(const char *name, GLenum shader_type) {
+    GLuint initShader(const GLchar *source, GLenum shader_type) {
         // Create shaders
         GLuint shader = glCreateShader(shader_type);
 
-        // Read shaders file
-        std::string str = readFile(name);
-        GLchar *cstr = new GLchar[str.length() + 1]; // Require space for terminating null character
-        strcpy(cstr, str.c_str());
-        const GLchar *constcstr = cstr;
-
         // Compile shaders
         GLint compiled;
-        glShaderSource(shader, 1, &constcstr, nullptr);
+        glShaderSource(shader, 1, &source, nullptr);
         glCompileShader(shader);
         glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
         if (compiled) {
@@ -73,9 +67,9 @@ namespace renderbox {
         throw 4; // TODO: Find error no
     }
 
-    GLuint initProgram(const char *vertexShaderName, const char *fragmentShaderName) {
-        GLuint vertexShaderID = initShader(vertexShaderName, GL_VERTEX_SHADER);
-        GLuint fragmentShaderID = initShader(fragmentShaderName, GL_FRAGMENT_SHADER);
+    GLuint initProgram(const char *vertexShaderSource, const char *fragmentShaderSource) {
+        GLuint vertexShaderID = initShader(vertexShaderSource, GL_VERTEX_SHADER);
+        GLuint fragmentShaderID = initShader(fragmentShaderSource, GL_FRAGMENT_SHADER);
 
         GLuint programID = initProgram(vertexShaderID, fragmentShaderID);
 
@@ -88,19 +82,8 @@ namespace renderbox {
         return programID;
     }
 
-    OpenGLProgram::OpenGLProgram(const char *vertexShaderName, const char *fragmentShaderName) {
-
-        GLuint vertexShaderID = initShader(vertexShaderName, GL_VERTEX_SHADER);
-        GLuint fragmentShaderID = initShader(fragmentShaderName, GL_FRAGMENT_SHADER);
-
-        programID = initProgram(vertexShaderID, fragmentShaderID);
-
-        glDetachShader(programID, vertexShaderID);
-        glDetachShader(programID, fragmentShaderID);
-
-        glDeleteShader(vertexShaderID);
-        glDeleteShader(fragmentShaderID);
-
+    OpenGLProgram::OpenGLProgram(const char *vertexShaderSource, const char *fragmentShaderSource) {
+        programID = initProgram(vertexShaderSource, fragmentShaderSource);
     }
 
     GLuint OpenGLProgram::getProgramID() {

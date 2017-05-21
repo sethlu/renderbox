@@ -4,12 +4,18 @@
 
 namespace renderbox {
 
+    enum MATERIAL {
+        GLSL_SHADER_MATERIAL,
+    };
+
     class Material {
+    private:
         static int count;
         int id = ++count;
     public:
         Material();
         int getMaterialID();
+        virtual MATERIAL getMaterialType() = 0;
     };
 
 }

@@ -23,6 +23,10 @@ float isolevel = 0.5f;
 
 void init() {
 
+    // Shared material
+    renderbox::Material *material = new renderbox::GLSLShaderMaterial(renderbox::readFile("shaders/debug_vert.glsl"),
+                                                                      renderbox::readFile("shaders/debug_frag.glsl"));
+
     // Scene
     scene = new renderbox::Scene();
 
@@ -34,12 +38,12 @@ void init() {
         }
     }
     voxelGeometry->updateGeometry(isolevel); // Refresh geometry
-    terrain = new renderbox::Mesh(voxelGeometry, new renderbox::Material());
+    terrain = new renderbox::Mesh(voxelGeometry, material);
     renderer->loadObject(terrain);
     scene->addChild(terrain);
 
     // Test cube
-    testCube = new renderbox::Mesh(new renderbox::BoxGeometry(1.0f, 1.0f, 1.0f), new renderbox::Material());
+    testCube = new renderbox::Mesh(new renderbox::BoxGeometry(1.0f, 1.0f, 1.0f), material);
     renderer->loadObject(testCube);
     scene->addChild(testCube);
 

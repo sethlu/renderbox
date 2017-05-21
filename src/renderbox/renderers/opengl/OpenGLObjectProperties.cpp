@@ -1,5 +1,6 @@
 #include <iostream>
 #include "OpenGLObjectProperties.h"
+#include "../../materials/GLSLShaderMaterial.h"
 
 
 namespace renderbox {
@@ -27,12 +28,22 @@ namespace renderbox {
     }
 
     OpenGLProgram *OpenGLObjectProperties::getProgram(Material *material) {
-        std::unordered_map<int, OpenGLProgram *>::iterator result = programs.find(material->getMaterialID());
+        int materialID = material->getMaterialID();
+        std::unordered_map<int, OpenGLProgram *>::iterator result = programs.find(materialID);
         if (result != programs.end()) {
             return result->second;
         }
-        OpenGLProgram *program = new OpenGLProgram("shaders/debug_vert.glsl", "shaders/debug_frag.glsl"); // TODO
-        programs.insert(std::pair<int, OpenGLProgram *>(material->getMaterialID(), program));
+        OpenGLProgram *program;
+        switch (material->getMaterialType()) {
+            case GLSL_SHADER_MATERIAL:
+                program = new OpenGLProgram(((GLSLShaderMaterial *) material)->getVertexShaderSource(),
+                                            ((GLSLShaderMaterial *) material)->getFragmentShaderSource());
+                break;
+            default:
+                fprintf(stderr, "Unsupported material type");
+                throw 2;
+        }
+        programs.insert(std::pair<int, OpenGLProgram *>(materialID, program));
         return program;
     }
 
