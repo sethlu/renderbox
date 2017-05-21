@@ -8,7 +8,6 @@
 namespace renderbox {
 
     class GLSLShaderMaterial : public Material {
-    private:
         char *vertexShaderSource;
         char *fragmentShaderSource;
     public:

@@ -9,7 +9,6 @@ namespace renderbox {
     };
 
     class Material {
-    private:
         static int count;
         int id = ++count;
     public:
