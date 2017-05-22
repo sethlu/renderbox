@@ -8,19 +8,11 @@
 
 namespace renderbox {
 
-    std::string readFile(const char *name) {
-        std::ifstream in;
-        std::string line, str = "";
-        in.open(name);
-        if (in.is_open()) {
-            while (!in.eof()) {
-                getline(in, line);
-                str += line + "\n";
-            }
-            return str;
-        }
-        fprintf(stdout, "Failed to open file: %s\n", name);
-        throw 2; // TODO: Find error no
+    std::unordered_map<GLuint, OpenGLProgram *> OpenGLProgram::programs;
+
+    OpenGLProgram *OpenGLProgram::getProgram(GLuint programID) {
+        auto it = programs.find(programID);
+        return it != programs.end() ? it->second : nullptr;
     }
 
     GLuint initShader(const GLchar *source, GLenum shader_type) {
@@ -85,6 +77,7 @@ namespace renderbox {
 
     OpenGLProgram::OpenGLProgram(const char *vertexShaderSource, const char *fragmentShaderSource) {
         programID = initProgram(vertexShaderSource, fragmentShaderSource);
+        programs[programID] = this;
     }
 
     OpenGLProgram::OpenGLProgram(std::string vertexShaderSource, std::string fragmentShaderSource) {
@@ -95,34 +88,39 @@ namespace renderbox {
         return programID;
     }
 
-    void OpenGLProgram::useProgram() {
+    inline void OpenGLProgram::useProgram(GLuint programID) {
         glUseProgram(programID);
+    }
+
+    void OpenGLProgram::useProgram() {
+        useProgram(programID);
     }
 
     void OpenGLProgram::stopProgram() {
         glUseProgram(0);
     }
 
-    void OpenGLProgram::setUniform(const char *name, glm::mat4x4 &matrix) {
-        useProgram();
-
-        GLint location = glGetUniformLocation(programID, name);
-        glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
-
-        stopProgram();
-    }
-
-    void OpenGLProgram::setUniform(const char *name, glm::vec3 &vector) {
-        useProgram();
-
-        GLint location = glGetUniformLocation(programID, name);
-        glUniform3fv(location, 1, glm::value_ptr(vector));
-
-        stopProgram();
-    }
-
     GLint OpenGLProgram::getAttributeLocation(const char *name) {
         return glGetAttribLocation(programID, name);
+    }
+
+    GLint OpenGLProgram::getUniformLocation(const char *name) {
+        return glGetUniformLocation(programID, name);
+    }
+
+    std::string readFile(const char *name) {
+        std::ifstream in;
+        std::string line, str = "";
+        in.open(name);
+        if (in.is_open()) {
+            while (!in.eof()) {
+                getline(in, line);
+                str += line + "\n";
+            }
+            return str;
+        }
+        fprintf(stdout, "Failed to open file: %s\n", name);
+        throw 2; // TODO: Find error no
     }
 
 

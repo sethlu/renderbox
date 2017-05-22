@@ -1,8 +1,9 @@
 #include <iostream>
+#include <queue>
 #include <GL/glew.h>
 #include <glm/gtc/type_ptr.hpp>
 #include "OpenGLRenderer.h"
-#include "../../materials/MeshBasicMaterial.h"
+#include "../../renderbox.h"
 
 
 namespace renderbox {
@@ -13,7 +14,7 @@ namespace renderbox {
 
         OpenGLObjectProperties *objectProperties = properties->getObjectProperties(object);
         OpenGLVertexArray *vertexArray = objectProperties->getVertexArray(0);
-        OpenGLProgram *program = objectProperties->getProgram(object->getMaterial());
+        OpenGLProgram *program = properties->getProgram(object->getMaterial());
 
         // Load object geometry
 
@@ -47,48 +48,38 @@ namespace renderbox {
 
     }
 
-    void OpenGLRenderer::renderObject(Object *object, Camera *camera, glm::mat4x4 viewProjectionMatrix) {
+    OpenGLRenderList *OpenGLRenderer::prepassRender(Object *object, Camera *camera) {
+        OpenGLRenderList *renderList = new OpenGLRenderList;
 
-        if (!object->visible) return;
+        std::queue<Object *> frontier;
+        frontier.push(object);
 
-        if (object->hasGeometry() && object->hasMaterial()) {
+        while (!frontier.empty()) {
+            Object *current = frontier.front();
+            frontier.pop();
 
-            glm::mat4x4 worldProjectionMatrix = viewProjectionMatrix * object->getWorldMatrix();
+            // Skip invisible objects
+            if (!current->visible) continue;
 
-            OpenGLObjectProperties *objectProperties = properties->getObjectProperties(object);
-            OpenGLVertexArray *vertexArray = objectProperties->getVertexArray(0);
-            Material *material = object->getMaterial();
-            OpenGLProgram *program = objectProperties->getProgram(material);
-
-            // Set common uniforms
-            program->setUniform("worldProjectionMatrix", worldProjectionMatrix);
-            if (material->getMaterialType() == MESH_BASIC_MATERIAL) {
-                program->setUniform("diffuse", ((MeshBasicMaterial *) material)->color);
+            // Do not add objects without geometry or material
+            if (current->hasGeometry() && current->hasMaterial()) {
+                OpenGLProgram *program = properties->getProgram(current->getMaterial());
+                renderList->addObject(program->getProgramID(), current);
             }
 
-            // Use program and vertex array for drawing
-            program->useProgram();
-            vertexArray->bindVertexArray();
-
-            // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-            // glDrawArrays(GL_TRIANGLES, 0, (GLsizei) object->getGeometry()->getFaces().size() * 3);
-            glDrawElements(GL_TRIANGLES, object->getGeometry()->getFaces().size() * 3, GL_UNSIGNED_INT, 0);
-
-            vertexArray->unbindVertexArray();
-
+            for (Object *next : current->getChildren()) {
+                frontier.push(next);
+            }
         }
 
-        for (Object *child : object->getChildren()) {
-            renderObject(child, camera, viewProjectionMatrix);
-        }
-
+        return renderList;
     }
 
-    void OpenGLRenderer::renderObject(Object *object, Camera *camera) {
-        renderObject(object, camera, camera->getViewProjectionMatrix());
-    }
+    void OpenGLRenderer::render(OpenGLRenderList *renderList, Camera *camera, OpenGLRenderTarget *renderTarget, bool forceClear) {
 
-    void OpenGLRenderer::render(Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget, bool forceClear) {
+        //
+        // Prepare
+        //
 
         // Use frame buffer from render target
         glBindFramebuffer(GL_FRAMEBUFFER, renderTarget ? renderTarget->getFramebufferID() : 0);
@@ -102,8 +93,57 @@ namespace renderbox {
         // Clear the scene
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        renderObject(scene, camera);
+        //
+        // Render
+        //
 
+        // View projection matrix
+        glm::mat4x4 viewProjectionMatrix = camera->getViewProjectionMatrix();
+
+        for (auto it = renderList->objects.begin(); it != renderList->objects.end(); ++it) {
+
+            // Use program
+            OpenGLProgram *program = OpenGLProgram::getProgram(it->first);
+
+            for (Object *object : it->second) {
+
+                OpenGLObjectProperties *objectProperties = properties->getObjectProperties(object);
+                OpenGLVertexArray *vertexArray = objectProperties->getVertexArray(0);
+                Material *material = object->getMaterial();
+
+                // World projection matrix
+                glm::mat4x4 worldProjectionMatrix = viewProjectionMatrix * object->getWorldMatrix();
+
+                // Set common uniforms
+                glUniformMatrix4fv(program->getUniformLocation("worldProjectionMatrix"),
+                                   1,
+                                   GL_FALSE,
+                                   glm::value_ptr(worldProjectionMatrix));
+                if (material->getMaterialType() == MESH_BASIC_MATERIAL) {
+                    glUniform3fv(program->getUniformLocation("diffuse"),
+                                 1,
+                                 glm::value_ptr(((MeshBasicMaterial *) material)->color));
+                }
+
+                // Bind vertex array
+                program->useProgram();
+                vertexArray->bindVertexArray();
+
+                // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+                // glDrawArrays(GL_TRIANGLES, 0, (GLsizei) object->getGeometry()->getFaces().size() * 3);
+                glDrawElements(GL_TRIANGLES, object->getGeometry()->getFaces().size() * 3, GL_UNSIGNED_INT, 0);
+
+            }
+        }
+
+        // Unbind vertex array
+        OpenGLVertexArray::unbindVertexArray();
+
+    }
+
+    void OpenGLRenderer::render(Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget, bool forceClear) {
+        render(prepassRender(scene, camera),
+               camera, renderTarget, forceClear);
     }
 
     OpenGLRenderer::OpenGLRenderer() {
