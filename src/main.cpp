@@ -274,7 +274,7 @@ void zoomCallback(GLFWwindow *window, double magnification) {
 }
 
 void rotateCallback(GLFWwindow *window, double rotation) {
-    cameraAngle[0] += - rotation * 2;
+    cameraAngle[0] += - rotation;
 }
 
 int main(int argc, char **argv) {
