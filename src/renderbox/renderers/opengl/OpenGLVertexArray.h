@@ -15,7 +15,7 @@ namespace renderbox {
         OpenGLVertexArray();
         GLuint getVertexArrayID();
         void bindVertexArray();
-        void unbindVertexArray();
+        static void unbindVertexArray();
         void enableAttribute(OpenGLProgram *program, const char *name);
         void setAttributeBuffer(GLuint location,
                                 OpenGLBuffer *buffer,
