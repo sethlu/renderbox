@@ -1,9 +1,8 @@
-#include "Geometry.h"
-
-
 #ifndef PARTICLESIM_BOXGEOMETRY_H
 #define PARTICLESIM_BOXGEOMETRY_H
 
+
+#include "Geometry.h"
 
 namespace renderbox {
 

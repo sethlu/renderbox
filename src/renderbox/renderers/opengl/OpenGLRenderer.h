@@ -1,3 +1,7 @@
+#ifndef PARTICLESIM_OPENGLRENDERER_H
+#define PARTICLESIM_OPENGLRENDERER_H
+
+
 #include <GL/glew.h>
 #include <map>
 #include "../../scenes/Scene.h"
@@ -7,11 +11,6 @@
 #include "OpenGLRenderTarget.h"
 #include "OpenGLRendererProperties.h"
 #include "OpenGLRenderList.h"
-
-
-#ifndef PARTICLESIM_OPENGLRENDERER_H
-#define PARTICLESIM_OPENGLRENDERER_H
-
 
 namespace renderbox {
 

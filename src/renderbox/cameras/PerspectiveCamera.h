@@ -1,11 +1,10 @@
-#include <glm/glm.hpp>
-#include "Camera.h"
-#include "../math/Ray.h"
-
-
 #ifndef PARTICLESIM_PERSPECTIVECAMERA_H
 #define PARTICLESIM_PERSPECTIVECAMERA_H
 
+
+#include <glm/glm.hpp>
+#include "Camera.h"
+#include "../math/Ray.h"
 
 namespace renderbox {
 

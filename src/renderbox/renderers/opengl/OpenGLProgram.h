@@ -1,12 +1,11 @@
+#ifndef PARTICLESIM_OPENGLPROGRAM_H
+#define PARTICLESIM_OPENGLPROGRAM_H
+
+
 #include <GL/glew.h>
 #include <glm/mat4x4.hpp>
 #include <unordered_map>
 #include "OpenGLBuffer.h"
-
-
-#ifndef PARTICLESIM_OPENGLPROGRAM_H
-#define PARTICLESIM_OPENGLPROGRAM_H
-
 
 namespace renderbox {
 

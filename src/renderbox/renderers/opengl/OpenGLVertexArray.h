@@ -1,11 +1,10 @@
-#include <GL/glew.h>
-#include "OpenGLBuffer.h"
-#include "OpenGLProgram.h"
-
-
 #ifndef PARTICLESIM_OPENGLVERTEXARRAY_H
 #define PARTICLESIM_OPENGLVERTEXARRAY_H
 
+
+#include <GL/glew.h>
+#include "OpenGLBuffer.h"
+#include "OpenGLProgram.h"
 
 namespace renderbox {
 

@@ -1,13 +1,12 @@
+#ifndef PARTICLESIM_OBJECT_H
+#define PARTICLESIM_OBJECT_H
+
+
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 #include <vector>
 #include "../geometries/Geometry.h"
 #include "../materials/Material.h"
-
-
-#ifndef PARTICLESIM_OBJECT_H
-#define PARTICLESIM_OBJECT_H
-
 
 namespace renderbox {
 

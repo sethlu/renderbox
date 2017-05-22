@@ -1,9 +1,8 @@
-#include <GL/glew.h>
-
-
 #ifndef PARTICLESIM_OPENGLBUFFER_H
 #define PARTICLESIM_OPENGLBUFFER_H
 
+
+#include <GL/glew.h>
 
 namespace renderbox {
 

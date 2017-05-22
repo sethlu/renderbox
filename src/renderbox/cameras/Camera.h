@@ -1,11 +1,10 @@
-#include <glm/mat4x4.hpp>
-#include "../core/Object.h"
-#include "../math/Ray.h"
-
-
 #ifndef PARTICLESIM_CAMERA_H
 #define PARTICLESIM_CAMERA_H
 
+
+#include <glm/mat4x4.hpp>
+#include "../core/Object.h"
+#include "../math/Ray.h"
 
 namespace renderbox {
 

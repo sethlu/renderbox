@@ -1,11 +1,10 @@
-#include <vector>
-#include <glm/vec3.hpp>
-#include <GL/glew.h>
-
-
 #ifndef PARTICLESIM_GEOMETRY_H
 #define PARTICLESIM_GEOMETRY_H
 
+
+#include <vector>
+#include <glm/vec3.hpp>
+#include <GL/glew.h>
 
 namespace renderbox {
 

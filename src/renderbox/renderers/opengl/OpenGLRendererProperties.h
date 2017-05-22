@@ -1,13 +1,12 @@
+#ifndef PARTICLESIM_OPENGLRENDERERPROPERTIES_H
+#define PARTICLESIM_OPENGLRENDERERPROPERTIES_H
+
+
 #include <GL/glew.h>
 #include <unordered_map>
 #include <string>
 #include "../../objects/Mesh.h"
 #include "OpenGLObjectProperties.h"
-
-
-#ifndef PARTICLESIM_OPENGLPROPERTIES_H
-#define PARTICLESIM_OPENGLPROPERTIES_H
-
 
 namespace renderbox {
 
@@ -22,4 +21,4 @@ namespace renderbox {
 }
 
 
-#endif //PARTICLESIM_OPENGLPROPERTIES_H
+#endif //PARTICLESIM_OPENGLRENDERERPROPERTIES_H
