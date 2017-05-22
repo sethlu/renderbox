@@ -8,8 +8,8 @@ namespace renderbox {
         this->fragmentShaderSource = fragmentShaderSource;
     }
 
-    GLSLShaderMaterial::GLSLShaderMaterial(std::string vertexShaderSource, std::string fragmentShaderSource) {
-        GLSLShaderMaterial(copyString(vertexShaderSource), copyString(fragmentShaderSource));
+    GLSLShaderMaterial::GLSLShaderMaterial(std::string vertexShaderSource, std::string fragmentShaderSource) : GLSLShaderMaterial(copyString(vertexShaderSource), copyString(fragmentShaderSource)) {
+
     }
 
     inline MATERIAL GLSLShaderMaterial::getMaterialType() {
