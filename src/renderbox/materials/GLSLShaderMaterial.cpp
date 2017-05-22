@@ -3,7 +3,7 @@
 
 namespace renderbox {
 
-    GLSLShaderMaterial::GLSLShaderMaterial(char *vertexShaderSource, char *fragmentShaderSource) {
+    GLSLShaderMaterial::GLSLShaderMaterial(const char *vertexShaderSource, const char *fragmentShaderSource) {
         this->vertexShaderSource = vertexShaderSource;
         this->fragmentShaderSource = fragmentShaderSource;
     }
@@ -16,11 +16,11 @@ namespace renderbox {
         return GLSL_SHADER_MATERIAL;
     }
 
-    char *GLSLShaderMaterial::getVertexShaderSource() {
+    const char *GLSLShaderMaterial::getVertexShaderSource() {
         return vertexShaderSource;
     }
 
-    char *GLSLShaderMaterial::getFragmentShaderSource() {
+    const char *GLSLShaderMaterial::getFragmentShaderSource() {
         return fragmentShaderSource;
     }
 
