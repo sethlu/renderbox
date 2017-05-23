@@ -83,7 +83,8 @@ void update() {
     glm::vec3 cameraDirection = camera->getRay()->getDirection();
     glm::vec3 forward = glm::normalize(glm::vec3(cameraDirection.x, cameraDirection.y, 0));
     glm::vec3 right = glm::normalize(glm::vec3(cameraDirection.y, - cameraDirection.x, 0));
-    cameraRig->translate(glm::vec3(right * cameraVelocity[0] * deltaTime + forward * cameraVelocity[1] * deltaTime));
+    cameraRig->translate(glm::vec3(right * cameraVelocity[0] + forward * cameraVelocity[1])
+                         * deltaTime * cameraDistance * 0.01f);
     cameraRig->clearRotation();
     cameraAngle[0] += cameraAngularVelocity * deltaTime;
     if (cameraAngle[1] < 5.0f) cameraAngle[1] = 5.0f;
@@ -245,7 +246,8 @@ void scrollCallback(GLFWwindow *window, double deltaX, double deltaY) {
         cameraAngle[1] += (float) - deltaY;
         return;
     }
-    cameraRig->translate(+ forward * (float) deltaY - right * (float) deltaX);
+    cameraRig->translate((forward * (float) deltaY - right * (float) deltaX)
+                         * cameraDistance * 0.01f);
 }
 
 void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
