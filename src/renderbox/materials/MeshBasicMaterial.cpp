@@ -7,7 +7,7 @@ namespace renderbox {
         this->color = color;
     }
 
-    inline MATERIAL MeshBasicMaterial::getMaterialType() {
+    MATERIAL MeshBasicMaterial::getMaterialType() {
         return MESH_BASIC_MATERIAL;
     }
 

@@ -12,7 +12,7 @@ namespace renderbox {
 
     }
 
-    inline MATERIAL GLSLShaderMaterial::getMaterialType() {
+    MATERIAL GLSLShaderMaterial::getMaterialType() {
         return GLSL_SHADER_MATERIAL;
     }
 

@@ -16,6 +16,7 @@
 
 #include "materials/Material.h"
 #include "materials/MeshBasicMaterial.h"
+#include "materials/MeshLambertMaterial.h"
 #include "materials/GLSLShaderMaterial.h"
 
 #include "objects/Mesh.h"
