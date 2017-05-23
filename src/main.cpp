@@ -46,7 +46,7 @@ void init() {
     scene->addChild(terrain);
 
     // Test cube
-    testCube = new renderbox::Mesh(new renderbox::BoxGeometry(1.0f, 1.0f, 1.0f), material);
+    testCube = new renderbox::Mesh(new renderbox::BoxGeometry(0.5f, 0.5f, 0.5f), material);
     renderer->loadObject(testCube);
     scene->addChild(testCube);
 
@@ -74,7 +74,7 @@ void update() {
     testCube->visible = false;
     if (cameraRay->intersectObject(terrain, worldPositions)) {
         renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry();
-        glm::vec3 testLocation = floor(worldPositions[0] + glm::vec3(0.5f));
+        glm::vec3 testLocation = worldPositions[0];
         testCube->visible = true;
         testCube->setTranslation(testLocation);
     }
@@ -123,20 +123,13 @@ void mouseclick(GLFWwindow *window) {
                                                          1.0f - 2 * mouseY / renderer->getWindowHeight()));
     std::vector<glm::vec3> worldPositions;
     if (cameraRay->intersectObject(terrain, worldPositions)) {
-        glm::vec3 objectPosition = floor(renderbox::dehomogenize(
+        glm::vec3 objectPosition = renderbox::dehomogenize(
                 glm::inverse(terrain->getWorldMatrix())
-                * glm::vec4(worldPositions[0] + glm::vec3(0.5f), 1.0f)));
+                * glm::vec4(worldPositions[0] - glm::vec3(0.5f), 1.0f));
 
         renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry();
 
-        terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, 0, 0), 1.0f);
-        terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, 0, 0), 1.0f);
-        terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, -1, 0), 1.0f);
-        terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, -1, 0), 1.0f);
-        terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, 0, -1), 1.0f);
-        terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, 0, -1), 1.0f);
-        terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, -1, -1), 1.0f);
-        terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, -1, -1), 1.0f);
+        terrainGeometry->brush(objectPosition, 3, 0.2f);
 
         terrainGeometry->updateGeometry(isolevel);
         renderer->loadObject(terrain);
@@ -149,7 +142,7 @@ double mouseLastSync = glfwGetTime();
 void mousedrag(GLFWwindow *window) {
 
     double currentTime = glfwGetTime();
-    if (currentTime - mouseLastSync < 0.06f) return;
+    if (currentTime - mouseLastSync < 0.08f) return;
     mouseLastSync = currentTime;
 
     renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderer->getWindowWidth() - 1.0f,
@@ -162,14 +155,7 @@ void mousedrag(GLFWwindow *window) {
 
         renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry();
 
-        terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, 0, 0), 1.0f);
-        terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, 0, 0), 1.0f);
-        terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, -1, 0), 1.0f);
-        terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, -1, 0), 1.0f);
-        terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, 0, -1), 1.0f);
-        terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, 0, -1), 1.0f);
-        terrainGeometry->setOccupancy(objectPosition + glm::vec3(0, -1, -1), 1.0f);
-        terrainGeometry->setOccupancy(objectPosition + glm::vec3(-1, -1, -1), 1.0f);
+        terrainGeometry->brush(objectPosition, 3, 0.2f);
 
         terrainGeometry->updateGeometry(isolevel);
         renderer->loadObject(terrain);

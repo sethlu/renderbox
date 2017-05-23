@@ -46,6 +46,7 @@ namespace renderbox {
                      std::vector<glm::uvec3> &faces);
 
     public:
+
         bool isOccupied(int x, int y, int z);
         bool isOccupied(glm::ivec3 position);
         bool isOccupied(glm::vec3 position);
@@ -53,7 +54,11 @@ namespace renderbox {
         void setOccupancy(int x, int y, int z, float occupancy);
         void setOccupancy(glm::ivec3 position, float occupancy);
         void setOccupancy(glm::vec3 position, float occupancy);
+
+        void brush(glm::vec3 focus, float radius, float value);
+
         void updateGeometry(float isolevel);
+
     };
 
 }

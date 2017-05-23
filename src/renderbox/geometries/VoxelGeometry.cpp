@@ -130,6 +130,28 @@ namespace renderbox {
         setOccupancy(glm::ivec3(position), occupancy);
     }
 
+    float normalDistributionPDF(float x) {
+        return (float) (exp(- 1.0 / 2.0 * x * x) / sqrt(M_PI_2));
+    }
+
+    float normalDistributionPDF(float x, float mu, float delta) {
+        return normalDistributionPDF((x - mu) / delta) / delta;
+    }
+
+    void VoxelGeometry::brush(glm::vec3 focus, float radius, float value) {
+        for (int x = (int) floorf(focus.x - radius); x <= (int) ceilf(focus.x + radius); ++x) {
+            for (int y = (int) floorf(focus.y - radius); y <= (int) ceilf(focus.y + radius); ++y) {
+                for (int z = (int) floorf(focus.z - radius); z <= (int) ceilf(focus.z + radius); ++z) {
+                    float distance = glm::length(glm::vec3(x, y, z) - focus);
+                    if (distance > radius) continue;
+                    float occupancy = getOccupancy(x, y, z) + value * normalDistributionPDF(distance, 0, radius / 3);
+                    if (occupancy > 1.0f) occupancy = 1.0f;
+                    setOccupancy(x, y, z, occupancy);
+                }
+            }
+        }
+    }
+
     int edgeTable[256] = {
             0x0  , 0x109, 0x203, 0x30a, 0x406, 0x50f, 0x605, 0x70c,
             0x80c, 0x905, 0xa0f, 0xb06, 0xc0a, 0xd03, 0xe09, 0xf00,
@@ -557,8 +579,6 @@ namespace renderbox {
         }
 
     }
-
-
 
     void VoxelGeometry::updateGeometry(float isolevel) {
 
