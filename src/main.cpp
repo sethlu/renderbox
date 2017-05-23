@@ -31,6 +31,7 @@ void init() {
 
     // Scene
     scene = new renderbox::Scene();
+    scene->setAmbientColor(glm::vec3(0.05f));
 
     // Voxel terrain
     renderbox::VoxelGeometry *voxelGeometry = new renderbox::VoxelGeometry();

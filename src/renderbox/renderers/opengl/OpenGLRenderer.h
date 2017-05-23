@@ -28,8 +28,8 @@ namespace renderbox {
 
         void loadObject(Object *object);
 
-        OpenGLRenderList * prepassRender(Object *object, Camera *camera);
-        void render(OpenGLRenderList *renderList, Camera *camera, OpenGLRenderTarget *renderTarget, bool forceClear);
+        OpenGLRenderList * prepassRender(Scene *object, Camera *camera);
+        void render(OpenGLRenderList *renderList, Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget, bool forceClear);
         void render(Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget = nullptr, bool forceClear = false);
 
         GLFWwindow *getWindow();

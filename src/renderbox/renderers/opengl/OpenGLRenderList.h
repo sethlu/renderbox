@@ -10,6 +10,7 @@
 #include "../ObjectProperties.h"
 #include "OpenGLObjectProperties.h"
 #include "../../lights/Light.h"
+#include "../../scenes/Scene.h"
 
 namespace renderbox {
 

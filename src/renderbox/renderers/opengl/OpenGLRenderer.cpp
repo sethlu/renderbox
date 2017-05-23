@@ -62,11 +62,11 @@ namespace renderbox {
 
     }
 
-    OpenGLRenderList *OpenGLRenderer::prepassRender(Object *object, Camera *camera) {
+    OpenGLRenderList *OpenGLRenderer::prepassRender(Scene *scene, Camera *camera) {
         OpenGLRenderList *renderList = new OpenGLRenderList;
 
         std::queue<Object *> frontier;
-        frontier.push(object);
+        frontier.push((Object *) scene);
 
         while (!frontier.empty()) {
             Object *current = frontier.front();
@@ -89,7 +89,7 @@ namespace renderbox {
         return renderList;
     }
 
-    void OpenGLRenderer::render(OpenGLRenderList *renderList, Camera *camera, OpenGLRenderTarget *renderTarget, bool forceClear) {
+    void OpenGLRenderer::render(OpenGLRenderList *renderList, Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget, bool forceClear) {
 
         //
         // Prepare
@@ -133,21 +133,29 @@ namespace renderbox {
                                    1,
                                    GL_FALSE,
                                    glm::value_ptr(worldProjectionMatrix));
-                if (material->getMaterialType() == MESH_BASIC_MATERIAL
-                        || material->getMaterialType() == MESH_LAMBERT_MATERIAL) {
-                    glUniform3fv(program->getUniformLocation("vertexColor"),
-                                 1,
-                                 glm::value_ptr(((MeshBasicMaterial *) material)->color));
-                }
-                if (material->getMaterialType() == MESH_LAMBERT_MATERIAL) {
-                    glUniformMatrix4fv(program->getUniformLocation("worldMatrix"),
-                                       1,
-                                       GL_FALSE,
-                                       glm::value_ptr(object->getWorldMatrix()));
-                    glUniformMatrix4fv(program->getUniformLocation("worldNormalMatrix"),
-                                       1,
-                                       GL_FALSE,
-                                       glm::value_ptr(glm::transpose(glm::inverse(object->getWorldMatrix()))));
+                switch (material->getMaterialType()) {
+                    case MESH_BASIC_MATERIAL:
+                        glUniform3fv(program->getUniformLocation("vertexColor"),
+                                     1,
+                                     glm::value_ptr(((MeshBasicMaterial *) material)->color));
+                        break;
+                    case MESH_LAMBERT_MATERIAL:
+                        glUniformMatrix4fv(program->getUniformLocation("worldMatrix"),
+                                           1,
+                                           GL_FALSE,
+                                           glm::value_ptr(object->getWorldMatrix()));
+                        glUniformMatrix4fv(program->getUniformLocation("worldNormalMatrix"),
+                                           1,
+                                           GL_FALSE,
+                                           glm::value_ptr(glm::transpose(glm::inverse(object->getWorldMatrix()))));
+                        glUniform3fv(program->getUniformLocation("sceneAmbientColor"),
+                                     1,
+                                     glm::value_ptr(scene->getAmbientColor()));
+                        glUniform3fv(program->getUniformLocation("vertexColor"),
+                                     1,
+                                     glm::value_ptr(((MeshBasicMaterial *) material)->color));
+                        break;
+                    default: break;
                 }
 
                 // Bind vertex array
@@ -168,7 +176,7 @@ namespace renderbox {
 
     void OpenGLRenderer::render(Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget, bool forceClear) {
         render(prepassRender(scene, camera),
-               camera, renderTarget, forceClear);
+               scene, camera, renderTarget, forceClear);
     }
 
     OpenGLRenderer::OpenGLRenderer() {
