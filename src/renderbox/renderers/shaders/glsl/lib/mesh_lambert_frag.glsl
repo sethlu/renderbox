@@ -20,9 +20,9 @@ void main() {
     vec3 L = normalize(lightWorldPosition - vertexWorldPosition);
     float distance = length(lightWorldPosition - vertexWorldPosition);
 
-    vec3 diffuse = vertexColor * max(dot(N, L), 0) * 40 * (1.0 / (1.0 + (0.25 * distance * distance)));
+    vec3 diffuseColor = vertexColor * clamp(dot(N, L), 0.0, 1.0) * 40.0 / (1.0 + (0.25 * distance * distance));
 
-    vec3 colorLinear = sceneAmbientColor + diffuse;
+    vec3 colorLinear = sceneAmbientColor + diffuseColor;
     vec3 colorGammaCorrected = pow(colorLinear, vec3(1.0 / screenGamma));
     fragmentColor = vec4(colorGammaCorrected, 1.0);
 
