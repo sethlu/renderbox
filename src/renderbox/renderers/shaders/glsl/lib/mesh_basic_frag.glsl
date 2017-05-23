@@ -2,12 +2,12 @@ R"(
 
 #version 330
 
-uniform vec3 diffuse;
+uniform vec3 vertexColor;
 
 out vec4 fragmentColor;
 
 void main() {
-    fragmentColor = vec4(diffuse, 1.0);
+    fragmentColor = vec4(vertexColor, 1.0);
 }
 
 )"

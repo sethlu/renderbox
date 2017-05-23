@@ -32,6 +32,13 @@ namespace renderbox {
                     #include "../shaders/glsl/lib/mesh_basic_frag.glsl"
                 );
                 break;
+            case MESH_LAMBERT_MATERIAL:
+                program = new OpenGLProgram(
+                    #include "../shaders/glsl/lib/mesh_lambert_vert.glsl"
+                        ,
+                    #include "../shaders/glsl/lib/mesh_lambert_frag.glsl"
+                );
+                break;
             case GLSL_SHADER_MATERIAL:
                 program = new OpenGLProgram(((GLSLShaderMaterial *) material)->getVertexShaderSource(),
                                             ((GLSLShaderMaterial *) material)->getFragmentShaderSource());

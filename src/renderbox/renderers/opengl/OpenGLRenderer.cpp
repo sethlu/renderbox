@@ -19,6 +19,7 @@ namespace renderbox {
         // Load object geometry
 
         std::vector<glm::vec3> vertices = object->getGeometry()->getVertices();
+        std::vector<glm::vec3> normals = object->getGeometry()->getNormals();
         std::vector<glm::uvec3> faces = object->getGeometry()->getFaces();
 
         unsigned long nVertices = vertices.size();
@@ -31,8 +32,21 @@ namespace renderbox {
         }
 
         objectProperties->getBuffer(0)->buffer(bufferVertices, sizeof(bufferVertices));
-        vertexArray->enableAttribute(program, "vertexPosition");
         vertexArray->setAttributeBuffer(program, "vertexPosition", objectProperties->getBuffer(0));
+        vertexArray->enableAttribute(program, "vertexPosition");
+
+        unsigned long nNormals = normals.size();
+        GLfloat bufferNormals[nNormals * 3];
+        for (unsigned long i = 0; i < nNormals; ++i) {
+            glm::vec3 normal = normals[i];
+            bufferNormals[3 * i] = normal[0];
+            bufferNormals[3 * i + 1] = normal[1];
+            bufferNormals[3 * i + 2] = normal[2];
+        }
+
+        objectProperties->getBuffer(1)->buffer(bufferNormals, sizeof(bufferNormals));
+        vertexArray->setAttributeBuffer(program, "vertexNormal", objectProperties->getBuffer(1));
+        vertexArray->enableAttribute(program, "vertexNormal");
 
         unsigned long nFaces = faces.size();
         GLuint bufferFaces[nFaces * 3];
@@ -43,8 +57,8 @@ namespace renderbox {
             bufferFaces[3 * i + 2] = face[2];
         }
 
-        objectProperties->getBuffer(1)->buffer(bufferFaces, sizeof(bufferFaces));
-        vertexArray->setElementBuffer(objectProperties->getBuffer(1));
+        objectProperties->getBuffer(2)->buffer(bufferFaces, sizeof(bufferFaces));
+        vertexArray->setElementBuffer(objectProperties->getBuffer(2));
 
     }
 
@@ -119,10 +133,21 @@ namespace renderbox {
                                    1,
                                    GL_FALSE,
                                    glm::value_ptr(worldProjectionMatrix));
-                if (material->getMaterialType() == MESH_BASIC_MATERIAL) {
-                    glUniform3fv(program->getUniformLocation("diffuse"),
+                if (material->getMaterialType() == MESH_BASIC_MATERIAL
+                        || material->getMaterialType() == MESH_LAMBERT_MATERIAL) {
+                    glUniform3fv(program->getUniformLocation("vertexColor"),
                                  1,
                                  glm::value_ptr(((MeshBasicMaterial *) material)->color));
+                }
+                if (material->getMaterialType() == MESH_LAMBERT_MATERIAL) {
+                    glUniformMatrix4fv(program->getUniformLocation("worldMatrix"),
+                                       1,
+                                       GL_FALSE,
+                                       glm::value_ptr(object->getWorldMatrix()));
+                    glUniformMatrix4fv(program->getUniformLocation("worldNormalMatrix"),
+                                       1,
+                                       GL_FALSE,
+                                       glm::value_ptr(glm::transpose(glm::inverse(object->getWorldMatrix()))));
                 }
 
                 // Bind vertex array

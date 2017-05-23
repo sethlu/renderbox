@@ -11,9 +11,11 @@ namespace renderbox {
     class Geometry {
     protected:
         std::vector<glm::vec3> vertices;
+        std::vector<glm::vec3> normals;
         std::vector<glm::uvec3> faces;
     public:
         std::vector<glm::vec3> getVertices();
+        std::vector<glm::vec3> getNormals();
         std::vector<glm::uvec3> getFaces();
     };
 

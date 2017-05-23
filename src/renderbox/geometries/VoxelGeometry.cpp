@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cfloat>
+#include <glm/geometric.hpp>
 #include "VoxelGeometry.h"
+#include "../renderbox.h"
 
 
 namespace renderbox {
@@ -432,6 +434,7 @@ namespace renderbox {
     void VoxelGeometry::addCube(int x, int y, int z,
                                 float isolevel,
                                 std::vector<glm::vec3> &vertices,
+                                std::vector<glm::vec3> &normals,
                                 std::vector<glm::uvec3> &faces) {
 
         float cubeVertexOccupancies[8] = {
@@ -537,10 +540,20 @@ namespace renderbox {
 
         for (int i = 0; triTable[cubeIndex][i] != -1; i += 3) {
             unsigned long n = vertices.size();
+
             vertices.push_back(vertexList[triTable[cubeIndex][i]]);
             vertices.push_back(vertexList[triTable[cubeIndex][i + 1]]);
             vertices.push_back(vertexList[triTable[cubeIndex][i + 2]]);
+
+            glm::vec3 normal = glm::normalize(glm::cross((vertexList[triTable[cubeIndex][i + 2]] - vertexList[triTable[cubeIndex][i]]),
+                                                         (vertexList[triTable[cubeIndex][i + 1]] - vertexList[triTable[cubeIndex][i]])));
+
+            normals.push_back(normal);
+            normals.push_back(normal);
+            normals.push_back(normal);
+
             faces.push_back(glm::uvec3(n, n + 1, n + 2));
+
         }
 
     }
@@ -550,6 +563,7 @@ namespace renderbox {
     void VoxelGeometry::updateGeometry(float isolevel) {
 
         vertices.clear();
+        normals.clear();
         faces.clear();
 
         for (auto it0 = voxelChunkPlanes.begin(); it0 != voxelChunkPlanes.end(); ++it0) {
@@ -570,6 +584,7 @@ namespace renderbox {
                         voxelChunk->voxelUpdated = false;
 
                         voxelChunk->vertices.clear();
+                        voxelChunk->normals.clear();
                         voxelChunk->faces.clear();
 
                         // Generate geometry for the current chunk
@@ -582,6 +597,7 @@ namespace renderbox {
                                             cz * VOXEL_CHUNK_DIMENSION + iz,
                                             isolevel,
                                             voxelChunk->vertices,
+                                            voxelChunk->normals,
                                             voxelChunk->faces);
                                 }
                             }
@@ -592,6 +608,7 @@ namespace renderbox {
 
                     unsigned int numVertices = (unsigned int) vertices.size();
                     vertices.insert(vertices.end(), voxelChunk->vertices.begin(), voxelChunk->vertices.end());
+                    normals.insert(normals.end(), voxelChunk->normals.begin(), voxelChunk->normals.end());
                     for (glm::uvec3 face : voxelChunk->faces) {
                         faces.push_back(glm::uvec3(numVertices) + face);
                     }
@@ -603,7 +620,7 @@ namespace renderbox {
                             addCube(cx * VOXEL_CHUNK_DIMENSION + ix,
                                     cy * VOXEL_CHUNK_DIMENSION + iy,
                                     cz * VOXEL_CHUNK_DIMENSION,
-                                    isolevel, vertices, faces);
+                                    isolevel, vertices, normals, faces);
                         }
                     }
                     for (int ix = 0; ix < VOXEL_CHUNK_DIMENSION; ++ix) {
@@ -611,7 +628,7 @@ namespace renderbox {
                             addCube(cx * VOXEL_CHUNK_DIMENSION + ix,
                                     cy * VOXEL_CHUNK_DIMENSION,
                                     cz * VOXEL_CHUNK_DIMENSION + iz,
-                                    isolevel, vertices, faces);
+                                    isolevel, vertices, normals, faces);
                         }
                     }
                     for (int iy = 1; iy < VOXEL_CHUNK_DIMENSION; ++iy) {
@@ -619,7 +636,7 @@ namespace renderbox {
                             addCube(cx * VOXEL_CHUNK_DIMENSION,
                                     cy * VOXEL_CHUNK_DIMENSION + iy,
                                     cz * VOXEL_CHUNK_DIMENSION + iz,
-                                    isolevel, vertices, faces);
+                                    isolevel, vertices, normals, faces);
                         }
                     }
 

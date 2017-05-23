@@ -8,8 +8,6 @@ out gl_PerVertex {
     vec4 gl_Position;
 };
 
-out vec3 fragmentDiffuse;
-
 in vec3 vertexPosition;
 
 void main() {

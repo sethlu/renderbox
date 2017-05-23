@@ -19,6 +19,7 @@ namespace renderbox {
             int index;
             Voxel voxels[VOXEL_CHUNK_DIMENSION][VOXEL_CHUNK_DIMENSION][VOXEL_CHUNK_DIMENSION];
             std::vector<glm::vec3> vertices;
+            std::vector<glm::vec3> normals;
             std::vector<glm::uvec3> faces;
             bool voxelUpdated = false;
         };
@@ -41,6 +42,7 @@ namespace renderbox {
         void addCube(int x, int y, int z,
                      float isolevel,
                      std::vector<glm::vec3> &vertices,
+                     std::vector<glm::vec3> &normals,
                      std::vector<glm::uvec3> &faces);
 
     public:
