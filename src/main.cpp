@@ -68,15 +68,16 @@ void update() {
 
     // Test cube
 
-    renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderer->getWindowWidth() - 1.0f,
-                                                         1.0f - 2 * mouseY / renderer->getWindowHeight()));
-    std::vector<glm::vec3> worldPositions;
     testCube->visible = false;
-    if (cameraRay->intersectObject(terrain, worldPositions)) {
-        renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry();
-        glm::vec3 testLocation = worldPositions[0];
-        testCube->visible = true;
-        testCube->setTranslation(testLocation);
+    if (mouseX >= 0 && mouseX <= renderer->getWindowWidth() && mouseY >= 0 && mouseY <= renderer->getWindowHeight()) {
+        renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderer->getWindowWidth() - 1.0f,
+                                                             1.0f - 2 * mouseY / renderer->getWindowHeight()));
+        std::vector<glm::vec3> worldPositions;
+        if (cameraRay->intersectObject(terrain, worldPositions)) {
+            glm::vec3 testLocation = worldPositions[0];
+            testCube->visible = true;
+            testCube->setTranslation(testLocation);
+        }
     }
 
     // Camera
