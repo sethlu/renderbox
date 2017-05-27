@@ -37,7 +37,9 @@ void init() {
     renderbox::VoxelGeometry *voxelGeometry = new renderbox::VoxelGeometry();
     for (int x = -32; x < 32; ++x) {
         for (int y = -32; y < 32; ++y) {
-            voxelGeometry->setOccupancy(x, y, 0, 1.0f);
+            for (int z = -1; z < 1; ++z) {
+                voxelGeometry->setOccupancy(x, y, z, 1.0f);
+            }
         }
     }
     voxelGeometry->updateGeometry(isolevel); // Refresh geometry
