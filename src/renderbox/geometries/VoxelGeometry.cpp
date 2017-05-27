@@ -108,17 +108,17 @@ namespace renderbox {
         int iz = remainder(z, VOXEL_CHUNK_DIMENSION);
 
         voxelChunk->voxels[ix][iy][iz].occupancy = occupancy;
-        voxelChunk->voxelUpdated = true;
+        voxelChunk->cacheNeedsUpdating = true;
 
         // Pre populate neighboring chunks for geometry generation of overlapping voxel chunk edges
 
-        getVoxelChunkByVoxel(x + 1, y + 1, z + 1, true);
-        getVoxelChunkByVoxel(x + 1, y + 1, z, true);
-        getVoxelChunkByVoxel(x, y + 1, z + 1, true);
-        getVoxelChunkByVoxel(x, y + 1, z, true);
-        getVoxelChunkByVoxel(x + 1, y, z + 1, true);
-        getVoxelChunkByVoxel(x + 1, y, z, true);
-        getVoxelChunkByVoxel(x, y, z + 1, true);
+        getVoxelChunkByVoxel(x + 1, y + 1, z + 1, true)->edgeCacheNeedsUpdating = true;
+        getVoxelChunkByVoxel(x + 1, y + 1, z, true)->edgeCacheNeedsUpdating = true;
+        getVoxelChunkByVoxel(x, y + 1, z + 1, true)->edgeCacheNeedsUpdating = true;
+        getVoxelChunkByVoxel(x, y + 1, z, true)->edgeCacheNeedsUpdating = true;
+        getVoxelChunkByVoxel(x + 1, y, z + 1, true)->edgeCacheNeedsUpdating = true;
+        getVoxelChunkByVoxel(x + 1, y, z, true)->edgeCacheNeedsUpdating = true;
+        getVoxelChunkByVoxel(x, y, z + 1, true)->edgeCacheNeedsUpdating = true;
 
     }
 
@@ -610,14 +610,12 @@ namespace renderbox {
 
                     // Cache non-edge voxel geometry
 
-                    if (voxelChunk->voxelUpdated) {
-                        voxelChunk->voxelUpdated = false;
+                    if (voxelChunk->cacheNeedsUpdating) {
+                        voxelChunk->cacheNeedsUpdating = false;
 
                         voxelChunk->vertices.clear();
                         voxelChunk->normals.clear();
                         voxelChunk->faces.clear();
-
-                        // Generate geometry for the current chunk
 
                         for (int ix = 1; ix < VOXEL_CHUNK_DIMENSION; ++ix) {
                             for (int iy = 1; iy < VOXEL_CHUNK_DIMENSION; ++iy) {
@@ -634,6 +632,48 @@ namespace renderbox {
                         }
                     }
 
+                    if (voxelChunk->edgeCacheNeedsUpdating) {
+                        voxelChunk->edgeCacheNeedsUpdating = false;
+
+                        voxelChunk->edgeVertices.clear();
+                        voxelChunk->edgeNormals.clear();
+                        voxelChunk->edgeFaces.clear();
+
+                        for (int ix = 0; ix < VOXEL_CHUNK_DIMENSION; ++ix) {
+                            for (int iy = 0; iy < VOXEL_CHUNK_DIMENSION; ++iy) {
+                                addCube(cx * VOXEL_CHUNK_DIMENSION + ix,
+                                        cy * VOXEL_CHUNK_DIMENSION + iy,
+                                        cz * VOXEL_CHUNK_DIMENSION,
+                                        isolevel,
+                                        voxelChunk->edgeVertices,
+                                        voxelChunk->edgeNormals,
+                                        voxelChunk->edgeFaces);
+                            }
+                        }
+                        for (int ix = 0; ix < VOXEL_CHUNK_DIMENSION; ++ix) {
+                            for (int iz = 1; iz < VOXEL_CHUNK_DIMENSION; ++iz) {
+                                addCube(cx * VOXEL_CHUNK_DIMENSION + ix,
+                                        cy * VOXEL_CHUNK_DIMENSION,
+                                        cz * VOXEL_CHUNK_DIMENSION + iz,
+                                        isolevel,
+                                        voxelChunk->edgeVertices,
+                                        voxelChunk->edgeNormals,
+                                        voxelChunk->edgeFaces);
+                            }
+                        }
+                        for (int iy = 1; iy < VOXEL_CHUNK_DIMENSION; ++iy) {
+                            for (int iz = 1; iz < VOXEL_CHUNK_DIMENSION; ++iz) {
+                                addCube(cx * VOXEL_CHUNK_DIMENSION,
+                                        cy * VOXEL_CHUNK_DIMENSION + iy,
+                                        cz * VOXEL_CHUNK_DIMENSION + iz,
+                                        isolevel,
+                                        voxelChunk->edgeVertices,
+                                        voxelChunk->edgeNormals,
+                                        voxelChunk->edgeFaces);
+                            }
+                        }
+                    }
+
                     // Add all vertices in chunk to the vertices array
 
                     unsigned int numVertices = (unsigned int) vertices.size();
@@ -643,31 +683,11 @@ namespace renderbox {
                         faces.push_back(glm::uvec3(numVertices) + face);
                     }
 
-                    // Non-cached faces
-
-                    for (int ix = 0; ix < VOXEL_CHUNK_DIMENSION; ++ix) {
-                        for (int iy = 0; iy < VOXEL_CHUNK_DIMENSION; ++iy) {
-                            addCube(cx * VOXEL_CHUNK_DIMENSION + ix,
-                                    cy * VOXEL_CHUNK_DIMENSION + iy,
-                                    cz * VOXEL_CHUNK_DIMENSION,
-                                    isolevel, vertices, normals, faces);
-                        }
-                    }
-                    for (int ix = 0; ix < VOXEL_CHUNK_DIMENSION; ++ix) {
-                        for (int iz = 1; iz < VOXEL_CHUNK_DIMENSION; ++iz) {
-                            addCube(cx * VOXEL_CHUNK_DIMENSION + ix,
-                                    cy * VOXEL_CHUNK_DIMENSION,
-                                    cz * VOXEL_CHUNK_DIMENSION + iz,
-                                    isolevel, vertices, normals, faces);
-                        }
-                    }
-                    for (int iy = 1; iy < VOXEL_CHUNK_DIMENSION; ++iy) {
-                        for (int iz = 1; iz < VOXEL_CHUNK_DIMENSION; ++iz) {
-                            addCube(cx * VOXEL_CHUNK_DIMENSION,
-                                    cy * VOXEL_CHUNK_DIMENSION + iy,
-                                    cz * VOXEL_CHUNK_DIMENSION + iz,
-                                    isolevel, vertices, normals, faces);
-                        }
+                    numVertices = (unsigned int) vertices.size();
+                    vertices.insert(vertices.end(), voxelChunk->edgeVertices.begin(), voxelChunk->edgeVertices.end());
+                    normals.insert(normals.end(), voxelChunk->edgeNormals.begin(), voxelChunk->edgeNormals.end());
+                    for (glm::uvec3 face : voxelChunk->edgeFaces) {
+                        faces.push_back(glm::uvec3(numVertices) + face);
                     }
 
                 }

@@ -9,7 +9,7 @@ namespace renderbox {
 
     class VoxelGeometry : public Geometry {
 
-        static const int VOXEL_CHUNK_DIMENSION = 6;
+        static const int VOXEL_CHUNK_DIMENSION = 8;
 
         struct Voxel {
             float occupancy;
@@ -18,10 +18,17 @@ namespace renderbox {
         struct VoxelChunk {
             int index;
             Voxel voxels[VOXEL_CHUNK_DIMENSION][VOXEL_CHUNK_DIMENSION][VOXEL_CHUNK_DIMENSION];
+
             std::vector<glm::vec3> vertices;
             std::vector<glm::vec3> normals;
             std::vector<glm::uvec3> faces;
-            bool voxelUpdated = false;
+
+            std::vector<glm::vec3> edgeVertices;
+            std::vector<glm::vec3> edgeNormals;
+            std::vector<glm::uvec3> edgeFaces;
+
+            bool cacheNeedsUpdating = false;
+            bool edgeCacheNeedsUpdating = false;
         };
 
         struct SparseVoxelChunkList {
