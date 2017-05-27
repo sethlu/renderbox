@@ -613,9 +613,9 @@ namespace renderbox {
                     if (voxelChunk->cacheNeedsUpdating) {
                         voxelChunk->cacheNeedsUpdating = false;
 
-                        voxelChunk->vertices.clear();
-                        voxelChunk->normals.clear();
-                        voxelChunk->faces.clear();
+                        voxelChunk->cacheVertices.clear();
+                        voxelChunk->cacheNormals.clear();
+                        voxelChunk->cacheFaces.clear();
 
                         for (int ix = 1; ix < VOXEL_CHUNK_DIMENSION; ++ix) {
                             for (int iy = 1; iy < VOXEL_CHUNK_DIMENSION; ++iy) {
@@ -624,9 +624,9 @@ namespace renderbox {
                                             cy * VOXEL_CHUNK_DIMENSION + iy,
                                             cz * VOXEL_CHUNK_DIMENSION + iz,
                                             isolevel,
-                                            voxelChunk->vertices,
-                                            voxelChunk->normals,
-                                            voxelChunk->faces);
+                                            voxelChunk->cacheVertices,
+                                            voxelChunk->cacheNormals,
+                                            voxelChunk->cacheFaces);
                                 }
                             }
                         }
@@ -635,9 +635,9 @@ namespace renderbox {
                     if (voxelChunk->edgeCacheNeedsUpdating) {
                         voxelChunk->edgeCacheNeedsUpdating = false;
 
-                        voxelChunk->edgeVertices.clear();
-                        voxelChunk->edgeNormals.clear();
-                        voxelChunk->edgeFaces.clear();
+                        voxelChunk->edgeCacheVertices.clear();
+                        voxelChunk->edgeCacheNormals.clear();
+                        voxelChunk->edgeCacheFaces.clear();
 
                         for (int ix = 0; ix < VOXEL_CHUNK_DIMENSION; ++ix) {
                             for (int iy = 0; iy < VOXEL_CHUNK_DIMENSION; ++iy) {
@@ -645,9 +645,9 @@ namespace renderbox {
                                         cy * VOXEL_CHUNK_DIMENSION + iy,
                                         cz * VOXEL_CHUNK_DIMENSION,
                                         isolevel,
-                                        voxelChunk->edgeVertices,
-                                        voxelChunk->edgeNormals,
-                                        voxelChunk->edgeFaces);
+                                        voxelChunk->edgeCacheVertices,
+                                        voxelChunk->edgeCacheNormals,
+                                        voxelChunk->edgeCacheFaces);
                             }
                         }
                         for (int ix = 0; ix < VOXEL_CHUNK_DIMENSION; ++ix) {
@@ -656,9 +656,9 @@ namespace renderbox {
                                         cy * VOXEL_CHUNK_DIMENSION,
                                         cz * VOXEL_CHUNK_DIMENSION + iz,
                                         isolevel,
-                                        voxelChunk->edgeVertices,
-                                        voxelChunk->edgeNormals,
-                                        voxelChunk->edgeFaces);
+                                        voxelChunk->edgeCacheVertices,
+                                        voxelChunk->edgeCacheNormals,
+                                        voxelChunk->edgeCacheFaces);
                             }
                         }
                         for (int iy = 1; iy < VOXEL_CHUNK_DIMENSION; ++iy) {
@@ -667,9 +667,9 @@ namespace renderbox {
                                         cy * VOXEL_CHUNK_DIMENSION + iy,
                                         cz * VOXEL_CHUNK_DIMENSION + iz,
                                         isolevel,
-                                        voxelChunk->edgeVertices,
-                                        voxelChunk->edgeNormals,
-                                        voxelChunk->edgeFaces);
+                                        voxelChunk->edgeCacheVertices,
+                                        voxelChunk->edgeCacheNormals,
+                                        voxelChunk->edgeCacheFaces);
                             }
                         }
                     }
@@ -677,16 +677,16 @@ namespace renderbox {
                     // Add all vertices in chunk to the vertices array
 
                     unsigned int numVertices = (unsigned int) vertices.size();
-                    vertices.insert(vertices.end(), voxelChunk->vertices.begin(), voxelChunk->vertices.end());
-                    normals.insert(normals.end(), voxelChunk->normals.begin(), voxelChunk->normals.end());
-                    for (glm::uvec3 face : voxelChunk->faces) {
+                    vertices.insert(vertices.end(), voxelChunk->cacheVertices.begin(), voxelChunk->cacheVertices.end());
+                    normals.insert(normals.end(), voxelChunk->cacheNormals.begin(), voxelChunk->cacheNormals.end());
+                    for (glm::uvec3 face : voxelChunk->cacheFaces) {
                         faces.push_back(glm::uvec3(numVertices) + face);
                     }
 
                     numVertices = (unsigned int) vertices.size();
-                    vertices.insert(vertices.end(), voxelChunk->edgeVertices.begin(), voxelChunk->edgeVertices.end());
-                    normals.insert(normals.end(), voxelChunk->edgeNormals.begin(), voxelChunk->edgeNormals.end());
-                    for (glm::uvec3 face : voxelChunk->edgeFaces) {
+                    vertices.insert(vertices.end(), voxelChunk->edgeCacheVertices.begin(), voxelChunk->edgeCacheVertices.end());
+                    normals.insert(normals.end(), voxelChunk->edgeCacheNormals.begin(), voxelChunk->edgeCacheNormals.end());
+                    for (glm::uvec3 face : voxelChunk->edgeCacheFaces) {
                         faces.push_back(glm::uvec3(numVertices) + face);
                     }
 

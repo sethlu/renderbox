@@ -19,16 +19,18 @@ namespace renderbox {
             int index;
             Voxel voxels[VOXEL_CHUNK_DIMENSION][VOXEL_CHUNK_DIMENSION][VOXEL_CHUNK_DIMENSION];
 
-            std::vector<glm::vec3> vertices;
-            std::vector<glm::vec3> normals;
-            std::vector<glm::uvec3> faces;
-
-            std::vector<glm::vec3> edgeVertices;
-            std::vector<glm::vec3> edgeNormals;
-            std::vector<glm::uvec3> edgeFaces;
+            // Cache
 
             bool cacheNeedsUpdating = false;
             bool edgeCacheNeedsUpdating = false;
+
+            std::vector<glm::vec3> cacheVertices;
+            std::vector<glm::vec3> cacheNormals;
+            std::vector<glm::uvec3> cacheFaces;
+
+            std::vector<glm::vec3> edgeCacheVertices;
+            std::vector<glm::vec3> edgeCacheNormals;
+            std::vector<glm::uvec3> edgeCacheFaces;
         };
 
         struct SparseVoxelChunkList {
