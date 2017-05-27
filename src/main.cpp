@@ -35,9 +35,9 @@ void init() {
 
     // Voxel terrain
     renderbox::VoxelGeometry *voxelGeometry = new renderbox::VoxelGeometry();
-    for (int x = -32; x < 32; ++x) {
-        for (int y = -32; y < 32; ++y) {
-            for (int z = -1; z < 1; ++z) {
+    for (int x = -16; x < 16; ++x) {
+        for (int y = -16; y < 16; ++y) {
+            for (int z = -4; z < 4; ++z) {
                 voxelGeometry->setOccupancy(x, y, z, 1.0f);
             }
         }
