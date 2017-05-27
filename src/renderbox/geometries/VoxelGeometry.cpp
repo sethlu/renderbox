@@ -1,3 +1,5 @@
+// Marching cube algorithm based on code from http://paulbourke.net/geometry/polygonise/
+
 #include <iostream>
 #include <cfloat>
 #include <glm/geometric.hpp>
