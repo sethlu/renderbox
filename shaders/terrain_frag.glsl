@@ -35,11 +35,11 @@ void main() {
 
     float noise = mix(clamp((largeNoise / 2 + 0.5), 0, 1),
                       clamp((smallNoise / 2 * 0.4 + 0.8), 0, 1),
-                      0.7);
+                      0.6);
     vec3 colorGrass = mix(colorGrassDark, colorGrassLight, noise);
     vec3 colorStone = mix(colorStoneDark, colorStoneLight, noise);
 
-    float gradient = 12;
+    float gradient = 8;
     vec3 terrainColor = mix(colorStone, colorGrass, clamp((N.z - 0.75) * gradient + 0.5, 0, 1));
 
     vec3 vertexColor = terrainColor;
