@@ -3,6 +3,11 @@
 
 const float screenGamma = 2.2;
 
+const vec3 colorGrassDark = pow(vec3(.36, .65, .27), vec3(screenGamma));
+const vec3 colorGrassLight = pow(vec3(.71, .77, .24), vec3(screenGamma));
+const vec3 colorStoneDark = pow(vec3(.37, .28, .21), vec3(screenGamma));
+const vec3 colorStoneLight = pow(vec3(.80, .63, .47), vec3(screenGamma));
+
 uniform vec3 sceneAmbientColor;
 
 out vec4 fragmentColor;
@@ -23,15 +28,16 @@ void main() {
 
     // Color mixing
 
-    float noise = mix(clamp((snoise(vertexWorldPosition.xy / 40) / 2 + 0.5), 0, 1),
-                      clamp((snoise(vertexWorldPosition * 20) / 2 * 0.4 + 0.8), 0, 1),
+    float smallNoise = snoise(vertexWorldPosition * 20);
+    float largeNoise = snoise(vertexWorldPosition.xy / 40);
+
+    N = normalize(N + vec3(smallNoise) / 10);
+
+    float noise = mix(clamp((largeNoise / 2 + 0.5), 0, 1),
+                      clamp((smallNoise / 2 * 0.4 + 0.8), 0, 1),
                       0.7);
-    vec3 colorGrass = mix(pow(vec3(.36, .65, .27), vec3(screenGamma)),
-                          pow(vec3(.71, .77, .24), vec3(screenGamma)),
-                          noise);
-    vec3 colorStone = mix(pow(vec3(.37, .28, .21), vec3(screenGamma)),
-                          pow(vec3(.80, .63, .47), vec3(screenGamma)),
-                          noise);
+    vec3 colorGrass = mix(colorGrassDark, colorGrassLight, noise);
+    vec3 colorStone = mix(colorStoneDark, colorStoneLight, noise);
 
     float gradient = 12;
     vec3 terrainColor = mix(colorStone, colorGrass, clamp((N.z - 0.75) * gradient + 0.5, 0, 1));
