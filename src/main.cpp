@@ -58,12 +58,36 @@ void init() {
 
 }
 
+double mouseLastSync = glfwGetTime();
+
 void update() {
 
     float currentTime = (float) glfwGetTime();
     float deltaTime = currentTime - lastTime;
 
     // Terrain
+
+    if (currentTime - mouseLastSync > 0.04f
+            && startMouseX != -1 && startMouseY != -1) {
+
+        renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderer->getWindowWidth() - 1.0f,
+                                                             1.0f - 2 * mouseY / renderer->getWindowHeight()));
+        std::vector<glm::vec3> worldPositions;
+        if (cameraRay->intersectObject(terrain, worldPositions)) {
+            glm::vec3 objectPosition = floor(renderbox::dehomogenize(
+                    glm::inverse(terrain->getWorldMatrix())
+                    * glm::vec4(worldPositions[0] + glm::vec3(0.5f), 1.0f)));
+
+            renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry();
+
+            terrainGeometry->brush(objectPosition, 8, 0.4f, isolevel);
+
+            terrainGeometry->updateGeometry(isolevel);
+            renderer->loadObject(terrain);
+        }
+
+        mouseLastSync = currentTime;
+    }
 
     // Test cube
 
@@ -129,7 +153,7 @@ void mouseclick(GLFWwindow *window) {
 
         renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry();
 
-        terrainGeometry->brush(objectPosition, 4, 0.25f);
+        terrainGeometry->brush(objectPosition, 5, 0.4f, isolevel);
 
         terrainGeometry->updateGeometry(isolevel);
         renderer->loadObject(terrain);
@@ -137,29 +161,7 @@ void mouseclick(GLFWwindow *window) {
 
 }
 
-double mouseLastSync = glfwGetTime();
-
 void mousedrag(GLFWwindow *window) {
-
-    double currentTime = glfwGetTime();
-    if (currentTime - mouseLastSync < 0.08f) return;
-    mouseLastSync = currentTime;
-
-    renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderer->getWindowWidth() - 1.0f,
-                                                         1.0f - 2 * mouseY / renderer->getWindowHeight()));
-    std::vector<glm::vec3> worldPositions;
-    if (cameraRay->intersectObject(terrain, worldPositions)) {
-        glm::vec3 objectPosition = floor(renderbox::dehomogenize(
-                glm::inverse(terrain->getWorldMatrix())
-                * glm::vec4(worldPositions[0] + glm::vec3(0.5f), 1.0f)));
-
-        renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry();
-
-        terrainGeometry->brush(objectPosition, 4, 0.25f);
-
-        terrainGeometry->updateGeometry(isolevel);
-        renderer->loadObject(terrain);
-    }
 
 }
 

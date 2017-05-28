@@ -60,14 +60,16 @@ namespace renderbox {
         bool isOccupied(glm::ivec3 position);
         bool isOccupied(glm::vec3 position);
         float getOccupancy(int x, int y, int z);
+        float getOccupancy(glm::ivec3 position);
         void setOccupancy(int x, int y, int z, float occupancy);
         void setOccupancy(glm::ivec3 position, float occupancy);
         void setOccupancy(glm::vec3 position, float occupancy);
+        bool connected(int x, int y, int z, float isolevel);
+        bool connected(glm::ivec3 position, float isolevel);
 
-        void brush(glm::vec3 focus, float radius, float value);
+        void brush(glm::vec3 focus, float radius, float value, float isolevel);
 
         void updateGeometry(float isolevel);
-
     };
 
 }
