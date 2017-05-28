@@ -3,10 +3,10 @@
 
 const float screenGamma = 2.2;
 
-const vec3 colorGrassDark = pow(vec3(.36, .65, .27), vec3(screenGamma));
+const vec3 colorGrassDark = pow(vec3(.37, .65, .27), vec3(screenGamma));
 const vec3 colorGrassLight = pow(vec3(.71, .77, .24), vec3(screenGamma));
 const vec3 colorStoneDark = pow(vec3(.37, .28, .21), vec3(screenGamma));
-const vec3 colorStoneLight = pow(vec3(.80, .63, .47), vec3(screenGamma));
+const vec3 colorStoneLight = pow(vec3(.81, .63, .47), vec3(screenGamma));
 
 uniform vec3 sceneAmbientColor;
 
@@ -20,7 +20,7 @@ float snoise(vec2 v);
 
 void main() {
 
-    vec3 lightWorldPosition = vec3(2, 2, 40);
+    vec3 lightWorldPosition = vec3(2, 2, 60);
 
     vec3 N = normalize(vertexWorldNormal);
     vec3 L = normalize(lightWorldPosition - vertexWorldPosition);
@@ -28,25 +28,33 @@ void main() {
 
     // Generate noise
 
-    float smallNoise = snoise(vertexWorldPosition * 20);
-    float largeNoise = snoise(vertexWorldPosition.xy / 40);
+    float smallNoise = snoise(vertexWorldPosition * 4);
+    float smallNoise2 = snoise((vertexWorldPosition + vec3(1)) * 4);
+    float largeNoise = snoise(vertexWorldPosition.xy / 20);
 
     // Affect fragment normal
 
-    N = normalize(N + vec3(smallNoise) / 10);
+    N = normalize(N + vec3(smallNoise, smallNoise2, 0) / 50);
 
     // Calculate fragment color
 
-    float noise = mix(clamp((largeNoise / 2 + 0.5), 0, 1),
-                      clamp((smallNoise / 2 * 0.4 + 0.8), 0, 1),
-                      0.6);
-    vec3 colorGrass = mix(colorGrassDark, colorGrassLight, noise);
-    vec3 colorStone = mix(colorStoneDark, colorStoneLight, noise);
+    // Noise
+    float noise = mix(clamp(largeNoise / 2 + 0.5, 0, 1) * 0.05,
+                      clamp(smallNoise / 2 + 0.5, 0, 1) * 0.3,
+                      0.4);
+    float edgeRadius = 0.15;
+    if (N.z > 0.75) {
+        noise = clamp(noise * (1 + 1 - pow(clamp((N.z - 0.75) / edgeRadius, 0, 1), 1.3)), 0, 1);
+    }
 
-    float gradient = 8;
-    vec3 vertexColor = mix(colorStone, colorGrass, clamp((N.z - 0.75) * gradient + 0.5, 0, 1));
+    // Color change gradient
+    float gradient = 5000;
 
-    vec3 diffuseColor = max(dot(N, L), 0) * vec3(1) * 400 / (1 + (0.25 * distance * distance));
+    vec3 vertexColor = mix(mix(colorStoneLight, colorStoneDark, noise),
+                           mix(colorGrassLight, colorGrassDark, noise),
+                           clamp((N.z - 0.75) * gradient + 0.5, 0, 1));
+
+    vec3 diffuseColor = max(dot(N, L), 0) * vec3(1, 1, 1) * 400 / (1 + (0.25 * distance * distance));
 
     vec3 colorLinear = vertexColor * (sceneAmbientColor + diffuseColor);
     vec3 colorGammaCorrected = pow(colorLinear, vec3(1 / screenGamma));
