@@ -23,10 +23,6 @@ float isolevel = 0.5f;
 
 void init() {
 
-    // Shared material
-    renderbox::Material *material = new renderbox::GLSLShaderMaterial(renderbox::readFile("shaders/terrain_vert.glsl"),
-                                                                      renderbox::readFile("shaders/terrain_frag.glsl"));
-
     // Scene
     scene = new renderbox::Scene();
     scene->setAmbientColor(glm::vec3(0.05f));
@@ -41,7 +37,9 @@ void init() {
         }
     }
     voxelGeometry->updateGeometry(isolevel); // Refresh geometry
-    terrain = new renderbox::Mesh(voxelGeometry, material);
+    terrain = new renderbox::Mesh(voxelGeometry,
+                                  new renderbox::GLSLShaderMaterial(renderbox::readFile("shaders/terrain_vert.glsl"),
+                                                                    renderbox::readFile("shaders/terrain_frag.glsl")));
     renderer->loadObject(terrain);
     scene->addChild(terrain);
 
