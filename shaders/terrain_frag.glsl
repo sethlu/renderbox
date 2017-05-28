@@ -23,8 +23,8 @@ void main() {
 
     // Color mixing
 
-    float noise = mix(clamp((snoise(vertexWorldPosition.xy / 40) / 2 / sqrt(2) + 0.5), 0, 1),
-                      clamp((snoise(vertexWorldPosition * 20) / 2 / sqrt(3) * 0.4 + 0.8), 0, 1),
+    float noise = mix(clamp((snoise(vertexWorldPosition.xy / 40) / 2 + 0.5), 0, 1),
+                      clamp((snoise(vertexWorldPosition * 20) / 2 * 0.4 + 0.8), 0, 1),
                       0.7);
     vec3 colorGrass = mix(pow(vec3(.36, .65, .27), vec3(screenGamma)),
                           pow(vec3(.71, .77, .24), vec3(screenGamma)),
