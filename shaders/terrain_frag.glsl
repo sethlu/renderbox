@@ -26,12 +26,16 @@ void main() {
     vec3 L = normalize(lightWorldPosition - vertexWorldPosition);
     float distance = length(lightWorldPosition - vertexWorldPosition);
 
-    // Color mixing
+    // Generate noise
 
     float smallNoise = snoise(vertexWorldPosition * 20);
     float largeNoise = snoise(vertexWorldPosition.xy / 40);
 
+    // Affect fragment normal
+
     N = normalize(N + vec3(smallNoise) / 10);
+
+    // Calculate fragment color
 
     float noise = mix(clamp((largeNoise / 2 + 0.5), 0, 1),
                       clamp((smallNoise / 2 * 0.4 + 0.8), 0, 1),
@@ -40,11 +44,9 @@ void main() {
     vec3 colorStone = mix(colorStoneDark, colorStoneLight, noise);
 
     float gradient = 8;
-    vec3 terrainColor = mix(colorStone, colorGrass, clamp((N.z - 0.75) * gradient + 0.5, 0, 1));
+    vec3 vertexColor = mix(colorStone, colorGrass, clamp((N.z - 0.75) * gradient + 0.5, 0, 1));
 
-    vec3 vertexColor = terrainColor;
-
-    vec3 diffuseColor = clamp(dot(N, L), 0, 1) * vec3(1) * 400 / (1 + (0.25 * distance * distance));
+    vec3 diffuseColor = max(dot(N, L), 0) * vec3(1) * 400 / (1 + (0.25 * distance * distance));
 
     vec3 colorLinear = vertexColor * (sceneAmbientColor + diffuseColor);
     vec3 colorGammaCorrected = pow(colorLinear, vec3(1 / screenGamma));
