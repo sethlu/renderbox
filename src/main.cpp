@@ -129,7 +129,7 @@ void mouseclick(GLFWwindow *window) {
 
         renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry();
 
-        terrainGeometry->brush(objectPosition, 4, 0.15f);
+        terrainGeometry->brush(objectPosition, 4, 0.25f);
 
         terrainGeometry->updateGeometry(isolevel);
         renderer->loadObject(terrain);
@@ -155,7 +155,7 @@ void mousedrag(GLFWwindow *window) {
 
         renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry();
 
-        terrainGeometry->brush(objectPosition, 4, 0.15f);
+        terrainGeometry->brush(objectPosition, 4, 0.25f);
 
         terrainGeometry->updateGeometry(isolevel);
         renderer->loadObject(terrain);
