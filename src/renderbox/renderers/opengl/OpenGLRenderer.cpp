@@ -155,6 +155,19 @@ namespace renderbox {
                                      1,
                                      glm::value_ptr(((MeshBasicMaterial *) material)->color));
                         break;
+                    case GLSL_SHADER_MATERIAL:
+                        glUniformMatrix4fv(program->getUniformLocation("worldMatrix"),
+                                           1,
+                                           GL_FALSE,
+                                           glm::value_ptr(object->getWorldMatrix()));
+                        glUniformMatrix4fv(program->getUniformLocation("worldNormalMatrix"),
+                                           1,
+                                           GL_FALSE,
+                                           glm::value_ptr(glm::transpose(glm::inverse(object->getWorldMatrix()))));
+                        glUniform3fv(program->getUniformLocation("sceneAmbientColor"),
+                                     1,
+                                     glm::value_ptr(scene->getAmbientColor()));
+                        break;
                     default: break;
                 }
 
