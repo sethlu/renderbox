@@ -23,7 +23,7 @@ void main() {
 
     // Color mixing
 
-    float noise = mix(clamp((snoise(vertexWorldPosition.xy * 1/40) / 2 / sqrt(2) + 0.5), 0, 1),
+    float noise = mix(clamp((snoise(vertexWorldPosition.xy / 40) / 2 / sqrt(2) + 0.5), 0, 1),
                       clamp((snoise(vertexWorldPosition * 20) / 2 / sqrt(3) * 0.4 + 0.8), 0, 1),
                       0.7);
     vec3 colorGrass = mix(pow(vec3(.36, .65, .27), vec3(screenGamma)),
@@ -38,11 +38,11 @@ void main() {
 
     vec3 vertexColor = terrainColor;
 
-    vec3 diffuseColor = clamp(dot(N, L), 0, 1) * vec3(1.0) * 400.0 / (1.0 + (0.25 * distance * distance));
+    vec3 diffuseColor = clamp(dot(N, L), 0, 1) * vec3(1) * 400 / (1 + (0.25 * distance * distance));
 
     vec3 colorLinear = vertexColor * (sceneAmbientColor + diffuseColor);
-    vec3 colorGammaCorrected = pow(colorLinear, vec3(1.0 / screenGamma));
-    fragmentColor = vec4(colorGammaCorrected, 1.0);
+    vec3 colorGammaCorrected = pow(colorLinear, vec3(1 / screenGamma));
+    fragmentColor = vec4(colorGammaCorrected, 1);
 
 }
 

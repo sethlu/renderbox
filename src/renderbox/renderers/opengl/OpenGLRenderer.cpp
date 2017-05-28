@@ -118,6 +118,7 @@ namespace renderbox {
 
             // Use program
             OpenGLProgram *program = OpenGLProgram::getProgram(it->first);
+            program->useProgram();
 
             for (Object *object : it->second) {
 
@@ -172,7 +173,6 @@ namespace renderbox {
                 }
 
                 // Bind vertex array
-                program->useProgram();
                 vertexArray->bindVertexArray();
 
                 // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

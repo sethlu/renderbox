@@ -26,8 +26,6 @@ void init() {
     // Shared material
     renderbox::Material *material = new renderbox::GLSLShaderMaterial(renderbox::readFile("shaders/terrain_vert.glsl"),
                                                                       renderbox::readFile("shaders/terrain_frag.glsl"));
-//    renderbox::Material *material = new renderbox::MeshBasicMaterial(glm::vec3(0.8, 0.8, 0.8));
-//    renderbox::Material *material = new renderbox::MeshLambertMaterial(glm::vec3(0.8, 0.8, 0.8));
 
     // Scene
     scene = new renderbox::Scene();
@@ -48,7 +46,8 @@ void init() {
     scene->addChild(terrain);
 
     // Test cube
-    testCube = new renderbox::Mesh(new renderbox::BoxGeometry(0.5f, 0.5f, 0.5f), material);
+    testCube = new renderbox::Mesh(new renderbox::BoxGeometry(0.5f, 0.5f, 0.5f),
+                                   new renderbox::MeshLambertMaterial(glm::vec3(1.0f, 0, 0)));
     renderer->loadObject(testCube);
     scene->addChild(testCube);
 

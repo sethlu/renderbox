@@ -16,8 +16,8 @@ in vec3 vertexPosition;
 in vec3 vertexNormal;
 
 void main() {
-    vertexWorldPosition = vec3(worldMatrix * vec4(vertexPosition, 1.0));
-    vertexWorldNormal = vec3(worldNormalMatrix * vec4(vertexNormal, 0.0));
+    vertexWorldPosition = vec3(worldMatrix * vec4(vertexPosition, 1));
+    vertexWorldNormal = vec3(worldNormalMatrix * vec4(vertexNormal, 0));
 
-    gl_Position = worldProjectionMatrix * vec4(vertexPosition, 1.0);
+    gl_Position = worldProjectionMatrix * vec4(vertexPosition, 1);
 }
