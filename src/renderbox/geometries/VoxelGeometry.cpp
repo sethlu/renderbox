@@ -476,11 +476,11 @@ namespace renderbox {
         return p1 + (p2 - p1) * (isolevel - v1) / (v2 - v1);
     }
 
-    void VoxelGeometry::addCube(int x, int y, int z,
-                                float isolevel,
-                                std::vector<glm::vec3> &vertices,
-                                std::vector<glm::vec3> &normals,
-                                std::vector<glm::uvec3> &faces) {
+    void VoxelGeometry::addMarchingCube(int x, int y, int z,
+                                        float isolevel,
+                                        std::vector<glm::vec3> &vertices,
+                                        std::vector<glm::vec3> &normals,
+                                        std::vector<glm::uvec3> &faces) {
 
         float cubeVertexOccupancies[8] = {
                 getOccupancy(x - 1, y    , z - 1),
@@ -613,7 +613,7 @@ namespace renderbox {
 
     }
 
-    void VoxelGeometry::updateGeometry(float isolevel) {
+    void VoxelGeometry::updateGeometryByMarchingCube(float isolevel) {
 
         vertices.clear();
         normals.clear();
@@ -643,13 +643,13 @@ namespace renderbox {
                         for (int ix = 1; ix < VOXEL_CHUNK_DIMENSION; ++ix) {
                             for (int iy = 1; iy < VOXEL_CHUNK_DIMENSION; ++iy) {
                                 for (int iz = 1; iz < VOXEL_CHUNK_DIMENSION; ++iz) {
-                                    addCube(cx * VOXEL_CHUNK_DIMENSION + ix,
-                                            cy * VOXEL_CHUNK_DIMENSION + iy,
-                                            cz * VOXEL_CHUNK_DIMENSION + iz,
-                                            isolevel,
-                                            voxelChunk->cacheVertices,
-                                            voxelChunk->cacheNormals,
-                                            voxelChunk->cacheFaces);
+                                    addMarchingCube(cx * VOXEL_CHUNK_DIMENSION + ix,
+                                                    cy * VOXEL_CHUNK_DIMENSION + iy,
+                                                    cz * VOXEL_CHUNK_DIMENSION + iz,
+                                                    isolevel,
+                                                    voxelChunk->cacheVertices,
+                                                    voxelChunk->cacheNormals,
+                                                    voxelChunk->cacheFaces);
                                 }
                             }
                         }
@@ -664,35 +664,35 @@ namespace renderbox {
 
                         for (int ix = 0; ix < VOXEL_CHUNK_DIMENSION; ++ix) {
                             for (int iy = 0; iy < VOXEL_CHUNK_DIMENSION; ++iy) {
-                                addCube(cx * VOXEL_CHUNK_DIMENSION + ix,
-                                        cy * VOXEL_CHUNK_DIMENSION + iy,
-                                        cz * VOXEL_CHUNK_DIMENSION,
-                                        isolevel,
-                                        voxelChunk->edgeCacheVertices,
-                                        voxelChunk->edgeCacheNormals,
-                                        voxelChunk->edgeCacheFaces);
+                                addMarchingCube(cx * VOXEL_CHUNK_DIMENSION + ix,
+                                                cy * VOXEL_CHUNK_DIMENSION + iy,
+                                                cz * VOXEL_CHUNK_DIMENSION,
+                                                isolevel,
+                                                voxelChunk->edgeCacheVertices,
+                                                voxelChunk->edgeCacheNormals,
+                                                voxelChunk->edgeCacheFaces);
                             }
                         }
                         for (int ix = 0; ix < VOXEL_CHUNK_DIMENSION; ++ix) {
                             for (int iz = 1; iz < VOXEL_CHUNK_DIMENSION; ++iz) {
-                                addCube(cx * VOXEL_CHUNK_DIMENSION + ix,
-                                        cy * VOXEL_CHUNK_DIMENSION,
-                                        cz * VOXEL_CHUNK_DIMENSION + iz,
-                                        isolevel,
-                                        voxelChunk->edgeCacheVertices,
-                                        voxelChunk->edgeCacheNormals,
-                                        voxelChunk->edgeCacheFaces);
+                                addMarchingCube(cx * VOXEL_CHUNK_DIMENSION + ix,
+                                                cy * VOXEL_CHUNK_DIMENSION,
+                                                cz * VOXEL_CHUNK_DIMENSION + iz,
+                                                isolevel,
+                                                voxelChunk->edgeCacheVertices,
+                                                voxelChunk->edgeCacheNormals,
+                                                voxelChunk->edgeCacheFaces);
                             }
                         }
                         for (int iy = 1; iy < VOXEL_CHUNK_DIMENSION; ++iy) {
                             for (int iz = 1; iz < VOXEL_CHUNK_DIMENSION; ++iz) {
-                                addCube(cx * VOXEL_CHUNK_DIMENSION,
-                                        cy * VOXEL_CHUNK_DIMENSION + iy,
-                                        cz * VOXEL_CHUNK_DIMENSION + iz,
-                                        isolevel,
-                                        voxelChunk->edgeCacheVertices,
-                                        voxelChunk->edgeCacheNormals,
-                                        voxelChunk->edgeCacheFaces);
+                                addMarchingCube(cx * VOXEL_CHUNK_DIMENSION,
+                                                cy * VOXEL_CHUNK_DIMENSION + iy,
+                                                cz * VOXEL_CHUNK_DIMENSION + iz,
+                                                isolevel,
+                                                voxelChunk->edgeCacheVertices,
+                                                voxelChunk->edgeCacheNormals,
+                                                voxelChunk->edgeCacheFaces);
                             }
                         }
                     }

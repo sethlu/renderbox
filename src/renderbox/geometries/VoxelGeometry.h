@@ -48,11 +48,11 @@ namespace renderbox {
         VoxelChunk *getVoxelChunk(int cx, int cy, int cz, bool createIfNotExists = false);
         VoxelChunk *getVoxelChunkByVoxel(int x, int y, int z, bool createIfNotExists = false);
 
-        void addCube(int x, int y, int z,
-                     float isolevel,
-                     std::vector<glm::vec3> &vertices,
-                     std::vector<glm::vec3> &normals,
-                     std::vector<glm::uvec3> &faces);
+        void addMarchingCube(int x, int y, int z,
+                             float isolevel,
+                             std::vector<glm::vec3> &vertices,
+                             std::vector<glm::vec3> &normals,
+                             std::vector<glm::uvec3> &faces);
 
     public:
 
@@ -69,7 +69,7 @@ namespace renderbox {
 
         void brush(glm::vec3 focus, float radius, float value, float isolevel);
 
-        void updateGeometry(float isolevel);
+        void updateGeometryByMarchingCube(float isolevel);
     };
 
 }

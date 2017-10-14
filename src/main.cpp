@@ -38,7 +38,7 @@ void init() {
             }
         }
     }
-    voxelGeometry->updateGeometry(isolevel); // Refresh geometry
+    voxelGeometry->updateGeometryByMarchingCube(isolevel); // Refresh geometry
     terrain = new renderbox::Mesh(voxelGeometry,
                                   new renderbox::GLSLShaderMaterial(renderbox::readFile("shaders/terrain_vert.glsl"),
                                                                     renderbox::readFile("shaders/terrain_frag.glsl")));
@@ -84,7 +84,7 @@ void update() {
 
             terrainGeometry->brush(objectPosition, 8, 0.4f, isolevel);
 
-            terrainGeometry->updateGeometry(isolevel);
+            terrainGeometry->updateGeometryByMarchingCube(isolevel);
             renderer->loadObject(terrain);
         }
 
@@ -157,7 +157,7 @@ void mouseclick(GLFWwindow *window) {
 
         terrainGeometry->brush(objectPosition, 5, 0.4f, isolevel);
 
-        terrainGeometry->updateGeometry(isolevel);
+        terrainGeometry->updateGeometryByMarchingCube(isolevel);
         renderer->loadObject(terrain);
     }
 
