@@ -1,5 +1,5 @@
-#ifndef PARTICLESIM_OBJECTPROPERTIES_H
-#define PARTICLESIM_OBJECTPROPERTIES_H
+#ifndef VOX_OBJECTPROPERTIES_H
+#define VOX_OBJECTPROPERTIES_H
 
 
 namespace renderbox {
@@ -11,4 +11,4 @@ namespace renderbox {
 }
 
 
-#endif //PARTICLESIM_OBJECTPROPERTIES_H
+#endif //VOX_OBJECTPROPERTIES_H

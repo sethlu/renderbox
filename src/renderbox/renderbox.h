@@ -1,5 +1,5 @@
-#ifndef PARTICLESIM_RENDERBOX_H
-#define PARTICLESIM_RENDERBOX_H
+#ifndef VOX_RENDERBOX_H
+#define VOX_RENDERBOX_H
 
 #include "core/Object.h"
 
@@ -23,4 +23,4 @@
 
 #include "scenes/Scene.h"
 
-#endif //PARTICLESIM_RENDERBOX_H
+#endif //VOX_RENDERBOX_H

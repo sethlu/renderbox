@@ -1,5 +1,5 @@
-#ifndef PARTICLESIM_BOXGEOMETRY_H
-#define PARTICLESIM_BOXGEOMETRY_H
+#ifndef VOX_BOXGEOMETRY_H
+#define VOX_BOXGEOMETRY_H
 
 
 #include "Geometry.h"
@@ -15,4 +15,4 @@ namespace renderbox {
 }
 
 
-#endif //PARTICLESIM_BOXGEOMETRY_H
+#endif //VOX_BOXGEOMETRY_H

@@ -1,5 +1,5 @@
-#ifndef PARTICLESIM_SHADERMATERIAL_H
-#define PARTICLESIM_SHADERMATERIAL_H
+#ifndef VOX_SHADERMATERIAL_H
+#define VOX_SHADERMATERIAL_H
 
 
 #include <string>
@@ -21,4 +21,4 @@ namespace renderbox {
 }
 
 
-#endif //PARTICLESIM_SHADERMATERIAL_H
+#endif //VOX_SHADERMATERIAL_H

@@ -1,5 +1,5 @@
-#ifndef PARTICLESIM_RENDERERTARGET_H
-#define PARTICLESIM_RENDERERTARGET_H
+#ifndef VOX_RENDERERTARGET_H
+#define VOX_RENDERERTARGET_H
 
 
 #include <GL/glew.h>
@@ -22,4 +22,5 @@ namespace renderbox {
 
 }
 
-#endif //PARTICLESIM_RENDERERTARGET_H
+
+#endif //VOX_RENDERERTARGET_H

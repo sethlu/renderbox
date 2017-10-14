@@ -1,5 +1,5 @@
-#ifndef PARTICLESIM_CAMERAPROPERTIES_H
-#define PARTICLESIM_CAMERAPROPERTIES_H
+#ifndef VOX_CAMERAPROPERTIES_H
+#define VOX_CAMERAPROPERTIES_H
 
 
 #include "ObjectProperties.h"
@@ -13,4 +13,4 @@ namespace renderbox {
 }
 
 
-#endif //PARTICLESIM_CAMERAPROPERTIES_H
+#endif //VOX_CAMERAPROPERTIES_H

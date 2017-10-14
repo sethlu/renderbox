@@ -1,5 +1,5 @@
-#ifndef PARTICLESIM_MATRIX_H
-#define PARTICLESIM_MATRIX_H
+#ifndef VOX_MATRIX_H
+#define VOX_MATRIX_H
 
 
 #include <glm/mat4x4.hpp>
@@ -12,4 +12,4 @@ namespace renderbox {
 }
 
 
-#endif //PARTICLESIM_MATRIX_H
+#endif //VOX_MATRIX_H

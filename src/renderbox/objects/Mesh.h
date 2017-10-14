@@ -1,5 +1,5 @@
-#ifndef PARTICLESIM_MESH_H
-#define PARTICLESIM_MESH_H
+#ifndef VOX_MESH_H
+#define VOX_MESH_H
 
 
 #include "../geometries/Geometry.h"
@@ -16,4 +16,4 @@ namespace renderbox {
 }
 
 
-#endif //PARTICLESIM_MESH_H
+#endif //VOX_MESH_H

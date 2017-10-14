@@ -1,5 +1,5 @@
-#ifndef PARTICLESIM_MATERIAL_H
-#define PARTICLESIM_MATERIAL_H
+#ifndef VOX_MATERIAL_H
+#define VOX_MATERIAL_H
 
 
 #include <string>
@@ -25,4 +25,4 @@ namespace renderbox {
 
 }
 
-#endif //PARTICLESIM_MATERIAL_H
+#endif //VOX_MATERIAL_H

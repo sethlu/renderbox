@@ -1,5 +1,5 @@
-#ifndef PARTICLESIM_RAY_H
-#define PARTICLESIM_RAY_H
+#ifndef VOX_RAY_H
+#define VOX_RAY_H
 
 
 #include <glm/vec3.hpp>
@@ -22,4 +22,4 @@ namespace renderbox {
 }
 
 
-#endif //PARTICLESIM_RAY_H
+#endif //VOX_RAY_H

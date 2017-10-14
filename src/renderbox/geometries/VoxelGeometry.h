@@ -1,5 +1,5 @@
-#ifndef PARTICLESIM_VOXELGEOMETRY_H
-#define PARTICLESIM_VOXELGEOMETRY_H
+#ifndef VOX_VOXELGEOMETRY_H
+#define VOX_VOXELGEOMETRY_H
 
 
 #include <unordered_map>
@@ -75,4 +75,4 @@ namespace renderbox {
 }
 
 
-#endif //PARTICLESIM_VOXELGEOMETRY_H
+#endif //VOX_VOXELGEOMETRY_H

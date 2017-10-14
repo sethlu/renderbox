@@ -1,5 +1,5 @@
-#ifndef PARTICLESIM_SCENE_H
-#define PARTICLESIM_SCENE_H
+#ifndef VOX_SCENE_H
+#define VOX_SCENE_H
 
 #include "../core/Object.h"
 
@@ -15,4 +15,4 @@ namespace renderbox {
 }
 
 
-#endif //PARTICLESIM_SCENE_H
+#endif //VOX_SCENE_H

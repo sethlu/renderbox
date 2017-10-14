@@ -1,5 +1,5 @@
-#ifndef PARTICLESIM_OPENGLRENDERLIST_H
-#define PARTICLESIM_OPENGLRENDERLIST_H
+#ifndef VOX_OPENGLRENDERLIST_H
+#define VOX_OPENGLRENDERLIST_H
 
 
 #include <glm/mat4x4.hpp>
@@ -27,4 +27,4 @@ namespace renderbox {
 }
 
 
-#endif //PARTICLESIM_OPENGLRENDERLIST_H
+#endif //VOX_OPENGLRENDERLIST_H

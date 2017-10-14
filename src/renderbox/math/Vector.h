@@ -1,5 +1,5 @@
-#ifndef PARTICLESIM_VECTOR_H
-#define PARTICLESIM_VECTOR_H
+#ifndef VOX_VECTOR_H
+#define VOX_VECTOR_H
 
 
 #include <glm/vec3.hpp>
@@ -14,4 +14,4 @@ namespace renderbox {
 
 }
 
-#endif //PARTICLESIM_VECTOR_H
+#endif //VOX_VECTOR_H

@@ -1,5 +1,5 @@
-#ifndef PARTICLESIM_CAMERA_H
-#define PARTICLESIM_CAMERA_H
+#ifndef VOX_CAMERA_H
+#define VOX_CAMERA_H
 
 
 #include <glm/mat4x4.hpp>
@@ -25,4 +25,4 @@ namespace renderbox {
 
 }
 
-#endif //PARTICLESIM_CAMERA_H
+#endif //VOX_CAMERA_H

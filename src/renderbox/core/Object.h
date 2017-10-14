@@ -1,5 +1,5 @@
-#ifndef PARTICLESIM_OBJECT_H
-#define PARTICLESIM_OBJECT_H
+#ifndef VOX_OBJECT_H
+#define VOX_OBJECT_H
 
 
 #include <glm/mat4x4.hpp>
@@ -105,4 +105,4 @@ namespace renderbox {
 }
 
 
-#endif //PARTICLESIM_OBJECT_H
+#endif //VOX_OBJECT_H

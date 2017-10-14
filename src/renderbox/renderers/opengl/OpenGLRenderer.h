@@ -1,5 +1,5 @@
-#ifndef PARTICLESIM_OPENGLRENDERER_H
-#define PARTICLESIM_OPENGLRENDERER_H
+#ifndef VOX_OPENGLRENDERER_H
+#define VOX_OPENGLRENDERER_H
 
 
 #include <GL/glew.h>
@@ -37,4 +37,4 @@ namespace renderbox {
 }
 
 
-#endif //PARTICLESIM_OPENGLRENDERER_H
+#endif //VOX_OPENGLRENDERER_H

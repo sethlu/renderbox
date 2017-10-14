@@ -1,5 +1,5 @@
-#ifndef PARTICLESIM_GEOMETRY_H
-#define PARTICLESIM_GEOMETRY_H
+#ifndef VOX_GEOMETRY_H
+#define VOX_GEOMETRY_H
 
 
 #include <vector>
@@ -22,4 +22,4 @@ namespace renderbox {
 }
 
 
-#endif //PARTICLESIM_GEOMETRY_H
+#endif //VOX_GEOMETRY_H
