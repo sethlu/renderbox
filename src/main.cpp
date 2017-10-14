@@ -1,11 +1,13 @@
 #include <iostream>
 #include "renderbox/renderbox.h"
+#include "renderbox/renderers/opengl/OpenGLGLFWRenderer.h"
+#include "renderbox/renderers/opengl/OpenGLRenderTarget.h"
 
 #define BUFFER_OFFSET(i) ((char*) nullptr + i);
 
 renderbox::Scene *scene;
 renderbox::PerspectiveCamera *camera;
-renderbox::OpenGLRenderer *renderer;
+renderbox::OpenGLGLFWRenderer *renderer;
 
 renderbox::Object *cameraRig;
 renderbox::Mesh *terrain;
@@ -271,7 +273,7 @@ void rotateCallback(GLFWwindow *window, double rotation) {
 
 int main(int argc, char **argv) {
 
-    renderer = new renderbox::OpenGLRenderer();
+    renderer = new renderbox::OpenGLGLFWRenderer();
     GLFWwindow *window = renderer->getWindow();
 
     // Callbacks

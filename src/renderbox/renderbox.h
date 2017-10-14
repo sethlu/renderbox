@@ -21,9 +21,6 @@
 
 #include "objects/Mesh.h"
 
-#include "renderers/opengl/OpenGLRenderer.h"
-#include "renderers/opengl/OpenGLRenderTarget.h"
-
 #include "scenes/Scene.h"
 
 #endif //PARTICLESIM_RENDERBOX_H
