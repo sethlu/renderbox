@@ -9,7 +9,6 @@
 #include "../../core/Object.h"
 #include "../ObjectProperties.h"
 #include "OpenGLObjectProperties.h"
-#include "../../lights/Light.h"
 #include "../../scenes/Scene.h"
 
 namespace renderbox {
@@ -22,11 +21,6 @@ namespace renderbox {
         std::unordered_map<GLuint, std::vector<Object *>> objects;
 
         void addObject(GLuint programID, Object *object);
-
-        /**
-         * Map from Light type to a list of lights
-         */
-        std::unordered_map<int, std::vector<Light *>> lights;
 
     };
 
