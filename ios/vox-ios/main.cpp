@@ -1,5 +1,5 @@
 #include "SDL.h"
-#include "../../renderbox/renderbox.h"
+#include "renderbox.h"
 
 
 renderbox::Scene *scene;
@@ -11,7 +11,7 @@ void init() {
 	
 	scene = new renderbox::Scene();
 	
-	renderbox::Object *cube = new renderbox::Object(new renderbox::BoxGeometry(2, 2, 2), new renderbox::MeshLambertMaterial(glm::vec3(1, 0, 0)));
+    renderbox::Object *cube = new renderbox::Object(new renderbox::BoxGeometry(2, 2, 2), new renderbox::MeshLambertMaterial(glm::vec3(1, 0, 0)));
 	renderer->loadObject(cube);
 	scene->addChild(cube);
 	
@@ -36,8 +36,6 @@ void render() {
 int main(int argc, char **argv) {
 	
 	renderer = new renderbox::OpenGLSDLRenderer();
-	
-	glClearColor(0, 0, 1, 1);
 	
 	// Render loop
 	
