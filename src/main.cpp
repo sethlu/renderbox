@@ -1,9 +1,5 @@
 #include <iostream>
-#include "renderbox/renderbox.h"
-#include "renderbox/renderers/opengl/OpenGLGLFWRenderer.h"
-#include "renderbox/renderers/opengl/OpenGLRenderTarget.h"
-
-#define BUFFER_OFFSET(i) ((char*) nullptr + i);
+#include "../renderbox/renderbox.h"
 
 renderbox::Scene *scene;
 renderbox::PerspectiveCamera *camera;
@@ -286,7 +282,7 @@ int main(int argc, char **argv) {
     glfwSetZoomCallback(window, zoomCallback);
     glfwSetRotateCallback(window, rotateCallback);
 
-    // Drawing loop
+    // Render loop
 
     double lastTime = glfwGetTime();
     int nFrames = 0;

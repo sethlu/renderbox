@@ -1,4 +1,4 @@
-[submodule "libs/glfw"]
-	path = libs/glfw
+[submodule "vendor/glfw"]
+	path = vendor/glfw
 	url = git@github.com:sethlu/glfw.git
 	branch = gestures
