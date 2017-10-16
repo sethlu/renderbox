@@ -194,12 +194,6 @@
 		C5C675831F94A4FD00CFACA5 /* OpenGLVertexArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLVertexArray.h; sourceTree = "<group>"; };
 		C5C675851F94A4FD00CFACA5 /* OpenGLSDLRenderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLSDLRenderer.cpp; sourceTree = "<group>"; };
 		C5C675861F94A4FD00CFACA5 /* OpenGLSDLRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLSDLRenderer.h; sourceTree = "<group>"; };
-		C5C6758A1F94A4FD00CFACA5 /* mesh_basic_frag.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = mesh_basic_frag.glsl; sourceTree = "<group>"; };
-		C5C6758B1F94A4FD00CFACA5 /* mesh_basic_vert.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = mesh_basic_vert.glsl; sourceTree = "<group>"; };
-		C5C6758C1F94A4FD00CFACA5 /* mesh_lambert_flat_frag.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = mesh_lambert_flat_frag.glsl; sourceTree = "<group>"; };
-		C5C6758D1F94A4FD00CFACA5 /* mesh_lambert_flat_vert.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = mesh_lambert_flat_vert.glsl; sourceTree = "<group>"; };
-		C5C6758E1F94A4FD00CFACA5 /* mesh_lambert_frag.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = mesh_lambert_frag.glsl; sourceTree = "<group>"; };
-		C5C6758F1F94A4FD00CFACA5 /* mesh_lambert_vert.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = mesh_lambert_vert.glsl; sourceTree = "<group>"; };
 		C5C675911F94A4FD00CFACA5 /* Scene.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Scene.cpp; sourceTree = "<group>"; };
 		C5C675921F94A4FD00CFACA5 /* Scene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Scene.h; sourceTree = "<group>"; };
 		C5C675AE1F94AAAE00CFACA5 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -470,7 +464,6 @@
 				C5C6756E1F94A4FD00CFACA5 /* ObjectProperties.cpp */,
 				C5C6756F1F94A4FD00CFACA5 /* ObjectProperties.h */,
 				C5C675701F94A4FD00CFACA5 /* opengl */,
-				C5C675871F94A4FD00CFACA5 /* shaders */,
 			);
 			path = renderers;
 			sourceTree = "<group>";
@@ -516,35 +509,6 @@
 				C5C675861F94A4FD00CFACA5 /* OpenGLSDLRenderer.h */,
 			);
 			path = sdl;
-			sourceTree = "<group>";
-		};
-		C5C675871F94A4FD00CFACA5 /* shaders */ = {
-			isa = PBXGroup;
-			children = (
-				C5C675881F94A4FD00CFACA5 /* glsl */,
-			);
-			path = shaders;
-			sourceTree = "<group>";
-		};
-		C5C675881F94A4FD00CFACA5 /* glsl */ = {
-			isa = PBXGroup;
-			children = (
-				C5C675891F94A4FD00CFACA5 /* lib */,
-			);
-			path = glsl;
-			sourceTree = "<group>";
-		};
-		C5C675891F94A4FD00CFACA5 /* lib */ = {
-			isa = PBXGroup;
-			children = (
-				C5C6758A1F94A4FD00CFACA5 /* mesh_basic_frag.glsl */,
-				C5C6758B1F94A4FD00CFACA5 /* mesh_basic_vert.glsl */,
-				C5C6758C1F94A4FD00CFACA5 /* mesh_lambert_flat_frag.glsl */,
-				C5C6758D1F94A4FD00CFACA5 /* mesh_lambert_flat_vert.glsl */,
-				C5C6758E1F94A4FD00CFACA5 /* mesh_lambert_frag.glsl */,
-				C5C6758F1F94A4FD00CFACA5 /* mesh_lambert_vert.glsl */,
-			);
-			path = lib;
 			sourceTree = "<group>";
 		};
 		C5C675901F94A4FD00CFACA5 /* scenes */ = {
