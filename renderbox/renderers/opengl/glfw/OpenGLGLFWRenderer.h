@@ -26,8 +26,8 @@ namespace renderbox {
         GLFWwindow *getWindow();
         int getWindowWidth();
         int getWindowHeight();
-        int getFramebufferWidth();
-        int getFramebufferHeight();
+        int getFramebufferWidth() override;
+        int getFramebufferHeight() override;
 
     };
 
