@@ -6,12 +6,13 @@ renderbox::Scene *scene;
 renderbox::Object *cameraRig;
 renderbox::Camera *camera;
 renderbox::OpenGLSDLRenderer *renderer;
+renderbox::Object *cube;
 
 void init() {
 	
 	scene = new renderbox::Scene();
 	
-    renderbox::Object *cube = new renderbox::Object(new renderbox::BoxGeometry(2, 2, 2), new renderbox::MeshLambertMaterial(glm::vec3(1, 0, 0)));
+    cube = new renderbox::Object(new renderbox::BoxGeometry(3, 3, 3), new renderbox::MeshLambertMaterial(glm::vec3(1, 0, 0)));
 	renderer->loadObject(cube);
 	scene->addChild(cube);
 	
@@ -40,14 +41,27 @@ int main(int argc, char **argv) {
 	// Render loop
 	
 	SDL_Event event;
-	int done = 0;
+	bool done = false;
 	
 	init();
 	while (!done) {
-		
-		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_QUIT) {
-				done = 1;
+
+        while (SDL_PollEvent(&event)) {
+			switch (event.type) {
+                case SDL_MOUSEMOTION: {
+
+					renderbox::Ray *ray = camera->getRay(glm::vec2(0.0f, 0.0f));
+					glm::vec3 up = glm::vec3(0, 0, 1.0f);
+					glm::vec3 right = glm::normalize(glm::cross(ray->getDirection(), up));
+
+					cube->rotate(up, (float) event.motion.xrel / 100);
+					cube->rotate(right, (float) event.motion.yrel / 100);
+
+					break;
+				}
+				case SDL_QUIT:
+					done = true;
+					break;
 			}
 		}
 		
