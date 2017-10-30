@@ -2,7 +2,8 @@
 #version 330
 
 const float screenGamma = 2.2;
-const int intervals = 81;
+const int intervals = 81; // number of 5nm data points
+const int stride = 4; // steps of 5nm, less accuracy from longer strides
 
 // Generated from util/black-body-radiation.py at 3000K over [380nm, 780nm] at 5nm intervals
 const float[intervals] spectralRadiance3000 = float[](49641355760.65561, 54782546391.79315, 60253444582.97214, 66057572842.27418, 72197354478.52588, 78674111961.18173, 85488073133.5703, 92638384751.56671, 100123132779.6051, 107939368848.0003, 116083142258.71309, 124549536919.83142, 133332712590.95462, 142425949831.21384, 151821698057.72632, 161511626143.76752, 171486675011.8717, 181737111706.47937, 192252584462.8219, 203022178322.65823, 214034470882.6049, 225277587796.49863, 236739257689.00497, 248406866173.04074, 260267508698.19556, 272308041990.8451, 284515133878.8464, 296875311324.33606, 309375006517.1438, 322000600908.5048, 334738467090.0611, 347575008446.6155, 360496696532.57886, 373490106141.77057, 386541948057.96356, 399639099489.66406, 412768632206.8394, 425917838409.9933, 439074254373.0692, 452225681911.23004, 465360207732.86206, 478466220742.0008, 491532427363.2123, 504547864965.5456, 517501913465.86884, 530384305194.5986, 543185133108.75165, 555894857438.4049, 568504310853.1356, 581004702234.9077, 593387619143.2562, 605645029057.5292, 617769279479.4689, 629753096977.6083, 641589585252.8229, 653272222302.076, 664794856754.7933, 676151703453.6609, 687337338348.7683, 698346692771.1375, 709175047148.6808, 719818024224.644, 730271581835.5486, 740532005302.645, 750595899487.8909, 760460180562.5386, 770122067533.4703, 779579073569.663, 788828997168.315, 797869913197.5828, 806700163850.1771, 815318349539.6901, 823723319768.9905, 831914163997.8312, 839890202534.5233, 847650977474.4731, 855196243706.3495, 862525960004.7532, 869640280226.4414, 876539544625.4778, 883224271301.0271);
@@ -129,6 +130,15 @@ const float cieColorMatch[81 * 3] = float[81 * 3](
     0.0000, 0.0000, 0.0000
 );
 
+// Table from: http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html
+const mat3 cieXyzToRgb = mat3(
+    2.3706743, -0.5138850, 0.0052982,
+    -0.9000405, 1.4253036, -0.0146949,
+    -0.4706338, 0.0885814, 1.0093968
+);
+
+const float factor = 1e-10 * intervals / (intervals / stride);
+
 void main() {
 
     vec3 lightWorldPosition = vec3(2, 2, 20);
@@ -145,58 +155,23 @@ void main() {
 
     float spectrum[intervals] = diffuseColor;
 
-    // Spectrum to xyz
+    // Spectrum to rgb
     // Adapted from: http://www.fourmilab.ch/documents/specrend/
 
     float X = 0, Y = 0, Z = 0;
-    for (int i = 0; i < intervals; ++i) {
+    for (int i = 0; i < intervals; i += stride) {
         float me = spectrum[i];
         X += me * cieColorMatch[i * 3];
         Y += me * cieColorMatch[i * 3 + 1];
         Z += me * cieColorMatch[i * 3 + 2];
     }
-    float factor = 8e-11;
-    float x = X * factor, y = Y * factor, z = Z * factor;
 
-    // xyz to rgb
-
-    float xr, yr, zr, xg, yg, zg, xb, yb, zb;
-    float xw, yw, zw;
-    float rx, ry, rz, gx, gy, gz, bx, by, bz;
-    float rw, gw, bw;
-
-    // CIE color system
-    xr = 0.7355; yr = 0.2645; zr = 1 - (xr + yr);
-    xg = 0.2658; yg = 0.7243; zg = 1 - (xg + yg);
-    xb = 0.1669; yb = 0.0085; zb = 1 - (xb + yb);
-    xw = 0.33333333; yw = 0.33333333; zw = 1 - (xw + yw);
-
-    // xyz to rgb matrix, before scaling to white
-    rx = (yg * zb) - (yb * zg); ry = (xb * zg) - (xg * zb); rz = (xg * yb) - (xb * yg);
-    gx = (yb * zr) - (yr * zb); gy = (xr * zb) - (xb * zr); gz = (xb * yr) - (xr * yb);
-    bx = (yr * zg) - (yg * zr); by = (xg * zr) - (xr * zg); bz = (xr * yg) - (xg * yr);
-
-    // White scaling factors
-    // Dividing by yw scales the white luminance to unity, as conventional
-    rw = ((rx * xw) + (ry * yw) + (rz * zw)) / yw;
-    gw = ((gx * xw) + (gy * yw) + (gz * zw)) / yw;
-    bw = ((bx * xw) + (by * yw) + (bz * zw)) / yw;
-
-    // xyz to rgb matrix, correctly scaled to white.
-    rx = rx / rw; ry = ry / rw; rz = rz / rw;
-    gx = gx / gw; gy = gy / gw; gz = gz / gw;
-    bx = bx / bw; by = by / bw; bz = bz / bw;
-
-    // rgb of the desired point
-    float r = (rx * x) + (ry * y) + (rz * z);
-    float g = (gx * x) + (gy * y) + (gz * z);
-    float b = (bx * x) + (by * y) + (bz * z);
-
-    vec3 colorLinear = vec3(r, g, b);
+    vec3 xyz = vec3(X, Y, Z) * factor;
+    vec3 rgb = cieXyzToRgb * xyz;
 
     // Gamma correction
 
-    vec3 colorGammaCorrected = pow(colorLinear, vec3(1 / screenGamma));
+    vec3 colorGammaCorrected = pow(rgb, vec3(1 / screenGamma));
     fragmentColor = vec4(colorGammaCorrected, 1);
 
 }
