@@ -8,7 +8,7 @@
 #include <queue>
 #include <glm/gtc/type_ptr.hpp>
 #include "OpenGLRenderer.h"
-#include "renderbox.h"
+#include "MeshBasicMaterial.h"
 
 
 namespace renderbox {
