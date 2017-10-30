@@ -1,1 +1,0 @@
-#include "CameraProperties.h"
