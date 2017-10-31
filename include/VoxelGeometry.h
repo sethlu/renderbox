@@ -80,7 +80,7 @@ namespace renderbox {
 
         void brush(glm::vec3 focus, float radius, float value, float isolevel);
 
-        void updateGeometryByMarchingCube(float isolevel);
+        void updateGeometryByMarchingCube(float isolevel, bool force = false);
 
     };
 
