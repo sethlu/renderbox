@@ -2,17 +2,26 @@
 #define VOX_OBJECT_H
 
 
+#include <vector>
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
-#include <vector>
 #include "Geometry.h"
 #include "Material.h"
 
 namespace renderbox {
 
     class Object {
-	
     protected:
+
+        /**
+         * @var Object geometry
+         */
+        Geometry *geometry = nullptr;
+
+        /**
+         * @var Object material
+         */
+        Material *material = nullptr;
 
         // Object internal management
 
@@ -25,7 +34,7 @@ namespace renderbox {
         /**
          * @var Global unique object ID
          */
-        int objectID = ++count;
+        int objectId = ++count;
 
         // Object inheritance
 
@@ -56,48 +65,74 @@ namespace renderbox {
          */
         glm::mat4x4 rotationMatrix = glm::mat4x4(1.0f);
 
+        /**
+         * @var Object scaling
+         */
+        glm::vec3 scale = glm::vec3(1.0f);
+
         virtual void didTransform();
-
-        // Object description
-
-        /**
-         * @var Object geometry
-         */
-        Geometry *geometry = nullptr;
-
-        /**
-         * @var Object material
-         */
-        Material *material = nullptr;
 
     public:
 
         Object();
-        Object(Geometry *geometry, Material *material);
-        int getObjectID();
 
-        bool hasParent();
-        Object *getParent();
-        std::vector<Object *> getChildren();
+        Object(Geometry *geometry, Material *material);
+
+        int getObjectID() const;
+
+        // Object inheritance
+
+        bool hasParent() const;
+
+        Object *getParent() const;
+
+        std::vector<Object *> getChildren() const;
+
         void addChild(Object *object);
 
-        glm::mat4x4 getWorldMatrix();
-        glm::mat4x4 getMatrix();
-        glm::vec3 getWorldPosition();
-
-        glm::vec3 getTranslation();
-        void setTranslation(glm::vec3 translation);
-        void translate(glm::vec3 delta);
-
-        glm::mat4x4 getRotationMatrix();
-        void rotate(glm::vec3 vector, float angle);
-        void clearRotation();
+        // Geometry
 
         bool hasGeometry();
-        Geometry *getGeometry();
+
+        Geometry *getGeometry() const;
+
+        // Material
 
         bool hasMaterial();
-        Material *getMaterial();
+
+        Material *getMaterial() const;
+
+        // Object transformation
+
+        glm::mat4x4 getWorldMatrix() const;
+
+        glm::mat4x4 getMatrix() const;
+
+        glm::vec3 getWorldPosition() const;
+
+        // Translation
+
+        glm::vec3 getTranslation() const;
+
+        void setTranslation(glm::vec3 translation);
+
+        void translate(glm::vec3 delta);
+
+        // Rotation
+
+        glm::mat4x4 getRotationMatrix() const;
+
+        void rotate(glm::vec3 vector, float angle);
+
+        void clearRotation();
+
+        // Scale
+
+        glm::vec3 getScale() const;
+
+        void setScale(glm::vec3 scale);
+
+        // Visibility
 
         bool visible = true;
 

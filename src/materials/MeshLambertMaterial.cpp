@@ -3,12 +3,17 @@
 
 namespace renderbox {
 
-    MeshLambertMaterial::MeshLambertMaterial(glm::vec3 color) {
-        this->color = color;
+    MeshLambertMaterial::MeshLambertMaterial(glm::vec3 color)
+        : color(color) {
+
     }
 
-    MATERIAL MeshLambertMaterial::getMaterialType() {
+    glm::vec3 MeshLambertMaterial::getColor() const {
+        return color;
+    };
+
+    MATERIAL MeshLambertMaterial::getMaterialType() const {
         return MESH_LAMBERT_MATERIAL;
-    }
+    };
 
 }

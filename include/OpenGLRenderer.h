@@ -19,25 +19,31 @@
 namespace renderbox {
 
 	class OpenGLRenderer {
-
     protected:
 
         static std::unordered_map<int, OpenGLProgram *> programs;
 
         OpenGLRendererProperties *properties = new OpenGLRendererProperties();
 		
-		GLint framebufferId = 0;
+		GLuint framebufferId = 0;
 		
     public:
 
         void loadObject(Object *object);
 
-        OpenGLRenderList * prepassRender(Scene *object, Camera *camera);
-        void render(OpenGLRenderList *renderList, Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget, bool forceClear);
-        void render(Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget = nullptr, bool forceClear = false);
+		// Render
 
-        virtual int getFramebufferWidth() = 0;
-        virtual int getFramebufferHeight() = 0;
+        OpenGLRenderList * prepassRender(Scene *object, Camera *camera);
+
+		void render(OpenGLRenderList *renderList, Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget, bool forceClear);
+
+		void render(Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget = nullptr, bool forceClear = false);
+
+		// Window framebuffer
+
+        virtual int getFramebufferWidth() const = 0;
+
+        virtual int getFramebufferHeight() const = 0;
 
     };
 

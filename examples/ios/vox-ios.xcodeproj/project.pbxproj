@@ -34,7 +34,6 @@
 		C51BE1ED1FA703AF00D71367 /* OpenGLVertexArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C51BE1021FA702E300D71367 /* OpenGLVertexArray.cpp */; };
 		C51BE1EE1FA703AF00D71367 /* OpenGLSDLRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C51BE1041FA702E300D71367 /* OpenGLSDLRenderer.cpp */; };
 		C51BE1EF1FA703AF00D71367 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C51BE1101FA702E300D71367 /* Scene.cpp */; };
-		C51BE1F01FA703C800D71367 /* libSDL2Simulator.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C51BE1D41FA7036B00D71367 /* libSDL2Simulator.a */; };
 		C5C674891F949FBF00CFACA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C5C674881F949FBF00CFACA5 /* Assets.xcassets */; };
 		C5C6748F1F949FBF00CFACA5 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5C6748E1F949FBF00CFACA5 /* main.cpp */; };
 		C5C674E91F94A18000CFACA5 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5C674E81F94A18000CFACA5 /* GLKit.framework */; };
@@ -220,7 +219,6 @@
 				C5C674ED1F94A18C00CFACA5 /* UIKit.framework in Frameworks */,
 				C5C674EB1F94A18700CFACA5 /* Foundation.framework in Frameworks */,
 				C5C674E91F94A18000CFACA5 /* GLKit.framework in Frameworks */,
-				C51BE1F01FA703C800D71367 /* libSDL2Simulator.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

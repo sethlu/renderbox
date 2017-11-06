@@ -8,10 +8,18 @@
 namespace renderbox {
 
     class MeshBasicMaterial : public Material {
-    public:
+    protected:
+
         glm::vec3 color;
+
+    public:
+
         MeshBasicMaterial(glm::vec3 color);
-        MATERIAL getMaterialType();
+
+        glm::vec3 getColor() const;
+
+        MATERIAL getMaterialType() const override;
+
     };
 
 }

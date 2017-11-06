@@ -8,6 +8,7 @@
 namespace renderbox {
 
     class VoxelGeometry : public Geometry {
+    protected:
 
         static const int VOXEL_CHUNK_DIMENSION = 8;
 
@@ -46,6 +47,7 @@ namespace renderbox {
         std::unordered_map<int, SparseVoxelChunkPlane *> voxelChunkPlanes;
 
         VoxelChunk *getVoxelChunk(int cx, int cy, int cz, bool createIfNotExists = false);
+
         VoxelChunk *getVoxelChunkByVoxel(int x, int y, int z, bool createIfNotExists = false);
 
         void addMarchingCube(int x, int y, int z,
@@ -57,19 +59,29 @@ namespace renderbox {
     public:
 
         bool isOccupied(int x, int y, int z);
+
         bool isOccupied(glm::ivec3 position);
+
         bool isOccupied(glm::vec3 position);
+
         float getOccupancy(int x, int y, int z);
+
         float getOccupancy(glm::ivec3 position);
+
         void setOccupancy(int x, int y, int z, float occupancy);
+
         void setOccupancy(glm::ivec3 position, float occupancy);
+
         void setOccupancy(glm::vec3 position, float occupancy);
-        bool connected(int x, int y, int z, float isolevel);
-        bool connected(glm::ivec3 position, float isolevel);
+
+        bool isConnected(int x, int y, int z, float isolevel);
+
+        bool isConnected(glm::ivec3 position, float isolevel);
 
         void brush(glm::vec3 focus, float radius, float value, float isolevel);
 
         void updateGeometryByMarchingCube(float isolevel);
+
     };
 
 }

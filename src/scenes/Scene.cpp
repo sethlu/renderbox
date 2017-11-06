@@ -3,7 +3,7 @@
 
 namespace renderbox {
 
-    glm::vec3 Scene::getAmbientColor() {
+    glm::vec3 Scene::getAmbientColor() const {
         return ambientColor;
     }
 

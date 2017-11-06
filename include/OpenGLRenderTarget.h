@@ -12,17 +12,30 @@
 namespace renderbox {
 
     class OpenGLRenderTarget {
-        int width;
-        int height;
-        GLuint framebufferID;
-        GLuint renderedTexturebufferID;
-        GLuint renderedDepthbufferID;
-        bool setSize(int width, int height);
+    protected:
+
+        int framebufferWidth;
+
+        int framebufferHeight;
+
+        GLuint framebufferId;
+
+        GLuint renderedTexturebufferId;
+
+        GLuint renderedDepthbufferId;
+
+        void setFramebufferSize(int width, int height);
+
     public:
+
         OpenGLRenderTarget(int width, int height);
-        GLuint getFramebufferID();
-        int getWidth();
-        int getHeight();
+
+        GLuint getFramebufferId();
+
+        int getFramebufferWidth();
+
+        int getFramebufferHeight();
+
     };
 
 }

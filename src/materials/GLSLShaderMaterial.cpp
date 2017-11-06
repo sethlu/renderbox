@@ -3,25 +3,28 @@
 
 namespace renderbox {
 
-    GLSLShaderMaterial::GLSLShaderMaterial(const char *vertexShaderSource, const char *fragmentShaderSource) {
-        this->vertexShaderSource = vertexShaderSource;
-        this->fragmentShaderSource = fragmentShaderSource;
-    }
-
-    GLSLShaderMaterial::GLSLShaderMaterial(std::string vertexShaderSource, std::string fragmentShaderSource) : GLSLShaderMaterial(copyString(vertexShaderSource), copyString(fragmentShaderSource)) {
+    GLSLShaderMaterial::GLSLShaderMaterial(const char *vertexShaderSource, const char *fragmentShaderSource)
+        : vertexShaderSource(vertexShaderSource)
+        , fragmentShaderSource(fragmentShaderSource) {
 
     }
 
-    MATERIAL GLSLShaderMaterial::getMaterialType() {
-        return GLSL_SHADER_MATERIAL;
+    GLSLShaderMaterial::GLSLShaderMaterial(const std::string &vertexShaderSource,
+                                           const std::string &fragmentShaderSource)
+        : GLSLShaderMaterial(copyString(vertexShaderSource), copyString(fragmentShaderSource)) {
+
     }
 
-    const char *GLSLShaderMaterial::getVertexShaderSource() {
+    const char *GLSLShaderMaterial::getVertexShaderSource() const {
         return vertexShaderSource;
-    }
+    };
 
-    const char *GLSLShaderMaterial::getFragmentShaderSource() {
+    const char *GLSLShaderMaterial::getFragmentShaderSource() const {
         return fragmentShaderSource;
-    }
+    };
+
+    MATERIAL GLSLShaderMaterial::getMaterialType() const {
+        return GLSL_SHADER_MATERIAL;
+    };
 
 }

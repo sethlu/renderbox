@@ -10,6 +10,7 @@ namespace renderbox {
     public:
 
         BoxGeometry(float width, float height, float depth);
+
     };
 
 }

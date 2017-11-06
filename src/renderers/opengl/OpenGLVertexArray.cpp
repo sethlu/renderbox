@@ -5,15 +5,15 @@
 namespace renderbox {
 
     OpenGLVertexArray::OpenGLVertexArray() {
-        glGenVertexArrays(1, &vertexArrayID);
+        glGenVertexArrays(1, &vertexArrayId);
     }
 
-    GLuint OpenGLVertexArray::getVertexArrayID() {
-        return vertexArrayID;
+    GLuint OpenGLVertexArray::getVertexArrayId() const {
+        return vertexArrayId;
     }
 
     void OpenGLVertexArray::bindVertexArray() {
-        glBindVertexArray(vertexArrayID);
+        glBindVertexArray(vertexArrayId);
     }
 
     void OpenGLVertexArray::unbindVertexArray() {

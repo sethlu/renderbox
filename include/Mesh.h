@@ -10,7 +10,9 @@ namespace renderbox {
 
     class Mesh : public Object {
     public:
+
         Mesh(Geometry *geometry, Material *material);
+
     };
 
 }

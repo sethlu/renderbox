@@ -42,7 +42,7 @@ namespace renderbox {
 		SDL_GL_SetSwapInterval(1);
 		
 		// Update frame buffer id
-		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &framebufferId);
+		glGetIntegerv(GL_FRAMEBUFFER_BINDING, (GLint *) &framebufferId);
 		
         // Enable depth tests
         glEnable(GL_DEPTH_TEST);
@@ -56,17 +56,17 @@ namespace renderbox {
 		
     }
 
-    SDL_Window *OpenGLSDLRenderer::getWindow() {
+    SDL_Window *OpenGLSDLRenderer::getWindow() const {
         return window;
     }
 
-    int OpenGLSDLRenderer::getFramebufferWidth() {
+    int OpenGLSDLRenderer::getFramebufferWidth() const {
 		int width;
 		SDL_GL_GetDrawableSize(window, &width, nullptr);
         return width;
     }
 
-    int OpenGLSDLRenderer::getFramebufferHeight() {
+    int OpenGLSDLRenderer::getFramebufferHeight() const {
 		int height;
 		SDL_GL_GetDrawableSize(window, nullptr, &height);
         return height;

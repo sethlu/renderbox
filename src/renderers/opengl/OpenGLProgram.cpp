@@ -81,16 +81,16 @@ namespace renderbox {
     }
 
     OpenGLProgram::OpenGLProgram(const char *vertexShaderSource, const char *fragmentShaderSource) {
-        programID = initProgram(vertexShaderSource, fragmentShaderSource);
-        programs[programID] = this;
+        programId = initProgram(vertexShaderSource, fragmentShaderSource);
+        programs[programId] = this;
     }
 
     OpenGLProgram::OpenGLProgram(std::string vertexShaderSource, std::string fragmentShaderSource) {
         OpenGLProgram(copyString(vertexShaderSource), copyString(fragmentShaderSource));
     }
 
-    GLuint OpenGLProgram::getProgramID() {
-        return programID;
+    GLuint OpenGLProgram::getProgramId() const {
+        return programId;
     }
 
     inline void OpenGLProgram::useProgram(GLuint programID) {
@@ -98,7 +98,7 @@ namespace renderbox {
     }
 
     void OpenGLProgram::useProgram() {
-        useProgram(programID);
+        useProgram(programId);
     }
 
     void OpenGLProgram::stopProgram() {
@@ -106,16 +106,16 @@ namespace renderbox {
     }
 
     GLint OpenGLProgram::getAttributeLocation(const char *name) {
-        return glGetAttribLocation(programID, name);
+        return glGetAttribLocation(programId, name);
     }
 
     GLint OpenGLProgram::getUniformLocation(const char *name) {
-        return glGetUniformLocation(programID, name);
+        return glGetUniformLocation(programId, name);
     }
 
     std::string readFile(const char *name) {
         std::ifstream in;
-        std::string line, str = "";
+        std::string line, str;
         in.open(name);
         if (in.is_open()) {
             while (!in.eof()) {

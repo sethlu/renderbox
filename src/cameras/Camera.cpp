@@ -10,22 +10,6 @@ namespace renderbox {
         viewMatrixDidUpdate();
     }
 
-    glm::mat4x4 Camera::getViewProjectionMatrix() {
-        return viewProjectionMatrix;
-    }
-
-    glm::mat4x4 Camera::getProjectionMatrix() {
-        return projectionMatrix;
-    }
-
-    glm::mat4x4 Camera::getViewMatrix() {
-        return viewMatrix;
-    }
-
-    Ray *Camera::getRay(glm::vec2) {
-        return nullptr;
-    }
-
     void Camera::projectionMatrixDidUpdate() {
         viewProjectionMatrix = projectionMatrix * viewMatrix;
     }
@@ -33,5 +17,17 @@ namespace renderbox {
     void Camera::viewMatrixDidUpdate() {
         viewProjectionMatrix = projectionMatrix * viewMatrix;
     }
+
+    glm::mat4x4 Camera::getViewProjectionMatrix() const {
+        return viewProjectionMatrix;
+    };
+
+    glm::mat4x4 Camera::getProjectionMatrix() const {
+        return projectionMatrix;
+    };
+
+    glm::mat4x4 Camera::getViewMatrix() const {
+        return viewMatrix;
+    };
 
 }

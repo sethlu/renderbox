@@ -15,27 +15,32 @@
 namespace renderbox {
 
     class OpenGLProgram {
+    protected:
 
         static std::unordered_map<GLuint, OpenGLProgram *> programs;
 
-        GLuint programID;
+        GLuint programId;
 
     public:
 
-        static OpenGLProgram *getProgram(GLuint programID);
-
         OpenGLProgram(const char *vertexShaderSource,
                       const char *fragmentShaderSource);
+
         OpenGLProgram(std::string vertexShaderSource,
                       std::string fragmentShaderSource);
 
-        GLuint getProgramID();
+        static OpenGLProgram *getProgram(GLuint programID);
+
+        GLuint getProgramId() const;
 
         static void useProgram(GLuint programID);
+
         void useProgram();
+
         static void stopProgram();
 
         GLint getAttributeLocation(const char *name);
+
         GLint getUniformLocation(const char *name);
 
     };

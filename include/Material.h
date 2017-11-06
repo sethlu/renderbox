@@ -13,15 +13,22 @@ namespace renderbox {
     };
 
     class Material {
+
         static int count;
-        int id = ++count;
+
+        int materialId = ++count;
+
     public:
+
         Material();
-        int getMaterialID();
-        virtual MATERIAL getMaterialType() = 0;
+
+        int getMaterialId();
+
+        virtual MATERIAL getMaterialType() const = 0;
+
     };
 
-    char *copyString(std::string src);
+    char *copyString(const std::string &src);
 
 }
 

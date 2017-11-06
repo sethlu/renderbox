@@ -9,20 +9,20 @@
 
 namespace renderbox {
 
-    bool OpenGLRenderTarget::setSize(int width, int height) {
+    void OpenGLRenderTarget::setFramebufferSize(int width, int height) {
 
-        this->width = width;
-        this->height = height;
+        this->framebufferWidth = width;
+        this->framebufferHeight = height;
 
         // Use frame buffer
-        glBindFramebuffer(GL_FRAMEBUFFER, framebufferID);
+        glBindFramebuffer(GL_FRAMEBUFFER, framebufferId);
 
         // Texture buffer
         glTexImage2D(GL_TEXTURE_2D,
                      0, // Level
                      GL_RGB, // Internal format
-                     this->width, // Width
-                     this->height, // Height
+                     this->framebufferWidth, // Width
+                     this->framebufferHeight, // Height
                      0, // Border
                      GL_RGB, // Format
                      GL_UNSIGNED_BYTE, // Type
@@ -36,15 +36,15 @@ namespace renderbox {
         // Depth buffer
         glRenderbufferStorage(GL_RENDERBUFFER,
                               GL_DEPTH_COMPONENT,
-                              this->width,
-                              this->height);
+                              this->framebufferWidth,
+                              this->framebufferHeight);
 
         // Configure frame buffer
         // Texture buffer
 		glFramebufferTexture2D(GL_FRAMEBUFFER, // Target
 							   GL_COLOR_ATTACHMENT0, // Attachment
 							   GL_TEXTURE_2D,
-							   renderedTexturebufferID, // Texture
+							   renderedTexturebufferId, // Texture
 							   0); // Level
 
         // Specify a list of color buffers for drawing
@@ -52,48 +52,46 @@ namespace renderbox {
         glDrawBuffers(1, buffers);
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-            return false;
+            throw 2;
         }
-
-        return true;
 
     }
 
     OpenGLRenderTarget::OpenGLRenderTarget(int width, int height) {
         // Generate frame buffer
-        glGenFramebuffers(1, &framebufferID);
+        glGenFramebuffers(1, &framebufferId);
         // Create texture buffer
-        glGenTextures(1, &renderedTexturebufferID);
+        glGenTextures(1, &renderedTexturebufferId);
         // Create depth buffer
-        glGenRenderbuffers(1, &renderedDepthbufferID);
+        glGenRenderbuffers(1, &renderedDepthbufferId);
 
         // Use frame buffer
-        glBindFramebuffer(GL_FRAMEBUFFER, framebufferID);
+        glBindFramebuffer(GL_FRAMEBUFFER, framebufferId);
 
         // Bind texture to frame buffer
-        glBindTexture(GL_TEXTURE_2D, renderedTexturebufferID);
+        glBindTexture(GL_TEXTURE_2D, renderedTexturebufferId);
         // Bind depth buffer to frame buffer
-        glBindRenderbuffer(GL_RENDERBUFFER, renderedDepthbufferID);
+        glBindRenderbuffer(GL_RENDERBUFFER, renderedDepthbufferId);
 
         // Attach render buffer object to the frame buffer object
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, // Target
                                   GL_DEPTH_ATTACHMENT, //  Attachment
                                   GL_RENDERBUFFER, // Render buffer target
-                                  renderedDepthbufferID); // Render buffer
+                                  renderedDepthbufferId); // Render buffer
 
-        setSize(width, height);
+        setFramebufferSize(width, height);
     }
 
-    GLuint OpenGLRenderTarget::getFramebufferID() {
-        return framebufferID;
+    GLuint OpenGLRenderTarget::getFramebufferId() {
+        return framebufferId;
     }
 
-    int OpenGLRenderTarget::getWidth() {
-        return width;
+    int OpenGLRenderTarget::getFramebufferWidth() {
+        return framebufferWidth;
     }
 
-    int OpenGLRenderTarget::getHeight() {
-        return height;
+    int OpenGLRenderTarget::getFramebufferHeight() {
+        return framebufferHeight;
     }
 
 }

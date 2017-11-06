@@ -10,7 +10,9 @@ namespace renderbox {
 
     void printVector(glm::vec3 vector);
 
-    glm::vec3 dehomogenize(glm::vec4 vector);
+    inline glm::vec3 dehomogenize(glm::vec4 vector) {
+        return glm::vec3(vector) / vector.w;
+    };
 
 }
 

@@ -11,20 +11,23 @@
 namespace renderbox {
 
     class OpenGLSDLRenderer : public OpenGLRenderer {
-
     protected:
 
         SDL_Window *window;
+
         SDL_GLContext context;
 
     public:
 
         OpenGLSDLRenderer();
+
         ~OpenGLSDLRenderer();
 
-        SDL_Window *getWindow();
-		int getFramebufferWidth() override;
-        int getFramebufferHeight() override;
+        SDL_Window *getWindow() const;
+
+		int getFramebufferWidth() const override;
+
+        int getFramebufferHeight() const override;
 
     };
 

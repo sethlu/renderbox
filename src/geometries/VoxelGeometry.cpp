@@ -144,7 +144,7 @@ namespace renderbox {
         return normalDistributionPDF((x - mu) / delta) / delta;
     }
 
-    bool VoxelGeometry::connected(int x, int y, int z, float isolevel) {
+    bool VoxelGeometry::isConnected(int x, int y, int z, float isolevel) {
         return getOccupancy(x, y, z) > isolevel
                 || getOccupancy(x + 1, y, z) > isolevel
                 || getOccupancy(x - 1, y, z) > isolevel
@@ -154,8 +154,8 @@ namespace renderbox {
                 || getOccupancy(x, y, z - 1) > isolevel;
     }
 
-    bool VoxelGeometry::connected(glm::ivec3 position, float isolevel) {
-        return connected(position.x, position.y, position.z, isolevel);
+    bool VoxelGeometry::isConnected(glm::ivec3 position, float isolevel) {
+        return isConnected(position.x, position.y, position.z, isolevel);
     }
 
     void VoxelGeometry::brush(glm::vec3 focus, float radius, float value, float isolevel) {
@@ -165,7 +165,7 @@ namespace renderbox {
                     float distance = glm::length(glm::vec3(x, y, z) - focus);
                     if (distance > radius) continue;
 
-                    if (!connected(x, y, z, isolevel)) continue;
+                    if (!isConnected(x, y, z, isolevel)) continue;
 
                     float occupancy = getOccupancy(x, y, z) + value * normalDistributionPDF(distance, 0, radius / 3);
                     if (occupancy > 1.0f) occupancy = 1.0f;

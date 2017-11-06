@@ -45,29 +45,29 @@ namespace renderbox {
         glfwDestroyWindow(window);
     }
 
-    GLFWwindow *OpenGLGLFWRenderer::getWindow() {
+    GLFWwindow *OpenGLGLFWRenderer::getWindow() const {
         return window;
     }
 
-    int OpenGLGLFWRenderer::getWindowWidth() {
+    int OpenGLGLFWRenderer::getWindowWidth() const {
         int width, height;
         glfwGetWindowSize(window, &width, &height);
         return width;
     }
 
-    int OpenGLGLFWRenderer::getWindowHeight() {
+    int OpenGLGLFWRenderer::getWindowHeight() const {
         int width, height;
         glfwGetWindowSize(window, &width, &height);
         return height;
     }
 
-    int OpenGLGLFWRenderer::getFramebufferWidth() {
+    int OpenGLGLFWRenderer::getFramebufferWidth() const {
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
         return width;
     }
 
-    int OpenGLGLFWRenderer::getFramebufferHeight() {
+    int OpenGLGLFWRenderer::getFramebufferHeight() const {
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
         return height;

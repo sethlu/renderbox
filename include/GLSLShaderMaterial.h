@@ -8,14 +8,23 @@
 namespace renderbox {
 
     class GLSLShaderMaterial : public Material {
+
         const char *vertexShaderSource;
+
         const char *fragmentShaderSource;
+
     public:
+
         GLSLShaderMaterial(const char *vertexShaderSource, const char *fragmentShaderSource);
-        GLSLShaderMaterial(std::string vertexShaderSource, std::string fragmentShaderSource);
-        const char *getVertexShaderSource();
-        const char *getFragmentShaderSource();
-        MATERIAL getMaterialType();
+
+        GLSLShaderMaterial(const std::string &vertexShaderSource, const std::string &fragmentShaderSource);
+
+        const char *getVertexShaderSource() const;
+
+        const char *getFragmentShaderSource() const;
+
+        MATERIAL getMaterialType() const override;
+
     };
 
 }

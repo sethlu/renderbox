@@ -1,6 +1,6 @@
+#include <iostream>
 #include <glm/geometric.hpp>
 #include <glm/gtx/intersect.hpp>
-#include <iostream>
 #include "Ray.h"
 #include "Vector.h"
 
@@ -21,11 +21,11 @@ namespace renderbox {
         return new Ray(copyOrigin, copyDirection);
     }
 
-    glm::vec3 Ray::getOrigin() {
+    glm::vec3 Ray::getOrigin() const {
         return origin;
     }
 
-    glm::vec3 Ray::getDirection() {
+    glm::vec3 Ray::getDirection() const {
         return direction;
     }
 

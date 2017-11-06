@@ -18,7 +18,7 @@ namespace renderbox {
     }
 
     OpenGLProgram *OpenGLRendererProperties::getProgram(Material *material) {
-        int materialID = material->getMaterialID();
+        int materialID = material->getMaterialId();
         auto result = programs.find(materialID);
         if (result != programs.end()) {
             return result->second;

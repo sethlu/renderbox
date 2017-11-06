@@ -7,8 +7,12 @@ namespace renderbox {
         this->color = color;
     }
 
-    MATERIAL MeshBasicMaterial::getMaterialType() {
-        return MESH_BASIC_MATERIAL;
+    glm::vec3 MeshBasicMaterial::getColor() const {
+        return color;
     }
+
+    MATERIAL MeshBasicMaterial::getMaterialType() const {
+        return MESH_BASIC_MATERIAL;
+    };
 
 }

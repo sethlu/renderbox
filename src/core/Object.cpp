@@ -9,9 +9,7 @@ namespace renderbox {
 
     int Object::count = 0;
 
-    Object::Object() {
-
-    }
+    Object::Object() = default;
 
     Object::Object(Geometry *geometry, Material *material) {
 
@@ -20,19 +18,19 @@ namespace renderbox {
 
     }
 
-    int Object::getObjectID() {
-        return objectID;
+    int Object::getObjectID() const {
+        return objectId;
     }
 
-    bool Object::hasParent() {
+    bool Object::hasParent() const {
         return parent != nullptr;
     }
 
-    Object *Object::getParent() {
+    Object *Object::getParent() const {
         return parent;
-    }
+    };
 
-    std::vector<Object *> Object::getChildren() {
+    std::vector<Object *> Object::getChildren() const {
         return children;
     }
 
@@ -46,15 +44,31 @@ namespace renderbox {
         children.push_back(child);
     }
 
-    glm::mat4x4 Object::getWorldMatrix() {
+    bool Object::hasGeometry() {
+        return geometry != nullptr;
+    }
+
+    Geometry *Object::getGeometry() const {
+        return geometry;
+    }
+
+    bool Object::hasMaterial() {
+        return material != nullptr;
+    }
+
+    Material *Object::getMaterial() const {
+        return material;
+    }
+
+    glm::mat4x4 Object::getWorldMatrix() const {
         return worldMatrix;
     }
 
-    glm::mat4x4 Object::getMatrix() {
-        return glm::translate(glm::mat4x4(1.0f), translation) * rotationMatrix;
+    glm::mat4x4 Object::getMatrix() const {
+        return glm::translate(glm::mat4x4(1.0f), translation) * glm::scale(rotationMatrix, scale);
     }
 
-    glm::vec3 Object::getWorldPosition() {
+    glm::vec3 Object::getWorldPosition() const {
         return dehomogenize(glm::column(getWorldMatrix(), 3));
     }
 
@@ -67,7 +81,7 @@ namespace renderbox {
         }
     }
 
-    glm::vec3 Object::getTranslation() {
+    glm::vec3 Object::getTranslation() const {
         return translation;
     }
 
@@ -81,7 +95,7 @@ namespace renderbox {
         didTransform();
     }
 
-    glm::mat4x4 Object::getRotationMatrix() {
+    glm::mat4x4 Object::getRotationMatrix() const {
         return rotationMatrix;
     }
 
@@ -95,20 +109,13 @@ namespace renderbox {
         didTransform();
     }
 
-    bool Object::hasGeometry() {
-        return geometry != nullptr;
+    glm::vec3 Object::getScale() const {
+        return scale;
     }
 
-    Geometry *Object::getGeometry() {
-        return geometry;
-    }
-
-    Material *Object::getMaterial() {
-        return material;
-    }
-
-    bool Object::hasMaterial() {
-        return material != nullptr;
+    void Object::setScale(glm::vec3 scale) {
+        this->scale = scale;
+        didTransform();
     }
 
 }
