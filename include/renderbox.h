@@ -28,5 +28,7 @@
 
 #include "OpenGLSDLRenderer.h"
 
+#include "GLSLPreprocessor.h"
+
 
 #endif //VOX_RENDERBOX_H
