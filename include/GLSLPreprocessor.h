@@ -25,8 +25,7 @@ namespace renderbox {
         CHAR_RAWDEL  = 0x0200,  // {}[]#<>%:;?*+-/^&|~!=,"'
         CHAR_PUNCT   = 0x0400,  // `$@()
         CHAR_XUPPER  = CHAR_XLETTER | CHAR_UPPER,
-        CHAR_XLOWER  = CHAR_XLETTER | CHAR_LOWER,
-        CHAR_WS      = CHAR_HORZ_WS | CHAR_VERT_WS | CHAR_SPACE
+        CHAR_XLOWER  = CHAR_XLETTER | CHAR_LOWER
     };
 
     const uint16_t CHAR_ASCII_INFO[256] = {
@@ -139,7 +138,7 @@ namespace renderbox {
 
         void exitSource();
 
-        bool handleDirective(GLSLToken &token);
+        void handleDirective(GLSLToken &token);
 
         // Sources
 
@@ -170,6 +169,9 @@ namespace renderbox {
     };
 
     class GLSLPreprocessorLexer {
+
+        friend class GLSLPreprocessor;
+
     public:
 
         GLSLPreprocessorLexer(GLSLPreprocessor *preprocessor,
@@ -188,18 +190,27 @@ namespace renderbox {
         const char *bufferEnd;
 
         bool isAtPhysicalStartOfLine;
+        bool isPreprocessingDirective;
 
-        bool skipWhitespace(GLSLToken &token);
+        bool lexLine(GLSLToken &token, const char *pointer);
 
-        static inline bool isHorizontalWhitespace(const char c) {
-            return (CHAR_ASCII_INFO[c] & CHAR_HORZ_WS) != 0;
-        }
+        bool lexIdentifier(GLSLToken &token, const char *pointer);
 
-        static inline bool isWhitespace(const char c) {
-            return (CHAR_ASCII_INFO[c] & CHAR_WS) != 0;
-        }
+        bool skipHorizontalWhitespace(GLSLToken &token);
 
     };
+
+    inline bool isIdentifierBody(const char c) {
+        return (CHAR_ASCII_INFO[c] & (CHAR_UPPER | CHAR_LOWER | CHAR_DIGIT | CHAR_UNDER)) != 0;
+    }
+
+    inline bool isHorizontalWhitespace(const char c) {
+        return (CHAR_ASCII_INFO[c] & (CHAR_HORZ_WS | CHAR_SPACE)) != 0;
+    }
+
+    inline bool isWhitespace(const char c) {
+        return (CHAR_ASCII_INFO[c] & (CHAR_HORZ_WS | CHAR_VERT_WS | CHAR_SPACE)) != 0;
+    }
 
 }
 

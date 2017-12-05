@@ -2,9 +2,6 @@
 #ifndef TOK
 #define TOK(X)
 #endif
-#ifndef PUNCTUATOR
-#define PUNCTUATOR(X,Y) TOK(X)
-#endif
 #ifndef PPKEYWORD
 #define PPKEYWORD(X)
 #endif
@@ -12,15 +9,18 @@
 
 // Preprocessor keywords
 
+PPKEYWORD(not_keyword)
+
 PPKEYWORD(include)
 
 
 // Language keywords
 
-TOK(unknown)             // Not a token
-TOK(eof)                 // End of file
+TOK(unknown)            // Not a token
+TOK(eod)                // End of directive
+TOK(eof)                // End of file
 
+TOK(identifier)         // Identifier
 
 #undef PPKEYWORD
-#undef PUNCTUATOR
 #undef TOK
