@@ -130,11 +130,15 @@ namespace renderbox {
 
         void lex(GLSLToken &token);
 
-        void enterMainSource(const char *filename);
+        void enterMainSourceFile(const char *filename);
+
+        void enterMainSource(const char *source);
 
     private:
 
-        void enterSource(const char *filename);
+        void enterSourceFile(const char *filename);
+
+        void enterSource(const char *source);
 
         void exitSource();
 
@@ -176,8 +180,7 @@ namespace renderbox {
 
         GLSLPreprocessorLexer(GLSLPreprocessor *preprocessor,
                               const char *bufferStart,
-                              const char *bufferPointer,
-                              const char *bufferEnd);
+                              const char *bufferPointer);
 
         bool lex(GLSLToken &token);
 
@@ -187,14 +190,18 @@ namespace renderbox {
 
         const char *bufferStart;
         const char *bufferPointer;
-        const char *bufferEnd;
 
         bool isAtPhysicalStartOfLine;
         bool isPreprocessingDirective;
+        bool isLexingFilename;
 
         bool lexLine(GLSLToken &token, const char *pointer);
 
         bool lexIdentifier(GLSLToken &token, const char *pointer);
+
+        bool lexStringLiteral(GLSLToken &token, const char *pointer);
+
+        bool lexAngledStringLiteral(GLSLToken &token, const char *pointer);
 
         bool skipHorizontalWhitespace(GLSLToken &token);
 

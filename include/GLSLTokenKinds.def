@@ -16,11 +16,15 @@ PPKEYWORD(include)
 
 // Language keywords
 
-TOK(unknown)            // Not a token
-TOK(eod)                // End of directive
-TOK(eof)                // End of file
+TOK(unknown)              // Not a token
+TOK(eod)                  // End of directive
+TOK(eof)                  // End of file
 
-TOK(identifier)         // Identifier
+TOK(identifier)           // Identifier
+
+TOK(string_literal)       // "foo"
+TOK(angle_string_literal) // <foo>
+
 
 #undef PPKEYWORD
 #undef TOK

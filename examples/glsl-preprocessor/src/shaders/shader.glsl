@@ -1,6 +1,8 @@
 
 #version 300
 
+#include <common>
+
 out vec4 fragmentColor;
 
 void main() {

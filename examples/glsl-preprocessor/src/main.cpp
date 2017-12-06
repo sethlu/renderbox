@@ -7,7 +7,7 @@ int main(int argc, char** argv) {
     renderbox::GLSLPreprocessor preprocessor;
     renderbox::GLSLToken token;
 
-    preprocessor.enterMainSource("shaders/shader.glsl");
+    preprocessor.enterMainSourceFile("shaders/shader.glsl");
     do {
         preprocessor.lex(token);
 

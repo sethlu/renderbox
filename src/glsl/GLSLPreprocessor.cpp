@@ -10,15 +10,27 @@ namespace renderbox {
         bool returnedToken;
         do {
             returnedToken = currentLexer->lex(token);
+
+            if (token.kind == eof) {
+                exitSource();
+
+                // Still lexers running?
+                if (!lexers.empty()) returnedToken = false; // Force to return a next token
+            }
+
         } while (!returnedToken);
 
     }
 
-    void GLSLPreprocessor::enterMainSource(const char *filename) {
-        enterSource(filename);
+    void GLSLPreprocessor::enterMainSourceFile(const char *filename) {
+        enterSourceFile(filename);
     }
 
-    void GLSLPreprocessor::enterSource(const char *filename) {
+    void GLSLPreprocessor::enterMainSource(const char *source) {
+        enterSource(source);
+    }
+
+    void GLSLPreprocessor::enterSourceFile(const char *filename) {
 
         GLSLPreprocessorSource *source;
         auto it = sources.find(filename);
@@ -31,9 +43,17 @@ namespace renderbox {
         }
 
         const char *bufferStart = source->source.get();
-        const char *bufferEnd = bufferStart + source->size;
 
-        currentLexer = new GLSLPreprocessorLexer(this, bufferStart, bufferStart, bufferEnd);
+        currentLexer = new GLSLPreprocessorLexer(this, bufferStart, bufferStart);
+        lexers.push_back(std::unique_ptr<GLSLPreprocessorLexer>(currentLexer));
+
+    }
+
+    void GLSLPreprocessor::enterSource(const char *source) {
+
+        const char *bufferStart = source;
+
+        currentLexer = new GLSLPreprocessorLexer(this, bufferStart, bufferStart);
         lexers.push_back(std::unique_ptr<GLSLPreprocessorLexer>(currentLexer));
 
     }
@@ -50,13 +70,15 @@ namespace renderbox {
     GLSLPPKeywordKind getPPKeywordKind(const char *keyword, unsigned len) {
 
 #define HASH(LEN, FIRST, THIRD) \
-  (((LEN) << 5) + ((((FIRST) - 'a') + ((THIRD) - 'a')) & 31))
+    (((LEN) << 5) + ((((FIRST) - 'a') + ((THIRD) - 'a')) & 31))
 #define CASE(LEN, FIRST, THIRD, NAME) \
     case HASH(LEN, FIRST, THIRD): \
         return memcmp(keyword, #NAME, LEN) ? pp_not_keyword : pp_ ## NAME
 
         switch (HASH(len, keyword[0], keyword[2])) {
+
             CASE(7, 'i', 'c', include);
+
             default: return pp_not_keyword;
         }
 
@@ -64,6 +86,10 @@ namespace renderbox {
 #undef HASH
 
     }
+
+    const char *glsl_common =
+#include "shaders/common.glsl"
+    ;
 
     void GLSLPreprocessor::handleDirective(GLSLToken &token) {
 
@@ -77,11 +103,10 @@ namespace renderbox {
             NotDirective:
 
             // Skip to the end of line
-            currentLexer->isPreprocessingDirective = false;
-            lex(token);
+            while (token.kind != eod) lex(token);
 
             token.kind = unknown;
-            token.len = static_cast<unsigned>(token.pointer + token.len - hash.pointer);
+            token.len = static_cast<unsigned>(token.pointer - hash.pointer);
             token.pointer = hash.pointer;
 
             return;
@@ -98,7 +123,58 @@ namespace renderbox {
                 break;
 
             case pp_include: // Include directive
-                break;
+
+                currentLexer->isLexingFilename = true;
+                lex(token);
+                currentLexer->isLexingFilename = false;
+
+                GLSLToken fileToken = token;
+
+                // Expect next token to be end of directive
+                lex(token);
+                if (token.kind != eod) goto NotDirective;
+
+                // Expecting a string literal or an angled string literal
+                switch (fileToken.kind) {
+                    default: break;
+
+                    case string_literal:
+                    case angle_string_literal: {
+
+                        unsigned fileLen = fileToken.len - 2;
+                        char file[fileLen + 1];
+                        memcpy(file, fileToken.pointer + 1, fileLen);
+                        file[fileLen] = '\0';
+
+                        if (fileToken.kind == angle_string_literal) {
+                            // Built in fragments
+
+#define HASH(LEN, FIRST, THIRD) \
+    (((LEN) << 5) + ((((FIRST) - 'a') + ((THIRD) - 'a')) & 31))
+#define CASE(LEN, FIRST, THIRD, NAME) \
+    case HASH(LEN, FIRST, THIRD): \
+        if (memcmp(file, #NAME, LEN)) break; enterSource(glsl_ ## NAME); lex(token); return
+
+                            switch (HASH(fileLen, file[0], file[2])) {
+
+                                CASE(6, 'c', 'm', common);
+
+                                default: break;
+                            }
+
+#undef CASE
+#undef HASH
+
+                        } else {
+
+                            // TODO: Search file from relative path
+
+                        }
+
+                    }
+
+                }
+
         }
 
         goto NotDirective;
@@ -106,6 +182,7 @@ namespace renderbox {
     }
 
     GLSLPreprocessorSource::GLSLPreprocessorSource(const char *filename) {
+
         FILE *f = fopen(filename, "r");
 
         // Determine file size
@@ -124,11 +201,11 @@ namespace renderbox {
 
     GLSLPreprocessorLexer::GLSLPreprocessorLexer(GLSLPreprocessor *preprocessor,
                                                  const char *bufferStart,
-                                                 const char *bufferPointer,
-                                                 const char *bufferEnd)
-        : preprocessor(preprocessor), bufferStart(bufferStart), bufferPointer(bufferPointer), bufferEnd(bufferEnd) {
+                                                 const char *bufferPointer)
+        : preprocessor(preprocessor), bufferStart(bufferStart), bufferPointer(bufferPointer) {
         isAtPhysicalStartOfLine = true;
         isPreprocessingDirective = false;
+        isLexingFilename = false;
     }
 
     bool GLSLPreprocessorLexer::lex(GLSLToken &token) {
@@ -226,6 +303,20 @@ namespace renderbox {
                 if (!isPreprocessingDirective) goto LexLine;
                 return lexIdentifier(token, pointer);
 
+            case '"': // String literal
+
+                // Only lex literal if in directive
+                if (!isPreprocessingDirective) goto LexLine;
+                return lexStringLiteral(token, pointer);
+
+            case '<':
+
+                if (!isPreprocessingDirective) goto LexLine;
+                if (isLexingFilename) { // Preprocesser lexing a filename
+                    return lexAngledStringLiteral(token, pointer);
+                }
+                goto LexLine;
+
         }
 
         return true;
@@ -255,6 +346,74 @@ namespace renderbox {
         if (pointer == bufferPointer) return false;
 
         token.kind = identifier;
+        token.pointer = bufferPointer;
+        token.len = static_cast<unsigned>(pointer - bufferPointer);
+
+        bufferPointer = pointer;
+
+        return true;
+
+    }
+
+    bool GLSLPreprocessorLexer::lexStringLiteral(GLSLToken &token, const char *pointer) {
+
+        while (*pointer != '"') {
+
+            // Escape character
+            if (*pointer == '\\') ++pointer;
+
+            if (*pointer == '\0' || *pointer == '\n') { // Early termination of string
+
+                token.kind = unknown;
+                token.pointer = bufferPointer;
+                token.len = static_cast<unsigned>(pointer - bufferPointer);
+
+                bufferPointer = pointer;
+
+                break;
+            }
+
+            ++pointer;
+
+        }
+
+        ++pointer;
+
+        token.kind = string_literal;
+        token.pointer = bufferPointer;
+        token.len = static_cast<unsigned>(pointer - bufferPointer);
+
+        bufferPointer = pointer;
+
+        return true;
+
+    }
+
+    bool GLSLPreprocessorLexer::lexAngledStringLiteral(GLSLToken &token, const char *pointer) {
+
+        while (*pointer != '>') {
+
+            // Escape character
+            if (*pointer == '\\') ++pointer;
+
+            if (*pointer == '\0' || *pointer == '\n') { // Early termination of string
+
+                token.kind = unknown;
+                token.pointer = bufferPointer;
+                token.len = static_cast<unsigned>(pointer - bufferPointer);
+
+                bufferPointer = pointer;
+
+                break;
+            }
+
+            ++pointer;
+
+        }
+
+        ++pointer;
+
+        token.kind = angle_string_literal;
         token.pointer = bufferPointer;
         token.len = static_cast<unsigned>(pointer - bufferPointer);
 
