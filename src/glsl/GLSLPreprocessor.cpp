@@ -74,7 +74,7 @@ namespace renderbox {
 
         if (token.kind == eod || token.len < 2) { // Empty line or not a directive
 
-            NotKeyword:
+            NotDirective:
 
             // Skip to the end of line
             currentLexer->isPreprocessingDirective = false;
@@ -101,7 +101,7 @@ namespace renderbox {
                 break;
         }
 
-        goto NotKeyword;
+        goto NotDirective;
 
     }
 
