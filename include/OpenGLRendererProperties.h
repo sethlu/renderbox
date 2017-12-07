@@ -17,9 +17,9 @@ namespace renderbox {
 
     class OpenGLRendererProperties {
 
-        static std::unordered_map<int, OpenGLProgram *> programs;
+        static std::unordered_map<int, std::unique_ptr<OpenGLProgram>> programs;
 
-        std::unordered_map<int, OpenGLObjectProperties *> objectProperties;
+        std::unordered_map<int, std::unique_ptr<OpenGLObjectProperties>> objectProperties;
 
     public:
 

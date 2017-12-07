@@ -5,24 +5,30 @@
 
 namespace renderbox {
 
-    std::unordered_map<int, OpenGLProgram *> OpenGLRendererProperties::programs;
+    std::unordered_map<int, std::unique_ptr<OpenGLProgram>> OpenGLRendererProperties::programs;
 
     OpenGLObjectProperties *OpenGLRendererProperties::getObjectProperties(Object *object) {
-        auto result = objectProperties.find(object->getObjectID());
+
+        auto result = objectProperties.find(object->getObjectId());
         if (result != objectProperties.end()) {
-            return result->second;
+            return result->second.get();
         }
+
         auto *properties = new OpenGLObjectProperties();
-        objectProperties.insert(std::pair<int, OpenGLObjectProperties *>(object->getObjectID(), properties));
+        objectProperties.insert(std::pair<int, std::unique_ptr<OpenGLObjectProperties>>(object->getObjectId(), std::unique_ptr<OpenGLObjectProperties>(properties)));
+
         return properties;
+
     }
 
     OpenGLProgram *OpenGLRendererProperties::getProgram(Material *material) {
-        int materialID = material->getMaterialId();
-        auto result = programs.find(materialID);
+
+        int materialId = material->getMaterialId();
+        auto result = programs.find(materialId);
         if (result != programs.end()) {
-            return result->second;
+            return result->second.get();
         }
+
         OpenGLProgram *program;
         switch (material->getMaterialType()) {
             case MESH_BASIC_MATERIAL:
@@ -63,8 +69,11 @@ namespace renderbox {
                 fprintf(stderr, "Unsupported material type");
                 throw 2;
         }
-        programs.insert(std::pair<int, OpenGLProgram *>(materialID, program));
+
+        programs.insert(std::pair<int, std::unique_ptr<OpenGLProgram>>(materialId, std::unique_ptr<OpenGLProgram>(program)));
+
         return program;
+
     }
 
 }
