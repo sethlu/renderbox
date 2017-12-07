@@ -20,9 +20,9 @@ namespace renderbox {
 
     class OpenGLObjectProperties : public ObjectProperties {
 
-        std::unordered_map<int, OpenGLBuffer *> buffers;
+        std::unordered_map<int, std::unique_ptr<OpenGLBuffer>> buffers;
 
-        std::unordered_map<int, OpenGLVertexArray *> vertexArrays;
+        std::unordered_map<int, std::unique_ptr<OpenGLVertexArray>> vertexArrays;
 
     public:
 
