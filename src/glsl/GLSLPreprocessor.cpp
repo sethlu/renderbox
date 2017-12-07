@@ -192,10 +192,11 @@ namespace renderbox {
         if (size_ < 0) throw 2; // Failed to tell size
         size = static_cast<size_t>(size_);
 
-        source.reset(new char[size]);
+        source.reset(new char[size + 1]);
 
         rewind(f);
         fread(source.get(), sizeof(char), size, f);
+        source.get()[size] = '\0';
 
     }
 
@@ -459,4 +460,5 @@ namespace renderbox {
         return os;
 
     }
+
 }
