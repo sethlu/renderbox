@@ -18,7 +18,7 @@ namespace renderbox {
 
     }
 
-    int Object::getObjectID() const {
+    int Object::getObjectId() const {
         return objectId;
     }
 

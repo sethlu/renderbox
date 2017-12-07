@@ -78,7 +78,7 @@ namespace renderbox {
 
         Object(Geometry *geometry, Material *material);
 
-        int getObjectID() const;
+        int getObjectId() const;
 
         // Object inheritance
 

@@ -20,7 +20,7 @@ namespace renderbox {
          */
         std::unordered_map<GLuint, std::vector<Object *>> objects;
 
-        void addObject(GLuint programID, Object *object);
+        void addObject(GLuint programId, Object *object);
 
     };
 
