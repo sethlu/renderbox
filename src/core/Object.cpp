@@ -9,12 +9,8 @@ namespace renderbox {
 
     int Object::count = 0;
 
-    Object::Object() = default;
-
-    Object::Object(Geometry *geometry, Material *material) {
-
-        this->geometry = geometry;
-        this->material = material;
+    Object::Object(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material)
+        : geometry(geometry), material(material) {
 
     }
 
@@ -30,33 +26,35 @@ namespace renderbox {
         return parent;
     };
 
-    std::vector<Object *> Object::getChildren() const {
+    std::vector<std::shared_ptr<Object>> Object::getChildren() const {
         return children;
     }
 
-    void Object::addChild(Object *child) {
+    void Object::addChild(std::shared_ptr<Object> child) {
         if (child->hasParent()) {
             fprintf(stderr, "Object already assigned with parent");
             throw 2;
         }
+
         child->parent = this;
         child->didTransform();
+
         children.push_back(child);
     }
 
     bool Object::hasGeometry() {
-        return geometry != nullptr;
+        return !!geometry;
     }
 
-    Geometry *Object::getGeometry() const {
+    std::shared_ptr<Geometry> Object::getGeometry() const {
         return geometry;
     }
 
     bool Object::hasMaterial() {
-        return material != nullptr;
+        return !!material;
     }
 
-    Material *Object::getMaterial() const {
+    std::shared_ptr<Material> Object::getMaterial() const {
         return material;
     }
 
@@ -76,7 +74,7 @@ namespace renderbox {
         // Calculate world matrix for each child
         worldMatrix = (hasParent() ? getParent()->worldMatrix : glm::mat4x4(1.0f)) * getMatrix();
         // Propagate object transformation
-        for (Object *child : children) {
+        for (const std::shared_ptr<Object> &child : children) {
             child->didTransform();
         }
     }

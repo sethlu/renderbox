@@ -16,12 +16,12 @@ namespace renderbox {
         /**
          * @var Object geometry
          */
-        Geometry *geometry = nullptr;
+        std::shared_ptr<Geometry> geometry;
 
         /**
          * @var Object material
          */
-        Material *material = nullptr;
+        std::shared_ptr<Material> material;
 
         // Object internal management
 
@@ -46,7 +46,7 @@ namespace renderbox {
         /**
          * @var Children of the object
          */
-        std::vector<Object *> children;
+        std::vector<std::shared_ptr<Object>> children;
 
         // Object transformation
 
@@ -58,7 +58,7 @@ namespace renderbox {
         /**
          * @var Object translation
          */
-        glm::vec3 translation;
+        glm::vec3 translation = glm::vec3(0);
 
         /**
          * @var Object rotation matrix
@@ -74,9 +74,9 @@ namespace renderbox {
 
     public:
 
-        Object();
+        Object() = default;
 
-        Object(Geometry *geometry, Material *material);
+        Object(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material);
 
         int getObjectId() const;
 
@@ -86,21 +86,21 @@ namespace renderbox {
 
         Object *getParent() const;
 
-        std::vector<Object *> getChildren() const;
+        std::vector<std::shared_ptr<Object>> getChildren() const;
 
-        void addChild(Object *object);
+        void addChild(std::shared_ptr<Object> child);
 
         // Geometry
 
         bool hasGeometry();
 
-        Geometry *getGeometry() const;
+        std::shared_ptr<Geometry> getGeometry() const;
 
         // Material
 
         bool hasMaterial();
 
-        Material *getMaterial() const;
+        std::shared_ptr<Material> getMaterial() const;
 
         // Object transformation
 

@@ -11,7 +11,7 @@ namespace renderbox {
     class Mesh : public Object {
     public:
 
-        Mesh(Geometry *geometry, Material *material);
+        Mesh(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material);
 
     };
 

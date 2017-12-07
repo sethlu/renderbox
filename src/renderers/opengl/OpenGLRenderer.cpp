@@ -21,7 +21,7 @@ namespace renderbox {
 
         OpenGLObjectProperties *objectProperties = properties->getObjectProperties(object);
         OpenGLVertexArray *vertexArray = objectProperties->getVertexArray(0);
-        OpenGLProgram *program = properties->getProgram(object->getMaterial());
+        OpenGLProgram *program = properties->getProgram(object->getMaterial().get());
 
         // Load object geometry
 
@@ -57,12 +57,12 @@ namespace renderbox {
 
             // Do not add objects without geometry or material
             if (current->hasGeometry() && current->hasMaterial()) {
-                OpenGLProgram *program = properties->getProgram(current->getMaterial());
+                OpenGLProgram *program = properties->getProgram(current->getMaterial().get());
                 renderList->addObject(program->getProgramId(), current);
             }
 
-            for (Object *next : current->getChildren()) {
-                frontier.push(next);
+            for (std::shared_ptr<Object> next : current->getChildren()) {
+                frontier.push(next.get());
             }
         }
 
@@ -104,7 +104,7 @@ namespace renderbox {
 
                 OpenGLObjectProperties *objectProperties = properties->getObjectProperties(object);
                 OpenGLVertexArray *vertexArray = objectProperties->getVertexArray(0);
-                Material *material = object->getMaterial();
+                Material *material = object->getMaterial().get();
 
                 // World projection matrix
                 glm::mat4x4 worldProjectionMatrix = viewProjectionMatrix * object->getWorldMatrix();
