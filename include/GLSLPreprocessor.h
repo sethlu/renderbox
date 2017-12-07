@@ -161,19 +161,18 @@ namespace renderbox {
 
     };
 
-    class GLSLPreprocessorSource {
+    std::string preprocessGLSLSource(const char *source);
 
-        friend class GLSLPreprocessor;
+    std::string readFile(const char *filename);
 
-    public:
+    std::string preprocessGLSLSourceFile(const char *filename);
 
-        explicit GLSLPreprocessorSource(const char *filename);
-
-    private:
+    struct GLSLPreprocessorSource {
 
         std::unique_ptr<char> source;
-
         size_t size;
+
+        explicit GLSLPreprocessorSource(const char *filename);
 
     };
 

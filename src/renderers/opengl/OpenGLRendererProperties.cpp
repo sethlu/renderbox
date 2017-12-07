@@ -32,7 +32,7 @@ namespace renderbox {
         OpenGLProgram *program;
         switch (material->getMaterialType()) {
             case MESH_BASIC_MATERIAL:
-                program = new OpenGLProgram(
+                program = OpenGLProgram::createProgramWithPreprocessedSources(
                     #if defined(__MACOSX__)
                     #include "shaders/mesh_basic_vert.glsl"
                     #elif defined(__IPHONEOS__)
@@ -47,7 +47,7 @@ namespace renderbox {
                 );
                 break;
             case MESH_LAMBERT_MATERIAL:
-                program = new OpenGLProgram(
+                program = OpenGLProgram::createProgramWithPreprocessedSources(
                     #if defined(__MACOSX__)
                     #include "shaders/mesh_lambert_vert.glsl"
                     #elif defined(__IPHONEOS__)

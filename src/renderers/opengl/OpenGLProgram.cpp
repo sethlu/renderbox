@@ -8,93 +8,80 @@
 #include <fstream>
 #include <glm/gtc/type_ptr.hpp>
 #include "OpenGLProgram.h"
-#include "Material.h"
+#include "GLSLPreprocessor.h"
 
 
 namespace renderbox {
 
     std::unordered_map<GLuint, OpenGLProgram *> OpenGLProgram::programs;
 
-    OpenGLProgram *OpenGLProgram::getProgram(GLuint programID) {
-        auto it = programs.find(programID);
+    OpenGLProgram *OpenGLProgram::getProgram(GLuint programId) {
+        auto it = programs.find(programId);
         return it != programs.end() ? it->second : nullptr;
     }
 
-    GLuint initShader(const GLchar *source, GLenum shader_type) {
-        // Create shaders
-        GLuint shader = glCreateShader(shader_type);
-
-        // Compile shaders
-        GLint compiled;
-        glShaderSource(shader, 1, &source, nullptr);
-        glCompileShader(shader);
-        glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
-        if (compiled) {
-            return shader;
-        }
-
-        // Compilation encountered error
-        GLint length;
-        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
-        GLchar *log = new GLchar[length + 1];
-        glGetShaderInfoLog(shader, length, &length, log);
-        fprintf(stderr, "Compilation error: %s\n", log);
-        throw 3; // TODO: Find error no
-    }
-
-    GLuint initProgram(GLuint vertexShaderID, GLuint fragmentShaderID) {
-        // Create program
-        GLuint programID = glCreateProgram();
-
-        // Link program
-        GLint linked;
-        glAttachShader(programID, vertexShaderID);
-        glAttachShader(programID, fragmentShaderID);
-        glLinkProgram(programID);
-        glGetProgramiv(programID, GL_LINK_STATUS, &linked);
-        if (linked) {
-            return programID;
-        }
-
-        // Linking encountered error
-        GLint length;
-        glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &length);
-        GLchar *log = new GLchar[length + 1];
-        glGetProgramInfoLog(programID, length, &length, log);
-        fprintf(stderr, "Linking error: %s\n", log);
-        throw 4; // TODO: Find error no
-    }
-
-    GLuint initProgram(const char *vertexShaderSource, const char *fragmentShaderSource) {
-        GLuint vertexShaderID = initShader(vertexShaderSource, GL_VERTEX_SHADER);
-        GLuint fragmentShaderID = initShader(fragmentShaderSource, GL_FRAGMENT_SHADER);
-
-        GLuint programID = initProgram(vertexShaderID, fragmentShaderID);
-
-        glDetachShader(programID, vertexShaderID);
-        glDetachShader(programID, fragmentShaderID);
-
-        glDeleteShader(vertexShaderID);
-        glDeleteShader(fragmentShaderID);
-
-        return programID;
-    }
-
     OpenGLProgram::OpenGLProgram(const char *vertexShaderSource, const char *fragmentShaderSource) {
-        programId = initProgram(vertexShaderSource, fragmentShaderSource);
+
+        programId = glCreateProgram();
         programs[programId] = this;
+
+        OpenGLShader vertexShader(vertexShaderSource, GL_VERTEX_SHADER);
+        OpenGLShader fragmentShader(fragmentShaderSource, GL_FRAGMENT_SHADER);
+
+        // Link shader
+        glAttachShader(programId, vertexShader.shaderId);
+        glAttachShader(programId, fragmentShader.shaderId);
+        glLinkProgram(programId);
+        glDetachShader(programId, vertexShader.shaderId);
+        glDetachShader(programId, fragmentShader.shaderId);
+
+        // Check if linked
+        GLint linked;
+        glGetProgramiv(programId, GL_LINK_STATUS, &linked);
+        if (!linked) {
+            GLint length;
+            glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &length);
+
+            auto log = new GLchar[length + 1];
+            glGetProgramInfoLog(programId, length, &length, log);
+            fprintf(stderr, "Linking error: %s\n", log);
+
+            throw 2;
+        }
+
     }
 
-    OpenGLProgram::OpenGLProgram(std::string vertexShaderSource, std::string fragmentShaderSource) {
-        OpenGLProgram(copyString(vertexShaderSource), copyString(fragmentShaderSource));
+    OpenGLProgram::OpenGLProgram(std::string &vertexShaderSource, std::string &fragmentShaderSource)
+        : OpenGLProgram(vertexShaderSource.c_str(), fragmentShaderSource.c_str()) {
+
+    }
+
+    OpenGLProgram *OpenGLProgram::createProgramWithPreprocessedSources(const char *vertexShaderSource, const char *fragmentShaderSource) {
+        std::string vertexShaderSource_ = preprocessGLSLSource(vertexShaderSource),
+                    fragmentShaderSource_ = preprocessGLSLSource(fragmentShaderSource);
+        return new OpenGLProgram(vertexShaderSource_, fragmentShaderSource_);
+    }
+
+    OpenGLProgram *OpenGLProgram::createProgramWithSourceFiles(const char *vertexShaderFilename,
+                                                              const char *fragmentShaderFilename) {
+        std::string vertexShaderSource = readFile(vertexShaderFilename),
+                    fragmentShaderSource = readFile(fragmentShaderFilename);
+        return new OpenGLProgram(vertexShaderSource, fragmentShaderSource);
+    }
+
+    OpenGLProgram *OpenGLProgram::createProgramWithPreprocessedSourceFiles(const char *vertexShaderFilename,
+                                                                          const char *fragmentShaderFilename) {
+        std::string vertexShaderSource = preprocessGLSLSourceFile(vertexShaderFilename),
+                    fragmentShaderSource = preprocessGLSLSourceFile(fragmentShaderFilename);
+        return new OpenGLProgram(vertexShaderSource, fragmentShaderSource);
     }
 
     GLuint OpenGLProgram::getProgramId() const {
         return programId;
     }
 
-    inline void OpenGLProgram::useProgram(GLuint programID) {
-        glUseProgram(programID);
+    inline void OpenGLProgram::useProgram(GLuint programId) {
+        glUseProgram(programId);
     }
 
     void OpenGLProgram::useProgram() {
@@ -113,20 +100,34 @@ namespace renderbox {
         return glGetUniformLocation(programId, name);
     }
 
-    std::string readFile(const char *name) {
-        std::ifstream in;
-        std::string line, str;
-        in.open(name);
-        if (in.is_open()) {
-            while (!in.eof()) {
-                getline(in, line);
-                str += line + "\n";
-            }
-            return str;
+    OpenGLShader::OpenGLShader(const char *source, GLenum type) {
+
+        shaderId = glCreateShader(type);
+
+        // Compile shader
+        glShaderSource(shaderId, 1, &source, nullptr);
+        glCompileShader(shaderId);
+
+        // Check if compiled
+        GLint compiled;
+        glGetShaderiv(shaderId, GL_COMPILE_STATUS, &compiled);
+        if (!compiled) {
+            GLint length;
+            glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &length);
+
+            auto log = new GLchar[length + 1];
+            glGetShaderInfoLog(shaderId, length, &length, log);
+            fprintf(stderr, "Compilation error: %s\n", log);
+
+            throw 2;
         }
-        fprintf(stdout, "Failed to open file: %s\n", name);
-        throw 2; // TODO: Find error no
+
     }
 
+    OpenGLShader::~OpenGLShader() {
+
+        glDeleteShader(shaderId);
+
+    }
 
 }

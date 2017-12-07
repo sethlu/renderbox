@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <fstream>
 #include "GLSLPreprocessor.h"
 
 
@@ -179,6 +180,53 @@ namespace renderbox {
 
         goto NotDirective;
 
+    }
+
+    std::string preprocessGLSLSource(const char *source) {
+        std::string result;
+        GLSLPreprocessor preprocessor;
+
+        preprocessor.enterMainSource(source);
+
+        GLSLToken token{};
+        do {
+            preprocessor.lex(token);
+
+            result.append(token.pointer, token.len);
+            result.append("\n");
+
+        } while (token.kind != eof);
+
+        result.append("\0");
+
+        return result;
+    }
+
+    std::string readFile(const char *filename) {
+        std::ifstream f(filename);
+        std::string result((std::istreambuf_iterator<char>(f)),
+                           (std::istreambuf_iterator<char>()));
+        return result;
+    }
+
+    std::string preprocessGLSLSourceFile(const char *filename) {
+        std::string result;
+        GLSLPreprocessor preprocessor;
+
+        preprocessor.enterMainSourceFile(filename);
+
+        GLSLToken token{};
+        do {
+            preprocessor.lex(token);
+
+            result.append(token.pointer, token.len);
+            result.append("\n");
+
+        } while (token.kind != eof);
+
+        result.append("\0");
+
+        return result;
     }
 
     GLSLPreprocessorSource::GLSLPreprocessorSource(const char *filename) {
