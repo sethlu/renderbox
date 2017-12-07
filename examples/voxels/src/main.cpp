@@ -2,13 +2,13 @@
 #include <glm/glm.hpp>
 #include "renderbox.h"
 
-renderbox::Scene *scene;
-renderbox::PerspectiveCamera *camera;
-renderbox::OpenGLGLFWRenderer *renderer;
+std::shared_ptr<renderbox::Scene> scene;
+std::shared_ptr<renderbox::PerspectiveCamera> camera;
+std::unique_ptr<renderbox::OpenGLGLFWRenderer> renderer;
 
-renderbox::Object *cameraRig;
-renderbox::Mesh *terrain;
-renderbox::Mesh *testCube;
+std::shared_ptr<renderbox::Object> cameraRig;
+std::shared_ptr<renderbox::Mesh> terrain;
+std::shared_ptr<renderbox::Mesh> testCube;
 
 float cameraDistance = 40.0f;
 float cameraAngularVelocity = 0.0f;
@@ -23,11 +23,11 @@ float isolevel = 0.5f;
 void init() {
 
     // Scene
-    scene = new renderbox::Scene();
+    scene = std::make_shared<renderbox::Scene>();
     scene->setAmbientColor(glm::vec3(0.05f));
 
     // Voxel terrain
-    renderbox::VoxelGeometry *voxelGeometry = new renderbox::VoxelGeometry();
+    auto voxelGeometry = std::make_shared<renderbox::VoxelGeometry>();
     for (int x = -32; x < 32; ++x) {
         for (int y = -32; y < 32; ++y) {
             for (int z = -4; z < 4; ++z) {
@@ -36,22 +36,26 @@ void init() {
         }
     }
     voxelGeometry->updateGeometryByMarchingCube(isolevel); // Refresh geometry
-    terrain = new renderbox::Mesh(voxelGeometry,
-                                  new renderbox::GLSLShaderMaterial(renderbox::readFile("shaders/terrain_vert.glsl"),
-                                                                    renderbox::readFile("shaders/terrain_frag.glsl")));
-    renderer->loadObject(terrain);
+    terrain = std::make_shared<renderbox::Mesh>(
+        voxelGeometry,
+        std::make_shared<renderbox::GLSLShaderMaterial>(
+            renderbox::readFile("shaders/terrain_vert.glsl"),
+            renderbox::readFile("shaders/terrain_frag.glsl")));
+    renderer->loadObject(terrain.get());
     scene->addChild(terrain);
 
     // Test cube
-    testCube = new renderbox::Mesh(new renderbox::BoxGeometry(0.5f, 0.5f, 0.5f),
-                                   new renderbox::MeshLambertMaterial(glm::vec3(1.0f, 0, 0)));
-    renderer->loadObject(testCube);
+    testCube = std::make_shared<renderbox::Mesh>(
+        std::make_shared<renderbox::BoxGeometry>(0.5f, 0.5f, 0.5f),
+        std::make_shared<renderbox::MeshLambertMaterial>(glm::vec3(1.0f, 0, 0)));
+    renderer->loadObject(testCube.get());
     scene->addChild(testCube);
 
     // Camera
-    camera = new renderbox::PerspectiveCamera(glm::radians(45.0f), (float) renderer->getWindowWidth() / (float) renderer->getWindowHeight());
+    camera = std::make_shared<renderbox::PerspectiveCamera>(
+        glm::radians(45.0f), (float) renderer->getWindowWidth() / (float) renderer->getWindowHeight());
     camera->setTranslation(glm::vec3(0, 0, cameraDistance));
-    cameraRig = new renderbox::Object();
+    cameraRig = std::make_shared<renderbox::Object>();
     cameraRig->addChild(camera);
     cameraRig->rotate(glm::vec3(1.0f, 0, 0), glm::radians(cameraAngle[1]));
 
@@ -72,17 +76,17 @@ void update() {
         renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderer->getWindowWidth() - 1.0f,
                                                              1.0f - 2 * mouseY / renderer->getWindowHeight()));
         std::vector<glm::vec3> worldPositions;
-        if (cameraRay->intersectObject(terrain, worldPositions)) {
+        if (cameraRay->intersectObject(terrain.get(), worldPositions)) {
             glm::vec3 objectPosition = floor(renderbox::dehomogenize(
                     glm::inverse(terrain->getWorldMatrix())
                     * glm::vec4(worldPositions[0] + glm::vec3(0.5f), 1.0f)));
 
-            renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry();
+            renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry().get();
 
             terrainGeometry->brush(objectPosition, 8, 0.4f, isolevel);
 
             terrainGeometry->updateGeometryByMarchingCube(isolevel);
-            renderer->loadObject(terrain);
+            renderer->loadObject(terrain.get());
         }
 
         mouseLastSync = currentTime;
@@ -95,7 +99,7 @@ void update() {
         renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderer->getWindowWidth() - 1.0f,
                                                              1.0f - 2 * mouseY / renderer->getWindowHeight()));
         std::vector<glm::vec3> worldPositions;
-        if (cameraRay->intersectObject(terrain, worldPositions)) {
+        if (cameraRay->intersectObject(terrain.get(), worldPositions)) {
             glm::vec3 testLocation = worldPositions[0];
             testCube->visible = true;
             testCube->setTranslation(testLocation);
@@ -111,14 +115,14 @@ void update() {
                          * deltaTime * cameraDistance * 0.01f);
     cameraRig->clearRotation();
     cameraAngle[0] += cameraAngularVelocity * deltaTime;
-    if (cameraAngle[1] < 5.0f) cameraAngle[1] = 5.0f;
+    if (cameraAngle[1] < 10.0f) cameraAngle[1] = 10.0f;
     else if (cameraAngle[1] > 85.0f) cameraAngle[1] = 85.0f;
     cameraRig->rotate(glm::vec3(1.0f, 0, 0), glm::radians(cameraAngle[1]));
     cameraRig->rotate(glm::vec3(0, 0, 1.0f), glm::radians(cameraAngle[0]));
 
     // Render
 
-    renderer->render(scene, camera);
+    renderer->render(scene.get(), camera.get());
 
     lastTime = currentTime;
 
@@ -145,17 +149,17 @@ void mouseclick(GLFWwindow *window) {
     renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderer->getWindowWidth() - 1.0f,
                                                          1.0f - 2 * mouseY / renderer->getWindowHeight()));
     std::vector<glm::vec3> worldPositions;
-    if (cameraRay->intersectObject(terrain, worldPositions)) {
+    if (cameraRay->intersectObject(terrain.get(), worldPositions)) {
         glm::vec3 objectPosition = renderbox::dehomogenize(
                 glm::inverse(terrain->getWorldMatrix())
                 * glm::vec4(worldPositions[0] - glm::vec3(0.5f), 1.0f));
 
-        renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry();
+        renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry().get();
 
         terrainGeometry->brush(objectPosition, 5, 0.4f, isolevel);
 
         terrainGeometry->updateGeometryByMarchingCube(isolevel);
-        renderer->loadObject(terrain);
+        renderer->loadObject(terrain.get());
     }
 
 }
@@ -270,7 +274,7 @@ void rotateCallback(GLFWwindow *window, double rotation) {
 
 int main(int argc, char **argv) {
 
-    renderer = new renderbox::OpenGLGLFWRenderer();
+    renderer.reset(new renderbox::OpenGLGLFWRenderer());
     GLFWwindow *window = renderer->getWindow();
 
     // Callbacks
