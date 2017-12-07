@@ -441,4 +441,15 @@ namespace renderbox {
 
     }
 
+    std::ostream &operator<<(std::ostream &os, const GLSLToken &token) {
+
+        char cstr[token.len + 1];
+        memcpy(cstr, token.pointer, token.len);
+        cstr[token.len] = '\0';
+
+        os << cstr;
+
+        return os;
+
+    }
 }

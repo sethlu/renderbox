@@ -11,15 +11,9 @@ int main(int argc, char** argv) {
     do {
         preprocessor.lex(token);
 
-        const char *ptr = token.pointer;
-        const char *endPtr = token.pointer + token.len;
-
-        std::cout << std::endl << reinterpret_cast<const void *>(ptr) << " " << token.kind << std::endl;
-
-        while (ptr < endPtr) {
-            std::cout << *ptr;
-            ++ptr;
-        }
+        std::cout << reinterpret_cast<const void *>(token.pointer)
+                  << " " << token.kind << std::endl
+                  << token << std::endl;
 
     } while (token.kind != renderbox::eof);
 

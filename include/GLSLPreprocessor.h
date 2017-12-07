@@ -6,6 +6,7 @@
 #include <memory>
 #include <vector>
 #include <map>
+#include <ostream>
 
 namespace renderbox {
 
@@ -108,9 +109,13 @@ namespace renderbox {
     };
 
     struct GLSLToken {
+
         GLSLTokenKind kind;
         const char *pointer;
         unsigned len;
+
+        friend std::ostream &operator<<(std::ostream &os, const GLSLToken &token);
+
     };
 
     struct CstrComparator {
