@@ -8,10 +8,6 @@ namespace renderbox {
         setPerspective(fovy, aspectRatio, zNear, zFar);
     }
 
-    PerspectiveCamera::~PerspectiveCamera() {
-
-    }
-
     void PerspectiveCamera::setPerspective(float fovy, float aspectRatio, float zNear, float zFar) {
         projectionMatrix = glm::perspective(fovy, aspectRatio, zNear, zFar);
         projectionMatrixDidUpdate();

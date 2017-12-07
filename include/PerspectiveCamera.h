@@ -12,7 +12,7 @@ namespace renderbox {
 
         PerspectiveCamera(float fovy, float aspectRatio, float zNear = 0.1f, float zFar = 10000.0f);
 
-        ~PerspectiveCamera() override;
+        ~PerspectiveCamera() override = default;
 
         void setPerspective(float fovy, float aspectRatio, float zNear = 0.1f, float zFar = 10000.0f);
 
