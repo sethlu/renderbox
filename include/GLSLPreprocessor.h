@@ -200,6 +200,8 @@ namespace renderbox {
         bool isPreprocessingDirective;
         bool isLexingFilename;
 
+        unsigned line;
+
         bool lexLine(GLSLToken &token, const char *pointer);
 
         bool lexIdentifier(GLSLToken &token, const char *pointer);

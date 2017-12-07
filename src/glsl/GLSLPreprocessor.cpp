@@ -202,15 +202,22 @@ namespace renderbox {
     GLSLPreprocessorLexer::GLSLPreprocessorLexer(GLSLPreprocessor *preprocessor,
                                                  const char *bufferStart,
                                                  const char *bufferPointer)
-        : preprocessor(preprocessor), bufferStart(bufferStart), bufferPointer(bufferPointer) {
-        isAtPhysicalStartOfLine = true;
-        isPreprocessingDirective = false;
-        isLexingFilename = false;
+        : preprocessor(preprocessor), bufferStart(bufferStart), bufferPointer(bufferPointer),
+          isAtPhysicalStartOfLine(true), isPreprocessingDirective(false), isLexingFilename(false),
+          line(0) {
+
     }
 
     bool GLSLPreprocessorLexer::lex(GLSLToken &token) {
 
         LexNextToken:
+
+        bool atPhysicalStartOfLine = false;
+        if (isAtPhysicalStartOfLine) {
+            atPhysicalStartOfLine = true;
+            isAtPhysicalStartOfLine = false;
+            ++line;
+        }
 
         skipHorizontalWhitespace(token);
 
@@ -270,7 +277,7 @@ namespace renderbox {
 
             case '#': // Directive
 
-                if (isAtPhysicalStartOfLine) {
+                if (atPhysicalStartOfLine) {
 
                     // Hash
                     token.kind = unknown;
