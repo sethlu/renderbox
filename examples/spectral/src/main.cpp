@@ -2,13 +2,12 @@
 #include <glm/glm.hpp>
 #include "renderbox.h"
 
-renderbox::Scene *scene;
-renderbox::PerspectiveCamera *camera;
-renderbox::OpenGLGLFWRenderer *renderer;
+std::shared_ptr<renderbox::Scene> scene;
+std::shared_ptr<renderbox::PerspectiveCamera> camera;
+std::shared_ptr<renderbox::OpenGLGLFWRenderer> renderer;
 
-renderbox::Object *cameraRig;
-
-renderbox::Object *testCube;
+std::shared_ptr<renderbox::Object> cameraRig;
+std::shared_ptr<renderbox::Object> testCube;
 
 float cameraDistance = 8.0f;
 float cameraAngularVelocity = 0.0f;
@@ -23,20 +22,25 @@ float isolevel = 0.5f;
 void init() {
 
     // Scene
-    scene = new renderbox::Scene();
+    scene = std::make_shared<renderbox::Scene>();
     scene->setAmbientColor(glm::vec3(0.05f));
 
     // Camera
-    camera = new renderbox::PerspectiveCamera(glm::radians(45.0f), (float) renderer->getWindowWidth() / (float) renderer->getWindowHeight());
+    camera = std::make_shared<renderbox::PerspectiveCamera>(
+        glm::radians(45.0f), (float) renderer->getWindowWidth() / (float) renderer->getWindowHeight());
     camera->setTranslation(glm::vec3(0, 0, cameraDistance));
-    cameraRig = new renderbox::Object();
+    cameraRig = std::make_shared<renderbox::Object>();
     cameraRig->addChild(camera);
     cameraRig->rotate(glm::vec3(1.0f, 0, 0), glm::radians(cameraAngle[1]));
 
     // Test cube
-    testCube = new renderbox::Mesh(new renderbox::BoxGeometry(1, 1, 1), new renderbox::GLSLShaderMaterial(renderbox::readFile("shaders/spectral_vert.glsl"), renderbox::readFile("shaders/spectral_frag.glsl")));
+    testCube = std::make_shared<renderbox::Mesh>(
+        std::make_shared<renderbox::BoxGeometry>(1, 1, 1),
+        std::make_shared<renderbox::GLSLShaderMaterial>(
+            renderbox::readFile("shaders/spectral_vert.glsl"),
+            renderbox::readFile("shaders/spectral_frag.glsl")));
     scene->addChild(testCube);
-    renderer->loadObject(testCube);
+    renderer->loadObject(testCube.get());
 
 }
 
@@ -63,7 +67,7 @@ void update() {
 
     // Render
 
-    renderer->render(scene, camera);
+    renderer->render(scene.get(), camera.get());
 
     lastTime = currentTime;
 
@@ -199,7 +203,7 @@ void rotateCallback(GLFWwindow *window, double rotation) {
 
 int main(int argc, char **argv) {
 
-    renderer = new renderbox::OpenGLGLFWRenderer();
+    renderer = std::make_shared<renderbox::OpenGLGLFWRenderer>();
     GLFWwindow *window = renderer->getWindow();
 
     // Callbacks
