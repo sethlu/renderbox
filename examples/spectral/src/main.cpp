@@ -4,7 +4,7 @@
 
 std::shared_ptr<renderbox::Scene> scene;
 std::shared_ptr<renderbox::PerspectiveCamera> camera;
-std::shared_ptr<renderbox::OpenGLGLFWRenderer> renderer;
+std::unique_ptr<renderbox::OpenGLGLFWRenderer> renderer;
 
 std::shared_ptr<renderbox::Object> cameraRig;
 std::shared_ptr<renderbox::Object> testCube;
@@ -203,7 +203,7 @@ void rotateCallback(GLFWwindow *window, double rotation) {
 
 int main(int argc, char **argv) {
 
-    renderer = std::make_shared<renderbox::OpenGLGLFWRenderer>();
+    renderer.reset(new renderbox::OpenGLGLFWRenderer());
     GLFWwindow *window = renderer->getWindow();
 
     // Callbacks
