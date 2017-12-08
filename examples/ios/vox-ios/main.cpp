@@ -2,24 +2,27 @@
 #include "renderbox.h"
 
 
-renderbox::Scene *scene;
-renderbox::Object *cameraRig;
-renderbox::Camera *camera;
-renderbox::OpenGLSDLRenderer *renderer;
-renderbox::Object *cube;
+std::shared_ptr<renderbox::Scene> scene;
+std::shared_ptr<renderbox::Camera> camera;
+std::unique_ptr<renderbox::OpenGLSDLRenderer> renderer;
+
+std::shared_ptr<renderbox::Object> cameraRig;
+std::shared_ptr<renderbox::Object> cube;
 
 void init() {
 	
-	scene = new renderbox::Scene();
+	scene = std::make_shared<renderbox::Scene>();
 	
-    cube = new renderbox::Object(new renderbox::BoxGeometry(3, 3, 3), new renderbox::MeshLambertMaterial(glm::vec3(1, 0, 0)));
-	renderer->loadObject(cube);
+	cube = std::make_shared<renderbox::Object>(std::make_shared<renderbox::BoxGeometry>(3, 3, 3),
+											   std::make_shared<renderbox::MeshLambertMaterial>(glm::vec3(1, 0, 0)));
+	renderer->loadObject(cube.get());
 	scene->addChild(cube);
 	
-	camera = new renderbox::PerspectiveCamera(glm::radians(45.0f), (float) renderer->getFramebufferWidth() / (float) renderer->getFramebufferHeight());
+	camera = std::make_shared<renderbox::PerspectiveCamera>(glm::radians(45.0f),
+															(float) renderer->getFramebufferWidth() / (float) renderer->getFramebufferHeight());
 	camera->setTranslation(glm::vec3(0, 0, 20));
 	
-	cameraRig = new renderbox::Object;
+	cameraRig = std::make_shared<renderbox::Object>();
 	cameraRig->addChild(camera);
 	cameraRig->rotate(glm::vec3(1, 0, 0), glm::radians(45.0f));
 	cameraRig->rotate(glm::vec3(0, 0, 1), glm::radians(45.0f));
@@ -28,7 +31,7 @@ void init() {
 
 void render() {
 	
-	renderer->render(scene, camera);
+	renderer->render(scene.get(), camera.get());
 	
 	SDL_GL_SwapWindow(renderer->getWindow());
 	
@@ -36,7 +39,7 @@ void render() {
 
 int main(int argc, char **argv) {
 	
-	renderer = new renderbox::OpenGLSDLRenderer();
+	renderer.reset(new renderbox::OpenGLSDLRenderer());
 	
 	// Render loop
 	
@@ -72,10 +75,6 @@ int main(int argc, char **argv) {
 	}
 	
 	// End
-	
-	delete scene;
-	delete camera;
-	delete renderer;
 	
 	SDL_Quit();
 	
