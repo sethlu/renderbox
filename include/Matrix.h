@@ -2,11 +2,14 @@
 #define VOX_MATRIX_H
 
 
-#include <glm/mat4x4.hpp>
+#include <glm/gtx/string_cast.hpp>
 
-namespace renderbox {
+namespace {
 
-    void printMatrix(glm::mat4x4 matrix);
+    std::ostream &operator<<(std::ostream &os, const glm::mat4x4 &matrix) {
+        os << glm::to_string(matrix);
+        return os;
+    };
 
 }
 

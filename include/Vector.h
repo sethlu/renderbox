@@ -4,11 +4,19 @@
 
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
+#include <glm/gtx/string_cast.hpp>
 #include <cstdio>
 
-namespace renderbox {
+namespace {
 
-    void printVector(glm::vec3 vector);
+    std::ostream &operator<<(std::ostream &os, const glm::vec3 &vector) {
+        os << glm::to_string(vector);
+        return os;
+    };
+
+}
+
+namespace renderbox {
 
     inline glm::vec3 dehomogenize(glm::vec4 vector) {
         return glm::vec3(vector) / vector.w;
