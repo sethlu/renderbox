@@ -2,21 +2,14 @@
 #define VOX_MESHBASICMATERIAL_H
 
 
-#include <glm/vec3.hpp>
 #include "Material.h"
 
 namespace renderbox {
 
-    class MeshBasicMaterial : public Material {
-    protected:
-
-        glm::vec3 color;
-
+    class MeshBasicMaterial : public Material, public ColorMaterial {
     public:
 
-        MeshBasicMaterial(glm::vec3 color);
-
-        glm::vec3 getColor() const;
+        explicit MeshBasicMaterial(glm::vec3 color);
 
         MATERIAL getMaterialType() const override;
 

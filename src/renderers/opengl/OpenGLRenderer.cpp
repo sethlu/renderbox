@@ -94,13 +94,13 @@ namespace renderbox {
         // View projection matrix
         glm::mat4x4 viewProjectionMatrix = camera->getViewProjectionMatrix();
 
-        for (auto it = renderList->objects.begin(); it != renderList->objects.end(); ++it) {
+        for (const auto &it : renderList->objects) {
 
             // Use program
-            OpenGLProgram *program = OpenGLProgram::getProgram(it->first);
+            OpenGLProgram *program = OpenGLProgram::getProgram(it.first);
             program->useProgram();
 
-            for (Object *object : it->second) {
+            for (Object *object : it.second) {
 
                 OpenGLObjectProperties *objectProperties = properties->getObjectProperties(object);
                 OpenGLVertexArray *vertexArray = objectProperties->getVertexArray(0);
@@ -109,10 +109,11 @@ namespace renderbox {
                 // World projection matrix
                 glm::mat4x4 worldProjectionMatrix = viewProjectionMatrix * object->getWorldMatrix();
 
-                if (program->vertexColor) {
-                    glUniform3fv(program->getUniformLocation("rb_vertexColor"),
-                                 1,
-                                 glm::value_ptr(((MeshBasicMaterial *) material)->getColor()));
+                if (program->vertexColor && material->isColorMaterial()) {
+                    if (auto m = dynamic_cast<ColorMaterial *>(material))
+                        glUniform3fv(program->getUniformLocation("rb_vertexColor"),
+                                     1,
+                                     glm::value_ptr(m->getColor()));
                 }
                 if (program->worldMatrix) {
                     glUniformMatrix4fv(program->getUniformLocation("rb_worldMatrix"),

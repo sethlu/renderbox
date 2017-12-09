@@ -3,12 +3,9 @@
 
 namespace renderbox {
 
-    MeshBasicMaterial::MeshBasicMaterial(glm::vec3 color) {
-        this->color = color;
-    }
+    MeshBasicMaterial::MeshBasicMaterial(glm::vec3 color)
+        : ColorMaterial(color) {
 
-    glm::vec3 MeshBasicMaterial::getColor() const {
-        return color;
     }
 
     MATERIAL MeshBasicMaterial::getMaterialType() const {

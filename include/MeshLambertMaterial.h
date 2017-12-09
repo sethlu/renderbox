@@ -2,21 +2,14 @@
 #define VOX_MESHLAMBERTMATERIAL_H
 
 
-#include <glm/vec3.hpp>
 #include "Material.h"
 
 namespace renderbox {
 
-    class MeshLambertMaterial : public Material {
-    protected:
-
-        glm::vec3 color;
-
+    class MeshLambertMaterial : public Material, public ColorMaterial {
     public:
 
-        MeshLambertMaterial(glm::vec3 color);
-
-        glm::vec3 getColor() const;
+        explicit MeshLambertMaterial(glm::vec3 color);
 
         MATERIAL getMaterialType() const override;
 
