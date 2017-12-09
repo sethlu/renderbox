@@ -15,6 +15,9 @@
 namespace renderbox {
 
     class OpenGLProgram {
+
+        friend class OpenGLRenderer;
+
     public:
 
         OpenGLProgram(const char *vertexShaderSource,
@@ -51,6 +54,12 @@ namespace renderbox {
         static std::unordered_map<GLuint, OpenGLProgram *> programs;
 
         GLuint programId;
+
+        bool vertexColor;
+        bool worldMatrix;
+        bool sceneAmbientColor;
+        bool worldNormalMatrix;
+        bool worldProjectionMatrix;
 
     };
 

@@ -30,12 +30,12 @@ namespace renderbox {
         std::vector<glm::uvec3> faces = object->getGeometry()->getFaces();
 
         objectProperties->getBuffer(0)->buffer(vertices);
-        vertexArray->setAttributeBuffer(program, "vertexPosition", objectProperties->getBuffer(0));
-        vertexArray->enableAttribute(program, "vertexPosition");
+        vertexArray->setAttributeBuffer(program, "rb_vertexPosition", objectProperties->getBuffer(0));
+        vertexArray->enableAttribute(program, "rb_vertexPosition");
 
         objectProperties->getBuffer(1)->buffer(normals);
-        vertexArray->setAttributeBuffer(program, "vertexNormal", objectProperties->getBuffer(1));
-        vertexArray->enableAttribute(program, "vertexNormal");
+        vertexArray->setAttributeBuffer(program, "rb_vertexNormal", objectProperties->getBuffer(1));
+        vertexArray->enableAttribute(program, "rb_vertexNormal");
 
         objectProperties->getBuffer(2)->buffer(faces);
         vertexArray->setElementBuffer(objectProperties->getBuffer(2));
@@ -109,47 +109,33 @@ namespace renderbox {
                 // World projection matrix
                 glm::mat4x4 worldProjectionMatrix = viewProjectionMatrix * object->getWorldMatrix();
 
-                // Set common uniforms
-                glUniformMatrix4fv(program->getUniformLocation("worldProjectionMatrix"),
-                                   1,
-                                   GL_FALSE,
-                                   glm::value_ptr(worldProjectionMatrix));
-                switch (material->getMaterialType()) {
-                    case MESH_BASIC_MATERIAL:
-                        glUniform3fv(program->getUniformLocation("vertexColor"),
-                                     1,
-                                     glm::value_ptr(((MeshBasicMaterial *) material)->getColor()));
-                        break;
-                    case MESH_LAMBERT_MATERIAL:
-                        glUniformMatrix4fv(program->getUniformLocation("worldMatrix"),
-                                           1,
-                                           GL_FALSE,
-                                           glm::value_ptr(object->getWorldMatrix()));
-                        glUniformMatrix4fv(program->getUniformLocation("worldNormalMatrix"),
-                                           1,
-                                           GL_FALSE,
-                                           glm::value_ptr(glm::transpose(glm::inverse(object->getWorldMatrix()))));
-                        glUniform3fv(program->getUniformLocation("sceneAmbientColor"),
-                                     1,
-                                     glm::value_ptr(scene->getAmbientColor()));
-                        glUniform3fv(program->getUniformLocation("vertexColor"),
-                                     1,
-                                     glm::value_ptr(((MeshLambertMaterial *) material)->getColor()));
-                        break;
-                    case GLSL_SHADER_MATERIAL:
-                        glUniformMatrix4fv(program->getUniformLocation("worldMatrix"),
-                                           1,
-                                           GL_FALSE,
-                                           glm::value_ptr(object->getWorldMatrix()));
-                        glUniformMatrix4fv(program->getUniformLocation("worldNormalMatrix"),
-                                           1,
-                                           GL_FALSE,
-                                           glm::value_ptr(glm::transpose(glm::inverse(object->getWorldMatrix()))));
-                        glUniform3fv(program->getUniformLocation("sceneAmbientColor"),
-                                     1,
-                                     glm::value_ptr(scene->getAmbientColor()));
-                        break;
-                    default: break;
+                if (program->vertexColor) {
+                    glUniform3fv(program->getUniformLocation("rb_vertexColor"),
+                                 1,
+                                 glm::value_ptr(((MeshBasicMaterial *) material)->getColor()));
+                }
+                if (program->worldMatrix) {
+                    glUniformMatrix4fv(program->getUniformLocation("rb_worldMatrix"),
+                                       1,
+                                       GL_FALSE,
+                                       glm::value_ptr(object->getWorldMatrix()));
+                }
+                if (program->sceneAmbientColor) {
+                    glUniform3fv(program->getUniformLocation("rb_sceneAmbientColor"),
+                                 1,
+                                 glm::value_ptr(scene->getAmbientColor()));
+                }
+                if (program->worldNormalMatrix) {
+                    glUniformMatrix4fv(program->getUniformLocation("rb_worldNormalMatrix"),
+                                       1,
+                                       GL_FALSE,
+                                       glm::value_ptr(glm::transpose(glm::inverse(object->getWorldMatrix()))));
+                }
+                if (program->worldProjectionMatrix) {
+                    glUniformMatrix4fv(program->getUniformLocation("rb_worldProjectionMatrix"),
+                                       1,
+                                       GL_FALSE,
+                                       glm::value_ptr(worldProjectionMatrix));
                 }
 
                 // Bind vertex array

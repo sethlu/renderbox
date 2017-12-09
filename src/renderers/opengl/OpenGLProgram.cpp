@@ -7,6 +7,7 @@
 #include <string>
 #include <fstream>
 #include <glm/gtc/type_ptr.hpp>
+#include <iostream>
 #include "OpenGLProgram.h"
 #include "GLSLPreprocessor.h"
 
@@ -20,7 +21,9 @@ namespace renderbox {
         return it != programs.end() ? it->second : nullptr;
     }
 
-    OpenGLProgram::OpenGLProgram(const char *vertexShaderSource, const char *fragmentShaderSource) {
+    OpenGLProgram::OpenGLProgram(const char *vertexShaderSource, const char *fragmentShaderSource)
+        : vertexColor(false), worldMatrix(false), sceneAmbientColor(false), worldNormalMatrix(false),
+          worldProjectionMatrix(false) {
 
         programId = glCreateProgram();
         programs[programId] = this;
@@ -47,6 +50,44 @@ namespace renderbox {
             fprintf(stderr, "Linking error: %s\n", log);
 
             throw 2;
+        }
+
+        // Get uniform names
+        GLint uniforms;
+        GLsizei uniformNameBufferSize;
+        glGetProgramiv(programId, GL_ACTIVE_UNIFORMS, &uniforms);
+        glGetProgramiv(programId, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniformNameBufferSize);
+
+        GLsizei uniformNameSize;
+        GLchar uniformName[uniformNameBufferSize];
+        for (GLuint uniformIndex = 0; uniformIndex < uniforms; ++uniformIndex) {
+            glGetActiveUniformName(programId, uniformIndex, uniformNameBufferSize, &uniformNameSize, uniformName);
+
+            // Assign bool flags for "built-in" uniforms
+            if (uniformNameSize < 4) continue;
+
+#define HASH(LEN, FIRST, FOURTH) \
+    (((LEN) << 5) + ((((FIRST) - 'a') + ((FOURTH) - 'a')) & 31))
+#define CASE(LEN, FIRST, NAME) \
+    case HASH((LEN) + 3, 'r', FIRST): \
+        if (memcmp(uniformName, "rb_"#NAME, LEN) == 0) { (NAME) = true; break; }
+
+            switch (HASH(uniformNameSize, uniformName[0], uniformName[3])) {
+
+                CASE(11, 'v', vertexColor);
+                CASE(11, 'w', worldMatrix);
+
+                CASE(17, 's', sceneAmbientColor);
+                CASE(17, 'w', worldNormalMatrix);
+
+                CASE(21, 'w', worldProjectionMatrix);
+
+                default: break;
+            }
+
+#undef CASE
+#undef HASH
+
         }
 
     }
