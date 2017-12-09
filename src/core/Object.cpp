@@ -14,6 +14,13 @@ namespace renderbox {
 
     }
 
+    Object::~Object() {
+        // Release parents
+        for (const auto &child : children) {
+            child->parent = nullptr;
+        }
+    }
+
     int Object::getObjectId() const {
         return objectId;
     }
@@ -74,7 +81,7 @@ namespace renderbox {
         // Calculate world matrix for each child
         worldMatrix = (hasParent() ? getParent()->worldMatrix : glm::mat4x4(1.0f)) * getMatrix();
         // Propagate object transformation
-        for (const std::shared_ptr<Object> &child : children) {
+        for (const auto &child : children) {
             child->didTransform();
         }
     }

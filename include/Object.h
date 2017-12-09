@@ -78,6 +78,8 @@ namespace renderbox {
 
         Object(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material);
 
+        virtual ~Object();
+
         int getObjectId() const;
 
         // Object inheritance
