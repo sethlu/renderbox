@@ -11,7 +11,7 @@ namespace renderbox {
 
         explicit MeshBasicMaterial(glm::vec3 color);
 
-        MATERIAL getMaterialType() const override;
+        MATERIAL_TYPE getMaterialType() const override;
 
     };
 

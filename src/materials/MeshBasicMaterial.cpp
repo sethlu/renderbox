@@ -8,7 +8,7 @@ namespace renderbox {
 
     }
 
-    MATERIAL MeshBasicMaterial::getMaterialType() const {
+    MATERIAL_TYPE MeshBasicMaterial::getMaterialType() const {
         return MESH_BASIC_MATERIAL;
     };
 

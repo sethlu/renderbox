@@ -23,7 +23,7 @@ namespace renderbox {
 
         const char *getFragmentShaderSource() const;
 
-        MATERIAL getMaterialType() const override;
+        MATERIAL_TYPE getMaterialType() const override;
 
     };
 

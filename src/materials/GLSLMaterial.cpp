@@ -23,7 +23,7 @@ namespace renderbox {
         return fragmentShaderSource;
     };
 
-    MATERIAL GLSLMaterial::getMaterialType() const {
+    MATERIAL_TYPE GLSLMaterial::getMaterialType() const {
         return GLSL_MATERIAL;
     };
 

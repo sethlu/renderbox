@@ -7,7 +7,7 @@
 
 namespace renderbox {
 
-    enum MATERIAL {
+    enum MATERIAL_TYPE {
         MESH_BASIC_MATERIAL   = 0x01,
         MESH_LAMBERT_MATERIAL = 0x02,
         GLSL_MATERIAL         = 0x04,
@@ -21,7 +21,7 @@ namespace renderbox {
 
         int getMaterialId();
 
-        virtual MATERIAL getMaterialType() const = 0;
+        virtual MATERIAL_TYPE getMaterialType() const = 0;
 
         bool isColorMaterial() const {
             return (getMaterialType() & COLOR_MATERIAL) != 0;
