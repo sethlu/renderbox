@@ -38,9 +38,7 @@ void init() {
     voxelGeometry->updateGeometryByMarchingCube(isolevel); // Refresh geometry
     terrain = std::make_shared<renderbox::Mesh>(
         voxelGeometry,
-        std::make_shared<renderbox::GLSLShaderMaterial>(
-            renderbox::readFile("shaders/terrain_vert.glsl"),
-            renderbox::readFile("shaders/terrain_frag.glsl")));
+        std::make_shared<renderbox::MeshLambertMaterial>(glm::vec3(1.0f, 1.0f, 1.0f)));
     renderer->loadObject(terrain.get());
     scene->addChild(terrain);
 
