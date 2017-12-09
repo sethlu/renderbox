@@ -5,10 +5,6 @@ namespace renderbox {
 
     int Material::count = 0;
 
-    Material::Material() {
-
-    }
-
     int Material::getMaterialId() {
         return materialId;
     }

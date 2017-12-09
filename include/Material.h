@@ -13,18 +13,19 @@ namespace renderbox {
     };
 
     class Material {
-
-        static int count;
-
-        int materialId = ++count;
-
     public:
 
-        Material();
+        Material() = default;
 
         int getMaterialId();
 
         virtual MATERIAL getMaterialType() const = 0;
+
+    protected:
+
+        static int count;
+
+        int materialId = ++count;
 
     };
 
