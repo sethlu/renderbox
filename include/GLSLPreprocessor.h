@@ -26,7 +26,7 @@ namespace renderbox {
         CHAR_RAWDEL  = 0x0200,  // {}[]#<>%:;?*+-/^&|~!=,"'
         CHAR_PUNCT   = 0x0400,  // `$@()
         CHAR_XUPPER  = CHAR_XLETTER | CHAR_UPPER,
-        CHAR_XLOWER  = CHAR_XLETTER | CHAR_LOWER
+        CHAR_XLOWER  = CHAR_XLETTER | CHAR_LOWER,
     };
 
     const uint16_t CHAR_ASCII_INFO[256] = {
