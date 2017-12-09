@@ -1,6 +1,6 @@
 #include <iostream>
 #include "OpenGLRendererProperties.h"
-#include "GLSLShaderMaterial.h"
+#include "GLSLMaterial.h"
 
 
 namespace renderbox {
@@ -61,9 +61,9 @@ namespace renderbox {
                     #endif
                 );
                 break;
-            case GLSL_SHADER_MATERIAL:
-                program = new OpenGLProgram(((GLSLShaderMaterial *) material)->getVertexShaderSource(),
-                                            ((GLSLShaderMaterial *) material)->getFragmentShaderSource());
+            case GLSL_MATERIAL:
+                program = new OpenGLProgram(((GLSLMaterial *) material)->getVertexShaderSource(),
+                                            ((GLSLMaterial *) material)->getFragmentShaderSource());
                 break;
             default:
                 fprintf(stderr, "Unsupported material type");

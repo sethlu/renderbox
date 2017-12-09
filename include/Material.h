@@ -9,7 +9,7 @@ namespace renderbox {
     enum MATERIAL {
         MESH_BASIC_MATERIAL,
         MESH_LAMBERT_MATERIAL,
-        GLSL_SHADER_MATERIAL
+        GLSL_MATERIAL
     };
 
     class Material {

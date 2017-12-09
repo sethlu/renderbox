@@ -36,7 +36,7 @@ void init() {
     // Test cube
     testCube = std::make_shared<renderbox::Mesh>(
         std::make_shared<renderbox::BoxGeometry>(1, 1, 1),
-        std::make_shared<renderbox::GLSLShaderMaterial>(
+        std::make_shared<renderbox::GLSLMaterial>(
             renderbox::readFile("shaders/spectral_vert.glsl"),
             renderbox::readFile("shaders/spectral_frag.glsl")));
     scene->addChild(testCube);
