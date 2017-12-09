@@ -22,7 +22,7 @@ namespace renderbox {
     }
 
     OpenGLProgram::OpenGLProgram(const char *vertexShaderSource, const char *fragmentShaderSource)
-        : vertexColor(false), worldMatrix(false), sceneAmbientColor(false), worldNormalMatrix(false),
+        : materialColor(false), worldMatrix(false), sceneAmbientColor(false), worldNormalMatrix(false),
           worldProjectionMatrix(false) {
 
         programId = glCreateProgram();
@@ -74,8 +74,9 @@ namespace renderbox {
 
             switch (HASH(uniformNameSize, uniformName[0], uniformName[3])) {
 
-                CASE(11, 'v', vertexColor);
                 CASE(11, 'w', worldMatrix);
+
+                CASE(13, 'm', materialColor);
 
                 CASE(17, 's', sceneAmbientColor);
                 CASE(17, 'w', worldNormalMatrix);

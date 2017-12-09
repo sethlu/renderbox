@@ -5,7 +5,7 @@ R"(
 const float screenGamma = 2.2;
 
 uniform vec3 rb_sceneAmbientColor;
-uniform vec3 rb_vertexColor;
+uniform vec3 rb_materialColor;
 
 out vec4 fragmentColor;
 
@@ -22,7 +22,7 @@ void main() {
 
     vec3 diffuseColor = max(dot(N, L), 0) * vec3(1) * 400 / (1 + (0.25 * distance * distance));
 
-    vec3 colorLinear = rb_vertexColor * (rb_sceneAmbientColor + diffuseColor);
+    vec3 colorLinear = rb_materialColor * (rb_sceneAmbientColor + diffuseColor);
     vec3 colorGammaCorrected = pow(colorLinear, vec3(1 / screenGamma));
     fragmentColor = vec4(colorGammaCorrected, 1);
 

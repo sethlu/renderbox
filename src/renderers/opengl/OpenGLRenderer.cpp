@@ -109,9 +109,9 @@ namespace renderbox {
                 // World projection matrix
                 glm::mat4x4 worldProjectionMatrix = viewProjectionMatrix * object->getWorldMatrix();
 
-                if (program->vertexColor && material->isColorMaterial()) {
+                if (program->materialColor && material->isColorMaterial()) {
                     if (auto m = dynamic_cast<ColorMaterial *>(material))
-                        glUniform3fv(program->getUniformLocation("rb_vertexColor"),
+                        glUniform3fv(program->getUniformLocation("rb_materialColor"),
                                      1,
                                      glm::value_ptr(m->getColor()));
                 }

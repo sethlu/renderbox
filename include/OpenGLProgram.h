@@ -55,7 +55,7 @@ namespace renderbox {
 
         GLuint programId;
 
-        bool vertexColor;
+        bool materialColor;
         bool worldMatrix;
         bool sceneAmbientColor;
         bool worldNormalMatrix;
