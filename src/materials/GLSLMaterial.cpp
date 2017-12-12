@@ -10,7 +10,7 @@ namespace renderbox {
     }
 
     GLSLMaterial::GLSLMaterial(const std::string &vertexShaderSource,
-                                           const std::string &fragmentShaderSource)
+                               const std::string &fragmentShaderSource)
         : GLSLMaterial(copyString(vertexShaderSource), copyString(fragmentShaderSource)) {
 
     }

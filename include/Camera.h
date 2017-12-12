@@ -9,6 +9,22 @@
 namespace renderbox {
 
     class Camera : public Object {
+    public:
+
+        virtual ~Camera() = default;
+
+        OBJECT_TYPE getObjectType() const override {
+            return CAMERA_OBJECT;
+        };
+
+        glm::mat4x4 getViewProjectionMatrix() const;
+
+        glm::mat4x4 getProjectionMatrix() const;
+
+        glm::mat4x4 getViewMatrix() const;
+
+        virtual Ray *getRay(glm::vec2 coordinates = glm::vec2(0)) const = 0;
+
     protected:
 
         glm::mat4x4 viewProjectionMatrix;
@@ -22,18 +38,6 @@ namespace renderbox {
         void projectionMatrixDidUpdate();
 
         void viewMatrixDidUpdate();
-
-    public:
-
-        virtual ~Camera() = default;
-
-        glm::mat4x4 getViewProjectionMatrix() const;
-
-        glm::mat4x4 getProjectionMatrix() const;
-
-        glm::mat4x4 getViewMatrix() const;
-
-        virtual Ray *getRay(glm::vec2 coordinates = glm::vec2(0)) const = 0;
 
     };
 
