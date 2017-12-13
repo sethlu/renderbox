@@ -49,9 +49,9 @@ namespace renderbox {
 
         bool invalidatePrograms = false;
 
-        properties->numPointLights = static_cast<unsigned>(renderList.pointLights.size());
-        if (properties->numPointLights != properties->lastNumPointLights) {
-            properties->lastNumPointLights = properties->numPointLights;
+        properties.numPointLights = static_cast<unsigned>(renderList.pointLights.size());
+        if (properties.numPointLights != properties.lastNumPointLights) {
+            properties.lastNumPointLights = properties.numPointLights;
             invalidatePrograms = true;
         }
 
@@ -77,14 +77,14 @@ namespace renderbox {
         for (const auto &it : renderList.objects) {
 
             // Use program
-            OpenGLProgram *program = properties->getProgram(it.first, invalidatePrograms);
+            OpenGLProgram *program = properties.getProgram(it.first, invalidatePrograms);
             program->useProgram();
 
             for (Object *object : it.second) {
 
                 bool blankObjectProperties;
                 OpenGLObjectProperties *objectProperties =
-                    properties->getObjectProperties(object, &blankObjectProperties);
+                    properties.getObjectProperties(object, &blankObjectProperties);
 
                 OpenGLVertexArray *vertexArray = objectProperties->getVertexArray(0);
 
@@ -118,7 +118,7 @@ namespace renderbox {
                                      1,
                                      glm::value_ptr(material->getColor()));
                 }
-                if (program->pointLights && properties->numPointLights) {
+                if (program->pointLights && properties.numPointLights) {
                     glUniform3fv(program->getUniformLocation("rb_pointLights[0].position"),
                                  1,
                                  glm::value_ptr(renderList.pointLights[0]->getWorldPosition()));
@@ -145,7 +145,7 @@ namespace renderbox {
                 }
                 if (program->numActivePointLights) {
                     glUniform1i(program->getUniformLocation("rb_numActivePointLights"),
-                                properties->numPointLights);
+                                properties.numPointLights);
                 }
                 if (program->worldProjectionMatrix) {
                     glUniformMatrix4fv(program->getUniformLocation("rb_worldProjectionMatrix"),
@@ -169,7 +169,7 @@ namespace renderbox {
 	}
 
     void OpenGLRenderer::loadObject(Object *object) {
-        OpenGLObjectProperties *objectProperties = properties->getObjectProperties(object);
+        OpenGLObjectProperties *objectProperties = properties.getObjectProperties(object);
         OpenGLVertexArray *vertexArray = objectProperties->getVertexArray(0);
 
         objectProperties->getBuffer(0)->buffer(object->getGeometry()->getVertices());

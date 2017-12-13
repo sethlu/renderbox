@@ -35,7 +35,7 @@ namespace renderbox {
 
     protected:
 
-        OpenGLRendererProperties *properties = new OpenGLRendererProperties();
+        OpenGLRendererProperties properties;
 
         GLuint framebufferId = 0;
 
