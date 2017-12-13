@@ -44,8 +44,8 @@ namespace renderbox {
 
         int count = 0;
 
-        std::vector<glm::vec3> vertices = object->getGeometry()->getVertices();
-        std::vector<glm::uvec3> faces = object->getGeometry()->getFaces();
+        auto &vertices = object->getGeometry()->getVertices();
+        auto &faces = object->getGeometry()->getFaces();
 
         std::vector<float> distances;
 

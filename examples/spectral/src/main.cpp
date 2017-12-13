@@ -40,7 +40,6 @@ void init() {
             renderbox::readFile("shaders/spectral_vert.glsl"),
             renderbox::readFile("shaders/spectral_frag.glsl")));
     scene->addChild(testCube);
-    renderer->loadObject(testCube.get());
 
 }
 

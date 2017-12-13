@@ -27,13 +27,15 @@ namespace renderbox {
                       std::string &fragmentShaderSource);
 
         static OpenGLProgram *createProgramWithPreprocessedSources(const char *vertexShaderSource,
-                                                                   const char *fragmentShaderSource);
+                                                                   const char *fragmentShaderSource,
+                                                                   const std::string &bootstrap = "");
 
         static OpenGLProgram *createProgramWithSourceFiles(const char *vertexShaderFilename,
                                                            const char *fragmentShaderFilename);
 
         static OpenGLProgram *createProgramWithPreprocessedSourceFiles(const char *vertexShaderFilename,
-                                                                       const char *fragmentShaderFilename);
+                                                                       const char *fragmentShaderFilename,
+                                                                       const std::string &bootstrap = "");
 
         static OpenGLProgram *getProgram(GLuint programId);
 
@@ -55,10 +57,12 @@ namespace renderbox {
 
         GLuint programId;
 
-        bool materialColor;
+        bool pointLights;
         bool worldMatrix;
+        bool materialColor;
         bool sceneAmbientColor;
         bool worldNormalMatrix;
+        bool numActivePointLights;
         bool worldProjectionMatrix;
 
     };

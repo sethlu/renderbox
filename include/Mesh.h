@@ -13,6 +13,10 @@ namespace renderbox {
 
         Mesh(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material);
 
+        OBJECT_TYPE getObjectType() const override {
+            return MESH_OBJECT;
+        };
+
     };
 
 }

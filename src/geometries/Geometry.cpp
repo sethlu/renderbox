@@ -3,15 +3,15 @@
 
 namespace renderbox {
 
-    std::vector<glm::vec3> Geometry::getVertices() const {
+    std::vector<glm::vec3> &Geometry::getVertices() {
         return vertices;
     };
 
-    std::vector<glm::vec3> Geometry::getNormals() const {
+    std::vector<glm::vec3> &Geometry::getNormals() {
         return normals;
     };
 
-    std::vector<glm::uvec3> Geometry::getFaces() const {
+    std::vector<glm::uvec3> &Geometry::getFaces() {
         return faces;
     };
 

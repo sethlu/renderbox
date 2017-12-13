@@ -10,17 +10,19 @@
 #include "ObjectProperties.h"
 #include "OpenGLObjectProperties.h"
 #include "Scene.h"
+#include "PointLight.h"
 
 namespace renderbox {
 
     struct OpenGLRenderList {
 
-        /**
-         * Map from OpenGLProgram id to a list of objects using it
-         */
-        std::unordered_map<GLuint, std::vector<Object *>> objects;
+        std::unordered_map<Material *, std::vector<Object *>> objects;
 
-        void addObject(GLuint programId, Object *object);
+        void addObject(Material *material, Object *object);
+
+        std::vector<PointLight *> pointLights;
+
+        void addLight(Light *light);
 
     };
 

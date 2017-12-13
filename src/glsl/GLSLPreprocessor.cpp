@@ -59,6 +59,10 @@ namespace renderbox {
 
     }
 
+    void GLSLPreprocessor::enterSource(const std::string &source) {
+        enterSource(source.c_str());
+    }
+
     void GLSLPreprocessor::exitSource() {
 
         lexers.pop_back();
@@ -67,7 +71,6 @@ namespace renderbox {
         // TODO: Count source file reference and dealloc its memory
 
     }
-
     GLSLPPKeywordKind getPPKeywordKind(const char *keyword, unsigned len) {
 
 #define HASH(LEN, FIRST, THIRD) \
@@ -79,6 +82,7 @@ namespace renderbox {
         switch (HASH(len, keyword[0], keyword[2])) {
 
             CASE(7, 'i', 'c', include);
+            CASE(7, 'v', 'r', version);
 
             default: return pp_not_keyword;
         }
@@ -90,6 +94,22 @@ namespace renderbox {
 
     const char *glsl_common =
 #include "shaders/common.glsl"
+    ;
+    const char *glsl_lights_preamble =
+#include "shaders/lights_preamble.glsl"
+    ;
+
+    const char *glsl_begin_vert =
+#include "shaders/begin_vert.glsl"
+    ;
+    const char *glsl_worldposition_vert =
+#include "shaders/worldposition_vert.glsl"
+    ;
+    const char *glsl_worldnormal_vert =
+#include "shaders/worldnormal_vert.glsl"
+    ;
+    const char *glsl_glposition_vert =
+#include "shaders/glposition_vert.glsl"
     ;
 
     void GLSLPreprocessor::handleDirective(GLSLToken &token) {
@@ -123,7 +143,7 @@ namespace renderbox {
             default:
                 break;
 
-            case pp_include: // Include directive
+            case pp_include: { // Include directive
 
                 currentLexer->isLexingFilename = true;
                 lex(token);
@@ -137,7 +157,8 @@ namespace renderbox {
 
                 // Expecting a string literal or an angled string literal
                 switch (fileToken.kind) {
-                    default: break;
+                    default:
+                        break;
 
                     case string_literal:
                     case angle_string_literal: {
@@ -160,7 +181,20 @@ namespace renderbox {
 
                                 CASE(6, 'c', 'm', common);
 
-                                default: break;
+                                CASE(15, 'l', 'g', lights_preamble);
+
+                                // Vertex shader
+
+                                CASE(10, 'b', 'g', begin_vert);
+
+                                CASE(18, 'w', 'r', worldposition_vert);
+
+                                CASE(16, 'w', 'r', worldnormal_vert);
+
+                                CASE(15, 'g', 'p', glposition_vert);
+
+                                default:
+                                    break;
                             }
 
 #undef CASE
@@ -176,16 +210,33 @@ namespace renderbox {
 
                 }
 
+                break;
+
+            }
+
+            case pp_version:
+
+                // TODO: Have something similar to isLexingFilename for number literal
+                lex(token); // Version number
+
+                // Expect next token to be end of directive
+                lex(token);
+                if (token.kind != eod) goto NotDirective;
+
+                // Next to lex from bootstrap script
+                enterSource(bootstrap);
+
         }
 
         goto NotDirective;
 
     }
 
-    std::string preprocessGLSLSource(const char *source) {
+    std::string preprocessGLSLSource(const char *source, const std::string &bootstrap) {
         std::string result;
         GLSLPreprocessor preprocessor;
 
+        preprocessor.bootstrap = bootstrap;
         preprocessor.enterMainSource(source);
 
         GLSLToken token{};
@@ -209,10 +260,11 @@ namespace renderbox {
         return result;
     }
 
-    std::string preprocessGLSLSourceFile(const char *filename) {
+    std::string preprocessGLSLSourceFile(const char *filename, const std::string &bootstrap) {
         std::string result;
         GLSLPreprocessor preprocessor;
 
+        preprocessor.bootstrap = bootstrap;
         preprocessor.enterMainSourceFile(filename);
 
         GLSLToken token{};

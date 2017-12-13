@@ -139,11 +139,17 @@ namespace renderbox {
 
         void enterMainSource(const char *source);
 
+        // Bootstrap
+
+        std::string bootstrap;
+
     private:
 
         void enterSourceFile(const char *filename);
 
         void enterSource(const char *source);
+
+        void enterSource(const std::string &source);
 
         void exitSource();
 
@@ -161,11 +167,11 @@ namespace renderbox {
 
     };
 
-    std::string preprocessGLSLSource(const char *source);
+    std::string preprocessGLSLSource(const char *source, const std::string &bootstrap = "");
 
     std::string readFile(const char *filename);
 
-    std::string preprocessGLSLSourceFile(const char *filename);
+    std::string preprocessGLSLSourceFile(const char *filename, const std::string &bootstrap = "");
 
     struct GLSLPreprocessorSource {
 

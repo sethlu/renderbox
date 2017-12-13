@@ -7,73 +7,55 @@
 #include <iostream>
 #include <queue>
 #include <glm/gtc/type_ptr.hpp>
-#include "MeshLambertMaterial.h"
-#include "MeshBasicMaterial.h"
+#include "Light.h"
 #include "Matrix.h"
+#include "Vector.h"
 #include "OpenGLRenderer.h"
 
 
 namespace renderbox {
 
-    void OpenGLRenderer::loadObject(Object *object) {
+    void OpenGLRenderer::render(Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget, bool forceClear) {
 
-        // Needs to load the buffer when the vertices are not yet loaded or when vertices have been updated
+        // Prepass scene
 
-        OpenGLObjectProperties *objectProperties = properties->getObjectProperties(object);
-        OpenGLVertexArray *vertexArray = objectProperties->getVertexArray(0);
-        OpenGLProgram *program = properties->getProgram(object->getMaterial().get());
-
-        // Load object geometry
-
-        std::vector<glm::vec3> vertices = object->getGeometry()->getVertices();
-        std::vector<glm::vec3> normals = object->getGeometry()->getNormals();
-        std::vector<glm::uvec3> faces = object->getGeometry()->getFaces();
-
-        objectProperties->getBuffer(0)->buffer(vertices);
-        vertexArray->setAttributeBuffer(program, "rb_vertexPosition", objectProperties->getBuffer(0));
-        vertexArray->enableAttribute(program, "rb_vertexPosition");
-
-        objectProperties->getBuffer(1)->buffer(normals);
-        vertexArray->setAttributeBuffer(program, "rb_vertexNormal", objectProperties->getBuffer(1));
-        vertexArray->enableAttribute(program, "rb_vertexNormal");
-
-        objectProperties->getBuffer(2)->buffer(faces);
-        vertexArray->setElementBuffer(objectProperties->getBuffer(2));
-
-    }
-
-    OpenGLRenderList *OpenGLRenderer::prepassRender(Scene *scene, Camera *camera) {
-        OpenGLRenderList *renderList = new OpenGLRenderList;
+        OpenGLRenderList renderList;
 
         std::queue<Object *> frontier;
-        frontier.push((Object *) scene);
+        frontier.push(static_cast<Object *>(scene));
 
         while (!frontier.empty()) {
-            Object *current = frontier.front();
+            auto object = frontier.front();
             frontier.pop();
 
             // Skip invisible objects
-            if (!current->visible) continue;
+            if (!object->visible) continue;
 
             // Do not add objects without geometry or material
-            if (current->hasGeometry() && current->hasMaterial()) {
-                OpenGLProgram *program = properties->getProgram(current->getMaterial().get());
-                renderList->addObject(program->getProgramId(), current);
+            if (object->hasGeometry() && object->hasMaterial()) {
+                renderList.addObject(object->getMaterial().get(), object);
             }
 
-            for (std::shared_ptr<Object> next : current->getChildren()) {
+            if (object->isLight()) {
+                renderList.addLight(static_cast<Light *>(object));
+            }
+
+            for (const auto &next : object->getChildren()) {
                 frontier.push(next.get());
             }
         }
 
-        return renderList;
-    }
-	
-    void OpenGLRenderer::render(OpenGLRenderList *renderList, Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget, bool forceClear) {
+        // Observe state changes
 
-        //
+        bool invalidatePrograms = false;
+
+        properties->numPointLights = static_cast<unsigned>(renderList.pointLights.size());
+        if (properties->numPointLights != properties->lastNumPointLights) {
+            properties->lastNumPointLights = properties->numPointLights;
+            invalidatePrograms = true;
+        }
+
         // Prepare
-        //
 
         // Use frame buffer from render target
         glBindFramebuffer(GL_FRAMEBUFFER, renderTarget ? renderTarget->getFramebufferId() : framebufferId);
@@ -83,37 +65,66 @@ namespace renderbox {
         } else {
             glViewport(0, 0, getFramebufferWidth(), getFramebufferHeight());
         }
-		
+
         // Clear the scene
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        //
         // Render
-        //
 
         // View projection matrix
         glm::mat4x4 viewProjectionMatrix = camera->getViewProjectionMatrix();
 
-        for (const auto &it : renderList->objects) {
+        for (const auto &it : renderList.objects) {
 
             // Use program
-            OpenGLProgram *program = OpenGLProgram::getProgram(it.first);
+            OpenGLProgram *program = properties->getProgram(it.first, invalidatePrograms);
             program->useProgram();
 
             for (Object *object : it.second) {
 
-                OpenGLObjectProperties *objectProperties = properties->getObjectProperties(object);
+                bool blankObjectProperties;
+                OpenGLObjectProperties *objectProperties =
+                    properties->getObjectProperties(object, &blankObjectProperties);
+
                 OpenGLVertexArray *vertexArray = objectProperties->getVertexArray(0);
-                Material *material = object->getMaterial().get();
+
+                if (blankObjectProperties) {
+
+                    objectProperties->getBuffer(0)->buffer(object->getGeometry()->getVertices());
+                    objectProperties->getBuffer(1)->buffer(object->getGeometry()->getNormals());
+                    objectProperties->getBuffer(2)->buffer(object->getGeometry()->getFaces());
+                    vertexArray->setElementBuffer(objectProperties->getBuffer(2));
+
+                    goto UpdateVertexArray;
+
+                } else if (invalidatePrograms) {
+
+                    UpdateVertexArray:
+
+                    vertexArray->setAttributeBuffer(program, "rb_vertexPosition", objectProperties->getBuffer(0));
+                    vertexArray->enableAttribute(program, "rb_vertexPosition");
+
+                    vertexArray->setAttributeBuffer(program, "rb_vertexNormal", objectProperties->getBuffer(1));
+                    vertexArray->enableAttribute(program, "rb_vertexNormal");
+
+                }
 
                 // World projection matrix
                 glm::mat4x4 worldProjectionMatrix = viewProjectionMatrix * object->getWorldMatrix();
 
-                if (program->materialColor && material->isColorMaterial()) {
-                    if (auto m = dynamic_cast<ColorMaterial *>(material))
+                if (program->materialColor) {
+                    if (auto material = dynamic_cast<ColorMaterial *>(object->getMaterial().get()))
                         glUniform3fv(program->getUniformLocation("rb_materialColor"),
                                      1,
-                                     glm::value_ptr(m->getColor()));
+                                     glm::value_ptr(material->getColor()));
+                }
+                if (program->pointLights && properties->numPointLights) {
+                    glUniform3fv(program->getUniformLocation("rb_pointLights[0].position"),
+                                 1,
+                                 glm::value_ptr(renderList.pointLights[0]->getWorldPosition()));
+                    glUniform3fv(program->getUniformLocation("rb_pointLights[0].color"),
+                                 1,
+                                 glm::value_ptr(renderList.pointLights[0]->getColor()));
                 }
                 if (program->worldMatrix) {
                     glUniformMatrix4fv(program->getUniformLocation("rb_worldMatrix"),
@@ -131,6 +142,10 @@ namespace renderbox {
                                        1,
                                        GL_FALSE,
                                        glm::value_ptr(glm::transpose(glm::inverse(object->getWorldMatrix()))));
+                }
+                if (program->numActivePointLights) {
+                    glUniform1i(program->getUniformLocation("rb_numActivePointLights"),
+                                properties->numPointLights);
                 }
                 if (program->worldProjectionMatrix) {
                     glUniformMatrix4fv(program->getUniformLocation("rb_worldProjectionMatrix"),
@@ -151,10 +166,16 @@ namespace renderbox {
         // Unbind vertex array
         OpenGLVertexArray::unbindVertexArray();
 
-    }
-
-    void OpenGLRenderer::render(Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget, bool forceClear) {
-        render(prepassRender(scene, camera), scene, camera, renderTarget, forceClear);
 	}
+
+    void OpenGLRenderer::loadObject(Object *object) {
+        OpenGLObjectProperties *objectProperties = properties->getObjectProperties(object);
+        OpenGLVertexArray *vertexArray = objectProperties->getVertexArray(0);
+
+        objectProperties->getBuffer(0)->buffer(object->getGeometry()->getVertices());
+        objectProperties->getBuffer(1)->buffer(object->getGeometry()->getNormals());
+        objectProperties->getBuffer(2)->buffer(object->getGeometry()->getFaces());
+        vertexArray->setElementBuffer(objectProperties->getBuffer(2));
+    }
 
 }

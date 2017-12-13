@@ -10,7 +10,89 @@
 
 namespace renderbox {
 
+    enum OBJECT_TYPE {
+        GROUP_OBJECT  = 0x0,
+        MESH_OBJECT   = 0x1,
+        SCENE_OBJECT  = 0x2,
+        CAMERA_OBJECT = 0x4,
+        LIGHT_OBJECT  = 0x8,
+    };
+
     class Object {
+    public:
+
+        Object() = default;
+
+        Object(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material);
+
+        virtual ~Object();
+
+        int getObjectId() const;
+
+        virtual OBJECT_TYPE getObjectType() const {
+            return GROUP_OBJECT;
+        }
+
+        bool isLight() const {
+            return (getObjectType() & LIGHT_OBJECT) != 0;
+        }
+
+        // Object inheritance
+
+        bool hasParent() const;
+
+        Object *getParent() const;
+
+        std::vector<std::shared_ptr<Object>> getChildren() const;
+
+        void addChild(std::shared_ptr<Object> child);
+
+        // Geometry
+
+        bool hasGeometry();
+
+        std::shared_ptr<Geometry> getGeometry() const;
+
+        // Material
+
+        bool hasMaterial();
+
+        std::shared_ptr<Material> getMaterial() const;
+
+        // Object transformation
+
+        glm::mat4x4 getWorldMatrix() const;
+
+        glm::mat4x4 getMatrix() const;
+
+        glm::vec3 getWorldPosition() const;
+
+        // Translation
+
+        glm::vec3 getTranslation() const;
+
+        void setTranslation(glm::vec3 translation);
+
+        void translate(glm::vec3 delta);
+
+        // Rotation
+
+        glm::mat4x4 getRotationMatrix() const;
+
+        void rotate(glm::vec3 vector, float angle);
+
+        void clearRotation();
+
+        // Scale
+
+        glm::vec3 getScale() const;
+
+        void setScale(glm::vec3 scale);
+
+        // Visibility
+
+        bool visible = true;
+
     protected:
 
         /**
@@ -71,72 +153,6 @@ namespace renderbox {
         glm::vec3 scale = glm::vec3(1.0f);
 
         virtual void didTransform();
-
-    public:
-
-        Object() = default;
-
-        Object(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material);
-
-        virtual ~Object();
-
-        int getObjectId() const;
-
-        // Object inheritance
-
-        bool hasParent() const;
-
-        Object *getParent() const;
-
-        std::vector<std::shared_ptr<Object>> getChildren() const;
-
-        void addChild(std::shared_ptr<Object> child);
-
-        // Geometry
-
-        bool hasGeometry();
-
-        std::shared_ptr<Geometry> getGeometry() const;
-
-        // Material
-
-        bool hasMaterial();
-
-        std::shared_ptr<Material> getMaterial() const;
-
-        // Object transformation
-
-        glm::mat4x4 getWorldMatrix() const;
-
-        glm::mat4x4 getMatrix() const;
-
-        glm::vec3 getWorldPosition() const;
-
-        // Translation
-
-        glm::vec3 getTranslation() const;
-
-        void setTranslation(glm::vec3 translation);
-
-        void translate(glm::vec3 delta);
-
-        // Rotation
-
-        glm::mat4x4 getRotationMatrix() const;
-
-        void rotate(glm::vec3 vector, float angle);
-
-        void clearRotation();
-
-        // Scale
-
-        glm::vec3 getScale() const;
-
-        void setScale(glm::vec3 scale);
-
-        // Visibility
-
-        bool visible = true;
 
     };
 

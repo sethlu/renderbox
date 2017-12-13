@@ -10,6 +10,10 @@ namespace renderbox {
 
         glm::vec3 getAmbientColor() const;
 
+        OBJECT_TYPE getObjectType() const override {
+            return SCENE_OBJECT;
+        };
+
         void setAmbientColor(glm::vec3 ambientColor);
 
     protected:

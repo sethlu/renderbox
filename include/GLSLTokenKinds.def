@@ -12,6 +12,7 @@
 PPKEYWORD(not_keyword)
 
 PPKEYWORD(include)
+PPKEYWORD(version)
 
 
 // Language keywords

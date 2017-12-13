@@ -10,6 +10,8 @@ std::shared_ptr<renderbox::Object> cameraRig;
 std::shared_ptr<renderbox::Mesh> terrain;
 std::shared_ptr<renderbox::Mesh> testCube;
 
+std::shared_ptr<renderbox::PointLight> pointLight;
+
 float cameraDistance = 40.0f;
 float cameraAngularVelocity = 0.0f;
 float cameraAngle[] = {0.0f, 45.0f};
@@ -39,14 +41,12 @@ void init() {
     terrain = std::make_shared<renderbox::Mesh>(
         voxelGeometry,
         std::make_shared<renderbox::MeshLambertMaterial>(glm::vec3(1.0f, 1.0f, 1.0f)));
-    renderer->loadObject(terrain.get());
     scene->addChild(terrain);
 
     // Test cube
     testCube = std::make_shared<renderbox::Mesh>(
         std::make_shared<renderbox::BoxGeometry>(0.5f, 0.5f, 0.5f),
         std::make_shared<renderbox::MeshLambertMaterial>(glm::vec3(1.0f, 0, 0)));
-    renderer->loadObject(testCube.get());
     scene->addChild(testCube);
 
     // Camera
@@ -56,6 +56,12 @@ void init() {
     cameraRig = std::make_shared<renderbox::Object>();
     cameraRig->addChild(camera);
     cameraRig->rotate(glm::vec3(1.0f, 0, 0), glm::radians(cameraAngle[1]));
+
+    // Light
+
+    pointLight = std::make_shared<renderbox::PointLight>(glm::vec3(400));
+    pointLight->setTranslation(glm::vec3(2, 2, 60));
+    scene->addChild(pointLight);
 
 }
 

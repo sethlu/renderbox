@@ -22,8 +22,8 @@ namespace renderbox {
     }
 
     OpenGLProgram::OpenGLProgram(const char *vertexShaderSource, const char *fragmentShaderSource)
-        : materialColor(false), worldMatrix(false), sceneAmbientColor(false), worldNormalMatrix(false),
-          worldProjectionMatrix(false) {
+        : pointLights(false), materialColor(false), worldMatrix(false), sceneAmbientColor(false),
+          worldNormalMatrix(false), numActivePointLights(false), worldProjectionMatrix(false) {
 
         programId = glCreateProgram();
         programs[programId] = this;
@@ -63,14 +63,36 @@ namespace renderbox {
         for (GLuint uniformIndex = 0; uniformIndex < uniforms; ++uniformIndex) {
             glGetActiveUniformName(programId, uniformIndex, uniformNameBufferSize, &uniformNameSize, uniformName);
 
+            std::cout << uniformName << std::endl;
+
             // Assign bool flags for "built-in" uniforms
             if (uniformNameSize < 4) continue;
+
+            // Find the index of `[` or fallback to 0
+            unsigned int array = static_cast<unsigned int>(uniformNameSize - 3);
+            while (array > 0) {
+                if (uniformName[array] == '[') break;
+                --array;
+            }
 
 #define HASH(LEN, FIRST, FOURTH) \
     (((LEN) << 5) + ((((FIRST) - 'a') + ((FOURTH) - 'a')) & 31))
 #define CASE(LEN, FIRST, NAME) \
     case HASH((LEN) + 3, 'r', FIRST): \
         if (memcmp(uniformName, "rb_"#NAME, LEN) == 0) { (NAME) = true; break; }
+
+            if (array) {
+                // Only match array name
+
+                switch (HASH(array, uniformName[0], uniformName[3])) {
+
+                    CASE(11, 'p', pointLights);
+
+                    default: break;
+                }
+
+                continue;
+            }
 
             switch (HASH(uniformNameSize, uniformName[0], uniformName[3])) {
 
@@ -80,6 +102,8 @@ namespace renderbox {
 
                 CASE(17, 's', sceneAmbientColor);
                 CASE(17, 'w', worldNormalMatrix);
+
+                CASE(20, 'n', numActivePointLights);
 
                 CASE(21, 'w', worldProjectionMatrix);
 
@@ -98,23 +122,26 @@ namespace renderbox {
 
     }
 
-    OpenGLProgram *OpenGLProgram::createProgramWithPreprocessedSources(const char *vertexShaderSource, const char *fragmentShaderSource) {
-        std::string vertexShaderSource_ = preprocessGLSLSource(vertexShaderSource),
-                    fragmentShaderSource_ = preprocessGLSLSource(fragmentShaderSource);
+    OpenGLProgram *OpenGLProgram::createProgramWithPreprocessedSources(const char *vertexShaderSource,
+                                                                       const char *fragmentShaderSource,
+                                                                       const std::string &bootstrap) {
+        std::string vertexShaderSource_ = preprocessGLSLSource(vertexShaderSource, bootstrap),
+                    fragmentShaderSource_ = preprocessGLSLSource(fragmentShaderSource, bootstrap);
         return new OpenGLProgram(vertexShaderSource_, fragmentShaderSource_);
     }
 
     OpenGLProgram *OpenGLProgram::createProgramWithSourceFiles(const char *vertexShaderFilename,
-                                                              const char *fragmentShaderFilename) {
+                                                               const char *fragmentShaderFilename) {
         std::string vertexShaderSource = readFile(vertexShaderFilename),
                     fragmentShaderSource = readFile(fragmentShaderFilename);
         return new OpenGLProgram(vertexShaderSource, fragmentShaderSource);
     }
 
     OpenGLProgram *OpenGLProgram::createProgramWithPreprocessedSourceFiles(const char *vertexShaderFilename,
-                                                                          const char *fragmentShaderFilename) {
-        std::string vertexShaderSource = preprocessGLSLSourceFile(vertexShaderFilename),
-                    fragmentShaderSource = preprocessGLSLSourceFile(fragmentShaderFilename);
+                                                                           const char *fragmentShaderFilename,
+                                                                           const std::string &bootstrap) {
+        std::string vertexShaderSource = preprocessGLSLSourceFile(vertexShaderFilename, bootstrap),
+                    fragmentShaderSource = preprocessGLSLSourceFile(fragmentShaderFilename, bootstrap);
         return new OpenGLProgram(vertexShaderSource, fragmentShaderSource);
     }
 
@@ -145,6 +172,10 @@ namespace renderbox {
     OpenGLShader::OpenGLShader(const char *source, GLenum type) {
 
         shaderId = glCreateShader(type);
+
+        std::cout << "OPENGL_SHADER" << std::endl
+                  << source
+                  << "END OPENGL SHADER" << std::endl;
 
         // Compile shader
         glShaderSource(shaderId, 1, &source, nullptr);
