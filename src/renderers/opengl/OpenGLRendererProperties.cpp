@@ -105,7 +105,7 @@ namespace renderbox {
             (*owner).reset(program);
         } else {
             programs.insert(std::pair<int, std::unique_ptr<OpenGLProgram>>(
-                materialId, std::move(std::unique_ptr<OpenGLProgram>(program))));
+                materialId, std::unique_ptr<OpenGLProgram>(program)));
         }
 
         return program;
