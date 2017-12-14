@@ -37,7 +37,7 @@ void main() {
 
     #if RB_NUM_POINT_LIGHTS > 0
 
-    vec3 N = normalize(vertexWorldNormal);
+    vec3 N = vertexWorldNormal;
 
     for (int i = 0; i < rb_numActivePointLights; ++i) {
 
