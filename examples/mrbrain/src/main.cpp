@@ -3,33 +3,33 @@
 #include <glm/glm.hpp>
 #include "renderbox.h"
 
-renderbox::Scene *scene;
-renderbox::PerspectiveCamera *camera;
-renderbox::OpenGLGLFWRenderer *renderer;
+std::shared_ptr<renderbox::Scene> scene;
+std::shared_ptr<renderbox::PerspectiveCamera> camera;
+std::unique_ptr<renderbox::OpenGLGLFWRenderer> renderer;
 
-renderbox::Object *cameraRig;
-renderbox::Mesh *terrain;
-renderbox::Mesh *testCube;
+std::shared_ptr<renderbox::Object> cameraRig;
+std::shared_ptr<renderbox::Mesh> brain;
+std::shared_ptr<renderbox::Mesh> testCube;
 
 float cameraDistance = 80.0f;
 float cameraAngularVelocity = 0.0f;
-float cameraAngle[] = {0.0f, 80.0f};
+float cameraAngle[] = {90.0f, 1.0f};
 float cameraVelocity[] = {0.0f, 0.0f}; // Relative to the camera forward direction
 
 float lastTime = (float) glfwGetTime();
 double mouseX = -1, mouseY = -1, startMouseX = -1, startMouseY = -1;
 
 float isolevel = 0.5f;
-const int steps = 6;
+const int steps = 4;
 
 void init() {
 
     // Scene
-    scene = new renderbox::Scene();
+    scene = std::make_shared<renderbox::Scene>();
     scene->setAmbientColor(glm::vec3(0.05f));
 
-    // Voxel terrain
-    auto *voxelGeometry = new renderbox::VoxelGeometry();
+    // Voxel brain
+    auto voxelGeometry = std::make_shared<renderbox::VoxelGeometry>();
 
     for (int z = 1, _z = 0; z <= 109; z += steps, ++_z) {
         const char *filename = renderbox::copyString("MRBrain/MRbrain." + std::to_string(z));
@@ -59,26 +59,29 @@ void init() {
 
     std::cout << "isolevel " << isolevel << "\n";
     voxelGeometry->updateGeometryByMarchingCube(isolevel); // Refresh geometry
-    terrain = new renderbox::Mesh(voxelGeometry,
-                                  new renderbox::GLSLShaderMaterial(renderbox::readFile("shaders/brain_vert.glsl"),
-                                                                    renderbox::readFile("shaders/brain_frag.glsl")));
-    terrain->setScale(glm::vec3(1, 1, 2));
-    terrain->setTranslation(glm::vec3(-256 / 2 / steps, -256 / 2 / steps, -109 / steps));
-    renderer->loadObject(terrain);
-    scene->addChild(terrain);
+    brain = std::make_shared<renderbox::Mesh>(voxelGeometry,
+                                              std::make_shared<renderbox::MeshLambertMaterial>());
+    brain->setScale(glm::vec3(1, 1, 2));
+    brain->setTranslation(glm::vec3(-256 / 2 / steps, -256 / 2 / steps, -109 / steps));
+    scene->addChild(brain);
 
     // Test cube
-    testCube = new renderbox::Mesh(new renderbox::BoxGeometry(0.5f, 0.5f, 0.5f),
-                                   new renderbox::MeshLambertMaterial(glm::vec3(1.0f, 0, 0)));
-    renderer->loadObject(testCube);
+    testCube = std::make_shared<renderbox::Mesh>(
+        std::make_shared<renderbox::BoxGeometry>(0.5f, 0.5f, 0.5f),
+        std::make_shared<renderbox::MeshLambertMaterial>(glm::vec3(1.0f, 0, 0)));
     scene->addChild(testCube);
 
     // Camera
-    camera = new renderbox::PerspectiveCamera(glm::radians(45.0f), (float) renderer->getWindowWidth() / (float) renderer->getWindowHeight());
+    camera = std::make_shared<renderbox::PerspectiveCamera>(
+        glm::radians(45.0f), (float) renderer->getWindowWidth() / (float) renderer->getWindowHeight());
     camera->setTranslation(glm::vec3(0, 0, cameraDistance));
-    cameraRig = new renderbox::Object();
+    cameraRig = std::make_shared<renderbox::Object>();
     cameraRig->addChild(camera);
     cameraRig->rotate(glm::vec3(1.0f, 0, 0), glm::radians(cameraAngle[1]));
+
+    auto pointLight = std::make_shared<renderbox::PointLight>(glm::vec3(3000.0f));
+    pointLight->setTranslation(glm::vec3(0, 0, 400));
+    scene->addChild(pointLight);
 
 }
 
@@ -97,17 +100,17 @@ void update() {
         renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderer->getWindowWidth() - 1.0f,
                                                              1.0f - 2 * mouseY / renderer->getWindowHeight()));
         std::vector<glm::vec3> worldPositions;
-        if (cameraRay->intersectObject(terrain, worldPositions)) {
+        if (cameraRay->intersectObject(brain.get(), worldPositions)) {
             glm::vec3 objectPosition = floor(renderbox::dehomogenize(
-                    glm::inverse(terrain->getWorldMatrix())
+                    glm::inverse(brain->getWorldMatrix())
                     * glm::vec4(worldPositions[0] + glm::vec3(0.5f), 1.0f)));
 
-            renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry();
+            renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) brain->getGeometry().get();
 
             terrainGeometry->brush(objectPosition, 8, 0.4f, isolevel);
 
             terrainGeometry->updateGeometryByMarchingCube(isolevel);
-            renderer->loadObject(terrain);
+            renderer->loadObject(brain.get());
         }
 
         mouseLastSync = currentTime;
@@ -120,7 +123,7 @@ void update() {
         renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderer->getWindowWidth() - 1.0f,
                                                              1.0f - 2 * mouseY / renderer->getWindowHeight()));
         std::vector<glm::vec3> worldPositions;
-        if (cameraRay->intersectObject(terrain, worldPositions)) {
+        if (cameraRay->intersectObject(brain.get(), worldPositions)) {
             glm::vec3 testLocation = worldPositions[0];
             testCube->visible = true;
             testCube->setTranslation(testLocation);
@@ -143,7 +146,7 @@ void update() {
 
     // Render
 
-    renderer->render(scene, camera);
+    renderer->render(scene.get(), camera.get());
 
     lastTime = currentTime;
 
@@ -170,17 +173,17 @@ void mouseclick(GLFWwindow *window) {
     renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderer->getWindowWidth() - 1.0f,
                                                          1.0f - 2 * mouseY / renderer->getWindowHeight()));
     std::vector<glm::vec3> worldPositions;
-    if (cameraRay->intersectObject(terrain, worldPositions)) {
+    if (cameraRay->intersectObject(brain.get(), worldPositions)) {
         glm::vec3 objectPosition = renderbox::dehomogenize(
-                glm::inverse(terrain->getWorldMatrix())
+                glm::inverse(brain->getWorldMatrix())
                 * glm::vec4(worldPositions[0] - glm::vec3(0.5f), 1.0f));
 
-        renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry();
+        renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) brain->getGeometry().get();
 
         terrainGeometry->brush(objectPosition, 5, 0.4f, isolevel);
 
         terrainGeometry->updateGeometryByMarchingCube(isolevel);
-        renderer->loadObject(terrain);
+        renderer->loadObject(brain.get());
     }
 
 }
@@ -241,15 +244,15 @@ void keyCallback(GLFWwindow *window, int key, int scanCode, int action, int mods
         if (action == GLFW_RELEASE) {
             isolevel += 0.01f;
             std::cout << "isolevel " << isolevel << "\n";
-            ((renderbox::VoxelGeometry *) terrain->getGeometry())->updateGeometryByMarchingCube(isolevel, true);
-            renderer->loadObject(terrain);
+            ((renderbox::VoxelGeometry *) brain->getGeometry().get())->updateGeometryByMarchingCube(isolevel, true);
+            renderer->loadObject(brain.get());
         }
     } else if (key == GLFW_KEY_MINUS) {
         if (action == GLFW_RELEASE) {
             isolevel -= 0.01f;
             std::cout << "isolevel " << isolevel << "\n";
-            ((renderbox::VoxelGeometry *) terrain->getGeometry())->updateGeometryByMarchingCube(isolevel, true);
-            renderer->loadObject(terrain);
+            ((renderbox::VoxelGeometry *) brain->getGeometry().get())->updateGeometryByMarchingCube(isolevel, true);
+            renderer->loadObject(brain.get());
         }
     }
 }
@@ -309,7 +312,7 @@ void rotateCallback(GLFWwindow *window, double rotation) {
 
 int main(int argc, char **argv) {
 
-    renderer = new renderbox::OpenGLGLFWRenderer();
+    renderer.reset(new renderbox::OpenGLGLFWRenderer());
     GLFWwindow *window = renderer->getWindow();
 
     // Callbacks
