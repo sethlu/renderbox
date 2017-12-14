@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <fstream>
 #include "GLSLPreprocessor.h"
@@ -12,7 +11,7 @@ namespace renderbox {
         do {
             returnedToken = currentLexer->lex(token);
 
-            if (token.kind == eof) {
+            if (token.kind == glsl_tok::eof) {
                 exitSource();
 
                 // Still lexers running?
@@ -71,20 +70,21 @@ namespace renderbox {
         // TODO: Count source file reference and dealloc its memory
 
     }
-    GLSLPPKeywordKind getPPKeywordKind(const char *keyword, unsigned len) {
+
+    glsl_tok::GLSLPPKeywordKind getPPKeywordKind(const char *keyword, unsigned len) {
 
 #define HASH(LEN, FIRST, THIRD) \
     (((LEN) << 5) + ((((FIRST) - 'a') + ((THIRD) - 'a')) & 31))
 #define CASE_UNIFORM(LEN, FIRST, THIRD, NAME) \
     case HASH(LEN, FIRST, THIRD): \
-        return memcmp(keyword, #NAME, LEN) ? pp_not_keyword : pp_ ## NAME
+        return memcmp(keyword, #NAME, LEN) ? glsl_tok::pp_not_keyword : glsl_tok::pp_ ## NAME
 
         switch (HASH(len, keyword[0], keyword[2])) {
 
             CASE_UNIFORM(7, 'i', 'c', include);
             CASE_UNIFORM(7, 'v', 'r', version);
 
-            default: return pp_not_keyword;
+            default: return glsl_tok::pp_not_keyword;
         }
 
 #undef CASE_UNIFORM
@@ -119,14 +119,14 @@ namespace renderbox {
         // Get the keyword
         lex(token);
 
-        if (token.kind == eod || token.len < 2) { // Empty line or not a directive
+        if (token.kind == glsl_tok::eod || token.len < 2) { // Empty line or not a directive
 
             NotDirective:
 
             // Skip to the end of line
-            while (token.kind != eod) lex(token);
+            while (token.kind != glsl_tok::eod) lex(token);
 
-            token.kind = unknown;
+            token.kind = glsl_tok::unknown;
             token.len = static_cast<unsigned>(token.pointer - hash.pointer);
             token.pointer = hash.pointer;
 
@@ -143,7 +143,7 @@ namespace renderbox {
             default:
                 break;
 
-            case pp_include: { // Include directive
+            case glsl_tok::pp_include: { // Include directive
 
                 currentLexer->isLexingFilename = true;
                 lex(token);
@@ -153,22 +153,22 @@ namespace renderbox {
 
                 // Expect next token to be end of directive
                 lex(token);
-                if (token.kind != eod) goto NotDirective;
+                if (token.kind != glsl_tok::eod) goto NotDirective;
 
                 // Expecting a string literal or an angled string literal
                 switch (fileToken.kind) {
                     default:
                         break;
 
-                    case string_literal:
-                    case angle_string_literal: {
+                    case glsl_tok::string_literal:
+                    case glsl_tok::angle_string_literal: {
 
                         unsigned fileLen = fileToken.len - 2;
                         char file[fileLen + 1];
                         memcpy(file, fileToken.pointer + 1, fileLen);
                         file[fileLen] = '\0';
 
-                        if (fileToken.kind == angle_string_literal) {
+                        if (fileToken.kind == glsl_tok::angle_string_literal) {
                             // Built in fragments
 
 #define HASH(LEN, FIRST, THIRD) \
@@ -214,14 +214,14 @@ namespace renderbox {
 
             }
 
-            case pp_version:
+            case glsl_tok::pp_version:
 
                 // TODO: Have something similar to isLexingFilename for number literal
                 lex(token); // Version number
 
                 // Expect next token to be end of directive
                 lex(token);
-                if (token.kind != eod) goto NotDirective;
+                if (token.kind != glsl_tok::eod) goto NotDirective;
 
                 // Next to lex from bootstrap script
                 enterSource(bootstrap);
@@ -246,7 +246,7 @@ namespace renderbox {
             result.append(token.pointer, token.len);
             result.append("\n");
 
-        } while (token.kind != eof);
+        } while (token.kind != glsl_tok::eof);
 
         result.append("\0");
 
@@ -274,7 +274,7 @@ namespace renderbox {
             result.append(token.pointer, token.len);
             result.append("\n");
 
-        } while (token.kind != eof);
+        } while (token.kind != glsl_tok::eof);
 
         result.append("\0");
 
@@ -340,7 +340,7 @@ namespace renderbox {
                 if (isPreprocessingDirective) {
                     // Append eod before the end of file
 
-                    token.kind = eod;
+                    token.kind = glsl_tok::eod;
                     token.pointer = bufferPointer;
                     token.len = 1;
 
@@ -349,7 +349,7 @@ namespace renderbox {
                     break;
                 }
 
-                token.kind = eof;
+                token.kind = glsl_tok::eof;
                 token.pointer = bufferPointer;
                 token.len = 1;
 
@@ -362,7 +362,7 @@ namespace renderbox {
                 isAtPhysicalStartOfLine = true;
 
                 if (isPreprocessingDirective) {
-                    token.kind = eod;
+                    token.kind = glsl_tok::eod;
                     token.pointer = bufferPointer;
                     token.len = 1;
 
@@ -381,7 +381,7 @@ namespace renderbox {
                 if (atPhysicalStartOfLine) {
 
                     // Hash
-                    token.kind = unknown;
+                    token.kind = glsl_tok::unknown;
                     token.pointer = bufferPointer;
                     token.len = 1;
 
@@ -437,7 +437,7 @@ namespace renderbox {
 
         if (pointer == bufferPointer) return false;
 
-        token.kind = unknown;
+        token.kind = glsl_tok::unknown;
         token.pointer = bufferPointer;
         token.len = static_cast<unsigned>(pointer - bufferPointer);
 
@@ -453,7 +453,7 @@ namespace renderbox {
 
         if (pointer == bufferPointer) return false;
 
-        token.kind = identifier;
+        token.kind = glsl_tok::raw_identifier;
         token.pointer = bufferPointer;
         token.len = static_cast<unsigned>(pointer - bufferPointer);
 
@@ -472,7 +472,7 @@ namespace renderbox {
 
             if (*pointer == '\0' || *pointer == '\n') { // Early termination of string
 
-                token.kind = unknown;
+                token.kind = glsl_tok::unknown;
                 token.pointer = bufferPointer;
                 token.len = static_cast<unsigned>(pointer - bufferPointer);
 
@@ -487,7 +487,7 @@ namespace renderbox {
 
         ++pointer;
 
-        token.kind = string_literal;
+        token.kind = glsl_tok::string_literal;
         token.pointer = bufferPointer;
         token.len = static_cast<unsigned>(pointer - bufferPointer);
 
@@ -506,7 +506,7 @@ namespace renderbox {
 
             if (*pointer == '\0' || *pointer == '\n') { // Early termination of string
 
-                token.kind = unknown;
+                token.kind = glsl_tok::unknown;
                 token.pointer = bufferPointer;
                 token.len = static_cast<unsigned>(pointer - bufferPointer);
 
@@ -521,7 +521,7 @@ namespace renderbox {
 
         ++pointer;
 
-        token.kind = angle_string_literal;
+        token.kind = glsl_tok::angle_string_literal;
         token.pointer = bufferPointer;
         token.len = static_cast<unsigned>(pointer - bufferPointer);
 
@@ -539,7 +539,7 @@ namespace renderbox {
 
         if (pointer == bufferPointer) return false;
 
-        token.kind = unknown;
+        token.kind = glsl_tok::unknown;
         token.pointer = bufferPointer;
         token.len = static_cast<unsigned>(pointer - bufferPointer);
 
