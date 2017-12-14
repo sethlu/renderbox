@@ -46,7 +46,7 @@ void main() {
         float lightDistance = length(lightVector);
 
         vertexColor += rb_materialColor * rb_pointLights[i].color *
-            max(dot(N, L), 0) / (1 + (0.25 * lightDistance * lightDistance));
+            max(dot(N, L), 0.0) / (1.0 + (0.25 * lightDistance * lightDistance));
 
     }
 

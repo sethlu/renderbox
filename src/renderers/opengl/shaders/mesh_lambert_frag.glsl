@@ -11,7 +11,7 @@ in vec3 vertexColor;
 void main() {
 
     vec3 colorLinear = vertexColor;
-    vec3 colorGammaCorrected = pow(colorLinear, vec3(1 / screenGamma));
+    vec3 colorGammaCorrected = pow(colorLinear, vec3(1.0 / screenGamma));
     fragmentColor = vec4(colorGammaCorrected, 1);
 
 }

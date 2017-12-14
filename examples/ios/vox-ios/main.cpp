@@ -9,13 +9,14 @@ std::unique_ptr<renderbox::OpenGLSDLRenderer> renderer;
 std::shared_ptr<renderbox::Object> cameraRig;
 std::shared_ptr<renderbox::Object> cube;
 
+std::shared_ptr<renderbox::PointLight> pointLight;
+
 void init() {
 	
 	scene = std::make_shared<renderbox::Scene>();
 	
 	cube = std::make_shared<renderbox::Object>(std::make_shared<renderbox::BoxGeometry>(3, 3, 3),
 											   std::make_shared<renderbox::MeshLambertMaterial>(glm::vec3(1, 0, 0)));
-	renderer->loadObject(cube.get());
 	scene->addChild(cube);
 	
 	camera = std::make_shared<renderbox::PerspectiveCamera>(glm::radians(45.0f),
@@ -26,6 +27,10 @@ void init() {
 	cameraRig->addChild(camera);
 	cameraRig->rotate(glm::vec3(1, 0, 0), glm::radians(45.0f));
 	cameraRig->rotate(glm::vec3(0, 0, 1), glm::radians(45.0f));
+	
+	pointLight = std::make_shared<renderbox::PointLight>(glm::vec3(20));
+	pointLight->setTranslation(glm::vec3(0, 0, 6.0f));
+	scene->addChild(pointLight);
 	
 }
 
