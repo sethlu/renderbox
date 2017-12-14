@@ -22,6 +22,9 @@
 
 #include "Mesh.h"
 
+#include "Light.h"
+#include "PointLight.h"
+
 #include "Scene.h"
 
 #include "OpenGLGLFWRenderer.h"
