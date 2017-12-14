@@ -613,7 +613,7 @@ namespace renderbox {
 
     }
 
-    void VoxelGeometry::updateGeometryByMarchingCube(float isolevel) {
+    void VoxelGeometry::updateGeometryByMarchingCube(float isolevel, bool force) {
 
         vertices.clear();
         normals.clear();
@@ -633,7 +633,7 @@ namespace renderbox {
 
                     // Cache non-edge voxel geometry
 
-                    if (voxelChunk->cacheNeedsUpdating) {
+                    if (voxelChunk->cacheNeedsUpdating || force) {
                         voxelChunk->cacheNeedsUpdating = false;
 
                         voxelChunk->cacheVertices.clear();
@@ -655,7 +655,7 @@ namespace renderbox {
                         }
                     }
 
-                    if (voxelChunk->edgeCacheNeedsUpdating) {
+                    if (voxelChunk->edgeCacheNeedsUpdating || force) {
                         voxelChunk->edgeCacheNeedsUpdating = false;
 
                         voxelChunk->edgeCacheVertices.clear();

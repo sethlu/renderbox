@@ -9,7 +9,7 @@ namespace renderbox {
     class MeshLambertMaterial : public Material, public ColorMaterial {
     public:
 
-        explicit MeshLambertMaterial(glm::vec3 color);
+        explicit MeshLambertMaterial(glm::vec3 color = glm::vec3(1.0f));
 
         MATERIAL_TYPE getMaterialType() const override;
 
