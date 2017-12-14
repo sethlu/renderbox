@@ -118,13 +118,15 @@ namespace renderbox {
                                      1,
                                      glm::value_ptr(material->getColor()));
                 }
-                if (/*program->pointLights &&*/ properties.numPointLights) {
-                    glUniform3fv(program->pointLights[0].position,
-                                 1,
-                                 glm::value_ptr(renderList.pointLights[0]->getWorldPosition()));
-                    glUniform3fv(program->pointLights[0].color,
-                                 1,
-                                 glm::value_ptr(renderList.pointLights[0]->getColor()));
+                if (!program->pointLights.empty() && properties.numPointLights) {
+                    for (unsigned i = 0; i < properties.numPointLights; ++i) {
+                        glUniform3fv(program->pointLights[i].position,
+                                     1,
+                                     glm::value_ptr(renderList.pointLights[i]->getWorldPosition()));
+                        glUniform3fv(program->pointLights[i].color,
+                                     1,
+                                     glm::value_ptr(renderList.pointLights[i]->getColor()));
+                    }
                 }
                 if (program->worldMatrix != -1) {
                     glUniformMatrix4fv(program->worldMatrix,
