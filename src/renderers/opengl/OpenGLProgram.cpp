@@ -95,7 +95,7 @@ namespace renderbox {
             } \
             array += 2; /* advance over `]` and `.` */ \
             auto &uniformArray = (NAME); \
-            uniformArray.reserve(index + 1); \
+            if (index + 1 >= uniformArray.capacity()) uniformArray.resize(index + 1); \
             switch (HASH(uniformNameSize - array, uniformName[array], uniformName[array + 1])) {
 
 #define CASE_UNIFORM_ARRAY_MEMBER(LEN, FIRST, SECOND, NAME) \
