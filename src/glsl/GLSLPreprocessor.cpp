@@ -5,6 +5,18 @@
 
 namespace renderbox {
 
+    std::ostream &operator<<(std::ostream &os, const GLSLToken &token) {
+
+        char cstr[token.len + 1];
+        memcpy(cstr, token.pointer, token.len);
+        cstr[token.len] = '\0';
+
+        os << cstr;
+
+        return os;
+
+    }
+
     void GLSLPreprocessor::lex(GLSLToken &token) {
 
         bool returnedToken;
@@ -546,18 +558,6 @@ namespace renderbox {
         bufferPointer = pointer;
 
         return true;
-
-    }
-
-    std::ostream &operator<<(std::ostream &os, const GLSLToken &token) {
-
-        char cstr[token.len + 1];
-        memcpy(cstr, token.pointer, token.len);
-        cstr[token.len] = '\0';
-
-        os << cstr;
-
-        return os;
 
     }
 
