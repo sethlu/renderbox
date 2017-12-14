@@ -21,9 +21,7 @@ namespace renderbox {
         return it != programs.end() ? it->second : nullptr;
     }
 
-    OpenGLProgram::OpenGLProgram(const char *vertexShaderSource, const char *fragmentShaderSource)
-        : pointLights(false), materialColor(false), worldMatrix(false), sceneAmbientColor(false),
-          worldNormalMatrix(false), numActivePointLights(false), worldProjectionMatrix(false) {
+    OpenGLProgram::OpenGLProgram(const char *vertexShaderSource, const char *fragmentShaderSource) {
 
         programId = glCreateProgram();
         programs[programId] = this;
@@ -52,7 +50,17 @@ namespace renderbox {
             throw 2;
         }
 
-        // Get uniform names
+        // Get uniform names and locations
+
+        // Reset uniform locations
+        pointLights.clear();
+        worldMatrix = -1;
+        materialColor = -1;
+        sceneAmbientColor = -1;
+        worldNormalMatrix = -1;
+        numActivePointLights = -1;
+        worldProjectionMatrix = -1;
+
         GLint uniforms;
         GLsizei uniformNameBufferSize;
         glGetProgramiv(programId, GL_ACTIVE_UNIFORMS, &uniforms);
@@ -69,24 +77,48 @@ namespace renderbox {
             if (uniformNameSize < 4) continue;
 
             // Find the index of `[` or fallback to 0
-            unsigned int array = static_cast<unsigned int>(uniformNameSize - 3);
+            auto array = static_cast<unsigned int>(uniformNameSize - 3);
             while (array > 0) {
                 if (uniformName[array] == '[') break;
                 --array;
             }
 
-#define HASH(LEN, FIRST, FOURTH) \
-    (((LEN) << 5) + ((((FIRST) - 'a') + ((FOURTH) - 'a')) & 31))
-#define CASE(LEN, FIRST, NAME) \
+#define HASH(LEN, A, B) \
+    (((LEN) << 5) + ((((A) - 'a') + ((B) - 'a')) & 31))
+
+#define CASE_UNIFORM_ARRAY_BEGIN(LEN, FIRST, NAME) \
     case HASH((LEN) + 3, 'r', FIRST): \
-        if (memcmp(uniformName, "rb_"#NAME, LEN) == 0) { (NAME) = true; break; }
+        if (memcmp(uniformName, "rb_"#NAME, LEN) == 0) { \
+            unsigned int index = 0; \
+            while (uniformName[++array] != ']') { \
+                index = index * 10 + (uniformName[array] - '0'); \
+            } \
+            array += 2; /* advance over `]` and `.` */ \
+            auto &uniformArray = (NAME); \
+            uniformArray.reserve(index + 1); \
+            switch (HASH(uniformNameSize - array, uniformName[array], uniformName[array + 1])) {
+
+#define CASE_UNIFORM_ARRAY_MEMBER(LEN, FIRST, SECOND, NAME) \
+                case HASH(LEN, FIRST, SECOND): \
+                    if (memcmp(uniformName + array, #NAME, LEN) == 0) { \
+                        uniformArray[index].NAME = getUniformLocation(uniformName); \
+                    } \
+                    break;
+
+#define CASE_UNIFORM_ARRAY_END \
+                default: break; \
+            } \
+        }
 
             if (array) {
                 // Only match array name
 
                 switch (HASH(array, uniformName[0], uniformName[3])) {
 
-                    CASE(11, 'p', pointLights);
+                    CASE_UNIFORM_ARRAY_BEGIN(11, 'p', pointLights)
+                        CASE_UNIFORM_ARRAY_MEMBER(5, 'c', 'o', color)
+                        CASE_UNIFORM_ARRAY_MEMBER(8, 'p', 'o', position)
+                    CASE_UNIFORM_ARRAY_END
 
                     default: break;
                 }
@@ -94,23 +126,33 @@ namespace renderbox {
                 continue;
             }
 
+#undef CASE_UNIFORM_ARRAY_END
+#undef CASE_UNIFORM_ARRAY_MEMBER
+#undef CASE_UNIFORM_ARRAY_BEGIN
+
+#define CASE_UNIFORM(LEN, FIRST, NAME) \
+    case HASH((LEN) + 3, 'r', FIRST): \
+        if (memcmp(uniformName, "rb_"#NAME, LEN) == 0) \
+            (NAME) = getUniformLocation(uniformName); \
+        break;
+
             switch (HASH(uniformNameSize, uniformName[0], uniformName[3])) {
 
-                CASE(11, 'w', worldMatrix);
+                CASE_UNIFORM(11, 'w', worldMatrix)
 
-                CASE(13, 'm', materialColor);
+                CASE_UNIFORM(13, 'm', materialColor)
 
-                CASE(17, 's', sceneAmbientColor);
-                CASE(17, 'w', worldNormalMatrix);
+                CASE_UNIFORM(17, 's', sceneAmbientColor)
+                CASE_UNIFORM(17, 'w', worldNormalMatrix)
 
-                CASE(20, 'n', numActivePointLights);
+                CASE_UNIFORM(20, 'n', numActivePointLights)
 
-                CASE(21, 'w', worldProjectionMatrix);
+                CASE_UNIFORM(21, 'w', worldProjectionMatrix)
 
                 default: break;
             }
 
-#undef CASE
+#undef CASE_UNIFORM
 #undef HASH
 
         }
@@ -143,30 +185,6 @@ namespace renderbox {
         std::string vertexShaderSource = preprocessGLSLSourceFile(vertexShaderFilename, bootstrap),
                     fragmentShaderSource = preprocessGLSLSourceFile(fragmentShaderFilename, bootstrap);
         return new OpenGLProgram(vertexShaderSource, fragmentShaderSource);
-    }
-
-    GLuint OpenGLProgram::getProgramId() const {
-        return programId;
-    }
-
-    inline void OpenGLProgram::useProgram(GLuint programId) {
-        glUseProgram(programId);
-    }
-
-    void OpenGLProgram::useProgram() {
-        useProgram(programId);
-    }
-
-    void OpenGLProgram::stopProgram() {
-        glUseProgram(0);
-    }
-
-    GLint OpenGLProgram::getAttributeLocation(const char *name) {
-        return glGetAttribLocation(programId, name);
-    }
-
-    GLint OpenGLProgram::getUniformLocation(const char *name) {
-        return glGetUniformLocation(programId, name);
     }
 
     OpenGLShader::OpenGLShader(const char *source, GLenum type) {

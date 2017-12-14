@@ -75,19 +75,19 @@ namespace renderbox {
 
 #define HASH(LEN, FIRST, THIRD) \
     (((LEN) << 5) + ((((FIRST) - 'a') + ((THIRD) - 'a')) & 31))
-#define CASE(LEN, FIRST, THIRD, NAME) \
+#define CASE_UNIFORM(LEN, FIRST, THIRD, NAME) \
     case HASH(LEN, FIRST, THIRD): \
         return memcmp(keyword, #NAME, LEN) ? pp_not_keyword : pp_ ## NAME
 
         switch (HASH(len, keyword[0], keyword[2])) {
 
-            CASE(7, 'i', 'c', include);
-            CASE(7, 'v', 'r', version);
+            CASE_UNIFORM(7, 'i', 'c', include);
+            CASE_UNIFORM(7, 'v', 'r', version);
 
             default: return pp_not_keyword;
         }
 
-#undef CASE
+#undef CASE_UNIFORM
 #undef HASH
 
     }
@@ -173,31 +173,31 @@ namespace renderbox {
 
 #define HASH(LEN, FIRST, THIRD) \
     (((LEN) << 5) + ((((FIRST) - 'a') + ((THIRD) - 'a')) & 31))
-#define CASE(LEN, FIRST, THIRD, NAME) \
+#define CASE_UNIFORM(LEN, FIRST, THIRD, NAME) \
     case HASH(LEN, FIRST, THIRD): \
         if (memcmp(file, #NAME, LEN)) break; enterSource(glsl_ ## NAME); lex(token); return
 
                             switch (HASH(fileLen, file[0], file[2])) {
 
-                                CASE(6, 'c', 'm', common);
+                                CASE_UNIFORM(6, 'c', 'm', common);
 
-                                CASE(15, 'l', 'g', lights_preamble);
+                                CASE_UNIFORM(15, 'l', 'g', lights_preamble);
 
                                 // Vertex shader
 
-                                CASE(10, 'b', 'g', begin_vert);
+                                CASE_UNIFORM(10, 'b', 'g', begin_vert);
 
-                                CASE(18, 'w', 'r', worldposition_vert);
+                                CASE_UNIFORM(18, 'w', 'r', worldposition_vert);
 
-                                CASE(16, 'w', 'r', worldnormal_vert);
+                                CASE_UNIFORM(16, 'w', 'r', worldnormal_vert);
 
-                                CASE(15, 'g', 'p', glposition_vert);
+                                CASE_UNIFORM(15, 'g', 'p', glposition_vert);
 
                                 default:
                                     break;
                             }
 
-#undef CASE
+#undef CASE_UNIFORM
 #undef HASH
 
                         } else {

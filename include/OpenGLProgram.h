@@ -39,17 +39,29 @@ namespace renderbox {
 
         static OpenGLProgram *getProgram(GLuint programId);
 
-        GLuint getProgramId() const;
+        inline GLuint getProgramId() const {
+            return programId;
+        }
 
-        static void useProgram(GLuint programId);
+        static inline void useProgram(GLuint programId) {
+            glUseProgram(programId);
+        }
 
-        void useProgram();
+        inline void useProgram() {
+            useProgram(programId);
+        }
 
-        static void stopProgram();
+        inline static void stopProgram() {
+            glUseProgram(0);
+        }
 
-        GLint getAttributeLocation(const char *name);
+        inline GLint getAttributeLocation(const char *name) const {
+            return glGetAttribLocation(programId, name);
+        };
 
-        GLint getUniformLocation(const char *name);
+        inline GLint getUniformLocation(const char *name) const {
+            return glGetUniformLocation(programId, name);
+        };
 
     protected:
 
@@ -57,13 +69,21 @@ namespace renderbox {
 
         GLuint programId;
 
-        bool pointLights;
-        bool worldMatrix;
-        bool materialColor;
-        bool sceneAmbientColor;
-        bool worldNormalMatrix;
-        bool numActivePointLights;
-        bool worldProjectionMatrix;
+        // Uniform locations
+
+        // Corresponding to lights_preamble.glsl
+        struct PointLight {
+            GLint position;
+            GLint color;
+        };
+
+        std::vector<struct PointLight> pointLights;
+        GLint worldMatrix;
+        GLint materialColor;
+        GLint sceneAmbientColor;
+        GLint worldNormalMatrix;
+        GLint numActivePointLights;
+        GLint worldProjectionMatrix;
 
     };
 

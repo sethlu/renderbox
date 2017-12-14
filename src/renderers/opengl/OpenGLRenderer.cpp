@@ -112,43 +112,43 @@ namespace renderbox {
                 // World projection matrix
                 glm::mat4x4 worldProjectionMatrix = viewProjectionMatrix * object->getWorldMatrix();
 
-                if (program->materialColor) {
+                if (program->materialColor != -1) {
                     if (auto material = dynamic_cast<ColorMaterial *>(object->getMaterial().get()))
-                        glUniform3fv(program->getUniformLocation("rb_materialColor"),
+                        glUniform3fv(program->materialColor,
                                      1,
                                      glm::value_ptr(material->getColor()));
                 }
-                if (program->pointLights && properties.numPointLights) {
-                    glUniform3fv(program->getUniformLocation("rb_pointLights[0].position"),
+                if (/*program->pointLights &&*/ properties.numPointLights) {
+                    glUniform3fv(program->pointLights[0].position,
                                  1,
                                  glm::value_ptr(renderList.pointLights[0]->getWorldPosition()));
-                    glUniform3fv(program->getUniformLocation("rb_pointLights[0].color"),
+                    glUniform3fv(program->pointLights[0].color,
                                  1,
                                  glm::value_ptr(renderList.pointLights[0]->getColor()));
                 }
-                if (program->worldMatrix) {
-                    glUniformMatrix4fv(program->getUniformLocation("rb_worldMatrix"),
+                if (program->worldMatrix != -1) {
+                    glUniformMatrix4fv(program->worldMatrix,
                                        1,
                                        GL_FALSE,
                                        glm::value_ptr(object->getWorldMatrix()));
                 }
-                if (program->sceneAmbientColor) {
-                    glUniform3fv(program->getUniformLocation("rb_sceneAmbientColor"),
+                if (program->sceneAmbientColor != -1) {
+                    glUniform3fv(program->sceneAmbientColor,
                                  1,
                                  glm::value_ptr(scene->getAmbientColor()));
                 }
-                if (program->worldNormalMatrix) {
-                    glUniformMatrix4fv(program->getUniformLocation("rb_worldNormalMatrix"),
+                if (program->worldNormalMatrix != -1) {
+                    glUniformMatrix4fv(program->worldNormalMatrix,
                                        1,
                                        GL_FALSE,
                                        glm::value_ptr(glm::transpose(glm::inverse(object->getWorldMatrix()))));
                 }
-                if (program->numActivePointLights) {
-                    glUniform1i(program->getUniformLocation("rb_numActivePointLights"),
+                if (program->numActivePointLights != -1) {
+                    glUniform1i(program->numActivePointLights,
                                 properties.numPointLights);
                 }
-                if (program->worldProjectionMatrix) {
-                    glUniformMatrix4fv(program->getUniformLocation("rb_worldProjectionMatrix"),
+                if (program->worldProjectionMatrix != -1) {
+                    glUniformMatrix4fv(program->worldProjectionMatrix,
                                        1,
                                        GL_FALSE,
                                        glm::value_ptr(worldProjectionMatrix));
