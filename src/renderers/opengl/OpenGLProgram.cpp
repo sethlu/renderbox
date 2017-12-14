@@ -69,7 +69,8 @@ namespace renderbox {
         GLsizei uniformNameSize;
         GLchar uniformName[uniformNameBufferSize];
         for (GLuint uniformIndex = 0; uniformIndex < uniforms; ++uniformIndex) {
-            glGetActiveUniformName(programId, uniformIndex, uniformNameBufferSize, &uniformNameSize, uniformName);
+            glGetActiveUniform(programId, uniformIndex, uniformNameBufferSize, &uniformNameSize,
+                               nullptr, nullptr, uniformName);
 
             std::cout << uniformName << std::endl;
 
