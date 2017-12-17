@@ -3,16 +3,10 @@
 
 int main(int argc, char **argv) {
 
+    auto scene = std::make_shared<renderbox::Scene>();
+
     std::string obj = renderbox::readFile("scene.obj");
-
-    renderbox::OBJLexer lexer(obj.c_str(), obj.c_str());
-    renderbox::OBJToken token{};
-
-    do {
-
-        lexer.lex(token);
-        std::cout << " " << token;
-
-    } while (token.kind != renderbox::obj_tok::eof);
+    renderbox::OBJLoader loader(scene);
+    loader.loadOBJ(obj.c_str());
 
 }

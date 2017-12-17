@@ -4,6 +4,7 @@
 
 #include <ostream>
 #include "lexer.h"
+#include "Scene.h"
 
 namespace renderbox {
 
@@ -27,10 +28,40 @@ namespace renderbox {
 
     };
 
+    class OBJLexer;
+
     class OBJLoader {
     public:
 
+        explicit OBJLoader(std::shared_ptr<Object> destination);
 
+        void loadOBJ(const char *source);
+
+    private:
+
+        std::shared_ptr<Object> destination;
+
+        std::vector<glm::vec3> vertices;
+
+        std::vector<glm::vec3> normals;
+
+        Object *object;
+
+        Geometry *geometry;
+
+        void lex(OBJLexer &lexer, OBJToken &token);
+
+        void handleVertex(OBJLexer &lexer, OBJToken &token);
+
+        void handleVertexNormal(OBJLexer &lexer, OBJToken &token);
+
+        void handleFace(OBJLexer &lexer, OBJToken &token);
+
+        void handleObject(OBJLexer &lexer, OBJToken &token);
+
+        float parseFloat(OBJLexer &lexer, OBJToken &token);
+
+        int parseInt(OBJLexer &lexer, OBJToken &token);
 
     };
 
