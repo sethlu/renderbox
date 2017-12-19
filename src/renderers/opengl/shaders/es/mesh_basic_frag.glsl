@@ -4,12 +4,18 @@ R"(
 
 precision mediump float;
 
-uniform vec3 vertexColor;
+const float screenGamma = 2.2;
 
 out vec4 fragmentColor;
 
+in vec3 vertexColor;
+
 void main() {
-    fragmentColor = vec4(vertexColor, 1.0);
+
+    vec3 colorLinear = vertexColor;
+    vec3 colorGammaCorrected = pow(colorLinear, vec3(1.0 / screenGamma));
+    fragmentColor = vec4(colorGammaCorrected, 1);
+
 }
 
 )"

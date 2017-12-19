@@ -44,7 +44,7 @@ void init() {
     // Test cube
     testCube = std::make_shared<renderbox::Mesh>(
         std::make_shared<renderbox::BoxGeometry>(0.5f, 0.5f, 0.5f),
-        std::make_shared<renderbox::MeshLambertMaterial>(glm::vec3(1.0f, 0, 0)));
+        std::make_shared<renderbox::MeshBasicMaterial>(glm::vec3(1.0f, 0, 0)));
     scene->addChild(testCube);
 
     // Camera

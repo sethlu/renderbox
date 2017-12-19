@@ -2,16 +2,25 @@ R"(
 
 #version 330
 
-uniform mat4 rb_worldProjectionMatrix;
+#include <lights_preamble>
 
-out gl_PerVertex {
-    vec4 gl_Position;
-};
+uniform mat4 rb_worldProjectionMatrix;
+uniform vec3 rb_materialColor;
+
+out vec3 vertexColor;
 
 in vec3 rb_vertexPosition;
 
 void main() {
-    gl_Position = rb_worldProjectionMatrix * vec4(rb_vertexPosition, 1.0f);
+
+    // Position
+
+    #include <glposition_vert>
+
+    // Lighting
+
+    vertexColor = rb_materialColor;
+
 }
 
 )"

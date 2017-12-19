@@ -4,12 +4,25 @@ R"(
 
 precision mediump float;
 
-uniform mat4 worldProjectionMatrix;
+#include <lights_preamble>
 
-in vec3 vertexPosition;
+uniform mat4 rb_worldProjectionMatrix;
+uniform vec3 rb_materialColor;
+
+out vec3 vertexColor;
+
+in vec3 rb_vertexPosition;
 
 void main() {
-    gl_Position = worldProjectionMatrix * vec4(vertexPosition, 1.0f);
+
+    // Position
+
+    #include <glposition_vert>
+
+    // Lighting
+
+    vertexColor = rb_materialColor;
+
 }
 
 )"
