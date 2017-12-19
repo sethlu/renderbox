@@ -1,5 +1,6 @@
 #include <iostream>
 #include <glm/gtx/string_cast.hpp>
+#include "MeshLambertMaterial.h"
 #include "OBJLoader.h"
 
 
@@ -90,8 +91,6 @@ namespace renderbox {
 
         vertices.emplace_back(v);
 
-        std::cout << "handle vertex " << glm::to_string(v) << std::endl;
-
     }
 
     void OBJLoader::handleVertexNormal(OBJLexer &lexer, OBJToken &token) {
@@ -118,8 +117,6 @@ namespace renderbox {
         if (token.kind != obj_tok::eol) INVALID_SYNTAX();
 
         normals.emplace_back(v);
-
-        std::cout << "handle normal " << glm::to_string(v) << std::endl;
 
     }
 
@@ -226,17 +223,30 @@ namespace renderbox {
 
         } while (token.kind != obj_tok::eol); // Expect end of line
 
-        std::cout << "handle face " << v.size() << " " << vt.size() << " " << vn.size() << std::endl;
+        if (v.size() > 4) INVALID_SYNTAX(); // Only support triangle and quad
+
+        geometry->getFaces().emplace_back(glm::uvec3(
+            getVertexIndex(v[0] - 1, (bvt ? vt[0] : 0) - 1, (bvn ? vn[0] : 0) - 1),
+            getVertexIndex(v[1] - 1, (bvt ? vt[1] : 0) - 1, (bvn ? vn[1] : 0) - 1),
+            getVertexIndex(v[2] - 1, (bvt ? vt[2] : 0) - 1, (bvn ? vn[2] : 0) - 1)));
+
+        if (v.size() == 4) { // Quad
+            geometry->getFaces().emplace_back(glm::uvec3(
+                getVertexIndex(v[2] - 1, (bvt ? vt[2] : 0) - 1, (bvn ? vn[2] : 0) - 1),
+                getVertexIndex(v[3] - 1, (bvt ? vt[3] : 0) - 1, (bvn ? vn[3] : 0) - 1),
+                getVertexIndex(v[0] - 1, (bvt ? vt[0] : 0) - 1, (bvn ? vn[0] : 0) - 1)));
+        }
 
     }
 
     void OBJLoader::handleObject(OBJLexer &lexer, OBJToken &token) {
 
         geometry = new Geometry;
-        object = new Object(std::shared_ptr<Geometry>(geometry), nullptr);
+        object = new Object(std::shared_ptr<Geometry>(geometry),
+                            std::make_shared<MeshLambertMaterial>());
         destination->addChild(std::shared_ptr<Object>(object));
 
-        std::cout << "handle object" << std::endl;
+        geometryVertexIndices.clear();
 
     }
 
@@ -277,6 +287,26 @@ namespace renderbox {
         number[token.len] = '\0';
 
         return static_cast<int>((negative ? -1 : 1) * strtol(number, nullptr, 10));
+
+    }
+
+    unsigned OBJLoader::getVertexIndex(int v, int vt, int vn) {
+
+        auto key = std::make_tuple(v, vt, vn);
+
+        auto it = geometryVertexIndices.find(key);
+        if (it != geometryVertexIndices.end()) {
+            return it->second;
+        }
+
+        geometry->getVertices().emplace_back(vertices[v]);
+        // TODO: Use of texture coordinates
+        if (vn >= 0) geometry->getNormals().emplace_back(normals[vn]);
+
+        auto index = static_cast<unsigned>(geometry->getVertices().size() - 1);
+        geometryVertexIndices[key] = index;
+
+        return index;
 
     }
 
