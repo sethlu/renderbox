@@ -48,8 +48,6 @@ namespace renderbox {
 
     };
 
-    char *copyString(const std::string &src);
-
 }
 
 #endif //VOX_MATERIAL_H

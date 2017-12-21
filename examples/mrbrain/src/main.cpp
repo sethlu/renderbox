@@ -32,7 +32,7 @@ void init() {
     auto voxelGeometry = std::make_shared<renderbox::VoxelGeometry>();
 
     for (int z = 1, _z = 0; z <= 109; z += steps, ++_z) {
-        const char *filename = renderbox::copyString("MRBrain/MRbrain." + std::to_string(z));
+        const char *filename = ("MRBrain/MRbrain." + std::to_string(z)).c_str();
         std::cout << "Loading " << filename << "\n";
         unsigned short buffer[256][256];
 

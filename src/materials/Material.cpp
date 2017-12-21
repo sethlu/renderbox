@@ -9,10 +9,4 @@ namespace renderbox {
         return materialId;
     }
 
-    char *copyString(const std::string &src) {
-        auto *dst = new char[src.length() + 1];
-        strcpy(dst, src.c_str());
-        return dst;
-    }
-
 }
