@@ -104,6 +104,32 @@ namespace renderbox {
         return (CHAR_ASCII_INFO[c] & (CHAR_HORZ_WS | CHAR_VERT_WS | CHAR_SPACE)) != 0;
     }
 
+    struct Source {
+
+        std::unique_ptr<char> source;
+        size_t size;
+
+        explicit Source(const char *filename) {
+
+            FILE *f = fopen(filename, "r");
+
+            // Determine file size
+            fseek(f, 0, SEEK_END);
+            long size_ = ftell(f);
+
+            if (size_ < 0) throw 2; // Failed to tell size
+            size = static_cast<size_t>(size_);
+
+            source.reset(new char[size + 1]);
+
+            rewind(f);
+            fread(source.get(), sizeof(char), size, f);
+            source.get()[size] = '\0';
+
+        };
+
+    };
+
 }
 
 

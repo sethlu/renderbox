@@ -44,12 +44,11 @@ namespace renderbox {
 
     void GLSLPreprocessor::enterSourceFile(const char *filename) {
 
-        GLSLPreprocessorSource *source;
+        Source *source;
         auto it = sources.find(filename);
         if (it == sources.end()) {
-            source = new GLSLPreprocessorSource(filename);
-            sources.insert(std::pair<const char *, std::unique_ptr<GLSLPreprocessorSource>>(
-                filename, std::unique_ptr<GLSLPreprocessorSource>(source)));
+            source = new Source(filename);
+            sources.insert(std::make_pair(filename, std::unique_ptr<Source>(source)));
         } else {
             source = it->second.get();
         }
@@ -63,9 +62,7 @@ namespace renderbox {
 
     void GLSLPreprocessor::enterSource(const char *source) {
 
-        const char *bufferStart = source;
-
-        currentLexer = new GLSLPreprocessorLexer(this, bufferStart, bufferStart);
+        currentLexer = new GLSLPreprocessorLexer(this, source, source);
         lexers.push_back(std::unique_ptr<GLSLPreprocessorLexer>(currentLexer));
 
     }
@@ -85,16 +82,16 @@ namespace renderbox {
 
     glsl_tok::GLSLPPKeywordKind getPPKeywordKind(const char *keyword, unsigned len) {
 
-#define HASH(LEN, FIRST, THIRD) \
-    (((LEN) << 5) + ((((FIRST) - 'a') + ((THIRD) - 'a')) & 31))
+#define HASH(LEN, A, B) \
+    (((LEN) << 5) + ((((A) - 'a') + ((B) - 'a')) & 31))
 #define CASE_UNIFORM(LEN, FIRST, THIRD, NAME) \
     case HASH(LEN, FIRST, THIRD): \
-        return memcmp(keyword, #NAME, LEN) ? glsl_tok::pp_not_keyword : glsl_tok::pp_ ## NAME
+        return memcmp(keyword, #NAME, LEN) ? glsl_tok::pp_not_keyword : glsl_tok::pp_ ## NAME;
 
         switch (HASH(len, keyword[0], keyword[2])) {
 
-            CASE_UNIFORM(7, 'i', 'c', include);
-            CASE_UNIFORM(7, 'v', 'r', version);
+            CASE_UNIFORM(7, 'i', 'c', include)
+            CASE_UNIFORM(7, 'v', 'r', version)
 
             default: return glsl_tok::pp_not_keyword;
         }
@@ -183,27 +180,27 @@ namespace renderbox {
                         if (fileToken.kind == glsl_tok::angle_string_literal) {
                             // Built in fragments
 
-#define HASH(LEN, FIRST, THIRD) \
-    (((LEN) << 5) + ((((FIRST) - 'a') + ((THIRD) - 'a')) & 31))
+#define HASH(LEN, A, B) \
+    (((LEN) << 5) + ((((A) - 'a') + ((B) - 'a')) & 31))
 #define CASE_UNIFORM(LEN, FIRST, THIRD, NAME) \
     case HASH(LEN, FIRST, THIRD): \
-        if (memcmp(file, #NAME, LEN)) break; enterSource(glsl_ ## NAME); lex(token); return
+        if (memcmp(file, #NAME, LEN)) break; enterSource(glsl_ ## NAME); lex(token); return;
 
                             switch (HASH(fileLen, file[0], file[2])) {
 
-                                CASE_UNIFORM(6, 'c', 'm', common);
+                                CASE_UNIFORM(6, 'c', 'm', common)
 
-                                CASE_UNIFORM(15, 'l', 'g', lights_preamble);
+                                CASE_UNIFORM(15, 'l', 'g', lights_preamble)
 
                                 // Vertex shader
 
-                                CASE_UNIFORM(10, 'b', 'g', begin_vert);
+                                CASE_UNIFORM(10, 'b', 'g', begin_vert)
 
-                                CASE_UNIFORM(18, 'w', 'r', worldposition_vert);
+                                CASE_UNIFORM(18, 'w', 'r', worldposition_vert)
 
-                                CASE_UNIFORM(16, 'w', 'r', worldnormal_vert);
+                                CASE_UNIFORM(16, 'w', 'r', worldnormal_vert)
 
-                                CASE_UNIFORM(15, 'g', 'p', glposition_vert);
+                                CASE_UNIFORM(15, 'g', 'p', glposition_vert)
 
                                 default:
                                     break;
@@ -291,25 +288,6 @@ namespace renderbox {
         result.append("\0");
 
         return result;
-    }
-
-    GLSLPreprocessorSource::GLSLPreprocessorSource(const char *filename) {
-
-        FILE *f = fopen(filename, "r");
-
-        // Determine file size
-        fseek(f, 0, SEEK_END);
-        long size_ = ftell(f);
-
-        if (size_ < 0) throw 2; // Failed to tell size
-        size = static_cast<size_t>(size_);
-
-        source.reset(new char[size + 1]);
-
-        rewind(f);
-        fread(source.get(), sizeof(char), size, f);
-        source.get()[size] = '\0';
-
     }
 
     GLSLPreprocessorLexer::GLSLPreprocessorLexer(GLSLPreprocessor *preprocessor,

@@ -33,5 +33,7 @@
 
 #include "GLSLPreprocessor.h"
 
+#include "OBJLoader.h"
+
 
 #endif //VOX_RENDERBOX_H

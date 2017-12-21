@@ -1,0 +1,52 @@
+
+#ifndef TOK
+#define TOK(X)
+#endif
+#ifndef PUNCTUATOR
+#define PUNCTUATOR(X,Y) TOK(X)
+#endif
+#ifndef KEYWORD
+#define KEYWORD(X) TOK(kw_ ## X)
+#endif
+
+
+// Language keywords
+
+TOK(unknown)                 // Not a token
+TOK(eol)                     // End of line
+TOK(eof)                     // End of file
+
+TOK(comment)                 // Comment
+
+TOK(raw_identifier)          // Raw identifier
+
+TOK(numeric_constant)        // Integer & floating constants
+
+TOK(unquoted_string_literal)
+
+PUNCTUATOR(minus,     "-")
+PUNCTUATOR(slash,     "/")
+
+// Vertex data
+
+KEYWORD(v)                   // Geometric vertex
+KEYWORD(vt)                  // Texture vertex
+KEYWORD(vn)                  // Vertex normal
+
+// Elements
+
+KEYWORD(f)                   // Face
+
+// Grouping
+
+KEYWORD(o)                   // Object
+
+// Display attributes
+
+KEYWORD(mtllib)              // Material library
+KEYWORD(usemtl)              // Material name
+
+
+#undef KEYWORD
+#undef PUNCTUATOR
+#undef TOK

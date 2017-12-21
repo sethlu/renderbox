@@ -4,7 +4,7 @@
 
 #include <memory>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <ostream>
 #include "lexer.h"
 
@@ -36,13 +36,7 @@ namespace renderbox {
 
     };
 
-    struct CstrComparator {
-        bool operator()(const char *a, const char *b) const {
-            return strcmp(a, b) == 0;
-        }
-    };
-
-    class GLSLPreprocessorSource;
+    class Source;
     class GLSLPreprocessorLexer;
 
     class GLSLPreprocessor {
@@ -75,7 +69,7 @@ namespace renderbox {
 
         // Sources
 
-        std::map<const char *, std::unique_ptr<GLSLPreprocessorSource>, CstrComparator> sources;
+        std::unordered_map<std::string, std::unique_ptr<Source>> sources;
 
         // Lexers
 
@@ -90,15 +84,6 @@ namespace renderbox {
     std::string readFile(const char *filename);
 
     std::string preprocessGLSLSourceFile(const char *filename, const std::string &bootstrap = "");
-
-    struct GLSLPreprocessorSource {
-
-        std::unique_ptr<char> source;
-        size_t size;
-
-        explicit GLSLPreprocessorSource(const char *filename);
-
-    };
 
     class GLSLPreprocessorLexer {
 

@@ -6,7 +6,7 @@
 
 namespace renderbox {
 
-    class MeshBasicMaterial : public Material, public ColorMaterial {
+    class MeshBasicMaterial : public Material, public DiffuseMaterial {
     public:
 
         explicit MeshBasicMaterial(glm::vec3 color);

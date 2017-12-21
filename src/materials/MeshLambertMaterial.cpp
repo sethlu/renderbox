@@ -4,7 +4,7 @@
 namespace renderbox {
 
     MeshLambertMaterial::MeshLambertMaterial(glm::vec3 color)
-        : ColorMaterial(color) {
+        : DiffuseMaterial(color) {
 
     }
 
