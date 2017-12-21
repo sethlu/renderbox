@@ -6,7 +6,7 @@
 
 namespace renderbox {
 
-    class MeshLambertMaterial : public Material, public ColorMaterial {
+    class MeshLambertMaterial : public Material, public DiffuseMaterial {
     public:
 
         explicit MeshLambertMaterial(glm::vec3 color = glm::vec3(1.0f));

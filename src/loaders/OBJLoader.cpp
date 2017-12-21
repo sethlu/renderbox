@@ -24,7 +24,7 @@ namespace renderbox {
     }
 
     OBJLoader::OBJLoader(std::shared_ptr<Object> destination)
-        : destination(std::move(destination)), object(nullptr), geometry(nullptr) {
+        : destination(std::move(destination)), object(nullptr), geometry(nullptr), material(nullptr) {
 
     }
 
@@ -115,6 +115,9 @@ namespace renderbox {
             default:                 break;
             case mtl_tok::eof:       return;
             case mtl_tok::kw_newmtl: handleNewMaterial(lexer, token); break; // Material name
+            case mtl_tok::kw_Ka:
+            case mtl_tok::kw_Kd:
+            case mtl_tok::kw_Ks:     handleMaterialColor(lexer, token); break; // Material color
         }
 
         goto NextLine;
@@ -397,9 +400,44 @@ namespace renderbox {
         // Material name should not exist
         if (materials.find(name) != materials.end()) INVALID_STATE();
 
-        // TODO: Propose generic/standard material
+        material = new MeshLambertMaterial; // TODO: Propose generic/standard material
         materials.insert(std::make_pair(std::string(name),
-                                        std::make_shared<MeshLambertMaterial>()));
+                                        std::shared_ptr<Material>(material)));
+
+    }
+
+    void OBJLoader::handleMaterialColor(MTLLexer &lexer, MTLToken &token) {
+
+        if (material == nullptr) INVALID_STATE();
+
+        auto keyword = token;
+        glm::vec3 v;
+
+        // Expect r
+        lex(lexer, token);
+        if (token.kind != mtl_tok::numeric_constant && token.kind != mtl_tok::minus) INVALID_SYNTAX();
+        v.x = parseFloat(lexer, token);
+
+        // Expect g
+        lex(lexer, token);
+        if (token.kind != mtl_tok::numeric_constant && token.kind != mtl_tok::minus) INVALID_SYNTAX();
+        v.y = parseFloat(lexer, token);
+
+        // Expect b
+        lex(lexer, token);
+        if (token.kind != mtl_tok::numeric_constant && token.kind != mtl_tok::minus) INVALID_SYNTAX();
+        v.z = parseFloat(lexer, token);
+
+        // Expect eol
+        lex(lexer, token);
+        if (token.kind != mtl_tok::eol) INVALID_SYNTAX();
+
+        switch (keyword.kind) {
+            default: break;
+            case mtl_tok::kw_Kd:
+                if (auto m = dynamic_cast<DiffuseMaterial *>(material)) m->setDiffuseColor(v);
+                break;
+        }
 
     }
 
@@ -412,6 +450,26 @@ namespace renderbox {
 
             lex(lexer, token);
             if (token.kind != obj_tok::numeric_constant) INVALID_SYNTAX();
+        }
+
+        // Make cleaned keyword
+        char number[token.len + 1];
+        memcpy(number, token.pointer, token.len);
+        number[token.len] = '\0';
+
+        return (negative ? -1 : 1) * strtof(number, nullptr);
+
+    }
+
+    float OBJLoader::parseFloat(MTLLexer &lexer, MTLToken &token) {
+
+        bool negative = false;
+
+        if (token.kind == mtl_tok::minus) {
+            negative = true;
+
+            lex(lexer, token);
+            if (token.kind != mtl_tok::numeric_constant) INVALID_SYNTAX();
         }
 
         // Make cleaned keyword
@@ -851,6 +909,10 @@ namespace renderbox {
         switch (HASH(token.len, keyword[0], keyword[1])) {
 
             CASE_KEYWORD(6, 'n', 'e', newmtl)
+
+            CASE_KEYWORD(2, 'K', 'a', Ka)
+            CASE_KEYWORD(2, 'K', 'd', Kd)
+            CASE_KEYWORD(2, 'K', 's', Ks)
 
             default: break;
         }

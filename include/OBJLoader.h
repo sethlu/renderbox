@@ -119,6 +119,8 @@ namespace renderbox {
 
         std::unordered_map<std::tuple<int, int, int>, unsigned> geometryVertexIndices;
 
+        Material *material;
+
         std::unordered_map<std::string, std::shared_ptr<Material>> materials;
 
         void enterOBJSource(const char *source);
@@ -143,7 +145,11 @@ namespace renderbox {
 
         void handleNewMaterial(MTLLexer &lexer, MTLToken &token);
 
+        void handleMaterialColor(MTLLexer &lexer, MTLToken &token);
+
         float parseFloat(OBJLexer &lexer, OBJToken &token);
+
+        float parseFloat(MTLLexer &lexer, MTLToken &token);
 
         int parseInt(OBJLexer &lexer, OBJToken &token);
 

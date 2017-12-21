@@ -11,7 +11,7 @@ namespace renderbox {
         MESH_BASIC_MATERIAL   = 0x01,
         MESH_LAMBERT_MATERIAL = 0x02,
         GLSL_MATERIAL         = 0x04,
-        COLOR_MATERIAL        = MESH_BASIC_MATERIAL | MESH_LAMBERT_MATERIAL,
+        DIFFUSE_MATERIAL      = MESH_BASIC_MATERIAL | MESH_LAMBERT_MATERIAL,
     };
 
     class Material {
@@ -23,8 +23,8 @@ namespace renderbox {
 
         virtual MATERIAL_TYPE getMaterialType() const = 0;
 
-        bool isColorMaterial() const {
-            return (getMaterialType() & COLOR_MATERIAL) != 0;
+        bool isDiffuseMaterial() const {
+            return (getMaterialType() & DIFFUSE_MATERIAL) != 0;
         }
 
     protected:
@@ -35,16 +35,18 @@ namespace renderbox {
 
     };
 
-    class ColorMaterial {
+    class DiffuseMaterial {
     public:
 
-        explicit ColorMaterial(glm::vec3 color) : color(color) {};
+        explicit DiffuseMaterial(glm::vec3 diffuseColor) : diffuseColor(diffuseColor) {};
 
-        glm::vec3 getColor() const { return color; }
+        glm::vec3 getDiffuseColor() const { return diffuseColor; }
+
+        void setDiffuseColor(glm::vec3 &diffuseColor_) { diffuseColor = diffuseColor_; }
 
     protected:
 
-        glm::vec3 color;
+        glm::vec3 diffuseColor;
 
     };
 

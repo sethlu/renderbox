@@ -9,7 +9,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "Light.h"
 #include "Matrix.h"
-#include "Vector.h"
 #include "OpenGLRenderer.h"
 
 
@@ -133,10 +132,10 @@ namespace renderbox {
                 glm::mat4x4 worldProjectionMatrix = viewProjectionMatrix * object->getWorldMatrix();
 
                 if (program->materialColor != -1) {
-                    if (auto material = dynamic_cast<ColorMaterial *>(object->getMaterial().get()))
+                    if (auto material = dynamic_cast<DiffuseMaterial *>(object->getMaterial().get()))
                         glUniform3fv(program->materialColor,
                                      1,
-                                     glm::value_ptr(material->getColor()));
+                                     glm::value_ptr(material->getDiffuseColor()));
                 }
                 if (program->worldMatrix != -1) {
                     glUniformMatrix4fv(program->worldMatrix,
