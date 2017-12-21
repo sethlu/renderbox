@@ -150,13 +150,6 @@ namespace renderbox {
 
     };
 
-    class OBJParser {
-    public:
-
-
-
-    };
-
 }
 
 
