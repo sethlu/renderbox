@@ -35,7 +35,7 @@ namespace renderbox {
 
             // Preserve last slash
             std::string relative(filename);
-            auto separator = relative.find_last_of('/');
+            auto separator = relative.find_last_of('/'); // Return -1 if not found
             relative.resize(separator + 1);
             // Append file name
             relative.append(filename);
@@ -60,7 +60,7 @@ namespace renderbox {
 
             // Preserve last slash
             std::string relative(filename);
-            auto separator = relative.find_last_of('/');
+            auto separator = relative.find_last_of('/'); // Return -1 if not found
             relative.resize(separator + 1);
             // Append file name
             relative.append(filename);
