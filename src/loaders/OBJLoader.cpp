@@ -28,7 +28,57 @@ namespace renderbox {
 
     }
 
-    void OBJLoader::loadOBJ(const char *source) {
+    void OBJLoader::enterOBJSourceFile(const char *filename) {
+
+        if (!sourceFiles.empty()) {
+            // Resolve relative path
+
+            // Preserve last slash
+            std::string relative(filename);
+            auto separator = relative.find_last_of('/');
+            relative.resize(separator + 1);
+            // Append file name
+            relative.append(filename);
+
+            filename = relative.c_str();
+
+        }
+
+        sourceFiles.emplace_back(filename);
+
+        Source source(filename);
+        enterOBJSource(source.source.get());
+
+        sourceFiles.pop_back();
+
+    }
+
+    void OBJLoader::enterMTLSourceFile(const char *filename) {
+
+        if (!sourceFiles.empty()) {
+            // Resolve relative path
+
+            // Preserve last slash
+            std::string relative(filename);
+            auto separator = relative.find_last_of('/');
+            relative.resize(separator + 1);
+            // Append file name
+            relative.append(filename);
+
+            filename = relative.c_str();
+
+        }
+
+        sourceFiles.emplace_back(filename);
+
+        Source source(filename);
+        enterMTLSource(source.source.get());
+
+        sourceFiles.pop_back();
+
+    }
+
+    void OBJLoader::enterOBJSource(const char *source) {
 
         OBJLexer lexer(source, source);
         OBJToken token{};
@@ -52,7 +102,7 @@ namespace renderbox {
 
     }
 
-    void OBJLoader::loadMTL(const char *source) {
+    void OBJLoader::enterMTLSource(const char *source) {
 
         MTLLexer lexer(source, source);
         MTLToken token{};
@@ -272,8 +322,7 @@ namespace renderbox {
     void OBJLoader::handleObject(OBJLexer &lexer, OBJToken &token) {
 
         geometry = new Geometry;
-        object = new Object(std::shared_ptr<Geometry>(geometry),
-                            std::make_shared<MeshLambertMaterial>());
+        object = new Object(std::shared_ptr<Geometry>(geometry), nullptr);
         destination->addChild(std::shared_ptr<Object>(object));
 
         geometryVertexIndices.clear();
@@ -288,7 +337,13 @@ namespace renderbox {
         do {
             if (token.kind != obj_tok::unquoted_string_literal) INVALID_SYNTAX();
 
-            // TODO: Handle material library
+            // Make cleaned library
+            char library[token.len + 1];
+            memcpy(library, token.pointer, token.len);
+            library[token.len] = '\0';
+
+            // Load material library
+            enterMTLSourceFile(library);
 
             lex(lexer, token);
         } while (token.kind != obj_tok::eol);
@@ -305,11 +360,20 @@ namespace renderbox {
         lexer.isLexingMaterialName = false;
         if (token.kind != obj_tok::unquoted_string_literal) INVALID_SYNTAX();
 
+        // Make cleaned name
+        char name[token.len + 1];
+        memcpy(name, token.pointer, token.len);
+        name[token.len] = '\0';
+
         // Expect eol
         lex(lexer, token);
         if (token.kind != obj_tok::eol) INVALID_SYNTAX();
 
-        // TODO: Handle material name
+        // Material name should exist
+        auto it = materials.find(name);
+        if (it == materials.end()) INVALID_STATE();
+
+        object->setMaterial(it->second);
 
     }
 
@@ -321,11 +385,21 @@ namespace renderbox {
         lexer.isLexingMaterialName = false;
         if (token.kind != mtl_tok::unquoted_string_literal) INVALID_SYNTAX();
 
+        // Make cleaned name
+        char name[token.len + 1];
+        memcpy(name, token.pointer, token.len);
+        name[token.len] = '\0';
+
         // Expect eol
         lex(lexer, token);
         if (token.kind != mtl_tok::eol) INVALID_SYNTAX();
 
-        // TODO: Handle new material
+        // Material name should not exist
+        if (materials.find(name) != materials.end()) INVALID_STATE();
+
+        // TODO: Propose generic/standard material
+        materials.insert(std::make_pair(std::string(name),
+                                        std::make_shared<MeshLambertMaterial>()));
 
     }
 

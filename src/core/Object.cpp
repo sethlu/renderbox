@@ -53,16 +53,24 @@ namespace renderbox {
         return !!geometry;
     }
 
-    std::shared_ptr<Geometry> Object::getGeometry() const {
+    std::shared_ptr<Geometry> Object::getGeometry() {
         return geometry;
+    }
+
+    void Object::setGeometry(std::shared_ptr<Geometry> geometry_) {
+        geometry = std::move(geometry_);
     }
 
     bool Object::hasMaterial() {
         return !!material;
     }
 
-    std::shared_ptr<Material> Object::getMaterial() const {
+    std::shared_ptr<Material> Object::getMaterial() {
         return material;
+    }
+
+    void Object::setMaterial(std::shared_ptr<Material> material_) {
+        material = std::move(material_);
     }
 
     glm::mat4x4 Object::getWorldMatrix() const {

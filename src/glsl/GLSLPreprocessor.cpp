@@ -44,12 +44,11 @@ namespace renderbox {
 
     void GLSLPreprocessor::enterSourceFile(const char *filename) {
 
-        GLSLPreprocessorSource *source;
+        Source *source;
         auto it = sources.find(filename);
         if (it == sources.end()) {
-            source = new GLSLPreprocessorSource(filename);
-            sources.insert(std::pair<const char *, std::unique_ptr<GLSLPreprocessorSource>>(
-                filename, std::unique_ptr<GLSLPreprocessorSource>(source)));
+            source = new Source(filename);
+            sources.insert(std::make_pair(filename, std::unique_ptr<Source>(source)));
         } else {
             source = it->second.get();
         }
@@ -289,25 +288,6 @@ namespace renderbox {
         result.append("\0");
 
         return result;
-    }
-
-    GLSLPreprocessorSource::GLSLPreprocessorSource(const char *filename) {
-
-        FILE *f = fopen(filename, "r");
-
-        // Determine file size
-        fseek(f, 0, SEEK_END);
-        long size_ = ftell(f);
-
-        if (size_ < 0) throw 2; // Failed to tell size
-        size = static_cast<size_t>(size_);
-
-        source.reset(new char[size + 1]);
-
-        rewind(f);
-        fread(source.get(), sizeof(char), size, f);
-        source.get()[size] = '\0';
-
     }
 
     GLSLPreprocessorLexer::GLSLPreprocessorLexer(GLSLPreprocessor *preprocessor,

@@ -99,11 +99,13 @@ namespace renderbox {
 
         explicit OBJLoader(std::shared_ptr<Object> destination);
 
-        void loadOBJ(const char *source);
+        void enterOBJSourceFile(const char *filename);
 
-        void loadMTL(const char *source);
+        void enterMTLSourceFile(const char *filename);
 
     private:
+
+        std::vector<const char *> sourceFiles;
 
         std::shared_ptr<Object> destination;
 
@@ -116,6 +118,12 @@ namespace renderbox {
         Geometry *geometry;
 
         std::unordered_map<std::tuple<int, int, int>, unsigned> geometryVertexIndices;
+
+        std::unordered_map<std::string, std::shared_ptr<Material>> materials;
+
+        void enterOBJSource(const char *source);
+
+        void enterMTLSource(const char *source);
 
         void lex(OBJLexer &lexer, OBJToken &token);
 

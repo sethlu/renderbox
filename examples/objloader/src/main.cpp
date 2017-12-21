@@ -10,9 +10,8 @@ int main(int argc, char **argv) {
         glm::radians(45.0f), (float) renderer->getWindowWidth() / (float) renderer->getWindowHeight());
     camera->setTranslation(glm::vec3(0, 0, 8));
 
-    std::string obj = renderbox::readFile("suzanne.obj");
     renderbox::OBJLoader loader(scene);
-    loader.loadOBJ(obj.c_str());
+    loader.enterOBJSourceFile("suzanne.obj");
 
     for (unsigned i = 0; i < 20; ++i) {
         auto pointLight = std::make_shared<renderbox::PointLight>(glm::vec3(30));
