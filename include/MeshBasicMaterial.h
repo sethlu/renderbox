@@ -9,9 +9,14 @@ namespace renderbox {
     class MeshBasicMaterial : public Material, public DiffuseMaterial {
     public:
 
-        explicit MeshBasicMaterial(glm::vec3 color);
+        explicit MeshBasicMaterial(glm::vec3 diffuseColor = glm::vec3(1.0f))
+            : DiffuseMaterial(diffuseColor) {
 
-        MATERIAL_TYPE getMaterialType() const override;
+        };
+
+        MATERIAL_TYPE getMaterialType() const override {
+            return MESH_BASIC_MATERIAL;
+        };
 
     };
 

@@ -131,9 +131,15 @@ namespace renderbox {
                 // World projection matrix
                 glm::mat4x4 worldProjectionMatrix = viewProjectionMatrix * object->getWorldMatrix();
 
-                if (program->materialColor != -1) {
+                if (program->materialAmbientColor != -1) {
+                    if (auto material = dynamic_cast<AmbientMaterial *>(object->getMaterial().get()))
+                        glUniform3fv(program->materialAmbientColor,
+                                     1,
+                                     glm::value_ptr(material->getAmbientColor()));
+                }
+                if (program->materialDiffuseColor != -1) {
                     if (auto material = dynamic_cast<DiffuseMaterial *>(object->getMaterial().get()))
-                        glUniform3fv(program->materialColor,
+                        glUniform3fv(program->materialDiffuseColor,
                                      1,
                                      glm::value_ptr(material->getDiffuseColor()));
                 }

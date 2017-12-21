@@ -6,12 +6,23 @@
 
 namespace renderbox {
 
-    class MeshLambertMaterial : public Material, public DiffuseMaterial {
+    class MeshLambertMaterial : public Material, public AmbientMaterial, public DiffuseMaterial {
     public:
 
-        explicit MeshLambertMaterial(glm::vec3 color = glm::vec3(1.0f));
+        explicit MeshLambertMaterial(glm::vec3 diffuseColor = glm::vec3(1.0f))
+            : MeshLambertMaterial(glm::vec3(1.0f), diffuseColor) {
 
-        MATERIAL_TYPE getMaterialType() const override;
+        };
+
+        MeshLambertMaterial(glm::vec3 ambientColor,
+                            glm::vec3 diffuseColor)
+            : AmbientMaterial(ambientColor), DiffuseMaterial(diffuseColor) {
+
+        };
+
+        MATERIAL_TYPE getMaterialType() const override {
+            return MESH_LAMBERT_MATERIAL;
+        };
 
     };
 

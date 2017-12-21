@@ -400,7 +400,7 @@ namespace renderbox {
         // Material name should not exist
         if (materials.find(name) != materials.end()) INVALID_STATE();
 
-        material = new MeshLambertMaterial; // TODO: Propose generic/standard material
+        material = new MeshLambertMaterial(glm::vec3(), glm::vec3()); // TODO: Propose generic/standard material
         materials.insert(std::make_pair(std::string(name),
                                         std::shared_ptr<Material>(material)));
 
@@ -434,6 +434,9 @@ namespace renderbox {
 
         switch (keyword.kind) {
             default: break;
+            case mtl_tok::kw_Ka:
+                if (auto m = dynamic_cast<AmbientMaterial *>(material)) m->setAmbientColor(v);
+                break;
             case mtl_tok::kw_Kd:
                 if (auto m = dynamic_cast<DiffuseMaterial *>(material)) m->setDiffuseColor(v);
                 break;

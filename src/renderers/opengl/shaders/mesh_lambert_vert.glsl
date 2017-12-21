@@ -7,7 +7,9 @@ R"(
 uniform mat4 rb_worldProjectionMatrix;
 uniform mat4 rb_worldMatrix;
 uniform mat4 rb_worldNormalMatrix;
-uniform vec3 rb_materialColor;
+uniform vec3 rb_sceneAmbientColor;
+uniform vec3 rb_materialAmbientColor;
+uniform vec3 rb_materialDiffuseColor;
 
 out vec3 vertexColor;
 
@@ -33,7 +35,7 @@ void main() {
 
     // Lighting
 
-    vertexColor = vec3(0);
+    vertexColor = rb_sceneAmbientColor * rb_materialAmbientColor;
 
     #if RB_NUM_POINT_LIGHTS > 0
 
@@ -45,7 +47,7 @@ void main() {
         vec3 L = normalize(lightVector);
         float lightDistance = length(lightVector);
 
-        vertexColor += rb_materialColor * rb_pointLights[i].color *
+        vertexColor += rb_materialDiffuseColor * rb_pointLights[i].color *
             max(dot(N, L), 0.0) / (1.0 + (0.25 * lightDistance * lightDistance));
 
     }

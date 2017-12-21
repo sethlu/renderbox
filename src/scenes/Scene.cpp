@@ -7,8 +7,8 @@ namespace renderbox {
         return ambientColor;
     }
 
-    void Scene::setAmbientColor(glm::vec3 ambientColor) {
-        this->ambientColor = ambientColor;
+    void Scene::setAmbientColor(const glm::vec3 &ambientColor_) {
+        ambientColor = ambientColor_;
     }
 
 }

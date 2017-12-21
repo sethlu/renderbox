@@ -5,7 +5,7 @@ R"(
 #include <lights_preamble>
 
 uniform mat4 rb_worldProjectionMatrix;
-uniform vec3 rb_materialColor;
+uniform vec3 rb_materialDiffuseColor;
 
 out vec3 vertexColor;
 
@@ -19,7 +19,7 @@ void main() {
 
     // Lighting
 
-    vertexColor = rb_materialColor;
+    vertexColor = rb_materialDiffuseColor;
 
 }
 

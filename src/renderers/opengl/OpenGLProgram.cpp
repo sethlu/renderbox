@@ -55,7 +55,8 @@ namespace renderbox {
         // Reset uniform locations
         pointLights.clear();
         worldMatrix = -1;
-        materialColor = -1;
+        materialAmbientColor = -1;
+        materialDiffuseColor = -1;
         sceneAmbientColor = -1;
         worldNormalMatrix = -1;
         numActivePointLights = -1;
@@ -75,7 +76,8 @@ namespace renderbox {
             std::cout << uniformName << std::endl;
 
             // Assign bool flags for "built-in" uniforms
-            if (uniformNameSize < 4) continue;
+
+            if (uniformNameSize < 14) continue;
 
             // Find the index of `[` or fallback to 0
             auto array = static_cast<unsigned int>(uniformNameSize - 3);
@@ -131,24 +133,24 @@ namespace renderbox {
 #undef CASE_UNIFORM_ARRAY_MEMBER
 #undef CASE_UNIFORM_ARRAY_BEGIN
 
-#define CASE_UNIFORM(LEN, FIRST, NAME) \
-    case HASH((LEN) + 3, 'r', FIRST): \
-        if (memcmp(uniformName, "rb_"#NAME, LEN) == 0) \
+#define CASE_UNIFORM(LEN, NINTH, NAME) \
+    case HASH((LEN) + 3, 'r', NINTH): \
+        if (memcmp(uniformName, "rb_"#NAME, (LEN) + 3) == 0) \
             (NAME) = getUniformLocation(uniformName); \
         break;
 
-            switch (HASH(uniformNameSize, uniformName[0], uniformName[3])) {
+            switch (HASH(uniformNameSize, uniformName[0], uniformName[3 + 8])) {
 
-                CASE_UNIFORM(11, 'w', worldMatrix)
+                CASE_UNIFORM(11, 'r', worldMatrix)
 
-                CASE_UNIFORM(13, 'm', materialColor)
+                CASE_UNIFORM(17, 'i', sceneAmbientColor)
+                CASE_UNIFORM(17, 'm', worldNormalMatrix)
 
-                CASE_UNIFORM(17, 's', sceneAmbientColor)
-                CASE_UNIFORM(17, 'w', worldNormalMatrix)
+                CASE_UNIFORM(20, 'A', materialAmbientColor)
+                CASE_UNIFORM(20, 'D', materialDiffuseColor)
+                CASE_UNIFORM(20, 'e', numActivePointLights)
 
-                CASE_UNIFORM(20, 'n', numActivePointLights)
-
-                CASE_UNIFORM(21, 'w', worldProjectionMatrix)
+                CASE_UNIFORM(21, 'j', worldProjectionMatrix)
 
                 default: break;
             }
