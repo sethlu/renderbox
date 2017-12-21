@@ -63,6 +63,16 @@ namespace renderbox {
 
     }
 
+    namespace mtl_tok {
+
+        enum MTLTokenKind {
+#define TOK(X) X,
+#include "MTLTokenKinds.def"
+            MTL_NUM_TOKENS
+        };
+
+    }
+
     struct OBJToken {
 
         obj_tok::OBJTokenKind kind;
@@ -73,7 +83,16 @@ namespace renderbox {
 
     };
 
+    struct MTLToken {
+
+        mtl_tok::MTLTokenKind kind;
+        const char *pointer;
+        unsigned len;
+
+    };
+
     class OBJLexer;
+    class MTLLexer;
 
     class OBJLoader {
     public:
@@ -81,6 +100,8 @@ namespace renderbox {
         explicit OBJLoader(std::shared_ptr<Object> destination);
 
         void loadOBJ(const char *source);
+
+        void loadMTL(const char *source);
 
     private:
 
@@ -98,6 +119,8 @@ namespace renderbox {
 
         void lex(OBJLexer &lexer, OBJToken &token);
 
+        void lex(MTLLexer &lexer, MTLToken &token);
+
         void handleVertex(OBJLexer &lexer, OBJToken &token);
 
         void handleVertexNormal(OBJLexer &lexer, OBJToken &token);
@@ -109,6 +132,8 @@ namespace renderbox {
         void handleMaterialLibrary(OBJLexer &lexer, OBJToken &token);
 
         void handleMaterialName(OBJLexer &lexer, OBJToken &token);
+
+        void handleNewMaterial(MTLLexer &lexer, MTLToken &token);
 
         float parseFloat(OBJLexer &lexer, OBJToken &token);
 
@@ -135,6 +160,7 @@ namespace renderbox {
 
         bool isAtPhysicalStartOfLine;
         bool isLexingFilename;
+        bool isLexingMaterialName;
 
         unsigned line;
 
@@ -147,6 +173,38 @@ namespace renderbox {
         bool skipLineComment(OBJToken &token, const char *pointer);
 
         bool skipHorizontalWhitespace(OBJToken &token);
+
+    };
+
+    class MTLLexer {
+
+        friend class OBJLoader;
+
+    public:
+
+        explicit MTLLexer(const char *bufferStart, const char *bufferPointer);
+
+        bool lex(MTLToken &token);
+
+    private:
+
+        const char *bufferStart;
+        const char *bufferPointer;
+
+        bool isAtPhysicalStartOfLine;
+        bool isLexingMaterialName;
+
+        unsigned line;
+
+        bool lexNumericConstant(MTLToken &token, const char *pointer);
+
+        bool lexIdentifier(MTLToken &token, const char *pointer);
+
+        bool lexUnquotedStringLiteral(MTLToken &token, const char *pointer);
+
+        bool skipLineComment(MTLToken &token, const char *pointer);
+
+        bool skipHorizontalWhitespace(MTLToken &token);
 
     };
 

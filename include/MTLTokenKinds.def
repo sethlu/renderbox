@@ -1,0 +1,52 @@
+
+#ifndef TOK
+#define TOK(X)
+#endif
+#ifndef PUNCTUATOR
+#define PUNCTUATOR(X,Y) TOK(X)
+#endif
+#ifndef KEYWORD
+#define KEYWORD(X) TOK(kw_ ## X)
+#endif
+
+
+// Language keywords
+
+TOK(unknown)                 // Not a token
+TOK(eol)                     // End of line
+TOK(eof)                     // End of file
+
+TOK(comment)                 // Comment
+
+TOK(raw_identifier)          // Raw identifier
+
+TOK(numeric_constant)        // Integer & floating constants
+
+TOK(unquoted_string_literal)
+
+PUNCTUATOR(minus,     "-")
+
+// Material name
+
+KEYWORD(newmtl)
+
+// Material color and illumination
+
+KEYWORD(Ka)                  // Ambient reflectivity
+KEYWORD(Kd)                  // Diffuse reflectivity
+KEYWORD(Ks)                  // Spectral reflectivity
+KEYWORD(Tf)                  // Transmission filter
+
+KEYWORD(illum)               // Illumination model
+
+KEYWORD(d)                   // Dissolve
+
+KEYWORD(Ns)                  // Specular exponent
+KEYWORD(sharpness)           // Sharpness
+KEYWORD(Ni)                  // Optical density
+
+
+
+#undef KEYWORD
+#undef PUNCTUATOR
+#undef TOK
