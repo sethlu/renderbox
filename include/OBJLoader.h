@@ -106,6 +106,10 @@ namespace renderbox {
 
         void handleObject(OBJLexer &lexer, OBJToken &token);
 
+        void handleMaterialLibrary(OBJLexer &lexer, OBJToken &token);
+
+        void handleMaterialName(OBJLexer &lexer, OBJToken &token);
+
         float parseFloat(OBJLexer &lexer, OBJToken &token);
 
         int parseInt(OBJLexer &lexer, OBJToken &token);
@@ -115,6 +119,9 @@ namespace renderbox {
     };
 
     class OBJLexer {
+
+        friend class OBJLoader;
+
     public:
 
         explicit OBJLexer(const char *bufferStart, const char *bufferPointer);

@@ -41,6 +41,11 @@ KEYWORD(f)                   // Face
 
 KEYWORD(o)                   // Object
 
+// Display attributes
+
+KEYWORD(mtllib)              // Material library
+KEYWORD(usemtl)              // Material name
+
 
 #undef KEYWORD
 #undef PUNCTUATOR

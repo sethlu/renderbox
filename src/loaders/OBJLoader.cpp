@@ -38,12 +38,14 @@ namespace renderbox {
         lex(lexer, token);
 
         switch (token.kind) {
-            default:             break;
-            case obj_tok::eof:   return;
-            case obj_tok::kw_v:  handleVertex(lexer, token); break; // Geometric vertex
-            case obj_tok::kw_vn: handleVertexNormal(lexer, token); break; // Vertex normal
-            case obj_tok::kw_f:  handleFace(lexer, token); break; // Face
-            case obj_tok::kw_o:  handleObject(lexer, token); break; // Object
+            default:                 break;
+            case obj_tok::eof:       return;
+            case obj_tok::kw_v:      handleVertex(lexer, token); break; // Geometric vertex
+            case obj_tok::kw_vn:     handleVertexNormal(lexer, token); break; // Vertex normal
+            case obj_tok::kw_f:      handleFace(lexer, token); break; // Face
+            case obj_tok::kw_o:      handleObject(lexer, token); break; // Object
+            case obj_tok::kw_mtllib: handleMaterialLibrary(lexer, token); break; // Material library
+            case obj_tok::kw_usemtl: handleMaterialName(lexer, token); break; // Material name
         }
 
         goto NextLine;
@@ -250,6 +252,37 @@ namespace renderbox {
 
     }
 
+    void OBJLoader::handleMaterialLibrary(OBJLexer &lexer, OBJToken &token) {
+
+        lexer.isLexingFilename = true;
+
+        lex(lexer, token);
+        do {
+            if (token.kind != obj_tok::unquoted_string_literal) INVALID_SYNTAX();
+
+            // TODO: Handle material library
+
+            lex(lexer, token);
+        } while (token.kind != obj_tok::eol);
+
+        lexer.isLexingFilename = false;
+
+    }
+
+    void OBJLoader::handleMaterialName(OBJLexer &lexer, OBJToken &token) {
+
+        // Expect material name
+        lex(lexer, token);
+        if (token.kind != obj_tok::raw_identifier) INVALID_SYNTAX();
+
+        // Expect eol
+        lex(lexer, token);
+        if (token.kind != obj_tok::eol) INVALID_SYNTAX();
+
+        // TODO: Handle material name
+
+    }
+
     float OBJLoader::parseFloat(OBJLexer &lexer, OBJToken &token) {
 
         bool negative = false;
@@ -345,6 +378,16 @@ namespace renderbox {
             }
 
             case '\0': // End of file
+
+                if (!atPhysicalStartOfLine) {
+                    // Append eol before the end of file
+
+                    token.kind = obj_tok::eol;
+                    token.pointer = bufferPointer; // Actually points to eof
+                    token.len = 1;
+
+                    break;
+                }
 
                 token.kind = obj_tok::eof;
                 token.pointer = bufferPointer;
@@ -470,6 +513,9 @@ namespace renderbox {
 
             CASE_KEYWORD(2, 'v', 't', vt)
             CASE_KEYWORD(2, 'v', 'n', vn)
+
+            CASE_KEYWORD(6, 'm', 't', mtllib)
+            CASE_KEYWORD(6, 'u', 's', usemtl)
 
             default: break;
         }
