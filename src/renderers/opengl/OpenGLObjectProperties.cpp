@@ -12,7 +12,7 @@ namespace renderbox {
         }
 
         auto buffer = new OpenGLBuffer();
-        buffers.insert(std::pair<int, std::unique_ptr<OpenGLBuffer>>(index, std::unique_ptr<OpenGLBuffer>(buffer)));
+        buffers.insert(std::make_pair(index, std::unique_ptr<OpenGLBuffer>(buffer)));
 
         return buffer;
 
@@ -26,7 +26,7 @@ namespace renderbox {
         }
 
         auto vertexArray = new OpenGLVertexArray();
-        vertexArrays.insert(std::pair<int, std::unique_ptr<OpenGLVertexArray>>(index, std::unique_ptr<OpenGLVertexArray>(vertexArray)));
+        vertexArrays.insert(std::make_pair(index, std::unique_ptr<OpenGLVertexArray>(vertexArray)));
 
         return vertexArray;
 
