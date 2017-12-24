@@ -91,6 +91,7 @@ namespace renderbox {
             default:                 break;
             case obj_tok::eof:       return;
             case obj_tok::kw_v:      handleVertex(lexer, token); break; // Geometric vertex
+            case obj_tok::kw_vt:     handleTextureVertex(lexer, token); break; // Texture vertex
             case obj_tok::kw_vn:     handleVertexNormal(lexer, token); break; // Vertex normal
             case obj_tok::kw_f:      handleFace(lexer, token); break; // Face
             case obj_tok::kw_o:      handleObject(lexer, token); break; // Object
@@ -173,6 +174,28 @@ namespace renderbox {
         if (token.kind != obj_tok::eol) INVALID_SYNTAX();
 
         vertices.emplace_back(v);
+
+    }
+
+    void OBJLoader::handleTextureVertex(OBJLexer &lexer, OBJToken &token) {
+
+        glm::vec2 v;
+
+        // Expect u
+        lex(lexer, token);
+        if (token.kind != obj_tok::numeric_constant && token.kind != obj_tok::minus) INVALID_SYNTAX();
+        v.x = parseFloat(lexer, token);
+
+        // Expect v
+        lex(lexer, token);
+        if (token.kind != obj_tok::numeric_constant && token.kind != obj_tok::minus) INVALID_SYNTAX();
+        v.y = parseFloat(lexer, token);
+
+        // Expect end of line
+        lex(lexer, token);
+        if (token.kind != obj_tok::eol) INVALID_SYNTAX();
+
+        uvs.emplace_back(v);
 
     }
 
@@ -514,7 +537,7 @@ namespace renderbox {
         }
 
         geometry->getVertices().emplace_back(vertices[v]);
-        // TODO: Use of texture coordinates
+        if (vt >= 0) geometry->getUVs().emplace_back(uvs[v]);
         if (vn >= 0) geometry->getNormals().emplace_back(normals[vn]);
 
         auto index = static_cast<unsigned>(geometry->getVertices().size() - 1);

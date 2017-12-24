@@ -111,6 +111,8 @@ namespace renderbox {
 
         std::vector<glm::vec3> vertices;
 
+        std::vector<glm::vec2> uvs;
+
         std::vector<glm::vec3> normals;
 
         Object *object;
@@ -132,6 +134,8 @@ namespace renderbox {
         void lex(MTLLexer &lexer, MTLToken &token);
 
         void handleVertex(OBJLexer &lexer, OBJToken &token);
+
+        void handleTextureVertex(OBJLexer &lexer, OBJToken &token);
 
         void handleVertexNormal(OBJLexer &lexer, OBJToken &token);
 

@@ -7,6 +7,10 @@ namespace renderbox {
         return vertices;
     };
 
+    std::vector<glm::vec2> &Geometry::getUVs() {
+        return uvs;
+    };
+
     std::vector<glm::vec3> &Geometry::getNormals() {
         return normals;
     };

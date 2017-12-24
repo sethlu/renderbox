@@ -18,6 +18,8 @@ namespace renderbox {
 
         std::vector<glm::vec3> &getVertices();
 
+        std::vector<glm::vec2> &getUVs();
+
         std::vector<glm::vec3> &getNormals();
 
         std::vector<glm::uvec3> &getFaces();
@@ -25,6 +27,8 @@ namespace renderbox {
     protected:
 
         std::vector<glm::vec3> vertices;
+
+        std::vector<glm::vec2> uvs;
 
         std::vector<glm::vec3> normals;
 
