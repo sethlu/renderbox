@@ -565,6 +565,8 @@ namespace renderbox {
                     token.pointer = bufferPointer; // Actually points to eof
                     token.len = 1;
 
+                    isAtPhysicalStartOfLine = true;
+
                     break;
                 }
 
@@ -799,6 +801,8 @@ namespace renderbox {
                     token.kind = mtl_tok::eol;
                     token.pointer = bufferPointer; // Actually points to eof
                     token.len = 1;
+
+                    isAtPhysicalStartOfLine = true;
 
                     break;
                 }
