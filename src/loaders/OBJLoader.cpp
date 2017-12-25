@@ -119,6 +119,9 @@ namespace renderbox {
             case mtl_tok::kw_Ka:
             case mtl_tok::kw_Kd:
             case mtl_tok::kw_Ks:     handleMaterialColor(lexer, token); break; // Material color
+            case mtl_tok::kw_map_Ka:
+            case mtl_tok::kw_map_Kd:
+            case mtl_tok::kw_map_Ks: handleTextureMap(lexer, token); break; // Texture map
         }
 
         goto NextLine;
@@ -467,6 +470,53 @@ namespace renderbox {
 
     }
 
+    void OBJLoader::handleTextureMap(MTLLexer &lexer, MTLToken &token) {
+
+        if (material == nullptr) INVALID_STATE();
+
+        auto keyword = token;
+
+        lexer.isLexingFilename = true;
+        lex(lexer, token);
+        lexer.isLexingFilename = false;
+        if (token.kind != mtl_tok::unquoted_string_literal) INVALID_SYNTAX();
+
+        // Make cleaned name
+        char filename_[token.len + 1];
+        memcpy(filename_, token.pointer, token.len);
+        filename_[token.len] = '\0';
+
+        const char *filename = filename_;
+
+        // Expect eol
+        lex(lexer, token);
+        if (token.kind != mtl_tok::eol) INVALID_SYNTAX();
+
+        if (!sourceFiles.empty()) {
+            // Resolve relative path
+
+            // Preserve last slash
+            std::string relative(sourceFiles.back());
+            auto separator = relative.find_last_of('/'); // Return -1 if not found
+            relative.resize(separator + 1);
+            // Append file name
+            relative.append(filename);
+
+            filename = relative.c_str();
+
+        }
+
+        auto texture = std::shared_ptr<Texture>(Texture::fromFile(filename));
+
+        switch (keyword.kind) {
+            default: break;
+            case mtl_tok::kw_map_Kd:
+                if (auto m = dynamic_cast<DiffuseMaterial *>(material)) m->setDiffuseMap(texture);
+                break;
+        }
+
+    }
+
     float OBJLoader::parseFloat(OBJLexer &lexer, OBJToken &token) {
 
         bool negative = false;
@@ -786,7 +836,7 @@ namespace renderbox {
 
     MTLLexer::MTLLexer(const char *bufferStart, const char *bufferPointer)
         : bufferStart(bufferStart), bufferPointer(bufferPointer),
-          isAtPhysicalStartOfLine(true), isLexingMaterialName(false), line(0){
+          isAtPhysicalStartOfLine(true), isLexingFilename(false), isLexingMaterialName(false), line(0) {
 
     }
 
@@ -865,7 +915,7 @@ namespace renderbox {
             case 'v': case 'w': case 'x': case 'y': case 'z':
             case '_':
 
-                if (isLexingMaterialName) { // Lexing a string without quotes etc
+                if (isLexingFilename || isLexingMaterialName) { // Lexing a string without quotes etc
                     return lexUnquotedStringLiteral(token, pointer);
                 }
                 return lexIdentifier(token, pointer);
@@ -944,7 +994,18 @@ namespace renderbox {
             CASE_KEYWORD(2, 'K', 'd', Kd)
             CASE_KEYWORD(2, 'K', 's', Ks)
 
-            default: break;
+            default:
+
+                if (token.len > 4) // Some keywords have a short prefix
+                    switch (HASH(token.len, keyword[4], keyword[5])) {
+
+                        CASE_KEYWORD(6, 'K', 'a', map_Ka)
+                        CASE_KEYWORD(6, 'K', 'd', map_Kd)
+                        CASE_KEYWORD(6, 'K', 's', map_Ks)
+
+                        default: break;
+                    }
+
         }
 
 #undef CASE_KEYWORD

@@ -79,10 +79,11 @@ namespace renderbox {
 
         std::vector<struct PointLight> pointLights;
         GLint worldMatrix;
-        GLint materialAmbientColor;
-        GLint materialDiffuseColor;
         GLint sceneAmbientColor;
         GLint worldNormalMatrix;
+        GLint materialDiffuseMap;
+        GLint materialAmbientColor;
+        GLint materialDiffuseColor;
         GLint numActivePointLights;
         GLint worldProjectionMatrix;
 

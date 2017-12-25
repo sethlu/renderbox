@@ -151,6 +151,8 @@ namespace renderbox {
 
         void handleMaterialColor(MTLLexer &lexer, MTLToken &token);
 
+        void handleTextureMap(MTLLexer &lexer, MTLToken &token);
+
         float parseFloat(OBJLexer &lexer, OBJToken &token);
 
         float parseFloat(MTLLexer &lexer, MTLToken &token);
@@ -210,6 +212,7 @@ namespace renderbox {
         const char *bufferPointer;
 
         bool isAtPhysicalStartOfLine;
+        bool isLexingFilename;
         bool isLexingMaterialName;
 
         unsigned line;

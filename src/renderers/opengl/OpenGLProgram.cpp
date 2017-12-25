@@ -55,10 +55,11 @@ namespace renderbox {
         // Reset uniform locations
         pointLights.clear();
         worldMatrix = -1;
-        materialAmbientColor = -1;
-        materialDiffuseColor = -1;
         sceneAmbientColor = -1;
         worldNormalMatrix = -1;
+        materialDiffuseMap = -1;
+        materialAmbientColor = -1;
+        materialDiffuseColor = -1;
         numActivePointLights = -1;
         worldProjectionMatrix = -1;
 
@@ -145,6 +146,8 @@ namespace renderbox {
 
                 CASE_UNIFORM(17, 'i', sceneAmbientColor)
                 CASE_UNIFORM(17, 'm', worldNormalMatrix)
+
+                CASE_UNIFORM(18, 'D', materialDiffuseMap)
 
                 CASE_UNIFORM(20, 'A', materialAmbientColor)
                 CASE_UNIFORM(20, 'D', materialDiffuseColor)

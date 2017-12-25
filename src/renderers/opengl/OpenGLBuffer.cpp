@@ -8,9 +8,9 @@ namespace renderbox {
         glGenBuffers(1, &bufferId);
     }
 
-    GLuint OpenGLBuffer::getBufferId() const {
-        return bufferId;
-    }
+    OpenGLBuffer::~OpenGLBuffer() {
+        glDeleteBuffers(1, &bufferId);
+    };
 
     void OpenGLBuffer::bindBuffer(GLenum target) {
         glBindBuffer(target, bufferId);
@@ -32,6 +32,10 @@ namespace renderbox {
 
     void OpenGLBuffer::buffer(const std::vector<glm::uvec3> &data, GLenum usage) {
         buffer(&data[0], (GLsizei) data.size() * sizeof(glm::uvec3), usage);
-    };
+    }
+
+    void OpenGLBuffer::buffer(const std::vector<glm::vec2> &data, GLenum usage) {
+        buffer(&data[0], (GLsizei) data.size() * sizeof(glm::vec2), usage);
+    }
 
 }

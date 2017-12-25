@@ -110,9 +110,11 @@ namespace renderbox {
                 if (blankObjectProperties) {
 
                     objectProperties->getBuffer(0)->buffer(object->getGeometry()->getVertices());
-                    objectProperties->getBuffer(1)->buffer(object->getGeometry()->getNormals());
-                    objectProperties->getBuffer(2)->buffer(object->getGeometry()->getFaces());
-                    vertexArray->setElementBuffer(objectProperties->getBuffer(2));
+                    objectProperties->getBuffer(1)->buffer(object->getGeometry()->getUVs());
+                    objectProperties->getBuffer(2)->buffer(object->getGeometry()->getNormals());
+
+                    objectProperties->getBuffer(3)->buffer(object->getGeometry()->getFaces());
+                    vertexArray->setElementBuffer(objectProperties->getBuffer(3));
 
                     goto UpdateVertexArray;
 
@@ -123,7 +125,10 @@ namespace renderbox {
                     vertexArray->setAttributeBuffer(program, "rb_vertexPosition", objectProperties->getBuffer(0));
                     vertexArray->enableAttribute(program, "rb_vertexPosition");
 
-                    vertexArray->setAttributeBuffer(program, "rb_vertexNormal", objectProperties->getBuffer(1));
+                    vertexArray->setAttributeBuffer(program, "rb_vertexUV", objectProperties->getBuffer(1), 2);
+                    vertexArray->enableAttribute(program, "rb_vertexUV");
+
+                    vertexArray->setAttributeBuffer(program, "rb_vertexNormal", objectProperties->getBuffer(2));
                     vertexArray->enableAttribute(program, "rb_vertexNormal");
 
                 }
@@ -162,6 +167,23 @@ namespace renderbox {
                                        glm::value_ptr(worldProjectionMatrix));
                 }
 
+                // FIXME: Currently the diffuse map is bound when the program specifies rb_materialDiffuseMap and the
+                // diffuse map is available. However, the case when the diffuse map is unavailable is not addressed.
+                OpenGLTexture *diffuseMap(nullptr);
+                if (object->getMaterial()->isDiffuseMaterial()) {
+                    bool blankTexture;
+                    diffuseMap = objectProperties->getTexture(0, &blankTexture);
+                    if (blankTexture) {
+                        auto material = dynamic_cast<DiffuseMaterial *>(object->getMaterial().get());
+                        diffuseMap->texture(material->getDiffuseMap().get());
+                    }
+                }
+                if (program->materialDiffuseMap != -1 && diffuseMap) {
+                    glActiveTexture(GL_TEXTURE0);
+                    diffuseMap->bindTexture();
+                    glUniform1i(program->materialDiffuseMap, 0);
+                }
+
                 // Bind vertex array
                 vertexArray->bindVertexArray();
 
@@ -178,12 +200,12 @@ namespace renderbox {
 
     void OpenGLRenderer::loadObject(Object *object) {
         OpenGLObjectProperties *objectProperties = properties.getObjectProperties(object);
-        OpenGLVertexArray *vertexArray = objectProperties->getVertexArray(0);
 
         objectProperties->getBuffer(0)->buffer(object->getGeometry()->getVertices());
-        objectProperties->getBuffer(1)->buffer(object->getGeometry()->getNormals());
-        objectProperties->getBuffer(2)->buffer(object->getGeometry()->getFaces());
-        vertexArray->setElementBuffer(objectProperties->getBuffer(2));
+        objectProperties->getBuffer(1)->buffer(object->getGeometry()->getUVs());
+        objectProperties->getBuffer(2)->buffer(object->getGeometry()->getNormals());
+
+        objectProperties->getBuffer(3)->buffer(object->getGeometry()->getFaces());
     }
 
 }

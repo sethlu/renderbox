@@ -10,20 +10,21 @@
 #endif
 #include <vector>
 #include <glm/vec3.hpp>
+#include <glm/vec2.hpp>
 
 
 namespace renderbox {
 
     class OpenGLBuffer {
-    protected:
-
-        GLuint bufferId;
-
     public:
 
         OpenGLBuffer();
 
-        GLuint getBufferId() const;
+        virtual ~OpenGLBuffer();
+
+        GLuint getBufferId() const {
+            return bufferId;
+        }
 
         void bindBuffer(GLenum target = GL_ARRAY_BUFFER);
 
@@ -34,6 +35,12 @@ namespace renderbox {
         void buffer(const std::vector<glm::vec3> &data, GLenum usage = GL_STATIC_DRAW);
 
         void buffer(const std::vector<glm::uvec3> &data, GLenum usage = GL_STATIC_DRAW);
+
+        void buffer(const std::vector<glm::vec2> &data, GLenum usage = GL_STATIC_DRAW);
+
+    protected:
+
+        GLuint bufferId;
 
     };
 

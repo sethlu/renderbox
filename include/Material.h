@@ -4,6 +4,7 @@
 
 #include <string>
 #include <glm/vec3.hpp>
+#include "Texture.h"
 
 namespace renderbox {
 
@@ -43,7 +44,7 @@ namespace renderbox {
     class AmbientMaterial {
     public:
 
-        explicit AmbientMaterial(glm::vec3 ambientColor) : ambientColor(ambientColor) {};
+        explicit AmbientMaterial(glm::vec3 ambientColor) : ambientColor(ambientColor) { };
 
         glm::vec3 getAmbientColor() const { return ambientColor; }
 
@@ -58,15 +59,21 @@ namespace renderbox {
     class DiffuseMaterial {
     public:
 
-        explicit DiffuseMaterial(glm::vec3 diffuseColor) : diffuseColor(diffuseColor) {};
+        explicit DiffuseMaterial(glm::vec3 diffuseColor) : diffuseColor(diffuseColor) { };
 
         glm::vec3 getDiffuseColor() const { return diffuseColor; }
 
         void setDiffuseColor(glm::vec3 &diffuseColor_) { diffuseColor = diffuseColor_; }
 
+        std::shared_ptr<Texture> getDiffuseMap() const { return diffuseMap; }
+
+        void setDiffuseMap(std::shared_ptr<Texture> diffuseMap_) { diffuseMap = diffuseMap_; }
+
     protected:
 
         glm::vec3 diffuseColor;
+
+        std::shared_ptr<Texture> diffuseMap;
 
     };
 

@@ -45,6 +45,11 @@ KEYWORD(Ns)                  // Specular exponent
 KEYWORD(sharpness)           // Sharpness
 KEYWORD(Ni)                  // Optical density
 
+// Texture map
+
+KEYWORD(map_Ka)              // Ambient texture
+KEYWORD(map_Kd)              // Diffuse texture
+KEYWORD(map_Ks)              // Specular texture
 
 
 #undef KEYWORD
