@@ -23,7 +23,7 @@ namespace renderbox {
     void OpenGLBuffer::buffer(const void *data, GLsizei size, GLenum usage) {
         bindBuffer(GL_ARRAY_BUFFER);
         glBufferData(GL_ARRAY_BUFFER, size, data, usage);
-        unbindBuffer();
+        unbindBuffer(GL_ARRAY_BUFFER);
     }
 
     void OpenGLBuffer::buffer(const std::vector<glm::vec3> &data, GLenum usage) {
