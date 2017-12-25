@@ -537,7 +537,7 @@ namespace renderbox {
         }
 
         geometry->getVertices().emplace_back(vertices[v]);
-        if (vt >= 0) geometry->getUVs().emplace_back(uvs[v]);
+        if (vt >= 0) geometry->getUVs().emplace_back(uvs[vt]);
         if (vn >= 0) geometry->getNormals().emplace_back(normals[vn]);
 
         auto index = static_cast<unsigned>(geometry->getVertices().size() - 1);
