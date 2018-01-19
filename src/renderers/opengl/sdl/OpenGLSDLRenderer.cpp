@@ -1,5 +1,4 @@
 
-#include "platform.h"
 #if defined(__IPHONEOS__)
 
 #include <OpenGLES/ES3/gl.h>
@@ -43,9 +42,6 @@ namespace renderbox {
 		
 		// Update frame buffer id
 		glGetIntegerv(GL_FRAMEBUFFER_BINDING, (GLint *) &framebufferId);
-		
-        // Enable depth tests
-        glEnable(GL_DEPTH_TEST);
 
     }
 

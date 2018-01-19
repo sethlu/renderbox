@@ -1,7 +1,6 @@
 #include "platform.h"
 #if defined(__MACOSX__)
 
-#include <OpenGL/OpenGL.h>
 #include "OpenGLGLFWRenderer.h"
 
 
@@ -35,9 +34,6 @@ namespace renderbox {
         }
         glfwMakeContextCurrent(window);
         glfwSwapInterval(1);
-
-        // Enable depth tests
-        glEnable(GL_DEPTH_TEST);
 
     }
 
