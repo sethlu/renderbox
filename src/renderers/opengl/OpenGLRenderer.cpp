@@ -170,15 +170,15 @@ namespace renderbox {
                                        glm::value_ptr(worldProjectionMatrix));
                 }
 
-                // FIXME: Currently the diffuse map is bound when the program specifies rb_materialDiffuseMap and the
-                // diffuse map is available. However, the case when the diffuse map is unavailable is not addressed.
                 OpenGLTexture *diffuseMap(nullptr);
                 if (object->getMaterial()->isDiffuseMaterial()) {
                     bool blankTexture;
                     diffuseMap = objectProperties->getTexture(0, &blankTexture);
                     if (blankTexture) {
-                        auto material = dynamic_cast<DiffuseMaterial *>(object->getMaterial().get());
-                        diffuseMap->texture(material->getDiffuseMap().get());
+                        if (auto material = dynamic_cast<DiffuseMaterial *>(object->getMaterial().get())) {
+                            auto texture = material->getDiffuseMap(); // Need to check if texture exists
+                            if (texture) diffuseMap->texture(material->getDiffuseMap().get());
+                        }
                     }
                 }
                 if (program->materialDiffuseMap != -1 && diffuseMap) {
