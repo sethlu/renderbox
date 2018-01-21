@@ -1,5 +1,5 @@
 R"(
 
-vertexWorldNormal = normalize(vec3(rb_worldMatrix * vec4(rb_vertexPosition, 1)));
+vertexWorldNormal = normalize(vec3(rb_worldNormalMatrix * vec4(rb_vertexNormal, 1)));
 
 )"
