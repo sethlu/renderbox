@@ -14,6 +14,9 @@
 namespace renderbox {
 
     class Geometry {
+
+        friend class OpenGLRenderer;
+
     public:
 
         std::vector<glm::vec3> &getVertices();

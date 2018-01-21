@@ -16,6 +16,9 @@
 namespace renderbox {
 
     class OpenGLBuffer {
+
+        friend class OpenGLRenderer;
+
     public:
 
         OpenGLBuffer();
@@ -38,9 +41,16 @@ namespace renderbox {
 
         void buffer(const std::vector<glm::vec2> &data, GLenum usage = GL_STATIC_DRAW);
 
+        GLsizei getSize() { return size; }
+
     protected:
 
         GLuint bufferId;
+
+        /**
+         * @var Size of the data buffered
+         */
+        GLsizei size;
 
     };
 

@@ -30,7 +30,9 @@ namespace renderbox {
 
         void enableAttribute(OpenGLProgram *program, const char *name);
 
-        void setAttributeBuffer(GLuint location,
+        void disableAttribute(OpenGLProgram *program, const char *name);
+
+        void setAttributeBuffer(GLuint index,
                                 OpenGLBuffer *buffer,
                                 GLint size = 3,
                                 GLenum type = GL_FLOAT,
@@ -44,6 +46,8 @@ namespace renderbox {
                                 GLenum type = GL_FLOAT,
                                 GLsizei stride = 0,
                                 const GLvoid *pointer = (GLvoid *) 0);
+
+        void setAttribute(GLuint index, const glm::vec2 &value);
 
         void setElementBuffer(OpenGLBuffer *buffer);
 

@@ -50,9 +50,18 @@ namespace renderbox {
 
         std::ostringstream bootstrap;
 
-#define BOOTSTRAP(VAR, VAL) bootstrap << "#define " #VAR " " << ((VAL)) << "\n";
+#define BOOTSTRAP(VAR, VAL) bootstrap << "#define " #VAR " " << (VAL) << "\n";
 
         BOOTSTRAP(RB_NUM_POINT_LIGHTS, upperPowerOfTwo(numPointLights));
+
+        // TODO: Program needs to be invalidated if material updates
+        if (material->isDiffuseMaterial()) {
+            if (auto diffuseMaterial = dynamic_cast<DiffuseMaterial *>(material)) {
+                if (diffuseMaterial->getDiffuseMap()) {
+                    BOOTSTRAP(RB_MATERIAL_DIFFUSE_MAP, ""); // Has diffuse map
+                }
+            }
+        }
 
 #undef BOOTSTRAP
 

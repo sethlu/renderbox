@@ -24,7 +24,7 @@ void init() {
 
     // Scene
     scene = std::make_shared<renderbox::Scene>();
-    scene->setAmbientColor(glm::vec3(0.05f));
+    scene->setAmbientColor(glm::vec3(0.01f));
 
     // Voxel terrain
     auto voxelGeometry = std::make_shared<renderbox::VoxelGeometry>();
@@ -57,9 +57,12 @@ void init() {
 
     // Light
 
-    for (unsigned i = 0; i < 5; ++i) {
-        auto pointLight = std::make_shared<renderbox::PointLight>(glm::vec3(100));
-        pointLight->setTranslation(glm::vec3(-32 + 64 * (float) rand() / RAND_MAX, -32 + 64 * (float) rand() / RAND_MAX, 64));
+    for (unsigned i = 0; i < 8; ++i) {
+        auto pointLight = std::make_shared<renderbox::PointLight>(100.0f * normalize(glm::vec3(
+            (float) rand() / RAND_MAX, (float) rand() / RAND_MAX, (float) rand() / RAND_MAX)));
+        pointLight->setTranslation(glm::vec3(-32 + 64 * (float) rand() / RAND_MAX,
+                                             -32 + 64 * (float) rand() / RAND_MAX,
+                                                   32));
         scene->addChild(pointLight);
     }
 

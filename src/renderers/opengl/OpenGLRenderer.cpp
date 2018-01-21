@@ -112,11 +112,21 @@ namespace renderbox {
 
                 if (blankObjectProperties) {
 
-                    objectProperties->getBuffer(0)->buffer(object->getGeometry()->getVertices());
-                    objectProperties->getBuffer(1)->buffer(object->getGeometry()->getUVs());
-                    objectProperties->getBuffer(2)->buffer(object->getGeometry()->getNormals());
+                    auto geometry(object->getGeometry());
+                    auto vertices(geometry->vertices);
+                    auto uvs(geometry->uvs);
+                    auto normals(geometry->normals);
 
-                    objectProperties->getBuffer(3)->buffer(object->getGeometry()->getFaces());
+                    objectProperties->getBuffer(0)->buffer(vertices);
+
+                    if (uvs.size() == vertices.size()) objectProperties->getBuffer(1)->buffer(uvs);
+                    else if (!uvs.empty()) throw 2;
+
+                    if (normals.size() == vertices.size()) objectProperties->getBuffer(2)->buffer(normals);
+                    else if (!normals.empty()) throw 2;
+
+                    objectProperties->getBuffer(3)->buffer(geometry->faces);
+
                     vertexArray->setElementBuffer(objectProperties->getBuffer(3));
 
                     goto UpdateVertexArray;
@@ -125,14 +135,29 @@ namespace renderbox {
 
                     UpdateVertexArray:
 
-                    vertexArray->setAttributeBuffer(program, "rb_vertexPosition", objectProperties->getBuffer(0));
-                    vertexArray->enableAttribute(program, "rb_vertexPosition");
+                    auto buffer0(objectProperties->getBuffer(0));
+                    if (buffer0->size) {
+                        vertexArray->setAttributeBuffer(program, "rb_vertexPosition", buffer0);
+                        vertexArray->enableAttribute(program, "rb_vertexPosition");
+                    } else {
+                        vertexArray->disableAttribute(program, "rb_vertexPosition");
+                    }
 
-                    vertexArray->setAttributeBuffer(program, "rb_vertexUV", objectProperties->getBuffer(1), 2);
-                    vertexArray->enableAttribute(program, "rb_vertexUV");
+                    auto buffer1(objectProperties->getBuffer(1));
+                    if (buffer1->size) {
+                        vertexArray->setAttributeBuffer(program, "rb_vertexUV", buffer1, 2);
+                        vertexArray->enableAttribute(program, "rb_vertexUV");
+                    } else {
+                        vertexArray->disableAttribute(program, "rb_vertexUV");
+                    }
 
-                    vertexArray->setAttributeBuffer(program, "rb_vertexNormal", objectProperties->getBuffer(2));
-                    vertexArray->enableAttribute(program, "rb_vertexNormal");
+                    auto buffer2(objectProperties->getBuffer(2));
+                    if (buffer2->size) {
+                        vertexArray->setAttributeBuffer(program, "rb_vertexNormal", buffer2);
+                        vertexArray->enableAttribute(program, "rb_vertexNormal");
+                    } else {
+                        vertexArray->disableAttribute(program, "rb_vertexNormal");
+                    }
 
                 }
 
@@ -204,11 +229,23 @@ namespace renderbox {
     void OpenGLRenderer::loadObject(Object *object) {
         OpenGLObjectProperties *objectProperties = properties.getObjectProperties(object);
 
-        objectProperties->getBuffer(0)->buffer(object->getGeometry()->getVertices());
-        objectProperties->getBuffer(1)->buffer(object->getGeometry()->getUVs());
-        objectProperties->getBuffer(2)->buffer(object->getGeometry()->getNormals());
+        auto geometry = object->getGeometry();
+        auto vertices = geometry->vertices;
+        auto uvs = geometry->uvs;
+        auto normals = geometry->normals;
 
-        objectProperties->getBuffer(3)->buffer(object->getGeometry()->getFaces());
+        objectProperties->getBuffer(0)->buffer(vertices);
+
+        if (uvs.size() == vertices.size()) objectProperties->getBuffer(1)->buffer(uvs);
+        else if (!uvs.empty()) throw 2;
+
+        if (normals.size() == vertices.size()) objectProperties->getBuffer(2)->buffer(normals);
+        else if (!normals.empty()) throw 2;
+
+        objectProperties->getBuffer(3)->buffer(geometry->faces);
+
+        // TODO: This method doesn't update the vertex array attributes
+
     }
 
 }
