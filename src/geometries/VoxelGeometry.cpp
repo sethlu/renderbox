@@ -4,7 +4,6 @@
 #include <cfloat>
 #include <glm/geometric.hpp>
 #include "VoxelGeometry.h"
-#include "renderbox.h"
 
 
 namespace renderbox {
@@ -136,6 +135,12 @@ namespace renderbox {
         setOccupancy(glm::ivec3(position), occupancy);
     }
 
+    glm::vec3 VoxelGeometry::getGradient(int x, int y, int z) {
+        return glm::vec3(getOccupancy(x + 1, y,     z    ) - getOccupancy(x - 1, y,     z    ),
+                         getOccupancy(x,     y + 1, z    ) - getOccupancy(x,     y - 1, z    ),
+                         getOccupancy(x,     y,     z + 1) - getOccupancy(x,     y,     z - 1));
+    }
+
     float normalDistributionPDF(float x) {
         return (float) (exp(- 1.0 / 2.0 * x * x) / sqrt(M_PI_2));
     }
@@ -175,7 +180,7 @@ namespace renderbox {
         }
     }
 
-    int edgeTable[256] = {
+    unsigned edgeTable[256] = {
             0x0  , 0x109, 0x203, 0x30a, 0x406, 0x50f, 0x605, 0x70c,
             0x80c, 0x905, 0xa0f, 0xb06, 0xc0a, 0xd03, 0xe09, 0xf00,
             0x190, 0x99 , 0x393, 0x29a, 0x596, 0x49f, 0x795, 0x69c,
@@ -478,137 +483,117 @@ namespace renderbox {
 
     void VoxelGeometry::addMarchingCube(int x, int y, int z,
                                         float isolevel,
-                                        std::vector<glm::vec3> &vertices,
-                                        std::vector<glm::vec3> &normals,
-                                        std::vector<glm::uvec3> &faces) {
+                                        std::vector<glm::vec3> &cacheVertices,
+                                        std::vector<glm::vec3> &cacheNormals,
+                                        std::vector<glm::uvec3> &cacheFaces) {
 
-        float cubeVertexOccupancies[8] = {
-                getOccupancy(x - 1, y    , z - 1),
-                getOccupancy(x,     y    , z - 1),
-                getOccupancy(x,     y - 1, z - 1),
-                getOccupancy(x - 1, y - 1, z - 1),
-                getOccupancy(x - 1, y    , z    ),
-                getOccupancy(x,     y    , z    ),
-                getOccupancy(x,     y - 1, z    ),
-                getOccupancy(x - 1, y - 1, z    )
+        float occupancies[8]{
+            getOccupancy(x - 1, y    , z - 1),
+            getOccupancy(x,     y    , z - 1),
+            getOccupancy(x,     y - 1, z - 1),
+            getOccupancy(x - 1, y - 1, z - 1),
+            getOccupancy(x - 1, y    , z    ),
+            getOccupancy(x,     y    , z    ),
+            getOccupancy(x,     y - 1, z    ),
+            getOccupancy(x - 1, y - 1, z    ),
         };
 
-        unsigned int cubeIndex = 0;
-        if (cubeVertexOccupancies[0] < isolevel) cubeIndex |= 0b1;
-        if (cubeVertexOccupancies[1] < isolevel) cubeIndex |= 0b10;
-        if (cubeVertexOccupancies[2] < isolevel) cubeIndex |= 0b100;
-        if (cubeVertexOccupancies[3] < isolevel) cubeIndex |= 0b1000;
-        if (cubeVertexOccupancies[4] < isolevel) cubeIndex |= 0b10000;
-        if (cubeVertexOccupancies[5] < isolevel) cubeIndex |= 0b100000;
-        if (cubeVertexOccupancies[6] < isolevel) cubeIndex |= 0b1000000;
-        if (cubeVertexOccupancies[7] < isolevel) cubeIndex |= 0b10000000;
+        unsigned char cubeIndex = 0;
+        if (occupancies[0] < isolevel) cubeIndex |= 0b1;
+        if (occupancies[1] < isolevel) cubeIndex |= 0b10;
+        if (occupancies[2] < isolevel) cubeIndex |= 0b100;
+        if (occupancies[3] < isolevel) cubeIndex |= 0b1000;
+        if (occupancies[4] < isolevel) cubeIndex |= 0b10000;
+        if (occupancies[5] < isolevel) cubeIndex |= 0b100000;
+        if (occupancies[6] < isolevel) cubeIndex |= 0b1000000;
+        if (occupancies[7] < isolevel) cubeIndex |= 0b10000000;
 
-        if (edgeTable[cubeIndex] == 0) {
-            return;
-        }
+        if (edgeTable[cubeIndex] == 0) return;
 
-        float length = 1.0f, width = 1.0f, height = 1.0f;
-        glm::vec3 vertexList[12], vertexNormals[12];
-        glm::vec3 position = glm::vec3(x * length, y * width, z * height);
-        glm::vec3 cubeVertices[8] = {
-                position + glm::vec3(- length / 2,   width / 2, - height / 2),
-                position + glm::vec3(  length / 2,   width / 2, - height / 2),
-                position + glm::vec3(  length / 2, - width / 2, - height / 2),
-                position + glm::vec3(- length / 2, - width / 2, - height / 2),
-                position + glm::vec3(- length / 2,   width / 2,   height / 2),
-                position + glm::vec3(  length / 2,   width / 2,   height / 2),
-                position + glm::vec3(  length / 2, - width / 2,   height / 2),
-                position + glm::vec3(- length / 2, - width / 2,   height / 2)
+        glm::vec3 cubeVertices[8]{
+            glm::vec3(x - 0.5f, y + 0.5f, z - 0.5f),
+            glm::vec3(x + 0.5f, y + 0.5f, z - 0.5f),
+            glm::vec3(x + 0.5f, y - 0.5f, z - 0.5f),
+            glm::vec3(x - 0.5f, y - 0.5f, z - 0.5f),
+            glm::vec3(x - 0.5f, y + 0.5f, z + 0.5f),
+            glm::vec3(x + 0.5f, y + 0.5f, z + 0.5f),
+            glm::vec3(x + 0.5f, y - 0.5f, z + 0.5f),
+            glm::vec3(x - 0.5f, y - 0.5f, z + 0.5f),
         };
-        glm::vec3 cubeVertexGradients[8] = {
-                glm::vec3(getOccupancy(x, y, z - 1) - getOccupancy(x - 2, y, z - 1),
-                          getOccupancy(x - 1, y + 1, z - 1) - getOccupancy(x - 1, y - 1, z - 1),
-                          getOccupancy(x - 1, y, z) - getOccupancy(x - 1, y, z - 2)),
-                glm::vec3(getOccupancy(x + 1, y, z - 1) - getOccupancy(x - 1, y, z - 1),
-                          getOccupancy(x, y + 1, z - 1) - getOccupancy(x, y - 1, z - 1),
-                          getOccupancy(x, y, z) - getOccupancy(x, y, z - 2)),
-                glm::vec3(getOccupancy(x + 1, y - 1, z - 1) - getOccupancy(x - 1, y - 1, z - 1),
-                          getOccupancy(x, y, z - 1) - getOccupancy(x, y - 2, z - 1),
-                          getOccupancy(x, y - 1, z) - getOccupancy(x, y - 1, z - 2)),
-                glm::vec3(getOccupancy(x, y - 1, z - 1) - getOccupancy(x - 2, y - 1, z - 1),
-                          getOccupancy(x - 1, y, z - 1) - getOccupancy(x - 1, y - 2, z - 1),
-                          getOccupancy(x - 1, y - 1, z) - getOccupancy(x - 1, y - 1, z - 2)),
-                glm::vec3(getOccupancy(x, y, z) - getOccupancy(x - 2, y, z),
-                          getOccupancy(x - 1, y + 1, z) - getOccupancy(x - 1, y - 1, z),
-                          getOccupancy(x - 1, y, z + 1) - getOccupancy(x - 1, y, z - 1)),
-                glm::vec3(getOccupancy(x + 1, y, z) - getOccupancy(x - 1, y, z),
-                          getOccupancy(x, y + 1, z) - getOccupancy(x, y - 1, z),
-                          getOccupancy(x, y, z + 1) - getOccupancy(x, y, z - 1)),
-                glm::vec3(getOccupancy(x + 1, y - 1, z) - getOccupancy(x - 1, y - 1, z),
-                          getOccupancy(x, y, z) - getOccupancy(x, y - 2, z),
-                          getOccupancy(x, y - 1, z + 1) - getOccupancy(x, y - 1, z - 1)),
-                glm::vec3(getOccupancy(x, y - 1, z) - getOccupancy(x - 2, y - 1, z),
-                          getOccupancy(x - 1, y, z) - getOccupancy(x - 1, y - 2, z),
-                          getOccupancy(x - 1, y - 1, z + 1) - getOccupancy(x - 1, y - 1, z - 1))
+        glm::vec3 cubeGradients[8]{
+            getGradient(x - 1, y,     z - 1),
+            getGradient(x,     y,     z - 1),
+            getGradient(x,     y - 1, z - 1),
+            getGradient(x - 1, y - 1, z - 1),
+            getGradient(x - 1, y,     z    ),
+            getGradient(x,     y,     z    ),
+            getGradient(x,     y - 1, z    ),
+            getGradient(x - 1, y - 1, z    ),
         };
 
-        int edges = edgeTable[cubeIndex];
+        glm::vec3 vertices[12], normals[12];
+        unsigned edges = edgeTable[cubeIndex];
         if (edges & 0b1) {
-            vertexList[0] = interpolateVector(cubeVertices[0], cubeVertices[1], cubeVertexOccupancies[0], cubeVertexOccupancies[1], isolevel);
-            vertexNormals[0] = interpolateVector(cubeVertexGradients[0], cubeVertexGradients[1], cubeVertexOccupancies[0], cubeVertexOccupancies[1], isolevel);
+            vertices[0] = interpolateVector(cubeVertices[0], cubeVertices[1], occupancies[0], occupancies[1], isolevel);
+            normals[0] = - interpolateVector(cubeGradients[0], cubeGradients[1], occupancies[0], occupancies[1], isolevel);
         }
         if (edges & 0b10) {
-            vertexList[1] = interpolateVector(cubeVertices[1], cubeVertices[2], cubeVertexOccupancies[1], cubeVertexOccupancies[2], isolevel);
-            vertexNormals[1] = interpolateVector(cubeVertexGradients[1], cubeVertexGradients[2], cubeVertexOccupancies[1], cubeVertexOccupancies[2], isolevel);
+            vertices[1] = interpolateVector(cubeVertices[1], cubeVertices[2], occupancies[1], occupancies[2], isolevel);
+            normals[1] = - interpolateVector(cubeGradients[1], cubeGradients[2], occupancies[1], occupancies[2], isolevel);
         }
         if (edges & 0b100) {
-            vertexList[2] = interpolateVector(cubeVertices[2], cubeVertices[3], cubeVertexOccupancies[2], cubeVertexOccupancies[3], isolevel);
-            vertexNormals[2] = interpolateVector(cubeVertexGradients[2], cubeVertexGradients[3], cubeVertexOccupancies[2], cubeVertexOccupancies[3], isolevel);
+            vertices[2] = interpolateVector(cubeVertices[2], cubeVertices[3], occupancies[2], occupancies[3], isolevel);
+            normals[2] = - interpolateVector(cubeGradients[2], cubeGradients[3], occupancies[2], occupancies[3], isolevel);
         }
         if (edges & 0b1000) {
-            vertexList[3] = interpolateVector(cubeVertices[3], cubeVertices[0], cubeVertexOccupancies[3], cubeVertexOccupancies[0], isolevel);
-            vertexNormals[3] = interpolateVector(cubeVertexGradients[3], cubeVertexGradients[0], cubeVertexOccupancies[3], cubeVertexOccupancies[0], isolevel);
+            vertices[3] = interpolateVector(cubeVertices[3], cubeVertices[0], occupancies[3], occupancies[0], isolevel);
+            normals[3] = - interpolateVector(cubeGradients[3], cubeGradients[0], occupancies[3], occupancies[0], isolevel);
         }
         if (edges & 0b10000) {
-            vertexList[4] = interpolateVector(cubeVertices[4], cubeVertices[5], cubeVertexOccupancies[4], cubeVertexOccupancies[5], isolevel);
-            vertexNormals[4] = interpolateVector(cubeVertexGradients[4], cubeVertexGradients[5], cubeVertexOccupancies[4], cubeVertexOccupancies[5], isolevel);
+            vertices[4] = interpolateVector(cubeVertices[4], cubeVertices[5], occupancies[4], occupancies[5], isolevel);
+            normals[4] = - interpolateVector(cubeGradients[4], cubeGradients[5], occupancies[4], occupancies[5], isolevel);
         }
         if (edges & 0b100000) {
-            vertexList[5] = interpolateVector(cubeVertices[5], cubeVertices[6], cubeVertexOccupancies[5], cubeVertexOccupancies[6], isolevel);
-            vertexNormals[5] = interpolateVector(cubeVertexGradients[5], cubeVertexGradients[6], cubeVertexOccupancies[5], cubeVertexOccupancies[6], isolevel);
+            vertices[5] = interpolateVector(cubeVertices[5], cubeVertices[6], occupancies[5], occupancies[6], isolevel);
+            normals[5] = - interpolateVector(cubeGradients[5], cubeGradients[6], occupancies[5], occupancies[6], isolevel);
         }
         if (edges & 0b1000000) {
-            vertexList[6] = interpolateVector(cubeVertices[6], cubeVertices[7], cubeVertexOccupancies[6], cubeVertexOccupancies[7], isolevel);
-            vertexNormals[6] = interpolateVector(cubeVertexGradients[6], cubeVertexGradients[7], cubeVertexOccupancies[6], cubeVertexOccupancies[7], isolevel);
+            vertices[6] = interpolateVector(cubeVertices[6], cubeVertices[7], occupancies[6], occupancies[7], isolevel);
+            normals[6] = - interpolateVector(cubeGradients[6], cubeGradients[7], occupancies[6], occupancies[7], isolevel);
         }
         if (edges & 0b10000000) {
-            vertexList[7] = interpolateVector(cubeVertices[7], cubeVertices[4], cubeVertexOccupancies[7], cubeVertexOccupancies[4], isolevel);
-            vertexNormals[7] = interpolateVector(cubeVertexGradients[7], cubeVertexGradients[4], cubeVertexOccupancies[7], cubeVertexOccupancies[4], isolevel);
+            vertices[7] = interpolateVector(cubeVertices[7], cubeVertices[4], occupancies[7], occupancies[4], isolevel);
+            normals[7] = - interpolateVector(cubeGradients[7], cubeGradients[4], occupancies[7], occupancies[4], isolevel);
         }
         if (edges & 0b100000000) {
-            vertexList[8] = interpolateVector(cubeVertices[0], cubeVertices[4], cubeVertexOccupancies[0], cubeVertexOccupancies[4], isolevel);
-            vertexNormals[8] = interpolateVector(cubeVertexGradients[0], cubeVertexGradients[4], cubeVertexOccupancies[0], cubeVertexOccupancies[4], isolevel);
+            vertices[8] = interpolateVector(cubeVertices[0], cubeVertices[4], occupancies[0], occupancies[4], isolevel);
+            normals[8] = - interpolateVector(cubeGradients[0], cubeGradients[4], occupancies[0], occupancies[4], isolevel);
         }
         if (edges & 0b1000000000) {
-            vertexList[9] = interpolateVector(cubeVertices[1], cubeVertices[5], cubeVertexOccupancies[1], cubeVertexOccupancies[5], isolevel);
-            vertexNormals[9] = interpolateVector(cubeVertexGradients[1], cubeVertexGradients[5], cubeVertexOccupancies[1], cubeVertexOccupancies[5], isolevel);
+            vertices[9] = interpolateVector(cubeVertices[1], cubeVertices[5], occupancies[1], occupancies[5], isolevel);
+            normals[9] = - interpolateVector(cubeGradients[1], cubeGradients[5], occupancies[1], occupancies[5], isolevel);
         }
         if (edges & 0b10000000000) {
-            vertexList[10] = interpolateVector(cubeVertices[2], cubeVertices[6], cubeVertexOccupancies[2], cubeVertexOccupancies[6], isolevel);
-            vertexNormals[10] = interpolateVector(cubeVertexGradients[2], cubeVertexGradients[6], cubeVertexOccupancies[2], cubeVertexOccupancies[6], isolevel);
+            vertices[10] = interpolateVector(cubeVertices[2], cubeVertices[6], occupancies[2], occupancies[6], isolevel);
+            normals[10] = - interpolateVector(cubeGradients[2], cubeGradients[6], occupancies[2], occupancies[6], isolevel);
         }
         if (edges & 0b100000000000) {
-            vertexList[11] = interpolateVector(cubeVertices[3], cubeVertices[7], cubeVertexOccupancies[3], cubeVertexOccupancies[7], isolevel);
-            vertexNormals[11] = interpolateVector(cubeVertexGradients[3], cubeVertexGradients[7], cubeVertexOccupancies[3], cubeVertexOccupancies[7], isolevel);
+            vertices[11] = interpolateVector(cubeVertices[3], cubeVertices[7], occupancies[3], occupancies[7], isolevel);
+            normals[11] = - interpolateVector(cubeGradients[3], cubeGradients[7], occupancies[3], occupancies[7], isolevel);
         }
 
         for (int i = 0; triTable[cubeIndex][i] != -1; i += 3) {
-            unsigned long n = vertices.size();
+            unsigned long n = cacheVertices.size();
 
-            vertices.push_back(vertexList[triTable[cubeIndex][i]]);
-            vertices.push_back(vertexList[triTable[cubeIndex][i + 1]]);
-            vertices.push_back(vertexList[triTable[cubeIndex][i + 2]]);
+            cacheVertices.push_back(vertices[triTable[cubeIndex][i]]);
+            cacheVertices.push_back(vertices[triTable[cubeIndex][i + 1]]);
+            cacheVertices.push_back(vertices[triTable[cubeIndex][i + 2]]);
 
-            normals.push_back(-glm::normalize(vertexNormals[triTable[cubeIndex][i]]));
-            normals.push_back(-glm::normalize(vertexNormals[triTable[cubeIndex][i + 1]]));
-            normals.push_back(-glm::normalize(vertexNormals[triTable[cubeIndex][i + 2]]));
+            cacheNormals.push_back(glm::normalize(normals[triTable[cubeIndex][i]]));
+            cacheNormals.push_back(glm::normalize(normals[triTable[cubeIndex][i + 1]]));
+            cacheNormals.push_back(glm::normalize(normals[triTable[cubeIndex][i + 2]]));
 
-            faces.emplace_back(n, n + 1, n + 2);
+            cacheFaces.emplace_back(n, n + 1, n + 2);
         }
 
     }
@@ -618,6 +603,8 @@ namespace renderbox {
         vertices.clear();
         normals.clear();
         faces.clear();
+
+        unsigned edgeVertices[VOXEL_CHUNK_DIMENSION3 * 3];
 
         for (auto &voxelChunkPlane : voxelChunkPlanes) {
             SparseVoxelChunkPlane *chunkPlane = voxelChunkPlane.second;
@@ -640,19 +627,103 @@ namespace renderbox {
                         voxelChunk->cacheNormals.clear();
                         voxelChunk->cacheFaces.clear();
 
-                        for (int ix = 1; ix < VOXEL_CHUNK_DIMENSION; ++ix) {
-                            for (int iy = 1; iy < VOXEL_CHUNK_DIMENSION; ++iy) {
-                                for (int iz = 1; iz < VOXEL_CHUNK_DIMENSION; ++iz) {
-                                    addMarchingCube(cx * VOXEL_CHUNK_DIMENSION + ix,
-                                                    cy * VOXEL_CHUNK_DIMENSION + iy,
-                                                    cz * VOXEL_CHUNK_DIMENSION + iz,
-                                                    isolevel,
-                                                    voxelChunk->cacheVertices,
-                                                    voxelChunk->cacheNormals,
-                                                    voxelChunk->cacheFaces);
+#define EDGE(X, Y, Z, I) (3 * VOXEL_CHUNK_DIMENSION2 * (X) + 3 * VOXEL_CHUNK_DIMENSION * (Y) + 3 * (Z) + (I))
+#define FROM_EDGE(E, X, Y, Z, I) \
+    (I) = (E) % 3; \
+    (Z) = (E) / 3 % VOXEL_CHUNK_DIMENSION; \
+    (Y) = (E) / (3 * VOXEL_CHUNK_DIMENSION) % VOXEL_CHUNK_DIMENSION; \
+    (X) = (E) / (3 * VOXEL_CHUNK_DIMENSION2); // This macro is for now left as reference
+
+                        for (auto &edgeVertex : edgeVertices) edgeVertex = INT_MAX;
+                        unsigned vertexIndex = 0;
+
+                        for (unsigned ix = 1; ix < VOXEL_CHUNK_DIMENSION; ++ix) {
+                            for (unsigned iy = 1; iy < VOXEL_CHUNK_DIMENSION; ++iy) {
+                                for (unsigned iz = 1; iz < VOXEL_CHUNK_DIMENSION; ++iz) {
+
+                                    int x = cx * VOXEL_CHUNK_DIMENSION + ix;
+                                    int y = cy * VOXEL_CHUNK_DIMENSION + iy;
+                                    int z = cz * VOXEL_CHUNK_DIMENSION + iz;
+
+                                    float occupancies[8]{
+                                        getOccupancy(x - 1, y    , z - 1),
+                                        getOccupancy(x,     y    , z - 1),
+                                        getOccupancy(x,     y - 1, z - 1),
+                                        getOccupancy(x - 1, y - 1, z - 1),
+                                        getOccupancy(x - 1, y    , z    ),
+                                        getOccupancy(x,     y    , z    ),
+                                        getOccupancy(x,     y - 1, z    ),
+                                        getOccupancy(x - 1, y - 1, z    )
+                                    };
+
+                                    unsigned char cubeIndex = 0;
+                                    if (occupancies[0] < isolevel) cubeIndex |= 0b1;
+                                    if (occupancies[1] < isolevel) cubeIndex |= 0b10;
+                                    if (occupancies[2] < isolevel) cubeIndex |= 0b100;
+                                    if (occupancies[3] < isolevel) cubeIndex |= 0b1000;
+                                    if (occupancies[4] < isolevel) cubeIndex |= 0b10000;
+                                    if (occupancies[5] < isolevel) cubeIndex |= 0b100000;
+                                    if (occupancies[6] < isolevel) cubeIndex |= 0b1000000;
+                                    if (occupancies[7] < isolevel) cubeIndex |= 0b10000000;
+
+                                    if (edgeTable[cubeIndex] == 0) continue;
+
+#define USE_VERTEX(VERTEX, Ax, Ay, Az, Bx, By, Bz) \
+    if (edgeVertices[VERTEX] == INT_MAX) { \
+        edgeVertices[VERTEX] = vertexIndex++; \
+        voxelChunk->cacheVertices.emplace_back( \
+            interpolateVector(glm::vec3((Ax) + 0.5f, (Ay) + 0.5f, (Az) + 0.5f), glm::vec3((Bx) + 0.5f, (By) + 0.5f, (Bz) + 0.5f), \
+                              getOccupancy((Ax), (Ay), (Az)), getOccupancy((Bx), (By), (Bz)), isolevel)); \
+        voxelChunk->cacheNormals.emplace_back( \
+            - glm::normalize(interpolateVector(getGradient((Ax), (Ay), (Az)), getGradient((Bx), (By), (Bz)), \
+                                               getOccupancy((Ax), (Ay), (Az)), getOccupancy((Bx), (By), (Bz)), isolevel))); \
+    }
+
+                                    unsigned jx = ix - 1, jy = iy - 1, jz = iz - 1;
+                                    unsigned edgeToVertex[12]{
+                                        EDGE(jx, iy, jz, 0),
+                                        EDGE(ix, jy, jz, 1),
+                                        EDGE(jx, jy, jz, 0),
+                                        EDGE(jx, jy, jz, 1),
+                                        EDGE(jx, iy, iz, 0),
+                                        EDGE(ix, jy, iz, 1),
+                                        EDGE(jx, jy, iz, 0),
+                                        EDGE(jx, jy, iz, 1),
+                                        EDGE(jx, iy, jz, 2),
+                                        EDGE(ix, iy, jz, 2),
+                                        EDGE(ix, jy, jz, 2),
+                                        EDGE(jx, jy, jz, 2),
+                                    };
+
+                                    unsigned edges = edgeTable[cubeIndex];
+                                    if (edges & 0b1)            USE_VERTEX(edgeToVertex[0],  x - 1, y,     z - 1, x,     y,     z - 1);
+                                    if (edges & 0b10)           USE_VERTEX(edgeToVertex[1],  x,     y,     z - 1, x,     y - 1, z - 1);
+                                    if (edges & 0b100)          USE_VERTEX(edgeToVertex[2],  x,     y - 1, z - 1, x - 1, y - 1, z - 1);
+                                    if (edges & 0b1000)         USE_VERTEX(edgeToVertex[3],  x - 1, y - 1, z - 1, x - 1, y,     z - 1);
+                                    if (edges & 0b10000)        USE_VERTEX(edgeToVertex[4],  x - 1, y,     z,     x,     y,     z    );
+                                    if (edges & 0b100000)       USE_VERTEX(edgeToVertex[5],  x,     y,     z,     x,     y - 1, z    );
+                                    if (edges & 0b1000000)      USE_VERTEX(edgeToVertex[6],  x,     y - 1, z,     x - 1, y - 1, z    );
+                                    if (edges & 0b10000000)     USE_VERTEX(edgeToVertex[7],  x - 1, y - 1, z,     x - 1, y,     z    );
+                                    if (edges & 0b100000000)    USE_VERTEX(edgeToVertex[8],  x - 1, y,     z - 1, x - 1, y,     z    );
+                                    if (edges & 0b1000000000)   USE_VERTEX(edgeToVertex[9],  x,     y,     z - 1, x,     y,     z    );
+                                    if (edges & 0b10000000000)  USE_VERTEX(edgeToVertex[10], x,     y - 1, z - 1, x,     y - 1, z    );
+                                    if (edges & 0b100000000000) USE_VERTEX(edgeToVertex[11], x - 1, y - 1, z - 1, x - 1, y - 1, z    );
+
+                                    for (int i = 0; triTable[cubeIndex][i] != -1; i += 3) {
+                                        voxelChunk->cacheFaces.emplace_back(
+                                            edgeVertices[edgeToVertex[triTable[cubeIndex][i    ]]],
+                                            edgeVertices[edgeToVertex[triTable[cubeIndex][i + 1]]],
+                                            edgeVertices[edgeToVertex[triTable[cubeIndex][i + 2]]]);
+                                    }
+
                                 }
                             }
                         }
+
+#undef USE_VERTEX
+#undef FROM_EDGE
+#undef EDGE
+
                     }
 
                     if (voxelChunk->edgeCacheNeedsUpdating || force) {

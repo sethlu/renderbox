@@ -7,10 +7,40 @@
 
 namespace renderbox {
 
-    class VoxelGeometry : public Geometry {
-    protected:
+    unsigned const VOXEL_CHUNK_DIMENSION = 8;
+    unsigned constexpr VOXEL_CHUNK_DIMENSION2 = VOXEL_CHUNK_DIMENSION * VOXEL_CHUNK_DIMENSION;
+    unsigned constexpr VOXEL_CHUNK_DIMENSION3 = VOXEL_CHUNK_DIMENSION2 * VOXEL_CHUNK_DIMENSION;
 
-        static const int VOXEL_CHUNK_DIMENSION = 8;
+    class VoxelGeometry : public Geometry {
+    public:
+
+        bool isOccupied(int x, int y, int z);
+
+        bool isOccupied(glm::ivec3 position);
+
+        bool isOccupied(glm::vec3 position);
+
+        float getOccupancy(int x, int y, int z);
+
+        float getOccupancy(glm::ivec3 position);
+
+        void setOccupancy(int x, int y, int z, float occupancy);
+
+        void setOccupancy(glm::ivec3 position, float occupancy);
+
+        void setOccupancy(glm::vec3 position, float occupancy);
+
+        glm::vec3 getGradient(int x, int y, int z);
+
+        bool isConnected(int x, int y, int z, float isolevel);
+
+        bool isConnected(glm::ivec3 position, float isolevel);
+
+        void brush(glm::vec3 focus, float radius, float value, float isolevel);
+
+        void updateGeometryByMarchingCube(float isolevel, bool force = false);
+
+    protected:
 
         struct Voxel {
             float occupancy;
@@ -52,35 +82,9 @@ namespace renderbox {
 
         void addMarchingCube(int x, int y, int z,
                              float isolevel,
-                             std::vector<glm::vec3> &vertices,
-                             std::vector<glm::vec3> &normals,
-                             std::vector<glm::uvec3> &faces);
-
-    public:
-
-        bool isOccupied(int x, int y, int z);
-
-        bool isOccupied(glm::ivec3 position);
-
-        bool isOccupied(glm::vec3 position);
-
-        float getOccupancy(int x, int y, int z);
-
-        float getOccupancy(glm::ivec3 position);
-
-        void setOccupancy(int x, int y, int z, float occupancy);
-
-        void setOccupancy(glm::ivec3 position, float occupancy);
-
-        void setOccupancy(glm::vec3 position, float occupancy);
-
-        bool isConnected(int x, int y, int z, float isolevel);
-
-        bool isConnected(glm::ivec3 position, float isolevel);
-
-        void brush(glm::vec3 focus, float radius, float value, float isolevel);
-
-        void updateGeometryByMarchingCube(float isolevel, bool force = false);
+                             std::vector<glm::vec3> &cacheVertices,
+                             std::vector<glm::vec3> &cacheNormals,
+                             std::vector<glm::uvec3> &cacheFaces);
 
     };
 
