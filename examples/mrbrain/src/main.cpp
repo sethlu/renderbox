@@ -92,7 +92,7 @@ void update() {
     float currentTime = (float) glfwGetTime();
     float deltaTime = currentTime - lastTime;
 
-    // Terrain
+    // Geometry
 
     if (currentTime - mouseLastSync > 0.04f
         && startMouseX != -1 && startMouseY != -1) {
@@ -105,11 +105,11 @@ void update() {
                     glm::inverse(brain->getWorldMatrix())
                     * glm::vec4(worldPositions[0] + glm::vec3(0.5f), 1.0f)));
 
-            renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) brain->getGeometry().get();
+            renderbox::VoxelGeometry *voxelGeometry = (renderbox::VoxelGeometry *) brain->getGeometry().get();
 
-            terrainGeometry->brush(objectPosition, 8, 0.4f, isolevel);
+            voxelGeometry->brush(objectPosition, 8, 0.4f, isolevel);
 
-            terrainGeometry->updateGeometryByMarchingCube(isolevel);
+            voxelGeometry->updateGeometryByMarchingCube(isolevel);
             renderer->loadObject(brain.get());
         }
 
@@ -178,11 +178,11 @@ void mouseclick(GLFWwindow *window) {
                 glm::inverse(brain->getWorldMatrix())
                 * glm::vec4(worldPositions[0] - glm::vec3(0.5f), 1.0f));
 
-        renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) brain->getGeometry().get();
+        renderbox::VoxelGeometry *voxelGeometry = (renderbox::VoxelGeometry *) brain->getGeometry().get();
 
-        terrainGeometry->brush(objectPosition, 5, 0.4f, isolevel);
+        voxelGeometry->brush(objectPosition, 5, 0.4f, isolevel);
 
-        terrainGeometry->updateGeometryByMarchingCube(isolevel);
+        voxelGeometry->updateGeometryByMarchingCube(isolevel);
         renderer->loadObject(brain.get());
     }
 

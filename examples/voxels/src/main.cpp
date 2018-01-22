@@ -30,9 +30,7 @@ void init() {
     auto voxelGeometry = std::make_shared<renderbox::VoxelGeometry>();
     for (int x = -32; x < 32; ++x) {
         for (int y = -32; y < 32; ++y) {
-            for (int z = -4; z < 4; ++z) {
-                voxelGeometry->setOccupancy(x, y, z, 1.0f);
-            }
+            voxelGeometry->setOccupancy(x, y, 0, 1);
         }
     }
     voxelGeometry->updateGeometryByMarchingCube(isolevel); // Refresh geometry
@@ -75,7 +73,7 @@ void update() {
     float currentTime = (float) glfwGetTime();
     float deltaTime = currentTime - lastTime;
 
-    // Terrain
+    // Geometry
 
     if (currentTime - mouseLastSync > 0.04f
         && startMouseX != -1 && startMouseY != -1) {
@@ -88,11 +86,11 @@ void update() {
                     glm::inverse(terrain->getWorldMatrix())
                     * glm::vec4(worldPositions[0] + glm::vec3(0.5f), 1.0f)));
 
-            renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry().get();
+            renderbox::VoxelGeometry *voxelGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry().get();
 
-            terrainGeometry->brush(objectPosition, 8, 0.4f, isolevel);
+            voxelGeometry->brush(objectPosition, 8, 0.4f, isolevel);
 
-            terrainGeometry->updateGeometryByMarchingCube(isolevel);
+            voxelGeometry->updateGeometryByMarchingCube(isolevel);
             renderer->loadObject(terrain.get());
         }
 
@@ -161,11 +159,11 @@ void mouseclick(GLFWwindow *window) {
                 glm::inverse(terrain->getWorldMatrix())
                 * glm::vec4(worldPositions[0] - glm::vec3(0.5f), 1.0f));
 
-        renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry().get();
+        renderbox::VoxelGeometry *voxelGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry().get();
 
-        terrainGeometry->brush(objectPosition, 8, 0.4f, isolevel);
+        voxelGeometry->brush(objectPosition, 8, 0.4f, isolevel);
 
-        terrainGeometry->updateGeometryByMarchingCube(isolevel);
+        voxelGeometry->updateGeometryByMarchingCube(isolevel);
         renderer->loadObject(terrain.get());
     }
 
