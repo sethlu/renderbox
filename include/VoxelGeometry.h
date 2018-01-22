@@ -7,7 +7,7 @@
 
 namespace renderbox {
 
-    unsigned const VOXEL_CHUNK_DIMENSION = 8;
+    unsigned const VOXEL_CHUNK_DIMENSION = 4; // Greater than one to prevent non-updated vertex gradients
     unsigned constexpr VOXEL_CHUNK_DIMENSION2 = VOXEL_CHUNK_DIMENSION * VOXEL_CHUNK_DIMENSION;
     unsigned constexpr VOXEL_CHUNK_DIMENSION3 = VOXEL_CHUNK_DIMENSION2 * VOXEL_CHUNK_DIMENSION;
 

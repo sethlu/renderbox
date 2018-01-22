@@ -163,7 +163,7 @@ void mouseclick(GLFWwindow *window) {
 
         renderbox::VoxelGeometry *terrainGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry().get();
 
-        terrainGeometry->brush(objectPosition, 5, 0.4f, isolevel);
+        terrainGeometry->brush(objectPosition, 8, 0.4f, isolevel);
 
         terrainGeometry->updateGeometryByMarchingCube(isolevel);
         renderer->loadObject(terrain.get());

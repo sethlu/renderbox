@@ -112,18 +112,25 @@ namespace renderbox {
         int iy = remainder(y, VOXEL_CHUNK_DIMENSION);
         int iz = remainder(z, VOXEL_CHUNK_DIMENSION);
 
-        voxelChunk->voxels[ix][iy][iz].occupancy = occupancy;
+        auto &occupancy_ = voxelChunk->voxels[ix][iy][iz].occupancy;
+        if (occupancy_ == occupancy) return;
+        occupancy_ = occupancy;
         voxelChunk->cacheNeedsUpdating = true;
 
         // Pre populate neighboring chunks for geometry generation of overlapping voxel chunk edges
 
-        getVoxelChunkByVoxel(x + 1, y + 1, z + 1, true)->edgeCacheNeedsUpdating = true;
-        getVoxelChunkByVoxel(x + 1, y + 1, z, true)->edgeCacheNeedsUpdating = true;
-        getVoxelChunkByVoxel(x, y + 1, z + 1, true)->edgeCacheNeedsUpdating = true;
-        getVoxelChunkByVoxel(x, y + 1, z, true)->edgeCacheNeedsUpdating = true;
-        getVoxelChunkByVoxel(x + 1, y, z + 1, true)->edgeCacheNeedsUpdating = true;
-        getVoxelChunkByVoxel(x + 1, y, z, true)->edgeCacheNeedsUpdating = true;
-        getVoxelChunkByVoxel(x, y, z + 1, true)->edgeCacheNeedsUpdating = true;
+        unsigned int b = 0;
+        if (ix + 2 >= VOXEL_CHUNK_DIMENSION) b |= 0b001; // Vertex gradients require +/- 2 units in each direction
+        if (iy + 2 >= VOXEL_CHUNK_DIMENSION) b |= 0b010;
+        if (iz + 2 >= VOXEL_CHUNK_DIMENSION) b |= 0b100;
+
+        if (b & 0b001) getVoxelChunkByVoxel(x + 1, y, z, true)->edgeCacheNeedsUpdating = true;
+        if (b & 0b010) getVoxelChunkByVoxel(x, y + 1, z, true)->edgeCacheNeedsUpdating = true;
+        if (b & 0b011) getVoxelChunkByVoxel(x + 1, y + 1, z, true)->edgeCacheNeedsUpdating = true;
+        if (b & 0b100) getVoxelChunkByVoxel(x, y, z + 1, true)->edgeCacheNeedsUpdating = true;
+        if (b & 0b101) getVoxelChunkByVoxel(x + 1, y, z + 1, true)->edgeCacheNeedsUpdating = true;
+        if (b & 0b110) getVoxelChunkByVoxel(x, y + 1, z + 1, true)->edgeCacheNeedsUpdating = true;
+        if (b & 0b111) getVoxelChunkByVoxel(x + 1, y + 1, z + 1, true)->edgeCacheNeedsUpdating = true;
 
     }
 
@@ -773,14 +780,14 @@ namespace renderbox {
                     auto numVertices = (unsigned int) vertices.size();
                     vertices.insert(vertices.end(), voxelChunk->cacheVertices.begin(), voxelChunk->cacheVertices.end());
                     normals.insert(normals.end(), voxelChunk->cacheNormals.begin(), voxelChunk->cacheNormals.end());
-                    for (glm::uvec3 face : voxelChunk->cacheFaces) {
+                    for (auto &face : voxelChunk->cacheFaces) {
                         faces.push_back(glm::uvec3(numVertices) + face);
                     }
 
                     numVertices = (unsigned int) vertices.size();
                     vertices.insert(vertices.end(), voxelChunk->edgeCacheVertices.begin(), voxelChunk->edgeCacheVertices.end());
                     normals.insert(normals.end(), voxelChunk->edgeCacheNormals.begin(), voxelChunk->edgeCacheNormals.end());
-                    for (glm::uvec3 face : voxelChunk->edgeCacheFaces) {
+                    for (auto &face : voxelChunk->edgeCacheFaces) {
                         faces.push_back(glm::uvec3(numVertices) + face);
                     }
 
