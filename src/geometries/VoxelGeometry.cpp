@@ -120,7 +120,7 @@ namespace renderbox {
         // Pre populate neighboring chunks for geometry generation of overlapping voxel chunk edges
 
         unsigned int b = 0;
-        if (ix + 2 >= VOXEL_CHUNK_DIMENSION) b |= 0b001; // Vertex gradients require +/- 2 units in each direction
+        if (ix + 2 >= VOXEL_CHUNK_DIMENSION) b |= 0b001; // Vertex gradients require +/- 1 units in each direction
         if (iy + 2 >= VOXEL_CHUNK_DIMENSION) b |= 0b010;
         if (iz + 2 >= VOXEL_CHUNK_DIMENSION) b |= 0b100;
 
@@ -131,6 +131,9 @@ namespace renderbox {
         if (b & 0b101) getVoxelChunkByVoxel(x + 1, y, z + 1, true)->edgeCacheNeedsUpdating = true;
         if (b & 0b110) getVoxelChunkByVoxel(x, y + 1, z + 1, true)->edgeCacheNeedsUpdating = true;
         if (b & 0b111) getVoxelChunkByVoxel(x + 1, y + 1, z + 1, true)->edgeCacheNeedsUpdating = true;
+
+        // FIXME: Probably need to introduce edge/corner caches to cope with cases when voxels at (0, 0, 0) for example
+        // is updated causing voxel gradients in neighboring chunks to invalidate.
 
     }
 
