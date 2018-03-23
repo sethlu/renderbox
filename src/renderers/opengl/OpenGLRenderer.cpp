@@ -183,10 +183,10 @@ namespace renderbox {
                                        glm::value_ptr(object->getWorldMatrix()));
                 }
                 if (program->worldNormalMatrix != -1) {
-                    glUniformMatrix4fv(program->worldNormalMatrix,
+                    glUniformMatrix3fv(program->worldNormalMatrix,
                                        1,
                                        GL_FALSE,
-                                       glm::value_ptr(glm::transpose(glm::inverse(object->getWorldMatrix()))));
+                                       glm::value_ptr(glm::transpose(glm::inverse(glm::mat3x3(object->getWorldMatrix())))));
                 }
                 if (program->worldProjectionMatrix != -1) {
                     glUniformMatrix4fv(program->worldProjectionMatrix,

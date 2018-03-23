@@ -6,7 +6,7 @@ R"(
 
 uniform mat4 rb_worldProjectionMatrix;
 uniform mat4 rb_worldMatrix;
-uniform mat4 rb_worldNormalMatrix;
+uniform mat3 rb_worldNormalMatrix;
 uniform vec3 rb_materialDiffuseColor;
 
 out vec3 vertexDiffuseColor;
