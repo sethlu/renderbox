@@ -11,8 +11,7 @@ find_package(OpenGL REQUIRED)
 include_directories(${OpenGL_INCLUDE_DIRS})
 
 # GLM
-find_package(GLM REQUIRED)
-include_directories(${GLM_INCLUDE_DIRS})
+add_subdirectory(vendor/glm)
 
 # GLFW
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
@@ -25,7 +24,7 @@ file(GLOB_RECURSE RENDERBOX_SOURCE_FILES src/*.cpp)
 file(GLOB_RECURSE RENDERBOX_HEADER_FILES include/*.h)
 
 add_library(renderbox ${RENDERBOX_SOURCE_FILES} ${RENDERBOX_HEADER_FILES})
-target_link_libraries(renderbox ${OPENGL_LIBRARIES} ${GLM_LIBRARY} glfw)
+target_link_libraries(renderbox ${OPENGL_LIBRARIES} glm glfw)
 target_include_directories(renderbox PUBLIC include)
 
 install(TARGETS renderbox DESTINATION lib)
