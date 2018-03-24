@@ -9,7 +9,7 @@
 #include <OpenGLES/ES3/gl.h>
 #endif
 #include <vector>
-#include <glm/vec3.hpp>
+#include "Vector.h"
 
 namespace renderbox {
 
@@ -19,23 +19,23 @@ namespace renderbox {
 
     public:
 
-        std::vector<glm::vec3> &getVertices();
+        std::vector<vec3> &getVertices();
 
-        std::vector<glm::vec2> &getUVs();
+        std::vector<vec2> &getUVs();
 
-        std::vector<glm::vec3> &getNormals();
+        std::vector<vec3> &getNormals();
 
-        std::vector<glm::uvec3> &getFaces();
+        std::vector<uvec3> &getFaces();
 
     protected:
 
-        std::vector<glm::vec3> vertices;
+        std::vector<vec3> vertices;
 
-        std::vector<glm::vec2> uvs;
+        std::vector<vec2> uvs;
 
-        std::vector<glm::vec3> normals;
+        std::vector<vec3> normals;
 
-        std::vector<glm::uvec3> faces;
+        std::vector<uvec3> faces;
 
     };
 

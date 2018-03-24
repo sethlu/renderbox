@@ -2,24 +2,19 @@
 #define VOX_VECTOR_H
 
 
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
-#include <glm/gtx/string_cast.hpp>
-#include <cstdio>
-
-namespace {
-
-    std::ostream &operator<<(std::ostream &os, const glm::vec3 &vector) {
-        os << glm::to_string(vector);
-        return os;
-    };
-
-}
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/glm.hpp>
 
 namespace renderbox {
 
-    inline glm::vec3 dehomogenize(glm::vec4 vector) {
-        return glm::vec3(vector) / vector.w;
+    typedef glm::vec2 vec2;
+    typedef glm::vec3 vec3;
+    typedef glm::vec4 vec4;
+    typedef glm::ivec3 ivec3;
+    typedef glm::uvec3 uvec3;
+
+    inline vec3 dehomogenize(vec4 vector) {
+        return vec3(vector) / vector.w;
     };
 
 }

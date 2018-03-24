@@ -24,13 +24,13 @@ namespace renderbox {
     class ColorLight {
     public:
 
-        explicit ColorLight(glm::vec3 color) : color(color) {};
+        explicit ColorLight(vec3 color) : color(color) {};
 
-        glm::vec3 getColor() { return color; };
+        vec3 getColor() { return color; };
 
     protected:
 
-        glm::vec3 color;
+        vec3 color;
 
     };
 

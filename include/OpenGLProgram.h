@@ -8,7 +8,6 @@
 #elif defined(__IPHONEOS__)
 #include <OpenGLES/ES3/gl.h>
 #endif
-#include <glm/mat4x4.hpp>
 #include <unordered_map>
 #include "OpenGLBuffer.h"
 

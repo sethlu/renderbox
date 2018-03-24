@@ -16,27 +16,27 @@ namespace renderbox {
 
         bool isOccupied(int x, int y, int z);
 
-        bool isOccupied(glm::ivec3 position);
+        bool isOccupied(ivec3 position);
 
-        bool isOccupied(glm::vec3 position);
+        bool isOccupied(vec3 position);
 
         float getOccupancy(int x, int y, int z);
 
-        float getOccupancy(glm::ivec3 position);
+        float getOccupancy(ivec3 position);
 
         void setOccupancy(int x, int y, int z, float occupancy);
 
-        void setOccupancy(glm::ivec3 position, float occupancy);
+        void setOccupancy(ivec3 position, float occupancy);
 
-        void setOccupancy(glm::vec3 position, float occupancy);
+        void setOccupancy(vec3 position, float occupancy);
 
-        glm::vec3 getGradient(int x, int y, int z);
+        vec3 getGradient(int x, int y, int z);
 
         bool isConnected(int x, int y, int z, float isolevel);
 
-        bool isConnected(glm::ivec3 position, float isolevel);
+        bool isConnected(ivec3 position, float isolevel);
 
-        void brush(glm::vec3 focus, float radius, float value, float isolevel);
+        void brush(vec3 focus, float radius, float value, float isolevel);
 
         void updateGeometryByMarchingCube(float isolevel, bool force = false);
 
@@ -55,13 +55,13 @@ namespace renderbox {
             bool cacheNeedsUpdating = false;
             bool edgeCacheNeedsUpdating = false;
 
-            std::vector<glm::vec3> cacheVertices;
-            std::vector<glm::vec3> cacheNormals;
-            std::vector<glm::uvec3> cacheFaces;
+            std::vector<vec3> cacheVertices;
+            std::vector<vec3> cacheNormals;
+            std::vector<uvec3> cacheFaces;
 
-            std::vector<glm::vec3> edgeCacheVertices;
-            std::vector<glm::vec3> edgeCacheNormals;
-            std::vector<glm::uvec3> edgeCacheFaces;
+            std::vector<vec3> edgeCacheVertices;
+            std::vector<vec3> edgeCacheNormals;
+            std::vector<uvec3> edgeCacheFaces;
         };
 
         struct SparseVoxelChunkList {
@@ -82,9 +82,9 @@ namespace renderbox {
 
         void addMarchingCube(int x, int y, int z,
                              float isolevel,
-                             std::vector<glm::vec3> &cacheVertices,
-                             std::vector<glm::vec3> &cacheNormals,
-                             std::vector<glm::uvec3> &cacheFaces);
+                             std::vector<vec3> &cacheVertices,
+                             std::vector<vec3> &cacheNormals,
+                             std::vector<uvec3> &cacheFaces);
 
     };
 

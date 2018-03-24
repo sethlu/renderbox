@@ -2,30 +2,29 @@
 #define VOX_RAY_H
 
 
-#include <glm/vec3.hpp>
 #include "Object.h"
 
 namespace renderbox {
 
     class Ray {
 
-        glm::vec3 origin;
+        vec3 origin;
 
-        glm::vec3 direction;
+        vec3 direction;
 
     public:
 
-        Ray(glm::vec3 origin, glm::vec3 direction);
+        Ray(vec3 origin, vec3 direction);
 
-        glm::vec3 getOrigin() const;
+        vec3 getOrigin() const;
 
-        glm::vec3 getDirection() const;
+        vec3 getDirection() const;
 
-        bool intersectTriangle(glm::vec3 &v0, glm::vec3 &v1, glm::vec3 &v2, glm::vec3 &baryPosition);
+        bool intersectTriangle(vec3 &v0, vec3 &v1, vec3 &v2, vec2 &baryPosition, float &distance);
 
-        bool intersectObject(Object *object, std::vector<glm::vec3> &positions);
+        bool intersectObject(Object *object, std::vector<vec3> &positions);
 
-        Ray *copy(glm::mat4x4 changeOfCoordinates);
+        Ray *copy(mat4 changeOfCoordinates);
 
     };
 

@@ -9,13 +9,13 @@ namespace renderbox {
     class MeshLambertMaterial : public Material, public AmbientMaterial, public DiffuseMaterial {
     public:
 
-        explicit MeshLambertMaterial(glm::vec3 diffuseColor = glm::vec3(1.0f))
-            : MeshLambertMaterial(glm::vec3(1.0f), diffuseColor) {
+        explicit MeshLambertMaterial(vec3 diffuseColor = vec3(1.0f))
+            : MeshLambertMaterial(vec3(1.0f), diffuseColor) {
 
         };
 
-        MeshLambertMaterial(glm::vec3 ambientColor,
-                            glm::vec3 diffuseColor)
+        MeshLambertMaterial(vec3 ambientColor,
+                            vec3 diffuseColor)
             : AmbientMaterial(ambientColor), DiffuseMaterial(diffuseColor) {
 
         };

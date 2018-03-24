@@ -2,7 +2,6 @@
 #define VOX_CAMERA_H
 
 
-#include <glm/mat4x4.hpp>
 #include "Object.h"
 #include "Ray.h"
 

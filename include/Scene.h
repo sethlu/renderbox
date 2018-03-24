@@ -8,21 +8,21 @@ namespace renderbox {
     class Scene : public Object {
     public:
 
-        Scene() : ambientColor(glm::vec3(0)) {
+        Scene() : ambientColor(vec3(0)) {
 
         };
 
-        glm::vec3 getAmbientColor() const;
+        vec3 getAmbientColor() const;
 
         OBJECT_TYPE getObjectType() const override {
             return SCENE_OBJECT;
         };
 
-        void setAmbientColor(const glm::vec3 &ambientColor);
+        void setAmbientColor(const vec3 &ambientColor);
 
     protected:
 
-        glm::vec3 ambientColor;
+        vec3 ambientColor;
 
     };
 

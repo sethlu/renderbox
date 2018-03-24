@@ -2,14 +2,13 @@
 #define VOX_MATRIX_H
 
 
-#include <glm/gtx/string_cast.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/glm.hpp>
 
-namespace {
+namespace renderbox {
 
-    std::ostream &operator<<(std::ostream &os, const glm::mat4x4 &matrix) {
-        os << glm::to_string(matrix);
-        return os;
-    };
+    typedef glm::mat3 mat3;
+    typedef glm::mat4 mat4;
 
 }
 

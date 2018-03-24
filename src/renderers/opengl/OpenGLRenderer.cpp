@@ -8,7 +8,6 @@
 #include <queue>
 #include <glm/gtc/type_ptr.hpp>
 #include "Light.h"
-#include "Matrix.h"
 #include "OpenGLRenderer.h"
 
 
@@ -74,7 +73,7 @@ namespace renderbox {
         // Render
 
         // View projection matrix
-        glm::mat4x4 viewProjectionMatrix = camera->getViewProjectionMatrix();
+        mat4 viewProjectionMatrix = camera->getViewProjectionMatrix();
 
         for (const auto &it : renderList.objects) {
 
@@ -162,7 +161,7 @@ namespace renderbox {
                 }
 
                 // World projection matrix
-                glm::mat4x4 worldProjectionMatrix = viewProjectionMatrix * object->getWorldMatrix();
+                mat4 worldProjectionMatrix = viewProjectionMatrix * object->getWorldMatrix();
 
                 if (program->materialAmbientColor != -1) {
                     if (auto material = dynamic_cast<AmbientMaterial *>(object->getMaterial().get()))
@@ -186,7 +185,7 @@ namespace renderbox {
                     glUniformMatrix3fv(program->worldNormalMatrix,
                                        1,
                                        GL_FALSE,
-                                       glm::value_ptr(glm::transpose(glm::inverse(glm::mat3x3(object->getWorldMatrix())))));
+                                       glm::value_ptr(glm::transpose(glm::inverse(mat3(object->getWorldMatrix())))));
                 }
                 if (program->worldProjectionMatrix != -1) {
                     glUniformMatrix4fv(program->worldProjectionMatrix,

@@ -2,7 +2,6 @@
 #define VOX_OPENGLRENDERLIST_H
 
 
-#include <glm/mat4x4.hpp>
 #include <vector>
 #include <unordered_map>
 #include "OpenGLVertexArray.h"

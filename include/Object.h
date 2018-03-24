@@ -3,10 +3,9 @@
 
 
 #include <vector>
-#include <glm/mat4x4.hpp>
-#include <glm/vec3.hpp>
 #include "Geometry.h"
 #include "Material.h"
+#include "Matrix.h"
 
 namespace renderbox {
 
@@ -65,33 +64,33 @@ namespace renderbox {
 
         // Object transformation
 
-        glm::mat4x4 getWorldMatrix() const;
+        mat4 getWorldMatrix() const;
 
-        glm::mat4x4 getMatrix() const;
+        mat4 getMatrix() const;
 
-        glm::vec3 getWorldPosition() const;
+        vec3 getWorldPosition() const;
 
         // Translation
 
-        glm::vec3 getTranslation() const;
+        vec3 getTranslation() const;
 
-        void setTranslation(glm::vec3 translation);
+        void setTranslation(vec3 translation);
 
-        void translate(glm::vec3 delta);
+        void translate(vec3 delta);
 
         // Rotation
 
-        glm::mat4x4 getRotationMatrix() const;
+        mat4 getRotationMatrix() const;
 
-        void rotate(glm::vec3 vector, float angle);
+        void rotate(vec3 vector, float angle);
 
         void clearRotation();
 
         // Scale
 
-        glm::vec3 getScale() const;
+        vec3 getScale() const;
 
-        void setScale(glm::vec3 scale);
+        void setScale(vec3 scale);
 
         // Visibility
 
@@ -139,22 +138,22 @@ namespace renderbox {
         /**
          * @var Object's world matrix
          */
-        glm::mat4x4 worldMatrix = glm::mat4x4(1.0f);
+        mat4 worldMatrix = mat4(1.0f);
 
         /**
          * @var Object translation
          */
-        glm::vec3 translation = glm::vec3(0);
+        vec3 translation = vec3(0);
 
         /**
          * @var Object rotation matrix
          */
-        glm::mat4x4 rotationMatrix = glm::mat4x4(1.0f);
+        mat4 rotationMatrix = mat4(1.0f);
 
         /**
          * @var Object scaling
          */
-        glm::vec3 scale = glm::vec3(1.0f);
+        vec3 scale = vec3(1.0f);
 
         virtual void didTransform();
 

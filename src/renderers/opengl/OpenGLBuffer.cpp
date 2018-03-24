@@ -29,16 +29,16 @@ namespace renderbox {
         this->size = size; // Update size of data held in buffer
     }
 
-    void OpenGLBuffer::buffer(const std::vector<glm::vec3> &data, GLenum usage) {
-        buffer(&data[0], (GLsizei) data.size() * sizeof(glm::vec3), usage);
+    void OpenGLBuffer::buffer(const std::vector<vec3> &data, GLenum usage) {
+        buffer(&data[0], (GLsizei) data.size() * sizeof(vec3), usage);
     };
 
-    void OpenGLBuffer::buffer(const std::vector<glm::uvec3> &data, GLenum usage) {
-        buffer(&data[0], (GLsizei) data.size() * sizeof(glm::uvec3), usage);
+    void OpenGLBuffer::buffer(const std::vector<uvec3> &data, GLenum usage) {
+        buffer(&data[0], (GLsizei) data.size() * sizeof(uvec3), usage);
     }
 
-    void OpenGLBuffer::buffer(const std::vector<glm::vec2> &data, GLenum usage) {
-        buffer(&data[0], (GLsizei) data.size() * sizeof(glm::vec2), usage);
+    void OpenGLBuffer::buffer(const std::vector<vec2> &data, GLenum usage) {
+        buffer(&data[0], (GLsizei) data.size() * sizeof(vec2), usage);
     }
 
 }

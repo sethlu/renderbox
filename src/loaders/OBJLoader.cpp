@@ -1,5 +1,7 @@
+#define GLM_ENABLE_EXPERIMENTAL
 #include <iostream>
 #include <glm/gtx/string_cast.hpp>
+#include "Vector.h"
 #include "MeshLambertMaterial.h"
 #include "OBJLoader.h"
 
@@ -148,7 +150,7 @@ namespace renderbox {
 
     void OBJLoader::handleVertex(OBJLexer &lexer, OBJToken &token) {
 
-        glm::vec3 v;
+        vec3 v;
 
         // Expect x coordinate
         lex(lexer, token);
@@ -182,7 +184,7 @@ namespace renderbox {
 
     void OBJLoader::handleTextureVertex(OBJLexer &lexer, OBJToken &token) {
 
-        glm::vec2 v;
+        vec2 v;
 
         // Expect u
         lex(lexer, token);
@@ -204,7 +206,7 @@ namespace renderbox {
 
     void OBJLoader::handleVertexNormal(OBJLexer &lexer, OBJToken &token) {
 
-        glm::vec3 v;
+        vec3 v;
 
         // Expect x coordinate
         lex(lexer, token);
@@ -334,13 +336,13 @@ namespace renderbox {
 
         if (v.size() > 4) INVALID_SYNTAX(); // Only support triangle and quad
 
-        geometry->getFaces().emplace_back(glm::uvec3(
+        geometry->getFaces().emplace_back(uvec3(
             getVertexIndex(v[0] - 1, (bvt ? vt[0] : 0) - 1, (bvn ? vn[0] : 0) - 1),
             getVertexIndex(v[1] - 1, (bvt ? vt[1] : 0) - 1, (bvn ? vn[1] : 0) - 1),
             getVertexIndex(v[2] - 1, (bvt ? vt[2] : 0) - 1, (bvn ? vn[2] : 0) - 1)));
 
         if (v.size() == 4) { // Quad
-            geometry->getFaces().emplace_back(glm::uvec3(
+            geometry->getFaces().emplace_back(uvec3(
                 getVertexIndex(v[2] - 1, (bvt ? vt[2] : 0) - 1, (bvn ? vn[2] : 0) - 1),
                 getVertexIndex(v[3] - 1, (bvt ? vt[3] : 0) - 1, (bvn ? vn[3] : 0) - 1),
                 getVertexIndex(v[0] - 1, (bvt ? vt[0] : 0) - 1, (bvn ? vn[0] : 0) - 1)));
@@ -426,7 +428,7 @@ namespace renderbox {
         // Material name should not exist
         if (materials.find(name) != materials.end()) INVALID_STATE();
 
-        material = new MeshLambertMaterial(glm::vec3(), glm::vec3()); // TODO: Propose generic/standard material
+        material = new MeshLambertMaterial(vec3(), vec3()); // TODO: Propose generic/standard material
         materials.insert(std::make_pair(std::string(name),
                                         std::shared_ptr<Material>(material)));
 
@@ -437,7 +439,7 @@ namespace renderbox {
         if (material == nullptr) INVALID_STATE();
 
         auto keyword = token;
-        glm::vec3 v;
+        vec3 v;
 
         // Expect r
         lex(lexer, token);

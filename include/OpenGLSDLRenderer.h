@@ -5,7 +5,7 @@
 #include "platform.h"
 #if defined(__IPHONEOS__)
 
-#include "SDL.h"
+#include <SDL.h>
 #include "OpenGLRenderer.h"
 
 namespace renderbox {

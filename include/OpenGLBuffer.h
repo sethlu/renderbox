@@ -9,8 +9,7 @@
 #include <OpenGLES/ES3/gl.h>
 #endif
 #include <vector>
-#include <glm/vec3.hpp>
-#include <glm/vec2.hpp>
+#include "Vector.h"
 
 
 namespace renderbox {
@@ -35,11 +34,11 @@ namespace renderbox {
 
         void buffer(const void *data, GLsizei size, GLenum usage = GL_STATIC_DRAW);
 
-        void buffer(const std::vector<glm::vec3> &data, GLenum usage = GL_STATIC_DRAW);
+        void buffer(const std::vector<vec3> &data, GLenum usage = GL_STATIC_DRAW);
 
-        void buffer(const std::vector<glm::uvec3> &data, GLenum usage = GL_STATIC_DRAW);
+        void buffer(const std::vector<uvec3> &data, GLenum usage = GL_STATIC_DRAW);
 
-        void buffer(const std::vector<glm::vec2> &data, GLenum usage = GL_STATIC_DRAW);
+        void buffer(const std::vector<vec2> &data, GLenum usage = GL_STATIC_DRAW);
 
         GLsizei getSize() { return size; }
 

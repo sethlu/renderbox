@@ -47,7 +47,7 @@ namespace renderbox {
                                 GLsizei stride = 0,
                                 const GLvoid *pointer = (GLvoid *) 0);
 
-        void setAttribute(GLuint index, const glm::vec2 &value);
+        void setAttribute(GLuint index, const vec2 &value);
 
         void setElementBuffer(OpenGLBuffer *buffer);
 

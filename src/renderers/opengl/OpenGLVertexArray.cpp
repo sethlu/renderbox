@@ -1,5 +1,6 @@
 #include <iostream>
 #include <glm/gtc/type_ptr.hpp>
+#include "Vector.h"
 #include "OpenGLVertexArray.h"
 
 
@@ -55,7 +56,7 @@ namespace renderbox {
         buffer->unbindBuffer();
     }
 
-    void OpenGLVertexArray::setAttribute(GLuint index, const glm::vec2 &value) {
+    void OpenGLVertexArray::setAttribute(GLuint index, const vec2 &value) {
         bindVertexArray();
         glVertexAttrib2fv(index, glm::value_ptr(value));
         unbindVertexArray();

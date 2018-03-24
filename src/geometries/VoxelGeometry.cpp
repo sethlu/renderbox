@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cfloat>
 #include <glm/geometric.hpp>
+#include "Vector.h"
 #include "VoxelGeometry.h"
 
 
@@ -88,7 +89,7 @@ namespace renderbox {
 
     }
 
-    float VoxelGeometry::getOccupancy(glm::ivec3 position) {
+    float VoxelGeometry::getOccupancy(ivec3 position) {
         return getOccupancy(position.x, position.y, position.z);
     }
 
@@ -96,12 +97,12 @@ namespace renderbox {
         return fabs(getOccupancy(x, y, z)) > FLT_EPSILON;
     }
 
-    bool VoxelGeometry::isOccupied(glm::ivec3 position) {
+    bool VoxelGeometry::isOccupied(ivec3 position) {
         return isOccupied(position.x, position.y, position.z);
     }
 
-    bool VoxelGeometry::isOccupied(glm::vec3 position) {
-        return isOccupied(glm::ivec3(position));
+    bool VoxelGeometry::isOccupied(vec3 position) {
+        return isOccupied(ivec3(position));
     }
 
     void VoxelGeometry::setOccupancy(int x, int y, int z, float occupancy) {
@@ -137,16 +138,16 @@ namespace renderbox {
 
     }
 
-    void VoxelGeometry::setOccupancy(glm::ivec3 position, float occupancy) {
+    void VoxelGeometry::setOccupancy(ivec3 position, float occupancy) {
         setOccupancy(position.x, position.y, position.z, occupancy);
     }
 
-    void VoxelGeometry::setOccupancy(glm::vec3 position, float occupancy) {
-        setOccupancy(glm::ivec3(position), occupancy);
+    void VoxelGeometry::setOccupancy(vec3 position, float occupancy) {
+        setOccupancy(ivec3(position), occupancy);
     }
 
-    glm::vec3 VoxelGeometry::getGradient(int x, int y, int z) {
-        return glm::vec3(getOccupancy(x + 1, y,     z    ) - getOccupancy(x - 1, y,     z    ),
+    vec3 VoxelGeometry::getGradient(int x, int y, int z) {
+        return vec3(getOccupancy(x + 1, y,     z    ) - getOccupancy(x - 1, y,     z    ),
                          getOccupancy(x,     y + 1, z    ) - getOccupancy(x,     y - 1, z    ),
                          getOccupancy(x,     y,     z + 1) - getOccupancy(x,     y,     z - 1));
     }
@@ -169,15 +170,15 @@ namespace renderbox {
                 || getOccupancy(x, y, z - 1) > isolevel;
     }
 
-    bool VoxelGeometry::isConnected(glm::ivec3 position, float isolevel) {
+    bool VoxelGeometry::isConnected(ivec3 position, float isolevel) {
         return isConnected(position.x, position.y, position.z, isolevel);
     }
 
-    void VoxelGeometry::brush(glm::vec3 focus, float radius, float value, float isolevel) {
+    void VoxelGeometry::brush(vec3 focus, float radius, float value, float isolevel) {
         for (int x = (int) floorf(focus.x - radius); x <= (int) ceilf(focus.x + radius); ++x) {
             for (int y = (int) floorf(focus.y - radius); y <= (int) ceilf(focus.y + radius); ++y) {
                 for (int z = (int) floorf(focus.z - radius); z <= (int) ceilf(focus.z + radius); ++z) {
-                    float distance = glm::length(glm::vec3(x, y, z) - focus);
+                    float distance = glm::length(vec3(x, y, z) - focus);
                     if (distance > radius) continue;
 
                     if (!isConnected(x, y, z, isolevel)) continue;
@@ -484,7 +485,7 @@ namespace renderbox {
             {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}
     };
 
-    glm::vec3 interpolateVector(glm::vec3 p1, glm::vec3 p2, float v1, float v2, float isolevel) {
+    vec3 interpolateVector(vec3 p1, vec3 p2, float v1, float v2, float isolevel) {
         if (fabs(v1 - isolevel) < FLT_EPSILON) return p1;
         if (fabs(v2 - isolevel) < FLT_EPSILON) return p2;
         if (fabs(v1 - v2) < FLT_EPSILON) return p1;
@@ -493,9 +494,9 @@ namespace renderbox {
 
     void VoxelGeometry::addMarchingCube(int x, int y, int z,
                                         float isolevel,
-                                        std::vector<glm::vec3> &cacheVertices,
-                                        std::vector<glm::vec3> &cacheNormals,
-                                        std::vector<glm::uvec3> &cacheFaces) {
+                                        std::vector<vec3> &cacheVertices,
+                                        std::vector<vec3> &cacheNormals,
+                                        std::vector<uvec3> &cacheFaces) {
 
         float occupancies[8]{
             getOccupancy(x - 1, y    , z - 1),
@@ -520,17 +521,17 @@ namespace renderbox {
 
         if (edgeTable[cubeIndex] == 0) return;
 
-        glm::vec3 cubeVertices[8]{
-            glm::vec3(x - 0.5f, y + 0.5f, z - 0.5f),
-            glm::vec3(x + 0.5f, y + 0.5f, z - 0.5f),
-            glm::vec3(x + 0.5f, y - 0.5f, z - 0.5f),
-            glm::vec3(x - 0.5f, y - 0.5f, z - 0.5f),
-            glm::vec3(x - 0.5f, y + 0.5f, z + 0.5f),
-            glm::vec3(x + 0.5f, y + 0.5f, z + 0.5f),
-            glm::vec3(x + 0.5f, y - 0.5f, z + 0.5f),
-            glm::vec3(x - 0.5f, y - 0.5f, z + 0.5f),
+        vec3 cubeVertices[8]{
+            vec3(x - 0.5f, y + 0.5f, z - 0.5f),
+            vec3(x + 0.5f, y + 0.5f, z - 0.5f),
+            vec3(x + 0.5f, y - 0.5f, z - 0.5f),
+            vec3(x - 0.5f, y - 0.5f, z - 0.5f),
+            vec3(x - 0.5f, y + 0.5f, z + 0.5f),
+            vec3(x + 0.5f, y + 0.5f, z + 0.5f),
+            vec3(x + 0.5f, y - 0.5f, z + 0.5f),
+            vec3(x - 0.5f, y - 0.5f, z + 0.5f),
         };
-        glm::vec3 cubeGradients[8]{
+        vec3 cubeGradients[8]{
             getGradient(x - 1, y,     z - 1),
             getGradient(x,     y,     z - 1),
             getGradient(x,     y - 1, z - 1),
@@ -541,7 +542,7 @@ namespace renderbox {
             getGradient(x - 1, y - 1, z    ),
         };
 
-        glm::vec3 vertices[12], normals[12];
+        vec3 vertices[12], normals[12];
         unsigned edges = edgeTable[cubeIndex];
         if (edges & 0b1) {
             vertices[0] = interpolateVector(cubeVertices[0], cubeVertices[1], occupancies[0], occupancies[1], isolevel);
@@ -682,7 +683,7 @@ namespace renderbox {
     if (edgeVertices[VERTEX] == INT_MAX) { \
         edgeVertices[VERTEX] = vertexIndex++; \
         voxelChunk->cacheVertices.emplace_back( \
-            interpolateVector(glm::vec3((Ax) + 0.5f, (Ay) + 0.5f, (Az) + 0.5f), glm::vec3((Bx) + 0.5f, (By) + 0.5f, (Bz) + 0.5f), \
+            interpolateVector(vec3((Ax) + 0.5f, (Ay) + 0.5f, (Az) + 0.5f), vec3((Bx) + 0.5f, (By) + 0.5f, (Bz) + 0.5f), \
                               getOccupancy((Ax), (Ay), (Az)), getOccupancy((Bx), (By), (Bz)), isolevel)); \
         voxelChunk->cacheNormals.emplace_back( \
             - glm::normalize(interpolateVector(getGradient((Ax), (Ay), (Az)), getGradient((Bx), (By), (Bz)), \
@@ -784,14 +785,14 @@ namespace renderbox {
                     vertices.insert(vertices.end(), voxelChunk->cacheVertices.begin(), voxelChunk->cacheVertices.end());
                     normals.insert(normals.end(), voxelChunk->cacheNormals.begin(), voxelChunk->cacheNormals.end());
                     for (auto &face : voxelChunk->cacheFaces) {
-                        faces.push_back(glm::uvec3(numVertices) + face);
+                        faces.push_back(uvec3(numVertices) + face);
                     }
 
                     numVertices = (unsigned int) vertices.size();
                     vertices.insert(vertices.end(), voxelChunk->edgeCacheVertices.begin(), voxelChunk->edgeCacheVertices.end());
                     normals.insert(normals.end(), voxelChunk->edgeCacheNormals.begin(), voxelChunk->edgeCacheNormals.end());
                     for (auto &face : voxelChunk->edgeCacheFaces) {
-                        faces.push_back(glm::uvec3(numVertices) + face);
+                        faces.push_back(uvec3(numVertices) + face);
                     }
 
                 }
