@@ -55,9 +55,16 @@ namespace renderbox {
         BOOTSTRAP(RB_NUM_POINT_LIGHTS, upperPowerOfTwo(numPointLights));
 
         // TODO: Program needs to be invalidated if material updates
+		if (material->isAmbientMaterial()) {
+			if (auto m = dynamic_cast<AmbientMaterial *>(material)) {
+				if (m->getAmbientMap()) {
+					BOOTSTRAP(RB_MATERIAL_AMBIENT_MAP, ""); // Has ambient map
+				}
+			}
+		}
         if (material->isDiffuseMaterial()) {
-            if (auto diffuseMaterial = dynamic_cast<DiffuseMaterial *>(material)) {
-                if (diffuseMaterial->getDiffuseMap()) {
+            if (auto m = dynamic_cast<DiffuseMaterial *>(material)) {
+                if (m->getDiffuseMap()) {
                     BOOTSTRAP(RB_MATERIAL_DIFFUSE_MAP, ""); // Has diffuse map
                 }
             }

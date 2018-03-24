@@ -519,6 +519,9 @@ namespace renderbox {
 
         switch (keyword.kind) {
             default: break;
+            case mtl_tok::kw_map_Ka:
+                if (auto m = dynamic_cast<AmbientMaterial *>(material)) m->setAmbientMap(texture);
+                break;
             case mtl_tok::kw_map_Kd:
                 if (auto m = dynamic_cast<DiffuseMaterial *>(material)) m->setDiffuseMap(texture);
                 break;

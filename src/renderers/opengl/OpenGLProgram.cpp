@@ -147,6 +147,7 @@ namespace renderbox {
                 CASE_UNIFORM(17, 'i', sceneAmbientColor)
                 CASE_UNIFORM(17, 'm', worldNormalMatrix)
 
+                CASE_UNIFORM(18, 'A', materialAmbientMap)
                 CASE_UNIFORM(18, 'D', materialDiffuseMap)
 
                 CASE_UNIFORM(20, 'A', materialAmbientColor)

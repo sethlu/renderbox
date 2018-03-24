@@ -194,6 +194,23 @@ namespace renderbox {
                                        glm::value_ptr(worldProjectionMatrix));
                 }
 
+                OpenGLTexture *ambientMap(nullptr);
+                if (object->getMaterial()->isAmbientMaterial()) {
+                    bool blankTexture;
+                    ambientMap = objectProperties->getTexture(0, &blankTexture);
+                    if (blankTexture) {
+                        if (auto material = dynamic_cast<AmbientMaterial *>(object->getMaterial().get())) {
+                            auto texture = material->getAmbientMap(); // Need to check if texture exists
+                            if (texture) ambientMap->texture(material->getAmbientMap().get());
+                        }
+                    }
+                }
+                if (program->materialAmbientMap != -1 && ambientMap) {
+                    glActiveTexture(GL_TEXTURE0);
+                    ambientMap->bindTexture();
+                    glUniform1i(program->materialAmbientMap, 0);
+                }
+
                 OpenGLTexture *diffuseMap(nullptr);
                 if (object->getMaterial()->isDiffuseMaterial()) {
                     bool blankTexture;
@@ -206,9 +223,9 @@ namespace renderbox {
                     }
                 }
                 if (program->materialDiffuseMap != -1 && diffuseMap) {
-                    glActiveTexture(GL_TEXTURE0);
+                    glActiveTexture(GL_TEXTURE1);
                     diffuseMap->bindTexture();
-                    glUniform1i(program->materialDiffuseMap, 0);
+                    glUniform1i(program->materialDiffuseMap, 1);
                 }
 
                 // Bind vertex array

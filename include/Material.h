@@ -50,9 +50,15 @@ namespace renderbox {
 
         void setAmbientColor(vec3 &ambientColor_) { ambientColor = ambientColor_; }
 
+        std::shared_ptr<Texture> getAmbientMap() const { return ambientMap; }
+
+        void setAmbientMap(std::shared_ptr<Texture> ambientMap_) { ambientMap = ambientMap_; }
+
     protected:
 
         vec3 ambientColor;
+
+        std::shared_ptr<Texture> ambientMap;
 
     };
 

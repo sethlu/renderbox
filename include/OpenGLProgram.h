@@ -80,9 +80,10 @@ namespace renderbox {
         GLint worldMatrix;
         GLint sceneAmbientColor;
         GLint worldNormalMatrix;
-        GLint materialDiffuseMap;
         GLint materialAmbientColor;
+        GLint materialAmbientMap;
         GLint materialDiffuseColor;
+        GLint materialDiffuseMap;
         GLint numActivePointLights;
         GLint worldProjectionMatrix;
 

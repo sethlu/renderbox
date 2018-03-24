@@ -9,8 +9,11 @@ precision mediump float;
 uniform mat4 rb_worldProjectionMatrix;
 uniform mat4 rb_worldMatrix;
 uniform mat3 rb_worldNormalMatrix;
+uniform vec3 rb_sceneAmbientColor;
+uniform vec3 rb_materialAmbientColor;
 uniform vec3 rb_materialDiffuseColor;
 
+out vec3 vertexAmbientColor;
 out vec3 vertexDiffuseColor;
 out vec2 vertexUV;
 
@@ -41,6 +44,12 @@ void main() {
 
     // Lighting
 
+	// Ambient
+	
+	vertexAmbientColor = rb_sceneAmbientColor * rb_materialAmbientColor;
+	
+	// Diffuse
+	
     vertexDiffuseColor = vec3(0.0);
 
     #if RB_NUM_POINT_LIGHTS > 0
