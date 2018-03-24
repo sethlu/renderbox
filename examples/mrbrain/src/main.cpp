@@ -9,7 +9,6 @@ std::unique_ptr<renderbox::OpenGLGLFWRenderer> renderer;
 
 std::shared_ptr<renderbox::Object> cameraRig;
 std::shared_ptr<renderbox::Mesh> brain;
-std::shared_ptr<renderbox::Mesh> testCube;
 
 float cameraDistance = 80.0f;
 float cameraAngularVelocity = 0.0f;
@@ -20,7 +19,7 @@ float lastTime = (float) glfwGetTime();
 double mouseX = -1, mouseY = -1, startMouseX = -1, startMouseY = -1;
 
 float isolevel = 0.5f;
-const int steps = 4;
+const int steps = 2;
 
 void init() {
 
@@ -65,12 +64,6 @@ void init() {
     brain->setTranslation(glm::vec3(-256 / 2 / steps, -256 / 2 / steps, -109 / steps));
     scene->addChild(brain);
 
-    // Test cube
-    testCube = std::make_shared<renderbox::Mesh>(
-        std::make_shared<renderbox::BoxGeometry>(0.5f, 0.5f, 0.5f),
-        std::make_shared<renderbox::MeshLambertMaterial>(glm::vec3(1.0f, 0, 0)));
-    scene->addChild(testCube);
-
     // Camera
     camera = std::make_shared<renderbox::PerspectiveCamera>(
         glm::radians(45.0f), (float) renderer->getWindowWidth() / (float) renderer->getWindowHeight());
@@ -91,44 +84,6 @@ void update() {
 
     float currentTime = (float) glfwGetTime();
     float deltaTime = currentTime - lastTime;
-
-    // Geometry
-
-    if (currentTime - mouseLastSync > 0.04f
-        && startMouseX != -1 && startMouseY != -1) {
-
-        renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderer->getWindowWidth() - 1.0f,
-                                                             1.0f - 2 * mouseY / renderer->getWindowHeight()));
-        std::vector<glm::vec3> worldPositions;
-        if (cameraRay->intersectObject(brain.get(), worldPositions)) {
-            glm::vec3 objectPosition = floor(renderbox::dehomogenize(
-                    glm::inverse(brain->getWorldMatrix())
-                    * glm::vec4(worldPositions[0] + glm::vec3(0.5f), 1.0f)));
-
-            renderbox::VoxelGeometry *voxelGeometry = (renderbox::VoxelGeometry *) brain->getGeometry().get();
-
-            voxelGeometry->brush(objectPosition, 8, 0.4f, isolevel);
-
-            voxelGeometry->updateGeometryByMarchingCube(isolevel);
-            renderer->loadObject(brain.get());
-        }
-
-        mouseLastSync = currentTime;
-    }
-
-    // Test cube
-
-    testCube->visible = false;
-    if (mouseX >= 0 && mouseX <= renderer->getWindowWidth() && mouseY >= 0 && mouseY <= renderer->getWindowHeight()) {
-        renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderer->getWindowWidth() - 1.0f,
-                                                             1.0f - 2 * mouseY / renderer->getWindowHeight()));
-        std::vector<glm::vec3> worldPositions;
-        if (cameraRay->intersectObject(brain.get(), worldPositions)) {
-            glm::vec3 testLocation = worldPositions[0];
-            testCube->visible = true;
-            testCube->setTranslation(testLocation);
-        }
-    }
 
     // Camera
 
@@ -153,46 +108,6 @@ void update() {
 }
 
 void uninit() {
-
-}
-
-void mousedown(GLFWwindow *window) {
-
-}
-
-void mousemove(GLFWwindow *window) {
-
-}
-
-void mouseup(GLFWwindow *window) {
-
-}
-
-void mouseclick(GLFWwindow *window) {
-
-    renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderer->getWindowWidth() - 1.0f,
-                                                         1.0f - 2 * mouseY / renderer->getWindowHeight()));
-    std::vector<glm::vec3> worldPositions;
-    if (cameraRay->intersectObject(brain.get(), worldPositions)) {
-        glm::vec3 objectPosition = renderbox::dehomogenize(
-                glm::inverse(brain->getWorldMatrix())
-                * glm::vec4(worldPositions[0] - glm::vec3(0.5f), 1.0f));
-
-        renderbox::VoxelGeometry *voxelGeometry = (renderbox::VoxelGeometry *) brain->getGeometry().get();
-
-        voxelGeometry->brush(objectPosition, 5, 0.4f, isolevel);
-
-        voxelGeometry->updateGeometryByMarchingCube(isolevel);
-        renderer->loadObject(brain.get());
-    }
-
-}
-
-void mousedrag(GLFWwindow *window) {
-
-}
-
-void mousedrop(GLFWwindow *window) {
 
 }
 
@@ -257,17 +172,6 @@ void keyCallback(GLFWwindow *window, int key, int scanCode, int action, int mods
     }
 }
 
-void cursorPosCallback(GLFWwindow *window, double x, double y) {
-    mouseX = x;
-    mouseY = y;
-    mousemove(window);
-    if (startMouseX != -1 && startMouseY != -1
-        && (fabs(startMouseX - mouseX) >= 5
-            || fabs(startMouseY - mouseY) >= 5)) {
-        mousedrag(window);
-    }
-}
-
 void scrollCallback(GLFWwindow *window, double deltaX, double deltaY) {
     glm::vec3 cameraDirection = camera->getRay()->getDirection();
     glm::vec3 forward = glm::normalize(glm::vec3(cameraDirection.x, cameraDirection.y, 0));
@@ -278,27 +182,6 @@ void scrollCallback(GLFWwindow *window, double deltaX, double deltaY) {
     }
     cameraRig->translate((forward * (float) deltaY - right * (float) deltaX)
                          * cameraDistance * 0.01f);
-}
-
-void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
-    if (button == GLFW_MOUSE_BUTTON_LEFT) {
-        if (action == GLFW_PRESS) {
-            startMouseX = mouseX;
-            startMouseY = mouseY;
-            mousedown(window);
-        }
-        if (action == GLFW_RELEASE) {
-            mouseup(window);
-            if (fabs(startMouseX - mouseX) >= 5
-                && fabs(startMouseY - mouseY) >= 5) {
-                mousedrop(window);
-            } else {
-                mouseclick(window);
-            }
-            startMouseX = -1;
-            startMouseY = -1;
-        }
-    }
 }
 
 void zoomCallback(GLFWwindow *window, double magnification) {
@@ -319,9 +202,7 @@ int main(int argc, char **argv) {
 
     glfwSetWindowSizeCallback(window, windowSizeCallback);
     glfwSetKeyCallback(window, keyCallback);
-    glfwSetCursorPosCallback(window, cursorPosCallback);
     glfwSetScrollCallback(window, scrollCallback);
-    glfwSetMouseButtonCallback(window, mouseButtonCallback);
     glfwSetZoomCallback(window, zoomCallback);
     glfwSetRotateCallback(window, rotateCallback);
 
