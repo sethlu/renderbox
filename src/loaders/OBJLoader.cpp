@@ -196,8 +196,15 @@ namespace renderbox {
         if (token.kind != obj_tok::numeric_constant && token.kind != obj_tok::minus) INVALID_SYNTAX();
         v.y = parseFloat(lexer, token);
 
-        // Expect end of line
+        // Expect w (optional)
         lex(lexer, token);
+		if (token.kind == obj_tok::numeric_constant) {
+			// Does not support
+			
+			lex(lexer, token);
+		}
+		
+		// Expect end of line
         if (token.kind != obj_tok::eol) INVALID_SYNTAX();
 
         uvs.emplace_back(v);
@@ -668,6 +675,9 @@ namespace renderbox {
             case '0': case '1': case '2': case '3': case '4':
             case '5': case '6': case '7': case '8': case '9':
 
+				if (isLexingFilename || isLexingMaterialName) { // Lexing a string without quotes etc
+					return lexUnquotedStringLiteral(token, pointer);
+				}
                 return lexNumericConstant(token, pointer);
 
             case 'A': case 'B': case 'C': case 'D': case 'E': case 'F': case 'G':
@@ -905,6 +915,9 @@ namespace renderbox {
             case '0': case '1': case '2': case '3': case '4':
             case '5': case '6': case '7': case '8': case '9':
 
+				if (isLexingFilename || isLexingMaterialName) { // Lexing a string without quotes etc
+					return lexUnquotedStringLiteral(token, pointer);
+				}
                 return lexNumericConstant(token, pointer);
 
             case 'A': case 'B': case 'C': case 'D': case 'E': case 'F': case 'G':
