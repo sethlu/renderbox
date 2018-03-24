@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:vox-ios.xcodeproj">
+      location = "self:/Users/sethlu/Developer/renderbox/examples/ios/CubeExample.xcodeproj">
    </FileRef>
 </Workspace>

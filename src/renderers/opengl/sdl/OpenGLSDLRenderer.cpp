@@ -1,4 +1,5 @@
 
+#include "platform.h"
 #if defined(__IPHONEOS__)
 
 #include <OpenGLES/ES3/gl.h>
