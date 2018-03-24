@@ -20,8 +20,11 @@ in vec2 vertexUV;
 void main() {
 
     vec3 ambientColorLinear = rb_sceneAmbientColor * rb_materialAmbientColor;
-    vec3 diffuseColorLinear = gammaToLinear(texture(rb_materialDiffuseMap, vertexUV).rgb, 2.2) *
-                              vertexDiffuseColor;
+	
+	vec3 diffuseColorLinear = vertexDiffuseColor;
+	#ifdef RB_MATERIAL_DIFFUSE_MAP
+	diffuseColorLinear *= gammaToLinear(texture(rb_materialDiffuseMap, vertexUV).rgb, 2.2);
+	#endif
 
     vec3 colorLinear = ambientColorLinear + diffuseColorLinear;
 
