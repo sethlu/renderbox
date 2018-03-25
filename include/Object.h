@@ -36,6 +36,11 @@ namespace renderbox {
             return (getObjectType() & LIGHT_OBJECT) != 0;
         }
 
+        /**
+         * Returns a shallow copy of the object
+         */
+        std::shared_ptr<Object> clone();
+
         // Object inheritance
 
         bool hasParent() const;

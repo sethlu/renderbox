@@ -25,6 +25,14 @@ namespace renderbox {
         return objectId;
     }
 
+    std::shared_ptr<Object> Object::clone() {
+        auto o = std::make_shared<Object>(geometry, material);
+        o->translation = translation;
+        o->rotationMatrix = rotationMatrix;
+        o->scale = scale;
+        return o;
+    }
+
     bool Object::hasParent() const {
         return parent != nullptr;
     }
