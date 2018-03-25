@@ -238,7 +238,7 @@ namespace renderbox {
         lex(lexer, token);
         if (token.kind != obj_tok::eol) INVALID_SYNTAX();
 
-        normals.emplace_back(v);
+        normals.emplace_back(vertexNormalTransform(v));
 
     }
 
