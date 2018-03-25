@@ -84,14 +84,14 @@ namespace renderbox {
 
 #define HASH(LEN, A, B) \
     (((LEN) << 5) + ((((A) - 'a') + ((B) - 'a')) & 31))
-#define CASE_UNIFORM(LEN, FIRST, THIRD, NAME) \
-    case HASH(LEN, FIRST, THIRD): \
+#define CASE_PPKEYWORD(LEN, FIRST, SECOND, NAME) \
+    case HASH(LEN, FIRST, SECOND): \
         return memcmp(keyword, #NAME, LEN) ? glsl_tok::pp_not_keyword : glsl_tok::pp_ ## NAME;
 
-        switch (HASH(len, keyword[0], keyword[2])) {
+        switch (HASH(len, keyword[0], keyword[1])) {
 
-            CASE_UNIFORM(7, 'i', 'c', include)
-            CASE_UNIFORM(7, 'v', 'r', version)
+            CASE_PPKEYWORD(7, 'i', 'n', include)
+            CASE_PPKEYWORD(7, 'v', 'e', version)
 
             default: return glsl_tok::pp_not_keyword;
         }
