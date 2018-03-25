@@ -19,7 +19,7 @@ namespace renderbox {
 
     public:
 
-        OpenGLSDLRenderer();
+        OpenGLSDLRenderer(Uint32 additionalInitFlags = 0);
 
         ~OpenGLSDLRenderer();
 

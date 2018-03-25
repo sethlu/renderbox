@@ -11,11 +11,11 @@
 
 namespace renderbox {
 
-    OpenGLSDLRenderer::OpenGLSDLRenderer() {
+    OpenGLSDLRenderer::OpenGLSDLRenderer(Uint32 additionalInitFlags) {
 
         // SDL
 
-        if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        if (SDL_Init(SDL_INIT_VIDEO | additionalInitFlags) < 0) {
             fprintf(stderr, "Failed to initialize SDL\n");
             throw 2;
         }
