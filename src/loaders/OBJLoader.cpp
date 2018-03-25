@@ -55,6 +55,10 @@ namespace renderbox {
 
     }
 
+    void OBJLoader::enterOBJSourceFile(const std::string &filename) {
+        enterOBJSourceFile(filename.c_str());
+    }
+
     void OBJLoader::enterMTLSourceFile(const char *filename) {
 
         if (!sourceFiles.empty()) {

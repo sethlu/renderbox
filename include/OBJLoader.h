@@ -101,6 +101,8 @@ namespace renderbox {
 
         void enterOBJSourceFile(const char *filename);
 
+        void enterOBJSourceFile(const std::string &filename);
+
         void enterMTLSourceFile(const char *filename);
 
     private:
