@@ -30,6 +30,16 @@ namespace renderbox {
             throw 2;
         }
 
+        bool flipVerical = false;
+        if (info.biHeight < 0) {
+            flipVerical = true;
+            info.biHeight = -info.biHeight;
+        }
+
+        if (!info.biSizeImage) {
+            info.biSizeImage = info.biWidth * info.biHeight * 3;
+        }
+
         auto *pixels = new char[info.biSizeImage];
         file.read(pixels, info.biSizeImage);
 
@@ -38,6 +48,18 @@ namespace renderbox {
             t = pixels[i];
             pixels[i] = pixels[i + 2];
             pixels[i + 2] = t;
+        }
+
+        if (flipVerical) {
+            size_t rowSize = info.biWidth * 3;
+            char t[rowSize];
+            for (int i = 0, h = info.biHeight / 2; i < h; ++i) {
+                char *a = pixels + i * rowSize,
+                     *b = pixels + (info.biHeight - 1 - i) * rowSize;
+                memcpy(t, a, rowSize);
+                memcpy(a, b, rowSize);
+                memcpy(b, t, rowSize);
+            }
         }
 
         return new Texture(pixels, static_cast<unsigned>(info.biWidth), static_cast<unsigned>(info.biHeight));
