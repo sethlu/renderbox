@@ -5,3 +5,6 @@
 [submodule "vendor/glm"]
 	path = vendor/glm
 	url = https://github.com/g-truc/glm.git
+[submodule "vendor/sdl"]
+	path = vendor/sdl
+	url = git@github.com:sethlu/SDL.git

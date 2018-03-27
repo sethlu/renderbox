@@ -18,6 +18,10 @@
 		C5C674F31F94A1A000CFACA5 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5C674F21F94A1A000CFACA5 /* CoreAudio.framework */; };
 		C5C674F51F94A1A600CFACA5 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5C674F41F94A1A600CFACA5 /* AudioToolbox.framework */; };
 		C5C674F71F94A1AD00CFACA5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5C674F61F94A1AD00CFACA5 /* CoreGraphics.framework */; };
+		C5EA44832069EF7F0047AE76 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5EA44822069EF7F0047AE76 /* Metal.framework */; };
+		C5FE796E2069EE52002585C6 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5FE796D2069EE52002585C6 /* CoreMotion.framework */; };
+		C5FE79702069EE60002585C6 /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5FE796F2069EE60002585C6 /* GameController.framework */; };
+		C5FE79722069EE71002585C6 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5FE79712069EE71002585C6 /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +56,10 @@
 		C5C674F41F94A1A600CFACA5 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		C5C674F61F94A1AD00CFACA5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		C5C675AE1F94AAAE00CFACA5 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C5EA44822069EF7F0047AE76 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		C5FE796D2069EE52002585C6 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		C5FE796F2069EE60002585C6 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
+		C5FE79712069EE71002585C6 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +67,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5EA44832069EF7F0047AE76 /* Metal.framework in Frameworks */,
+				C5FE79722069EE71002585C6 /* AVFoundation.framework in Frameworks */,
+				C5FE79702069EE60002585C6 /* GameController.framework in Frameworks */,
+				C5FE796E2069EE52002585C6 /* CoreMotion.framework in Frameworks */,
 				C5C674F71F94A1AD00CFACA5 /* CoreGraphics.framework in Frameworks */,
 				C5C674F51F94A1A600CFACA5 /* AudioToolbox.framework in Frameworks */,
 				C5C674F31F94A1A000CFACA5 /* CoreAudio.framework in Frameworks */,
@@ -114,6 +126,10 @@
 		C5C674E71F94A18000CFACA5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C5EA44822069EF7F0047AE76 /* Metal.framework */,
+				C5FE79712069EE71002585C6 /* AVFoundation.framework */,
+				C5FE796F2069EE60002585C6 /* GameController.framework */,
+				C5FE796D2069EE52002585C6 /* CoreMotion.framework */,
 				C5C674F61F94A1AD00CFACA5 /* CoreGraphics.framework */,
 				C5C674F41F94A1A600CFACA5 /* AudioToolbox.framework */,
 				C5C674F21F94A1A000CFACA5 /* CoreAudio.framework */,
@@ -344,7 +360,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../include/",
 					"$(SRCROOT)/../../../vendor/glm/",
-					"$(SRCROOT)/../../../vendor/sdl2/include/",
+					"$(SRCROOT)/../../../vendor/sdl/include/",
 					/usr/local/include,
 				);
 				INFOPLIST_FILE = CubeExample/Info.plist;
@@ -370,7 +386,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../include/",
 					"$(SRCROOT)/../../../vendor/glm/",
-					"$(SRCROOT)/../../../vendor/sdl2/include/",
+					"$(SRCROOT)/../../../vendor/sdl/include/",
 					/usr/local/include,
 				);
 				INFOPLIST_FILE = CubeExample/Info.plist;

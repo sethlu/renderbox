@@ -34,34 +34,42 @@
 		C5397A162065D976001AAFFE /* OBJLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C53979D12065D975001AAFFE /* OBJLoader.cpp */; };
 		C5397A172065D976001AAFFE /* PointLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C53979D32065D975001AAFFE /* PointLight.cpp */; };
 		C5397A182065D976001AAFFE /* Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C53979D42065D975001AAFFE /* Light.cpp */; };
-		C5397A212065DA8A001AAFFE /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5397A1F2065DA4B001AAFFE /* libSDL2.a */; };
+		C5FE79692069EC2D002585C6 /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5AA39B42069EC03004E3FDD /* libSDL2.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		C5397A1E2065DA4B001AAFFE /* PBXContainerItemProxy */ = {
+		C5AA39B32069EC03004E3FDD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = C5397A192065DA4A001AAFFE /* SDL.xcodeproj */;
+			containerPortal = C5AA39AB2069EC03004E3FDD /* SDL.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = FD6526630DE8FCCB002AD96B;
-			remoteInfo = libSDL;
+			remoteInfo = "libSDL-iOS";
 		};
-		C5397A262065DC8E001AAFFE /* PBXContainerItemProxy */ = {
+		C5AA39B52069EC03004E3FDD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = C5397A192065DA4A001AAFFE /* SDL.xcodeproj */;
+			containerPortal = C5AA39AB2069EC03004E3FDD /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FAB598141BB5C1B100BE72C5;
+			remoteInfo = "libSDL-tvOS";
+		};
+		C5EA44842069EFBB0047AE76 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C5AA39AB2069EC03004E3FDD /* SDL.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = FD6526620DE8FCCB002AD96B;
-			remoteInfo = libSDL;
+			remoteInfo = "libSDL-iOS";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		C53978642065D862001AAFFE /* CopyFiles */ = {
+		C53978642065D862001AAFFE /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
 			);
+			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -149,7 +157,8 @@
 		C53979FB2065D976001AAFFE /* MTLTokenKinds.def */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = MTLTokenKinds.def; sourceTree = "<group>"; };
 		C53979FC2065D976001AAFFE /* Scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scene.h; sourceTree = "<group>"; };
 		C53979FD2065D976001AAFFE /* OpenGLVertexArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLVertexArray.h; sourceTree = "<group>"; };
-		C5397A192065DA4A001AAFFE /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = "../../../vendor/sdl2/Xcode-iOS/SDL/SDL.xcodeproj"; sourceTree = "<group>"; };
+		C5AA39A420679C9D004E3FDD /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		C5AA39AB2069EC03004E3FDD /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = "../../../vendor/sdl/Xcode-iOS/SDL/SDL.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,7 +166,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C5397A212065DA8A001AAFFE /* libSDL2.a in Frameworks */,
+				C5FE79692069EC2D002585C6 /* libSDL2.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,7 +176,7 @@
 		C539785D2065D862001AAFFE = {
 			isa = PBXGroup;
 			children = (
-				C5397A192065DA4A001AAFFE /* SDL.xcodeproj */,
+				C5AA39AB2069EC03004E3FDD /* SDL.xcodeproj */,
 				C53979982065D95D001AAFFE /* RenderBox */,
 				C53978672065D862001AAFFE /* Products */,
 				C5397A202065DA8A001AAFFE /* Frameworks */,
@@ -432,19 +441,21 @@
 			path = ../../../include;
 			sourceTree = "<group>";
 		};
-		C5397A1A2065DA4A001AAFFE /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				C5397A1F2065DA4B001AAFFE /* libSDL2.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		C5397A202065DA8A001AAFFE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C5AA39A420679C9D004E3FDD /* CoreMotion.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C5AA39AC2069EC03004E3FDD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C5AA39B42069EC03004E3FDD /* libSDL2.a */,
+				C5AA39B62069EC03004E3FDD /* libSDL2.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -456,12 +467,12 @@
 			buildPhases = (
 				C53978622065D862001AAFFE /* Sources */,
 				C53978632065D862001AAFFE /* Frameworks */,
-				C53978642065D862001AAFFE /* CopyFiles */,
+				C53978642065D862001AAFFE /* Copy Files */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				C5397A272065DC8E001AAFFE /* PBXTargetDependency */,
+				C5EA44852069EFBB0047AE76 /* PBXTargetDependency */,
 			);
 			name = RenderBox;
 			productName = RenderBox;
@@ -495,8 +506,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = C5397A1A2065DA4A001AAFFE /* Products */;
-					ProjectRef = C5397A192065DA4A001AAFFE /* SDL.xcodeproj */;
+					ProductGroup = C5AA39AC2069EC03004E3FDD /* Products */;
+					ProjectRef = C5AA39AB2069EC03004E3FDD /* SDL.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -507,11 +518,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		C5397A1F2065DA4B001AAFFE /* libSDL2.a */ = {
+		C5AA39B42069EC03004E3FDD /* libSDL2.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libSDL2.a;
-			remoteRef = C5397A1E2065DA4B001AAFFE /* PBXContainerItemProxy */;
+			remoteRef = C5AA39B32069EC03004E3FDD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C5AA39B62069EC03004E3FDD /* libSDL2.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSDL2.a;
+			remoteRef = C5AA39B52069EC03004E3FDD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -554,10 +572,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		C5397A272065DC8E001AAFFE /* PBXTargetDependency */ = {
+		C5EA44852069EFBB0047AE76 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = libSDL;
-			targetProxy = C5397A262065DC8E001AAFFE /* PBXContainerItemProxy */;
+			name = "libSDL-iOS";
+			targetProxy = C5EA44842069EFBB0047AE76 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -673,7 +691,7 @@
 				DEVELOPMENT_TEAM = 4JAEG2S45X;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../vendor/glm/",
-					"$(SRCROOT)/../../../vendor/sdl2/include/",
+					"$(SRCROOT)/../../../vendor/sdl/include/",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -689,7 +707,7 @@
 				DEVELOPMENT_TEAM = 4JAEG2S45X;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../vendor/glm/",
-					"$(SRCROOT)/../../../vendor/sdl2/include/",
+					"$(SRCROOT)/../../../vendor/sdl/include/",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
