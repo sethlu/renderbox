@@ -214,7 +214,7 @@ namespace renderbox {
                 OpenGLTexture *diffuseMap(nullptr);
                 if (object->getMaterial()->isDiffuseMaterial()) {
                     bool blankTexture;
-                    diffuseMap = objectProperties->getTexture(0, &blankTexture);
+                    diffuseMap = objectProperties->getTexture(1, &blankTexture);
                     if (blankTexture) {
                         if (auto material = dynamic_cast<DiffuseMaterial *>(object->getMaterial().get())) {
                             auto texture = material->getDiffuseMap(); // Need to check if texture exists
