@@ -94,61 +94,61 @@ namespace renderbox {
     class OBJLexer;
     class MTLLexer;
 
-    vec3 xyz(const vec3& v) { return {v.x, v.y, v.z}; }
-    vec3 xzy(const vec3& v) { return {v.x, v.z, v.y}; }
-    vec3 yxz(const vec3& v) { return {v.y, v.x, v.z}; }
-    vec3 yzx(const vec3& v) { return {v.y, v.z, v.x}; }
-    vec3 zxy(const vec3& v) { return {v.z, v.x, v.z}; }
-    vec3 zyx(const vec3& v) { return {v.z, v.z, v.x}; }
+    inline vec3 xyz(const vec3& v) { return {v.x, v.y, v.z}; }
+    inline vec3 xzy(const vec3& v) { return {v.x, v.z, v.y}; }
+    inline vec3 yxz(const vec3& v) { return {v.y, v.x, v.z}; }
+    inline vec3 yzx(const vec3& v) { return {v.y, v.z, v.x}; }
+    inline vec3 zxy(const vec3& v) { return {v.z, v.x, v.z}; }
+    inline vec3 zyx(const vec3& v) { return {v.z, v.z, v.x}; }
 
-    vec3 nxyz(const vec3& v) { return {-v.x, v.y, v.z}; }
-    vec3 nxzy(const vec3& v) { return {-v.x, v.z, v.y}; }
-    vec3 nyxz(const vec3& v) { return {-v.y, v.x, v.z}; }
-    vec3 nyzx(const vec3& v) { return {-v.y, v.z, v.x}; }
-    vec3 nzxy(const vec3& v) { return {-v.z, v.x, v.z}; }
-    vec3 nzyx(const vec3& v) { return {-v.z, v.z, v.x}; }
+    inline vec3 nxyz(const vec3& v) { return {-v.x, v.y, v.z}; }
+    inline vec3 nxzy(const vec3& v) { return {-v.x, v.z, v.y}; }
+    inline vec3 nyxz(const vec3& v) { return {-v.y, v.x, v.z}; }
+    inline vec3 nyzx(const vec3& v) { return {-v.y, v.z, v.x}; }
+    inline vec3 nzxy(const vec3& v) { return {-v.z, v.x, v.z}; }
+    inline vec3 nzyx(const vec3& v) { return {-v.z, v.z, v.x}; }
 
-    vec3 xnyz(const vec3& v) { return {v.x, -v.y, v.z}; }
-    vec3 xnzy(const vec3& v) { return {v.x, -v.z, v.y}; }
-    vec3 ynxz(const vec3& v) { return {v.y, -v.x, v.z}; }
-    vec3 ynzx(const vec3& v) { return {v.y, -v.z, v.x}; }
-    vec3 znxy(const vec3& v) { return {v.z, -v.x, v.z}; }
-    vec3 znyx(const vec3& v) { return {v.z, -v.z, v.x}; }
+    inline vec3 xnyz(const vec3& v) { return {v.x, -v.y, v.z}; }
+    inline vec3 xnzy(const vec3& v) { return {v.x, -v.z, v.y}; }
+    inline vec3 ynxz(const vec3& v) { return {v.y, -v.x, v.z}; }
+    inline vec3 ynzx(const vec3& v) { return {v.y, -v.z, v.x}; }
+    inline vec3 znxy(const vec3& v) { return {v.z, -v.x, v.z}; }
+    inline vec3 znyx(const vec3& v) { return {v.z, -v.z, v.x}; }
 
-    vec3 xynz(const vec3& v) { return {v.x, v.y, -v.z}; }
-    vec3 xzny(const vec3& v) { return {v.x, v.z, -v.y}; }
-    vec3 yxnz(const vec3& v) { return {v.y, v.x, -v.z}; }
-    vec3 yznx(const vec3& v) { return {v.y, v.z, -v.x}; }
-    vec3 zxny(const vec3& v) { return {v.z, v.x, -v.z}; }
-    vec3 zynx(const vec3& v) { return {v.z, v.z, -v.x}; }
+    inline vec3 xynz(const vec3& v) { return {v.x, v.y, -v.z}; }
+    inline vec3 xzny(const vec3& v) { return {v.x, v.z, -v.y}; }
+    inline vec3 yxnz(const vec3& v) { return {v.y, v.x, -v.z}; }
+    inline vec3 yznx(const vec3& v) { return {v.y, v.z, -v.x}; }
+    inline vec3 zxny(const vec3& v) { return {v.z, v.x, -v.z}; }
+    inline vec3 zynx(const vec3& v) { return {v.z, v.z, -v.x}; }
 
-    vec3 nxnyz(const vec3& v) { return {-v.x, -v.y, v.z}; }
-    vec3 nxnzy(const vec3& v) { return {-v.x, -v.z, v.y}; }
-    vec3 nynxz(const vec3& v) { return {-v.y, -v.x, v.z}; }
-    vec3 nynzx(const vec3& v) { return {-v.y, -v.z, v.x}; }
-    vec3 nznxy(const vec3& v) { return {-v.z, -v.x, v.z}; }
-    vec3 nznyx(const vec3& v) { return {-v.z, -v.z, v.x}; }
+    inline vec3 nxnyz(const vec3& v) { return {-v.x, -v.y, v.z}; }
+    inline vec3 nxnzy(const vec3& v) { return {-v.x, -v.z, v.y}; }
+    inline vec3 nynxz(const vec3& v) { return {-v.y, -v.x, v.z}; }
+    inline vec3 nynzx(const vec3& v) { return {-v.y, -v.z, v.x}; }
+    inline vec3 nznxy(const vec3& v) { return {-v.z, -v.x, v.z}; }
+    inline vec3 nznyx(const vec3& v) { return {-v.z, -v.z, v.x}; }
 
-    vec3 nxynz(const vec3& v) { return {-v.x, v.y, -v.z}; }
-    vec3 nxzny(const vec3& v) { return {-v.x, v.z, -v.y}; }
-    vec3 nyxnz(const vec3& v) { return {-v.y, v.x, -v.z}; }
-    vec3 nyznx(const vec3& v) { return {-v.y, v.z, -v.x}; }
-    vec3 nzxny(const vec3& v) { return {-v.z, v.x, -v.z}; }
-    vec3 nzynx(const vec3& v) { return {-v.z, v.z, -v.x}; }
+    inline vec3 nxynz(const vec3& v) { return {-v.x, v.y, -v.z}; }
+    inline vec3 nxzny(const vec3& v) { return {-v.x, v.z, -v.y}; }
+    inline vec3 nyxnz(const vec3& v) { return {-v.y, v.x, -v.z}; }
+    inline vec3 nyznx(const vec3& v) { return {-v.y, v.z, -v.x}; }
+    inline vec3 nzxny(const vec3& v) { return {-v.z, v.x, -v.z}; }
+    inline vec3 nzynx(const vec3& v) { return {-v.z, v.z, -v.x}; }
 
-    vec3 xnynz(const vec3& v) { return {v.x, -v.y, -v.z}; }
-    vec3 xnzny(const vec3& v) { return {v.x, -v.z, -v.y}; }
-    vec3 ynxnz(const vec3& v) { return {v.y, -v.x, -v.z}; }
-    vec3 ynznx(const vec3& v) { return {v.y, -v.z, -v.x}; }
-    vec3 znxny(const vec3& v) { return {v.z, -v.x, -v.z}; }
-    vec3 znynx(const vec3& v) { return {v.z, -v.z, -v.x}; }
+    inline vec3 xnynz(const vec3& v) { return {v.x, -v.y, -v.z}; }
+    inline vec3 xnzny(const vec3& v) { return {v.x, -v.z, -v.y}; }
+    inline vec3 ynxnz(const vec3& v) { return {v.y, -v.x, -v.z}; }
+    inline vec3 ynznx(const vec3& v) { return {v.y, -v.z, -v.x}; }
+    inline vec3 znxny(const vec3& v) { return {v.z, -v.x, -v.z}; }
+    inline vec3 znynx(const vec3& v) { return {v.z, -v.z, -v.x}; }
 
-    vec3 nxnynz(const vec3& v) { return {-v.x, -v.y, -v.z}; }
-    vec3 nxnzny(const vec3& v) { return {-v.x, -v.z, -v.y}; }
-    vec3 nynxnz(const vec3& v) { return {-v.y, -v.x, -v.z}; }
-    vec3 nynznx(const vec3& v) { return {-v.y, -v.z, -v.x}; }
-    vec3 nznxny(const vec3& v) { return {-v.z, -v.x, -v.z}; }
-    vec3 nznynx(const vec3& v) { return {-v.z, -v.z, -v.x}; }
+    inline vec3 nxnynz(const vec3& v) { return {-v.x, -v.y, -v.z}; }
+    inline vec3 nxnzny(const vec3& v) { return {-v.x, -v.z, -v.y}; }
+    inline vec3 nynxnz(const vec3& v) { return {-v.y, -v.x, -v.z}; }
+    inline vec3 nynznx(const vec3& v) { return {-v.y, -v.z, -v.x}; }
+    inline vec3 nznxny(const vec3& v) { return {-v.z, -v.x, -v.z}; }
+    inline vec3 nznynx(const vec3& v) { return {-v.z, -v.z, -v.x}; }
 
     class OBJLoader {
     public:
