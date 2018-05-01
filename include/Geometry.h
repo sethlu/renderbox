@@ -2,12 +2,6 @@
 #define VOX_GEOMETRY_H
 
 
-#include "platform.h"
-#if defined(__MACOSX__)
-#include <OpenGL/OpenGL.h>
-#elif defined(__IPHONEOS__)
-#include <OpenGLES/ES3/gl.h>
-#endif
 #include <vector>
 #include "Vector.h"
 
