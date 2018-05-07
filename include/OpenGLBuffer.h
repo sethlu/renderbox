@@ -1,5 +1,5 @@
-#ifndef VOX_OPENGLBUFFER_H
-#define VOX_OPENGLBUFFER_H
+#ifndef RENDERBOX_OPENGLBUFFER_H
+#define RENDERBOX_OPENGLBUFFER_H
 
 
 #include "platform.h"
@@ -55,4 +55,4 @@ namespace renderbox {
 }
 
 
-#endif //VOX_OPENGLBUFFER_H
+#endif //RENDERBOX_OPENGLBUFFER_H

@@ -1,5 +1,5 @@
-#ifndef VOX_SHADERMATERIAL_H
-#define VOX_SHADERMATERIAL_H
+#ifndef RENDERBOX_SHADERMATERIAL_H
+#define RENDERBOX_SHADERMATERIAL_H
 
 
 #include <string>
@@ -29,4 +29,4 @@ namespace renderbox {
 }
 
 
-#endif //VOX_SHADERMATERIAL_H
+#endif //RENDERBOX_SHADERMATERIAL_H

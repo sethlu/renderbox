@@ -1,5 +1,5 @@
-#ifndef VOX_RENDERERTARGET_H
-#define VOX_RENDERERTARGET_H
+#ifndef RENDERBOX_RENDERERTARGET_H
+#define RENDERBOX_RENDERERTARGET_H
 
 
 #include "platform.h"
@@ -41,4 +41,4 @@ namespace renderbox {
 }
 
 
-#endif //VOX_RENDERERTARGET_H
+#endif //RENDERBOX_RENDERERTARGET_H

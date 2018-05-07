@@ -2,8 +2,6 @@
 #define RENDERBOX_LEX_H_H
 
 
-#include <cstdint>
-
 namespace renderbox {
 
     // ASCII info based on: http://llvm.org/svn/llvm-project/cfe/trunk/include/clang/Basic/CharInfo.h

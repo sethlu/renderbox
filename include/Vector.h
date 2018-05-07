@@ -1,5 +1,5 @@
-#ifndef VOX_VECTOR_H
-#define VOX_VECTOR_H
+#ifndef RENDERBOX_VECTOR_H
+#define RENDERBOX_VECTOR_H
 
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -19,4 +19,5 @@ namespace renderbox {
 
 }
 
-#endif //VOX_VECTOR_H
+
+#endif //RENDERBOX_VECTOR_H

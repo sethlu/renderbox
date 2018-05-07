@@ -1,5 +1,5 @@
-#ifndef VOX_OBJECTPROPERTIES_H
-#define VOX_OBJECTPROPERTIES_H
+#ifndef RENDERBOX_OBJECTPROPERTIES_H
+#define RENDERBOX_OBJECTPROPERTIES_H
 
 
 namespace renderbox {
@@ -11,4 +11,4 @@ namespace renderbox {
 }
 
 
-#endif //VOX_OBJECTPROPERTIES_H
+#endif //RENDERBOX_OBJECTPROPERTIES_H

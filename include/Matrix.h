@@ -1,5 +1,5 @@
-#ifndef VOX_MATRIX_H
-#define VOX_MATRIX_H
+#ifndef RENDERBOX_MATRIX_H
+#define RENDERBOX_MATRIX_H
 
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -13,4 +13,4 @@ namespace renderbox {
 }
 
 
-#endif //VOX_MATRIX_H
+#endif //RENDERBOX_MATRIX_H

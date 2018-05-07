@@ -37,6 +37,7 @@ namespace renderbox {
     };
 
     class Source;
+
     class GLSLPreprocessorLexer;
 
     class GLSLPreprocessor {

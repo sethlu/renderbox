@@ -1,5 +1,6 @@
-#ifndef VOX_SCENE_H
-#define VOX_SCENE_H
+#ifndef RENDERBOX_SCENE_H
+#define RENDERBOX_SCENE_H
+
 
 #include "Object.h"
 
@@ -29,4 +30,4 @@ namespace renderbox {
 }
 
 
-#endif //VOX_SCENE_H
+#endif //RENDERBOX_SCENE_H

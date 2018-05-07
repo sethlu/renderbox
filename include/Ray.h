@@ -1,5 +1,5 @@
-#ifndef VOX_RAY_H
-#define VOX_RAY_H
+#ifndef RENDERBOX_RAY_H
+#define RENDERBOX_RAY_H
 
 
 #include "Object.h"
@@ -31,4 +31,4 @@ namespace renderbox {
 }
 
 
-#endif //VOX_RAY_H
+#endif //RENDERBOX_RAY_H

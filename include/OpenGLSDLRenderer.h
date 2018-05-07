@@ -1,8 +1,9 @@
-#ifndef VOX_OPENGLSDLRENDERER_H
-#define VOX_OPENGLSDLRENDERER_H
+#ifndef RENDERBOX_OPENGLSDLRENDERER_H
+#define RENDERBOX_OPENGLSDLRENDERER_H
 
 
 #include "platform.h"
+
 #if defined(__IPHONEOS__)
 
 #include <SDL.h>
@@ -25,7 +26,7 @@ namespace renderbox {
 
         SDL_Window *getWindow() const;
 
-		int getFramebufferWidth() const override;
+        int getFramebufferWidth() const override;
 
         int getFramebufferHeight() const override;
 
@@ -36,4 +37,4 @@ namespace renderbox {
 #endif // defined(__IPHONEOS__)
 
 
-#endif //VOX_OPENGLSDLRENDERER_H
+#endif //RENDERBOX_OPENGLSDLRENDERER_H

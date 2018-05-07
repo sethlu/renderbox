@@ -1,5 +1,5 @@
-#ifndef VOX_OPENGLRENDERLIST_H
-#define VOX_OPENGLRENDERLIST_H
+#ifndef RENDERBOX_OPENGLRENDERLIST_H
+#define RENDERBOX_OPENGLRENDERLIST_H
 
 
 #include <vector>
@@ -28,4 +28,4 @@ namespace renderbox {
 }
 
 
-#endif //VOX_OPENGLRENDERLIST_H
+#endif //RENDERBOX_OPENGLRENDERLIST_H

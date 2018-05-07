@@ -1,5 +1,5 @@
-#ifndef VOX_MATERIAL_H
-#define VOX_MATERIAL_H
+#ifndef RENDERBOX_MATERIAL_H
+#define RENDERBOX_MATERIAL_H
 
 
 #include <string>
@@ -44,7 +44,7 @@ namespace renderbox {
     class AmbientMaterial {
     public:
 
-        explicit AmbientMaterial(vec3 ambientColor) : ambientColor(ambientColor) { };
+        explicit AmbientMaterial(vec3 ambientColor) : ambientColor(ambientColor) {};
 
         vec3 getAmbientColor() const { return ambientColor; }
 
@@ -65,7 +65,7 @@ namespace renderbox {
     class DiffuseMaterial {
     public:
 
-        explicit DiffuseMaterial(vec3 diffuseColor) : diffuseColor(diffuseColor) { };
+        explicit DiffuseMaterial(vec3 diffuseColor) : diffuseColor(diffuseColor) {};
 
         vec3 getDiffuseColor() const { return diffuseColor; }
 
@@ -85,4 +85,4 @@ namespace renderbox {
 
 }
 
-#endif //VOX_MATERIAL_H
+#endif //RENDERBOX_MATERIAL_H

@@ -1,5 +1,5 @@
-#ifndef VOX_RENDERBOX_H
-#define VOX_RENDERBOX_H
+#ifndef RENDERBOX_RENDERBOX_H
+#define RENDERBOX_RENDERBOX_H
 
 
 #include "Object.h"
@@ -36,4 +36,4 @@
 #include "OBJLoader.h"
 
 
-#endif //VOX_RENDERBOX_H
+#endif //RENDERBOX_RENDERBOX_H

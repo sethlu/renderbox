@@ -1,5 +1,5 @@
-#ifndef VOX_CAMERA_H
-#define VOX_CAMERA_H
+#ifndef RENDERBOX_CAMERA_H
+#define RENDERBOX_CAMERA_H
 
 
 #include "Object.h"
@@ -42,4 +42,5 @@ namespace renderbox {
 
 }
 
-#endif //VOX_CAMERA_H
+
+#endif //RENDERBOX_CAMERA_H

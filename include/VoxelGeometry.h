@@ -1,5 +1,5 @@
-#ifndef VOX_VOXELGEOMETRY_H
-#define VOX_VOXELGEOMETRY_H
+#ifndef RENDERBOX_VOXELGEOMETRY_H
+#define RENDERBOX_VOXELGEOMETRY_H
 
 
 #include <unordered_map>
@@ -91,4 +91,4 @@ namespace renderbox {
 }
 
 
-#endif //VOX_VOXELGEOMETRY_H
+#endif //RENDERBOX_VOXELGEOMETRY_H

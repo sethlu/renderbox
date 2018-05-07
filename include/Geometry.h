@@ -1,5 +1,5 @@
-#ifndef VOX_GEOMETRY_H
-#define VOX_GEOMETRY_H
+#ifndef RENDERBOX_GEOMETRY_H
+#define RENDERBOX_GEOMETRY_H
 
 
 #include <vector>
@@ -36,4 +36,4 @@ namespace renderbox {
 }
 
 
-#endif //VOX_GEOMETRY_H
+#endif //RENDERBOX_GEOMETRY_H

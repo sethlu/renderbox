@@ -1,5 +1,5 @@
-#ifndef VOX_OBJECT_H
-#define VOX_OBJECT_H
+#ifndef RENDERBOX_OBJECT_H
+#define RENDERBOX_OBJECT_H
 
 
 #include <vector>
@@ -161,4 +161,4 @@ namespace renderbox {
 }
 
 
-#endif //VOX_OBJECT_H
+#endif //RENDERBOX_OBJECT_H

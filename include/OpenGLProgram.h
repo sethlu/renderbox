@@ -1,5 +1,5 @@
-#ifndef VOX_OPENGLPROGRAM_H
-#define VOX_OPENGLPROGRAM_H
+#ifndef RENDERBOX_OPENGLPROGRAM_H
+#define RENDERBOX_OPENGLPROGRAM_H
 
 
 #include "platform.h"
@@ -108,4 +108,4 @@ namespace renderbox {
 }
 
 
-#endif //VOX_OPENGLPROGRAM_H
+#endif //RENDERBOX_OPENGLPROGRAM_H

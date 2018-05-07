@@ -1,5 +1,5 @@
-#ifndef VOX_OPENGLRENDERER_H
-#define VOX_OPENGLRENDERER_H
+#ifndef RENDERBOX_OPENGLRENDERER_H
+#define RENDERBOX_OPENGLRENDERER_H
 
 
 #include "platform.h"
@@ -18,16 +18,16 @@
 
 namespace renderbox {
 
-	class OpenGLRenderer {
+    class OpenGLRenderer {
     public:
 
-		// Render
+        // Render
 
-		void render(Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget = nullptr, bool forceClear = false);
+        void render(Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget = nullptr, bool forceClear = false);
 
         void loadObject(Object *object);
 
-		// Window framebuffer
+        // Window framebuffer
 
         virtual int getFramebufferWidth() const = 0;
 
@@ -44,4 +44,4 @@ namespace renderbox {
 }
 
 
-#endif //VOX_OPENGLRENDERER_H
+#endif //RENDERBOX_OPENGLRENDERER_H

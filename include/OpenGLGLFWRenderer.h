@@ -1,12 +1,11 @@
-#ifndef VOX_OPENGLGLFWRENDERER_H
-#define VOX_OPENGLGLFWRENDERER_H
+#ifndef RENDERBOX_OPENGLGLFWRENDERER_H
+#define RENDERBOX_OPENGLGLFWRENDERER_H
 
 
 #include "platform.h"
 #if defined(__MACOSX__)
 
 #define GLFW_INCLUDE_GLCOREARB
-
 #include <GLFW/glfw3.h>
 #include "OpenGLRenderer.h"
 
@@ -39,4 +38,5 @@ namespace renderbox {
 
 #endif // defined(__MACOSX__)
 
-#endif //VOX_OPENGLGLFWRENDERER_H
+
+#endif //RENDERBOX_OPENGLGLFWRENDERER_H

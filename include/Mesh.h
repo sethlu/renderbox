@@ -1,5 +1,5 @@
-#ifndef VOX_MESH_H
-#define VOX_MESH_H
+#ifndef RENDERBOX_MESH_H
+#define RENDERBOX_MESH_H
 
 
 #include "Geometry.h"
@@ -22,4 +22,4 @@ namespace renderbox {
 }
 
 
-#endif //VOX_MESH_H
+#endif //RENDERBOX_MESH_H

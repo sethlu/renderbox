@@ -1,5 +1,5 @@
-#ifndef VOX_OPENGLVERTEXARRAY_H
-#define VOX_OPENGLVERTEXARRAY_H
+#ifndef RENDERBOX_OPENGLVERTEXARRAY_H
+#define RENDERBOX_OPENGLVERTEXARRAY_H
 
 
 #include "platform.h"
@@ -56,4 +56,4 @@ namespace renderbox {
 }
 
 
-#endif //VOX_OPENGLVERTEXARRAY_H
+#endif //RENDERBOX_OPENGLVERTEXARRAY_H

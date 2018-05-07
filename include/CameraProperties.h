@@ -1,5 +1,5 @@
-#ifndef VOX_CAMERAPROPERTIES_H
-#define VOX_CAMERAPROPERTIES_H
+#ifndef RENDERBOX_CAMERAPROPERTIES_H
+#define RENDERBOX_CAMERAPROPERTIES_H
 
 
 #include "ObjectProperties.h"
@@ -13,4 +13,4 @@ namespace renderbox {
 }
 
 
-#endif //VOX_CAMERAPROPERTIES_H
+#endif //RENDERBOX_CAMERAPROPERTIES_H

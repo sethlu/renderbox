@@ -13,7 +13,7 @@ namespace renderbox {
     public:
 
         explicit Texture(const char *pixels, unsigned width, unsigned height)
-            : pixels(pixels), width(width), height(height) { };
+                : pixels(pixels), width(width), height(height) {};
 
         static Texture *fromFile(const char *filename);
 
