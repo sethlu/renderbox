@@ -37,14 +37,6 @@ namespace renderbox {
         return parent != nullptr;
     }
 
-    Object *Object::getParent() const {
-        return parent;
-    };
-
-    std::vector<std::shared_ptr<Object>> Object::getChildren() const {
-        return children;
-    }
-
     void Object::addChild(std::shared_ptr<Object> child) {
         if (child->hasParent()) {
             fprintf(stderr, "Object already assigned with parent");
@@ -95,7 +87,7 @@ namespace renderbox {
 
     void Object::didTransform() {
         // Calculate world matrix for each child
-        worldMatrix = (hasParent() ? getParent()->worldMatrix : mat4(1.0f)) * getMatrix();
+        worldMatrix = (hasParent() ? parent->worldMatrix : mat4(1.0f)) * getMatrix();
         // Propagate object transformation
         for (const auto &child : children) {
             child->didTransform();

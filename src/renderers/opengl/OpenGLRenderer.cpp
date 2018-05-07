@@ -32,7 +32,7 @@ namespace renderbox {
                 renderList.addLight(static_cast<Light *>(object));
             }
 
-            for (const auto &next : object->getChildren()) {
+            for (const auto &next : object->children) {
                 frontier.push(next.get());
             }
         }

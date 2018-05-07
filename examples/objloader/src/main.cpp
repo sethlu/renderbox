@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
 
     renderbox::OBJLoader loader(scene);
     loader.enterOBJSourceFile("suzanne.obj");
-    suzanne = scene->getChildren()[0];
+    suzanne = scene->children[0];
 
     for (unsigned i = 0; i < 8; ++i) {
         auto pointLight = std::make_shared<renderbox::PointLight>(60.0f * normalize(glm::vec3(

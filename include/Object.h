@@ -45,9 +45,15 @@ namespace renderbox {
 
         bool hasParent() const;
 
-        Object *getParent() const;
+        /**
+         * @var Parent of the object
+         */
+        Object *parent = nullptr;
 
-        std::vector<std::shared_ptr<Object>> getChildren() const;
+        /**
+         * @var Children of the object
+         */
+        std::vector<std::shared_ptr<Object>> children;
 
         void addChild(std::shared_ptr<Object> child);
 
@@ -125,18 +131,6 @@ namespace renderbox {
          * @var Global unique object ID
          */
         int objectId = ++count;
-
-        // Object inheritance
-
-        /**
-         * @var Parent of the object
-         */
-        Object *parent = nullptr;
-
-        /**
-         * @var Children of the object
-         */
-        std::vector<std::shared_ptr<Object>> children;
 
         // Object transformation
 
