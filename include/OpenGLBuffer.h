@@ -34,11 +34,10 @@ namespace renderbox {
 
         void buffer(const void *data, GLsizei size, GLenum usage = GL_STATIC_DRAW);
 
-        void buffer(const std::vector<vec3> &data, GLenum usage = GL_STATIC_DRAW);
-
-        void buffer(const std::vector<uvec3> &data, GLenum usage = GL_STATIC_DRAW);
-
-        void buffer(const std::vector<vec2> &data, GLenum usage = GL_STATIC_DRAW);
+        template<typename T>
+        void buffer(const std::vector<T> &data, GLenum usage = GL_STATIC_DRAW) {
+            buffer(&data[0], (GLsizei) data.size() * sizeof(T), usage);
+        }
 
         GLsizei getSize() { return size; }
 
