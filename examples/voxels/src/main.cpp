@@ -1,5 +1,6 @@
 #include <iostream>
 #include <glm/glm.hpp>
+#define RENDERBOX_USE_GLFW
 #include "renderbox.h"
 
 std::shared_ptr<renderbox::Scene> scene;
