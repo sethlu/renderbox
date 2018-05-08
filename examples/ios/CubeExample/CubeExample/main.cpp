@@ -1,4 +1,5 @@
 #include <iostream>
+#define RENDERBOX_USE_SDL
 #include <renderbox.h>
 
 
