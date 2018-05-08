@@ -19,6 +19,8 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(vendor/glfw)
 
+# SDL
+add_subdirectory(vendor/sdl)
 
 file(GLOB_RECURSE RENDERBOX_SOURCE_FILES src/*.cpp)
 file(GLOB_RECURSE RENDERBOX_HEADER_FILES include/*.h)

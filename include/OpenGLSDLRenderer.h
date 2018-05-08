@@ -2,11 +2,7 @@
 #define RENDERBOX_OPENGLSDLRENDERER_H
 
 
-#include "platform.h"
-
-#if defined(__IPHONEOS__)
-
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "OpenGLRenderer.h"
 
 namespace renderbox {
@@ -33,8 +29,5 @@ namespace renderbox {
     };
 
 }
-
-#endif // defined(__IPHONEOS__)
-
 
 #endif //RENDERBOX_OPENGLSDLRENDERER_H
