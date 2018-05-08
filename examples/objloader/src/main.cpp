@@ -1,4 +1,5 @@
 #include <iostream>
+#define RENDERBOX_USE_GLFW
 #include "renderbox.h"
 
 std::unique_ptr<renderbox::OpenGLGLFWRenderer> renderer;
