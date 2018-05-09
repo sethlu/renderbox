@@ -1,13 +1,15 @@
 #include <iostream>
+#define RENDERBOX_USE_OPENGL
 #define RENDERBOX_USE_GLFW
 #include "renderbox.h"
 
-std::unique_ptr<renderbox::OpenGLGLFWRenderer> renderer;
+std::unique_ptr<renderbox::OpenGLRenderer> renderer;
+std::unique_ptr<renderbox::GLFWOpenGLRenderTarget> renderTarget;
 std::shared_ptr<renderbox::PerspectiveCamera> camera;
 std::shared_ptr<renderbox::Object> suzanne;
 
 void windowSizeCallback(GLFWwindow *window, int width, int height) {
-    camera->setPerspective(glm::radians(45.0f), (float) renderer->getWindowWidth() / (float) renderer->getWindowHeight());
+    camera->setPerspective(glm::radians(45.0f), (float) renderTarget->getWindowWidth() / (float) renderTarget->getWindowHeight());
 }
 
 void scrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
@@ -17,8 +19,10 @@ void scrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
 
 int main(int argc, char **argv) {
 
-    renderer.reset(new renderbox::OpenGLGLFWRenderer);
-    GLFWwindow *window = renderer->getWindow();
+    renderer.reset(new renderbox::OpenGLRenderer);
+    renderTarget.reset(new renderbox::GLFWOpenGLRenderTarget);
+
+    GLFWwindow *window = renderTarget->getWindow();
 
     glfwSetWindowSizeCallback(window, windowSizeCallback);
     glfwSetScrollCallback(window, scrollCallback);
@@ -40,7 +44,7 @@ int main(int argc, char **argv) {
     }
 
     camera = std::make_shared<renderbox::PerspectiveCamera>(
-        glm::radians(45.0f), (float) renderer->getWindowWidth() / (float) renderer->getWindowHeight());
+        glm::radians(45.0f), (float) renderTarget->getWindowWidth() / (float) renderTarget->getWindowHeight());
     camera->setTranslation(glm::vec3(0, 0, 5));
 
     double lastTime = glfwGetTime();
@@ -56,7 +60,7 @@ int main(int argc, char **argv) {
             lastTime = currentTime;
         }
 
-        renderer->render(scene.get(), camera.get());
+        renderer->render(scene.get(), camera.get(), renderTarget.get());
 
         // Swap buffers
         glfwSwapBuffers(window);
