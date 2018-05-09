@@ -1,12 +1,13 @@
+#include <cstdio>
 #include "platform.h"
 #if defined(__MACOSX__)
 
-#include "OpenGLGLFWRenderer.h"
+#include "GLFWOpenGLRenderTarget.h"
 
 
 namespace renderbox {
 
-    OpenGLGLFWRenderer::OpenGLGLFWRenderer() {
+    GLFWOpenGLRenderTarget::GLFWOpenGLRenderTarget() {
 
         // GLFW
 
@@ -37,33 +38,33 @@ namespace renderbox {
 
     }
 
-    OpenGLGLFWRenderer::~OpenGLGLFWRenderer() {
+    GLFWOpenGLRenderTarget::~GLFWOpenGLRenderTarget() {
         glfwDestroyWindow(window);
     }
 
-    GLFWwindow *OpenGLGLFWRenderer::getWindow() const {
+    GLFWwindow *GLFWOpenGLRenderTarget::getWindow() const {
         return window;
     }
 
-    int OpenGLGLFWRenderer::getWindowWidth() const {
+    int GLFWOpenGLRenderTarget::getWindowWidth() const {
         int width, height;
         glfwGetWindowSize(window, &width, &height);
         return width;
     }
 
-    int OpenGLGLFWRenderer::getWindowHeight() const {
+    int GLFWOpenGLRenderTarget::getWindowHeight() const {
         int width, height;
         glfwGetWindowSize(window, &width, &height);
         return height;
     }
 
-    int OpenGLGLFWRenderer::getFramebufferWidth() const {
+    int GLFWOpenGLRenderTarget::getFramebufferWidth() const {
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
         return width;
     }
 
-    int OpenGLGLFWRenderer::getFramebufferHeight() const {
+    int GLFWOpenGLRenderTarget::getFramebufferHeight() const {
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
         return height;

@@ -7,20 +7,16 @@
 
 #define GLFW_INCLUDE_GLCOREARB
 #include <GLFW/glfw3.h>
-#include "OpenGLRenderer.h"
+#include "OpenGLRenderTarget.h"
 
 namespace renderbox {
 
-    class OpenGLGLFWRenderer : public OpenGLRenderer {
-    protected:
-
-        GLFWwindow *window;
-
+    class GLFWOpenGLRenderTarget : public OpenGLRenderTarget {
     public:
 
-        OpenGLGLFWRenderer();
+        GLFWOpenGLRenderTarget();
 
-        ~OpenGLGLFWRenderer();
+        ~GLFWOpenGLRenderTarget();
 
         GLFWwindow *getWindow() const;
 
@@ -31,6 +27,10 @@ namespace renderbox {
         int getFramebufferWidth() const override;
 
         int getFramebufferHeight() const override;
+
+    protected:
+
+        GLFWwindow *window;
 
     };
 

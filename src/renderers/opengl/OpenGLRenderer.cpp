@@ -50,13 +50,9 @@ namespace renderbox {
         // Prepare
 
         // Use frame buffer from render target
-        glBindFramebuffer(GL_FRAMEBUFFER, renderTarget ? renderTarget->getFramebufferId() : framebufferId);
+        glBindFramebuffer(GL_FRAMEBUFFER, renderTarget->getFramebufferId());
 
-        if (renderTarget) {
-            glViewport(0, 0, renderTarget->getFramebufferWidth(), renderTarget->getFramebufferHeight());
-        } else {
-            glViewport(0, 0, getFramebufferWidth(), getFramebufferHeight());
-        }
+        glViewport(0, 0, renderTarget->getFramebufferWidth(), renderTarget->getFramebufferHeight());
 
         // Enable depth tests
         glEnable(GL_DEPTH_TEST);

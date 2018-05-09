@@ -23,21 +23,13 @@ namespace renderbox {
 
         // Render
 
-        void render(Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget = nullptr, bool forceClear = false);
+        void render(Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget, bool forceClear = false);
 
         void loadObject(Object *object);
-
-        // Window framebuffer
-
-        virtual int getFramebufferWidth() const = 0;
-
-        virtual int getFramebufferHeight() const = 0;
 
     protected:
 
         OpenGLRendererProperties properties;
-
-        GLuint framebufferId = 0;
 
     };
 

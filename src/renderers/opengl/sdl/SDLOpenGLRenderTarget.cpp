@@ -4,7 +4,7 @@
 #elif defined(__IPHONEOS__)
 #include <OpenGLES/ES3/gl.h>
 #endif
-#include "OpenGLSDLRenderer.h"
+#include "SDLOpenGLRenderTarget.h"
 
 
 #define SCREEN_WIDTH 320
@@ -12,7 +12,7 @@
 
 namespace renderbox {
 
-    OpenGLSDLRenderer::OpenGLSDLRenderer(Uint32 additionalInitFlags) {
+    SDLOpenGLRenderTarget::SDLOpenGLRenderTarget(Uint32 additionalInitFlags) {
 
         // SDL
 
@@ -51,24 +51,24 @@ namespace renderbox {
 
     }
 
-    OpenGLSDLRenderer::~OpenGLSDLRenderer() {
+    SDLOpenGLRenderTarget::~SDLOpenGLRenderTarget() {
 		
 		SDL_GL_DeleteContext(context);
 		SDL_DestroyWindow(window);
 		
     }
 
-    SDL_Window *OpenGLSDLRenderer::getWindow() const {
+    SDL_Window *SDLOpenGLRenderTarget::getWindow() const {
         return window;
     }
 
-    int OpenGLSDLRenderer::getFramebufferWidth() const {
+    int SDLOpenGLRenderTarget::getFramebufferWidth() const {
 		int width;
 		SDL_GL_GetDrawableSize(window, &width, nullptr);
         return width;
     }
 
-    int OpenGLSDLRenderer::getFramebufferHeight() const {
+    int SDLOpenGLRenderTarget::getFramebufferHeight() const {
 		int height;
 		SDL_GL_GetDrawableSize(window, nullptr, &height);
         return height;
