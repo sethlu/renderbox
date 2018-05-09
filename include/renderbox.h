@@ -27,12 +27,16 @@
 
 #include "Scene.h"
 
-#if defined(RENDERBOX_USE_GLFW)
-#include "OpenGLGLFWRenderer.h"
+#if defined(RENDERBOX_USE_OPENGL)
+#include "OpenGLRenderer.h"
 #endif
 
-#if defined(RENDERBOX_USE_SDL)
-#include "OpenGLSDLRenderer.h"
+#if defined(RENDERBOX_USE_GLFW) && defined(RENDERBOX_USE_OPENGL)
+#include "GLFWOpenGLRenderTarget.h"
+#endif
+
+#if defined(RENDERBOX_USE_SDL) && defined(RENDERBOX_USE_OPENGL)
+#include "SDLOpenGLRenderTarget.h"
 #endif
 
 #include "GLSLPreprocessor.h"
