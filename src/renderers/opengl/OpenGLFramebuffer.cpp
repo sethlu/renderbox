@@ -34,10 +34,6 @@ namespace renderbox {
         setFramebufferSize(width, height);
     }
 
-    GLuint OpenGLFramebuffer::getFramebufferId() {
-        return framebufferId;
-    }
-
     int OpenGLFramebuffer::getFramebufferWidth() const {
         return framebufferWidth;
     }

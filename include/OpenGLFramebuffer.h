@@ -11,8 +11,6 @@ namespace renderbox {
 
         OpenGLFramebuffer(int width, int height);
 
-        GLuint getFramebufferId();
-
         int getFramebufferWidth() const override;
 
         int getFramebufferHeight() const override;
