@@ -1,11 +1,13 @@
 #include <iostream>
+#define RENDERBOX_USE_OPENGL
 #define RENDERBOX_USE_SDL
 #include <renderbox.h>
 
 
 std::shared_ptr<renderbox::Scene> scene;
 std::shared_ptr<renderbox::Camera> camera;
-std::unique_ptr<renderbox::OpenGLSDLRenderer> renderer;
+std::unique_ptr<renderbox::OpenGLRenderer> renderer;
+std::unique_ptr<renderbox::SDLOpenGLRenderTarget> renderTarget;
 
 std::shared_ptr<renderbox::Object> cameraRig;
 std::shared_ptr<renderbox::Object> cube;
@@ -21,7 +23,7 @@ void init() {
 	scene->addChild(cube);
 	
 	camera = std::make_shared<renderbox::PerspectiveCamera>(glm::radians(45.0f),
-															(float) renderer->getFramebufferWidth() / (float) renderer->getFramebufferHeight());
+															(float) renderTarget->getFramebufferWidth() / (float) renderTarget->getFramebufferHeight());
 	camera->setTranslation(renderbox::vec3(0, 0, 20));
 	
 	cameraRig = std::make_shared<renderbox::Object>();
@@ -37,15 +39,16 @@ void init() {
 
 void render() {
 	
-	renderer->render(scene.get(), camera.get());
+	renderer->render(scene.get(), camera.get(), renderTarget.get());
 	
-	SDL_GL_SwapWindow(renderer->getWindow());
+	SDL_GL_SwapWindow(renderTarget->getWindow());
 	
 }
 
 int main(int argc, char **argv) {
 	
-	renderer.reset(new renderbox::OpenGLSDLRenderer());
+	renderer.reset(new renderbox::OpenGLRenderer());
+    renderTarget.reset(new renderbox::SDLOpenGLRenderTarget());
 	
 	// Render loop
 	
