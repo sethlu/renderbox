@@ -1,11 +1,13 @@
 #include <iostream>
 #include <glm/glm.hpp>
+#define RENDERBOX_USE_OPENGL
 #define RENDERBOX_USE_GLFW
 #include "renderbox.h"
 
 std::shared_ptr<renderbox::Scene> scene;
 std::shared_ptr<renderbox::PerspectiveCamera> camera;
-std::unique_ptr<renderbox::OpenGLGLFWRenderer> renderer;
+std::unique_ptr<renderbox::OpenGLRenderer> renderer;
+std::unique_ptr<renderbox::GLFWOpenGLRenderTarget> renderTarget;
 
 std::shared_ptr<renderbox::Object> cameraRig;
 std::shared_ptr<renderbox::Mesh> terrain;
@@ -48,7 +50,7 @@ void init() {
 
     // Camera
     camera = std::make_shared<renderbox::PerspectiveCamera>(
-        glm::radians(45.0f), (float) renderer->getWindowWidth() / (float) renderer->getWindowHeight());
+        glm::radians(45.0f), (float) renderTarget->getWindowWidth() / (float) renderTarget->getWindowHeight());
     camera->setTranslation(glm::vec3(0, 0, cameraDistance));
     cameraRig = std::make_shared<renderbox::Object>();
     cameraRig->addChild(camera);
@@ -79,8 +81,8 @@ void update() {
     if (currentTime - mouseLastSync > 0.04f
         && startMouseX != -1 && startMouseY != -1) {
 
-        renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderer->getWindowWidth() - 1.0f,
-                                                             1.0f - 2 * mouseY / renderer->getWindowHeight()));
+        renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderTarget->getWindowWidth() - 1.0f,
+                                                             1.0f - 2 * mouseY / renderTarget->getWindowHeight()));
         std::vector<glm::vec3> worldPositions;
         if (cameraRay->intersectObject(terrain.get(), worldPositions)) {
             glm::vec3 objectPosition = floor(renderbox::dehomogenize(
@@ -101,9 +103,9 @@ void update() {
     // Test cube
 
     testCube->visible = false;
-    if (mouseX >= 0 && mouseX <= renderer->getWindowWidth() && mouseY >= 0 && mouseY <= renderer->getWindowHeight()) {
-        renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderer->getWindowWidth() - 1.0f,
-                                                             1.0f - 2 * mouseY / renderer->getWindowHeight()));
+    if (mouseX >= 0 && mouseX <= renderTarget->getWindowWidth() && mouseY >= 0 && mouseY <= renderTarget->getWindowHeight()) {
+        renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderTarget->getWindowWidth() - 1.0f,
+                                                             1.0f - 2 * mouseY / renderTarget->getWindowHeight()));
         std::vector<glm::vec3> worldPositions;
         if (cameraRay->intersectObject(terrain.get(), worldPositions)) {
             glm::vec3 testLocation = worldPositions[0];
@@ -128,7 +130,7 @@ void update() {
 
     // Render
 
-    renderer->render(scene.get(), camera.get());
+    renderer->render(scene.get(), camera.get(), renderTarget.get());
 
     lastTime = currentTime;
 
@@ -152,8 +154,8 @@ void mouseup(GLFWwindow *window) {
 
 void mouseclick(GLFWwindow *window) {
 
-    renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderer->getWindowWidth() - 1.0f,
-                                                         1.0f - 2 * mouseY / renderer->getWindowHeight()));
+    renderbox::Ray *cameraRay = camera->getRay(glm::vec2(2 * mouseX / renderTarget->getWindowWidth() - 1.0f,
+                                                         1.0f - 2 * mouseY / renderTarget->getWindowHeight()));
     std::vector<glm::vec3> worldPositions;
     if (cameraRay->intersectObject(terrain.get(), worldPositions)) {
         glm::vec3 objectPosition = renderbox::dehomogenize(
@@ -179,7 +181,7 @@ void mousedrop(GLFWwindow *window) {
 }
 
 void windowSizeCallback(GLFWwindow *window, int width, int height) {
-    camera->setPerspective(glm::radians(45.0f), (float) renderer->getWindowWidth() / (float) renderer->getWindowHeight());
+    camera->setPerspective(glm::radians(45.0f), (float) renderTarget->getWindowWidth() / (float) renderTarget->getWindowHeight());
 }
 
 int keyMods = 0;
@@ -280,8 +282,9 @@ void rotateCallback(GLFWwindow *window, double rotation) {
 
 int main(int argc, char **argv) {
 
-    renderer.reset(new renderbox::OpenGLGLFWRenderer());
-    GLFWwindow *window = renderer->getWindow();
+    renderer.reset(new renderbox::OpenGLRenderer());
+    renderTarget.reset(new renderbox::GLFWOpenGLRenderTarget());
+    GLFWwindow *window = renderTarget->getWindow();
 
     // Callbacks
 
