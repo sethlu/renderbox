@@ -1,11 +1,13 @@
 #include <iostream>
 #include <glm/glm.hpp>
+#define RENDERBOX_USE_OPENGL
 #define RENDERBOX_USE_GLFW
 #include "renderbox.h"
 
 std::shared_ptr<renderbox::Scene> scene;
 std::shared_ptr<renderbox::PerspectiveCamera> camera;
-std::unique_ptr<renderbox::OpenGLGLFWRenderer> renderer;
+std::unique_ptr<renderbox::OpenGLRenderer> renderer;
+std::unique_ptr<renderbox::GLFWOpenGLRenderTarget> renderTarget;
 
 std::shared_ptr<renderbox::Object> cameraRig;
 std::shared_ptr<renderbox::Object> testCube;
@@ -28,7 +30,7 @@ void init() {
 
     // Camera
     camera = std::make_shared<renderbox::PerspectiveCamera>(
-        glm::radians(45.0f), (float) renderer->getWindowWidth() / (float) renderer->getWindowHeight());
+        glm::radians(45.0f), (float) renderTarget->getWindowWidth() / (float) renderTarget->getWindowHeight());
     camera->setTranslation(glm::vec3(0, 0, cameraDistance));
     cameraRig = std::make_shared<renderbox::Object>();
     cameraRig->addChild(camera);
@@ -67,7 +69,7 @@ void update() {
 
     // Render
 
-    renderer->render(scene.get(), camera.get());
+    renderer->render(scene.get(), camera.get(), renderTarget.get());
 
     lastTime = currentTime;
 
@@ -102,7 +104,7 @@ void mousedrop(GLFWwindow *window) {
 }
 
 void windowSizeCallback(GLFWwindow *window, int width, int height) {
-    camera->setPerspective(glm::radians(45.0f), (float) renderer->getWindowWidth() / (float) renderer->getWindowHeight());
+    camera->setPerspective(glm::radians(45.0f), (float) renderTarget->getWindowWidth() / (float) renderTarget->getWindowHeight());
 }
 
 int keyMods = 0;
@@ -203,8 +205,9 @@ void rotateCallback(GLFWwindow *window, double rotation) {
 
 int main(int argc, char **argv) {
 
-    renderer.reset(new renderbox::OpenGLGLFWRenderer());
-    GLFWwindow *window = renderer->getWindow();
+    renderer.reset(new renderbox::OpenGLRenderer());
+    renderTarget.reset(new renderbox::GLFWOpenGLRenderTarget());
+    GLFWwindow *window = renderTarget->getWindow();
 
     // Callbacks
 
