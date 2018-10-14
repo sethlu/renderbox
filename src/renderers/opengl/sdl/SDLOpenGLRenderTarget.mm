@@ -4,8 +4,8 @@
 #import <AppKit/AppKit.h>
 #endif //defined(RENDERBOX_MACOS)
 
-#define SCREEN_WIDTH 320
-#define SCREEN_HEIGHT 568
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 600
 
 namespace renderbox {
 
@@ -28,8 +28,20 @@ namespace renderbox {
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
         // Create window
-		
-        window = SDL_CreateWindow(NULL, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_BORDERLESS | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI);
+        
+#if defined(RENDERBOX_MACOS)
+        window = SDL_CreateWindow(nullptr, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                WINDOW_WIDTH, WINDOW_HEIGHT,
+                SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI);
+#elif defined(RENDERBOX_IPHONEOS)
+        SDL_DisplayMode displayMode;
+        SDL_GetDesktopDisplayMode(0, &displayMode);
+        
+        window = SDL_CreateWindow(nullptr, 0, 0,
+                displayMode.w, displayMode.h,
+                SDL_WINDOW_BORDERLESS | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI);
+#endif
+        
         if (!window) {
             fprintf(stderr, "Failed to init window\n");
             throw 2;
