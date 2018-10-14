@@ -1,10 +1,12 @@
 [submodule "vendor/glfw"]
 	path = vendor/glfw
 	url = git@github.com:sethlu/glfw.git
-	branch = gestures
+	branch = renderbox
 [submodule "vendor/glm"]
 	path = vendor/glm
-	url = https://github.com/g-truc/glm.git
+	url = git@github.com:sethlu/glm.git
+	branch = renderbox
 [submodule "vendor/sdl"]
 	path = vendor/sdl
 	url = git@github.com:sethlu/SDL.git
+	branch = renderbox
