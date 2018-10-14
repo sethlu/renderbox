@@ -2,7 +2,7 @@
 #define RENDERBOX_OPENGLSDLRENDERER_H
 
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include "OpenGLRenderer.h"
 
 namespace renderbox {
