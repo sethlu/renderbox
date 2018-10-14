@@ -3,6 +3,7 @@
 
 
 #include <SDL.h>
+
 #include "OpenGLRenderer.h"
 
 namespace renderbox {

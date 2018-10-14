@@ -3,6 +3,7 @@
 
 
 #include <string>
+
 #include "Material.h"
 
 namespace renderbox {

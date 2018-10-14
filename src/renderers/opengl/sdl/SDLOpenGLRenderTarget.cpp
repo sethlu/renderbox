@@ -1,11 +1,4 @@
-
-#if defined(__MACOSX__)
-#include <OpenGL/gl3.h>
-#elif defined(__IPHONEOS__)
-#include <OpenGLES/ES3/gl.h>
-#endif
 #include "SDLOpenGLRenderTarget.h"
-
 
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 568
@@ -21,9 +14,9 @@ namespace renderbox {
             throw 2;
         }
 
-        #if defined(__MACOSX__)
+        #if defined(RENDERBOX_MACOS)
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-        #elif defined(__IPHONEOS__)
+        #elif defined(RENDERBOX_IPHONEOS)
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
         #endif
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);

@@ -3,11 +3,12 @@
 
 
 #include "platform.h"
-#if defined(__MACOSX__)
+#if defined(RENDERBOX_MACOS)
+
+#include "OpenGLRenderTarget.h"
 
 #define GLFW_INCLUDE_GLCOREARB
 #include <GLFW/glfw3.h>
-#include "OpenGLRenderTarget.h"
 
 namespace renderbox {
 
@@ -36,7 +37,7 @@ namespace renderbox {
 
 }
 
-#endif // defined(__MACOSX__)
+#endif //defined(RENDERBOX_MACOS)
 
 
 #endif //RENDERBOX_OPENGLGLFWRENDERER_H

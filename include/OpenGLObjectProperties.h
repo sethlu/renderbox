@@ -2,14 +2,10 @@
 #define RENDERBOX_OPENGLOBJECTPROPERTIES_H
 
 
-#include "platform.h"
-#if defined(__MACOSX__)
-#include <OpenGL/gl3.h>
-#elif defined(__IPHONEOS__)
-#include <OpenGLES/ES3/gl.h>
-#endif
 #include <string>
 #include <unordered_map>
+
+#include "OpenGL.h"
 #include "OpenGLBuffer.h"
 #include "OpenGLVertexArray.h"
 #include "OpenGLProgram.h"

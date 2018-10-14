@@ -3,6 +3,7 @@
 
 
 #include <string>
+
 #include "Vector.h"
 #include "Texture.h"
 

@@ -1,9 +1,9 @@
-#include <cstdio>
 #include "platform.h"
-#if defined(__MACOSX__)
+#if defined(RENDERBOX_MACOS)
 
 #include "GLFWOpenGLRenderTarget.h"
 
+#include <cstdio>
 
 namespace renderbox {
 
@@ -72,4 +72,4 @@ namespace renderbox {
 
 }
 
-#endif // defined(__MACOSX__)
+#endif //defined(RENDERBOX_MACOS)

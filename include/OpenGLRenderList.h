@@ -4,12 +4,13 @@
 
 #include <vector>
 #include <unordered_map>
-#include "OpenGLVertexArray.h"
+
 #include "Object.h"
 #include "ObjectProperties.h"
 #include "OpenGLObjectProperties.h"
-#include "Scene.h"
+#include "OpenGLVertexArray.h"
 #include "PointLight.h"
+#include "Scene.h"
 
 namespace renderbox {
 

@@ -2,13 +2,9 @@
 #define RENDERBOX_OPENGLPROGRAM_H
 
 
-#include "platform.h"
-#if defined(__MACOSX__)
-#include <OpenGL/gl3.h>
-#elif defined(__IPHONEOS__)
-#include <OpenGLES/ES3/gl.h>
-#endif
 #include <unordered_map>
+
+#include "OpenGL.h"
 #include "OpenGLBuffer.h"
 
 namespace renderbox {

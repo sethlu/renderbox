@@ -6,6 +6,7 @@
 #include <vector>
 #include <unordered_map>
 #include <ostream>
+
 #include "lexer.h"
 
 namespace renderbox {

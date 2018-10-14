@@ -2,15 +2,11 @@
 #define RENDERBOX_OPENGLRENDERERPROPERTIES_H
 
 
-#include "platform.h"
-#if defined(__MACOSX__)
-#include <OpenGL/gl3.h>
-#elif defined(__IPHONEOS__)
-#include <OpenGLES/ES3/gl.h>
-#endif
 #include <unordered_map>
 #include <string>
+
 #include "Mesh.h"
+#include "OpenGL.h"
 #include "OpenGLObjectProperties.h"
 
 namespace renderbox {
