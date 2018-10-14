@@ -17,9 +17,15 @@ namespace renderbox {
 
         virtual int getFramebufferHeight() const = 0;
 
+        virtual void frameDidRender() {
+            frameCount++;
+        };
+
     protected:
 
         GLuint framebufferId = 0;
+
+        unsigned frameCount = 0;
 
     };
 

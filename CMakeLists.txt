@@ -22,7 +22,7 @@ add_subdirectory(vendor/glfw)
 # SDL
 add_subdirectory(vendor/sdl)
 
-file(GLOB_RECURSE RENDERBOX_SOURCE_FILES src/*.cpp)
+file(GLOB_RECURSE RENDERBOX_SOURCE_FILES src/*.cpp src/*.mm)
 file(GLOB_RECURSE RENDERBOX_HEADER_FILES include/*.h)
 
 add_library(renderbox ${RENDERBOX_SOURCE_FILES} ${RENDERBOX_HEADER_FILES})

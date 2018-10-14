@@ -29,6 +29,8 @@ namespace renderbox {
 
         int getFramebufferHeight() const override;
 
+        void frameDidRender() override;
+
     protected:
 
         GLFWwindow *window;

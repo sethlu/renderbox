@@ -5,6 +5,14 @@
 
 #include <cstdio>
 
+#import <AppKit/AppKit.h>
+
+#define GLFW_EXPOSE_NATIVE_NSGL
+#include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
+#include <GLFWOpenGLRenderTarget.h>
+
+
 namespace renderbox {
 
     GLFWOpenGLRenderTarget::GLFWOpenGLRenderTarget() {
@@ -68,6 +76,14 @@ namespace renderbox {
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
         return height;
+    }
+
+    void GLFWOpenGLRenderTarget::frameDidRender() {
+        OpenGLRenderTarget::frameDidRender();
+
+        // The following is a rough fix to OpenGL drawing resulting in empty screen on macOS Mojave
+        // Ref: https://github.com/glfw/glfw/issues/1334
+        if (frameCount <= 2) [(NSOpenGLContext *) glfwGetNSGLContext(window) update];
     }
 
 }

@@ -230,6 +230,8 @@ namespace renderbox {
         // Unbind vertex array
         OpenGLVertexArray::unbindVertexArray();
 
+        renderTarget->frameDidRender();
+
 	}
 
     void OpenGLRenderer::loadObject(Object *object) {
