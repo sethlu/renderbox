@@ -19,7 +19,7 @@ namespace renderbox {
 
     protected:
 
-        GLuint framebufferId;
+        GLuint framebufferId = 0;
 
     };
 
