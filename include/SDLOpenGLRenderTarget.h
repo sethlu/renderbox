@@ -21,6 +21,8 @@ namespace renderbox {
 
         int getFramebufferHeight() const override;
 
+        void frameDidRender() override;
+        
     protected:
 
         SDL_Window *window;

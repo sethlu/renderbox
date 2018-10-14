@@ -1,5 +1,9 @@
 #include "SDLOpenGLRenderTarget.h"
 
+#if defined(RENDERBOX_MACOS)
+#import <AppKit/AppKit.h>
+#endif //defined(RENDERBOX_MACOS)
+
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 568
 
@@ -14,11 +18,11 @@ namespace renderbox {
             throw 2;
         }
 
-        #if defined(RENDERBOX_MACOS)
+#if defined(RENDERBOX_MACOS)
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-        #elif defined(RENDERBOX_IPHONEOS)
+#elif defined(RENDERBOX_IPHONEOS)
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
-        #endif
+#endif
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
@@ -65,6 +69,16 @@ namespace renderbox {
 		int height;
 		SDL_GL_GetDrawableSize(window, nullptr, &height);
         return height;
+    }
+    
+    void SDLOpenGLRenderTarget::frameDidRender() {
+        OpenGLRenderTarget::frameDidRender();
+        
+#if defined(RENDERBOX_MACOS)
+        // The following is a rough fix to OpenGL drawing resulting in empty screen on macOS Mojave
+        // Ref: https://github.com/glfw/glfw/issues/1334
+        if (frameCount <= 2) [(__bridge NSOpenGLContext *) context update];
+#endif //defined(RENDERBOX_MACOS)
     }
 
 }

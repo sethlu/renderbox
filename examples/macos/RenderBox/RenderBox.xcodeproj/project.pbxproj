@@ -8,13 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		C53776DD20A13E5F00DFD1D9 /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C53776D120A137F400DFD1D9 /* libSDL2.a */; };
+		C57BF1F12172F07600A6F06A /* MetalRenderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = C57BF1EC2172EF6500A6F06A /* MetalRenderer.mm */; };
+		C57BF1F62172F07F00A6F06A /* SDLMetalRenderTarget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C57BF1EE2172EF6500A6F06A /* SDLMetalRenderTarget.mm */; };
 		C5A0712020EDF38000379727 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5A070E420EDF37E00379727 /* Texture.cpp */; };
 		C5A0712120EDF38000379727 /* OpenGLRenderList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5A070E920EDF37E00379727 /* OpenGLRenderList.cpp */; };
 		C5A0712220EDF38000379727 /* OpenGLBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5A070EA20EDF37E00379727 /* OpenGLBuffer.cpp */; };
 		C5A0712320EDF38000379727 /* OpenGLRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5A070EB20EDF37E00379727 /* OpenGLRenderer.cpp */; };
 		C5A0712420EDF38000379727 /* OpenGLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5A070EC20EDF37E00379727 /* OpenGLTexture.cpp */; };
 		C5A0712520EDF38000379727 /* OpenGLObjectProperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5A070ED20EDF37E00379727 /* OpenGLObjectProperties.cpp */; };
-		C5A0712620EDF38000379727 /* SDLOpenGLRenderTarget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5A070EF20EDF37E00379727 /* SDLOpenGLRenderTarget.cpp */; };
+		C5A0712620EDF38000379727 /* SDLOpenGLRenderTarget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C5A070EF20EDF37E00379727 /* SDLOpenGLRenderTarget.mm */; };
 		C5A0712720EDF38000379727 /* OpenGLRendererProperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5A070FA20EDF37E00379727 /* OpenGLRendererProperties.cpp */; };
 		C5A0712920EDF38000379727 /* OpenGLFramebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5A070FD20EDF37E00379727 /* OpenGLFramebuffer.cpp */; };
 		C5A0712A20EDF38000379727 /* OpenGLVertexArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5A070FE20EDF37E00379727 /* OpenGLVertexArray.cpp */; };
@@ -167,6 +169,10 @@
 		C537773520A142CF00DFD1D9 /* SDL_test_compare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDL_test_compare.h; sourceTree = "<group>"; };
 		C537773620A142CF00DFD1D9 /* SDL_opengles2_gl2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDL_opengles2_gl2.h; sourceTree = "<group>"; };
 		C53978662065D862001AAFFE /* libRenderBox.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRenderBox.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C57BF1E52172EF4E00A6F06A /* MetalRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalRenderer.h; path = ../../../../../Volumes/sethlu/Developer/renderbox/include/MetalRenderer.h; sourceTree = "<group>"; };
+		C57BF1EA2172EF5900A6F06A /* SDLMetalRenderTarget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SDLMetalRenderTarget.h; path = ../../../../../Volumes/sethlu/Developer/renderbox/include/SDLMetalRenderTarget.h; sourceTree = "<group>"; };
+		C57BF1EC2172EF6500A6F06A /* MetalRenderer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalRenderer.mm; sourceTree = "<group>"; };
+		C57BF1EE2172EF6500A6F06A /* SDLMetalRenderTarget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SDLMetalRenderTarget.mm; sourceTree = "<group>"; };
 		C5A070BA20EDF36900379727 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
 		C5A070BB20EDF36900379727 /* bitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bitmap.h; sourceTree = "<group>"; };
 		C5A070BC20EDF36900379727 /* ObjectProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectProperties.h; sourceTree = "<group>"; };
@@ -213,7 +219,7 @@
 		C5A070EB20EDF37E00379727 /* OpenGLRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLRenderer.cpp; sourceTree = "<group>"; };
 		C5A070EC20EDF37E00379727 /* OpenGLTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLTexture.cpp; sourceTree = "<group>"; };
 		C5A070ED20EDF37E00379727 /* OpenGLObjectProperties.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLObjectProperties.cpp; sourceTree = "<group>"; };
-		C5A070EF20EDF37E00379727 /* SDLOpenGLRenderTarget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDLOpenGLRenderTarget.cpp; sourceTree = "<group>"; };
+		C5A070EF20EDF37E00379727 /* SDLOpenGLRenderTarget.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SDLOpenGLRenderTarget.mm; sourceTree = "<group>"; };
 		C5A070F120EDF37E00379727 /* mesh_basic_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mesh_basic_vert.glsl; sourceTree = "<group>"; };
 		C5A070F220EDF37E00379727 /* mesh_lambert_frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mesh_lambert_frag.glsl; sourceTree = "<group>"; };
 		C5A070F320EDF37E00379727 /* mesh_basic_frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mesh_basic_frag.glsl; sourceTree = "<group>"; };
@@ -455,6 +461,7 @@
 				C5A070C620EDF36B00379727 /* Mesh.h */,
 				C5A070CD20EDF36C00379727 /* MeshBasicMaterial.h */,
 				C5A070C320EDF36A00379727 /* MeshLambertMaterial.h */,
+				C57BF1E52172EF4E00A6F06A /* MetalRenderer.h */,
 				C5A070E020EDF36E00379727 /* MTLTokenKinds.def */,
 				C5A070D120EDF36C00379727 /* Object.h */,
 				C5A070BC20EDF36900379727 /* ObjectProperties.h */,
@@ -476,6 +483,7 @@
 				C5A070C420EDF36A00379727 /* Ray.h */,
 				C5A070DA20EDF36D00379727 /* renderbox.h */,
 				C5A070DD20EDF36E00379727 /* Scene.h */,
+				C57BF1EA2172EF5900A6F06A /* SDLMetalRenderTarget.h */,
 				C5A070CF20EDF36C00379727 /* SDLOpenGLRenderTarget.h */,
 				C5A070DB20EDF36D00379727 /* Texture.h */,
 				C5A070C820EDF36B00379727 /* Vector.h */,
@@ -493,6 +501,23 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		C57BF1EB2172EF6500A6F06A /* metal */ = {
+			isa = PBXGroup;
+			children = (
+				C57BF1EC2172EF6500A6F06A /* MetalRenderer.mm */,
+				C57BF1ED2172EF6500A6F06A /* sdl */,
+			);
+			path = metal;
+			sourceTree = "<group>";
+		};
+		C57BF1ED2172EF6500A6F06A /* sdl */ = {
+			isa = PBXGroup;
+			children = (
+				C57BF1EE2172EF6500A6F06A /* SDLMetalRenderTarget.mm */,
+			);
+			path = sdl;
+			sourceTree = "<group>";
+		};
 		C5A070E320EDF37E00379727 /* textures */ = {
 			isa = PBXGroup;
 			children = (
@@ -504,6 +529,7 @@
 		C5A070E520EDF37E00379727 /* renderers */ = {
 			isa = PBXGroup;
 			children = (
+				C57BF1EB2172EF6500A6F06A /* metal */,
 				C5A070E820EDF37E00379727 /* opengl */,
 			);
 			path = renderers;
@@ -530,7 +556,7 @@
 		C5A070EE20EDF37E00379727 /* sdl */ = {
 			isa = PBXGroup;
 			children = (
-				C5A070EF20EDF37E00379727 /* SDLOpenGLRenderTarget.cpp */,
+				C5A070EF20EDF37E00379727 /* SDLOpenGLRenderTarget.mm */,
 			);
 			path = sdl;
 			sourceTree = "<group>";
@@ -754,6 +780,7 @@
 				C5A0713620EDF38000379727 /* PerspectiveCamera.cpp in Sources */,
 				C5A0713220EDF38000379727 /* Material.cpp in Sources */,
 				C5A0713120EDF38000379727 /* OBJLoader.cpp in Sources */,
+				C57BF1F12172F07600A6F06A /* MetalRenderer.mm in Sources */,
 				C5A0712420EDF38000379727 /* OpenGLTexture.cpp in Sources */,
 				C5A0713920EDF38000379727 /* Mesh.cpp in Sources */,
 				C5A0712F20EDF38000379727 /* PointLight.cpp in Sources */,
@@ -766,10 +793,11 @@
 				C5A0712520EDF38000379727 /* OpenGLObjectProperties.cpp in Sources */,
 				C5A0713720EDF38000379727 /* Ray.cpp in Sources */,
 				C5A0713820EDF38000379727 /* Object.cpp in Sources */,
-				C5A0712620EDF38000379727 /* SDLOpenGLRenderTarget.cpp in Sources */,
+				C5A0712620EDF38000379727 /* SDLOpenGLRenderTarget.mm in Sources */,
 				C5A0712B20EDF38000379727 /* OpenGLProgram.cpp in Sources */,
 				C5A0712720EDF38000379727 /* OpenGLRendererProperties.cpp in Sources */,
 				C5A0712920EDF38000379727 /* OpenGLFramebuffer.cpp in Sources */,
+				C57BF1F62172F07F00A6F06A /* SDLMetalRenderTarget.mm in Sources */,
 				C5A0713420EDF38000379727 /* Scene.cpp in Sources */,
 				C5A0713A20EDF38000379727 /* GLSLPreprocessor.cpp in Sources */,
 				C5A0712D20EDF38000379727 /* Geometry.cpp in Sources */,

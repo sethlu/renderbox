@@ -13,7 +13,7 @@
 		C5A0707320EDF12C00379727 /* OpenGLRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5A0703B20EDF12B00379727 /* OpenGLRenderer.cpp */; };
 		C5A0707420EDF12C00379727 /* OpenGLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5A0703C20EDF12B00379727 /* OpenGLTexture.cpp */; };
 		C5A0707520EDF12C00379727 /* OpenGLObjectProperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5A0703D20EDF12B00379727 /* OpenGLObjectProperties.cpp */; };
-		C5A0707620EDF12C00379727 /* SDLOpenGLRenderTarget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5A0703F20EDF12B00379727 /* SDLOpenGLRenderTarget.cpp */; };
+		C5A0707620EDF12C00379727 /* SDLOpenGLRenderTarget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C5A0703F20EDF12B00379727 /* SDLOpenGLRenderTarget.mm */; };
 		C5A0707720EDF12C00379727 /* OpenGLRendererProperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5A0704A20EDF12B00379727 /* OpenGLRendererProperties.cpp */; };
 		C5A0707920EDF12C00379727 /* OpenGLFramebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5A0704D20EDF12B00379727 /* OpenGLFramebuffer.cpp */; };
 		C5A0707A20EDF12C00379727 /* OpenGLVertexArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5A0704E20EDF12B00379727 /* OpenGLVertexArray.cpp */; };
@@ -165,7 +165,7 @@
 		C5A0703B20EDF12B00379727 /* OpenGLRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLRenderer.cpp; sourceTree = "<group>"; };
 		C5A0703C20EDF12B00379727 /* OpenGLTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLTexture.cpp; sourceTree = "<group>"; };
 		C5A0703D20EDF12B00379727 /* OpenGLObjectProperties.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLObjectProperties.cpp; sourceTree = "<group>"; };
-		C5A0703F20EDF12B00379727 /* SDLOpenGLRenderTarget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SDLOpenGLRenderTarget.cpp; sourceTree = "<group>"; };
+		C5A0703F20EDF12B00379727 /* SDLOpenGLRenderTarget.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SDLOpenGLRenderTarget.mm; sourceTree = "<group>"; };
 		C5A0704120EDF12B00379727 /* mesh_basic_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mesh_basic_vert.glsl; sourceTree = "<group>"; };
 		C5A0704220EDF12B00379727 /* mesh_lambert_frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mesh_lambert_frag.glsl; sourceTree = "<group>"; };
 		C5A0704320EDF12B00379727 /* mesh_basic_frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mesh_basic_frag.glsl; sourceTree = "<group>"; };
@@ -512,7 +512,7 @@
 		C5A0703E20EDF12B00379727 /* sdl */ = {
 			isa = PBXGroup;
 			children = (
-				C5A0703F20EDF12B00379727 /* SDLOpenGLRenderTarget.cpp */,
+				C5A0703F20EDF12B00379727 /* SDLOpenGLRenderTarget.mm */,
 			);
 			path = sdl;
 			sourceTree = "<group>";
@@ -744,7 +744,7 @@
 				C5A0707520EDF12C00379727 /* OpenGLObjectProperties.cpp in Sources */,
 				C5A0708720EDF12C00379727 /* Ray.cpp in Sources */,
 				C5A0708820EDF12C00379727 /* Object.cpp in Sources */,
-				C5A0707620EDF12C00379727 /* SDLOpenGLRenderTarget.cpp in Sources */,
+				C5A0707620EDF12C00379727 /* SDLOpenGLRenderTarget.mm in Sources */,
 				C5A0707B20EDF12C00379727 /* OpenGLProgram.cpp in Sources */,
 				C5A0707720EDF12C00379727 /* OpenGLRendererProperties.cpp in Sources */,
 				C5A0707920EDF12C00379727 /* OpenGLFramebuffer.cpp in Sources */,
