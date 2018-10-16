@@ -14,7 +14,9 @@ cmake-build-debug
 # User settings
 xcuserdata
 
-# compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
+*.xcworkspace
+
+# Compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
 *.xcscmblueprint
 *.xccheckout
 
