@@ -31,12 +31,20 @@
 #include "OpenGLRenderer.h"
 #endif
 
+#if defined(RENDERBOX_USE_METAL)
+#include "MetalRenderer.h"
+#endif
+
 #if defined(RENDERBOX_USE_GLFW) && defined(RENDERBOX_USE_OPENGL)
 #include "GLFWOpenGLRenderTarget.h"
 #endif
 
 #if defined(RENDERBOX_USE_SDL) && defined(RENDERBOX_USE_OPENGL)
 #include "SDLOpenGLRenderTarget.h"
+#endif
+
+#if defined(RENDERBOX_USE_SDL) && defined(RENDERBOX_USE_METAL)
+#include "SDLMetalRenderTarget.h"
 #endif
 
 #include "GLSLPreprocessor.h"

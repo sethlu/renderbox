@@ -12,6 +12,8 @@ namespace renderbox {
 
         friend class OpenGLRenderer;
 
+        friend class MetalRenderer;
+
     public:
 
         std::vector<vec3> &getVertices();

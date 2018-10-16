@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		C53776DD20A13E5F00DFD1D9 /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C53776D120A137F400DFD1D9 /* libSDL2.a */; };
+		C53F2671217459AF00EF9635 /* MetalObjectProperties.mm in Sources */ = {isa = PBXBuildFile; fileRef = C53F266F217459AF00EF9635 /* MetalObjectProperties.mm */; };
+		C53F267321745AD500EF9635 /* MetalBuffer.mm in Sources */ = {isa = PBXBuildFile; fileRef = C53F267221745AD500EF9635 /* MetalBuffer.mm */; };
+		C53F267621745DC300EF9635 /* MetalRenderList.mm in Sources */ = {isa = PBXBuildFile; fileRef = C53F267521745DC300EF9635 /* MetalRenderList.mm */; };
+		C53F26792174649900EF9635 /* MetalDeviceRendererProperties.mm in Sources */ = {isa = PBXBuildFile; fileRef = C53F26782174649900EF9635 /* MetalDeviceRendererProperties.mm */; };
+		C53F267C21746AE400EF9635 /* MetalRendererProperties.mm in Sources */ = {isa = PBXBuildFile; fileRef = C53F267B21746AE400EF9635 /* MetalRendererProperties.mm */; };
+		C53F26B52175197A00EF9635 /* MetalLibrary.metal in Sources */ = {isa = PBXBuildFile; fileRef = C53F266D21743B2200EF9635 /* MetalLibrary.metal */; };
 		C57BF1F12172F07600A6F06A /* MetalRenderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = C57BF1EC2172EF6500A6F06A /* MetalRenderer.mm */; };
 		C57BF1F62172F07F00A6F06A /* SDLMetalRenderTarget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C57BF1EE2172EF6500A6F06A /* SDLMetalRenderTarget.mm */; };
 		C5A0712020EDF38000379727 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5A070E420EDF37E00379727 /* Texture.cpp */; };
@@ -169,10 +175,22 @@
 		C537773520A142CF00DFD1D9 /* SDL_test_compare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDL_test_compare.h; sourceTree = "<group>"; };
 		C537773620A142CF00DFD1D9 /* SDL_opengles2_gl2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDL_opengles2_gl2.h; sourceTree = "<group>"; };
 		C53978662065D862001AAFFE /* libRenderBox.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRenderBox.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		C57BF1E52172EF4E00A6F06A /* MetalRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MetalRenderer.h; path = ../../../../../Volumes/sethlu/Developer/renderbox/include/MetalRenderer.h; sourceTree = "<group>"; };
-		C57BF1EA2172EF5900A6F06A /* SDLMetalRenderTarget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SDLMetalRenderTarget.h; path = ../../../../../Volumes/sethlu/Developer/renderbox/include/SDLMetalRenderTarget.h; sourceTree = "<group>"; };
+		C53F266D21743B2200EF9635 /* MetalLibrary.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = MetalLibrary.metal; sourceTree = "<group>"; };
+		C53F266F217459AF00EF9635 /* MetalObjectProperties.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalObjectProperties.mm; sourceTree = "<group>"; };
+		C53F2670217459AF00EF9635 /* MetalObjectProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalObjectProperties.h; sourceTree = "<group>"; };
+		C53F267221745AD500EF9635 /* MetalBuffer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalBuffer.mm; sourceTree = "<group>"; };
+		C53F267421745AF400EF9635 /* MetalBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalBuffer.h; sourceTree = "<group>"; };
+		C53F267521745DC300EF9635 /* MetalRenderList.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalRenderList.mm; sourceTree = "<group>"; };
+		C53F267721745DDC00EF9635 /* MetalRenderList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalRenderList.h; sourceTree = "<group>"; };
+		C53F26782174649900EF9635 /* MetalDeviceRendererProperties.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalDeviceRendererProperties.mm; sourceTree = "<group>"; };
+		C53F267A217464BF00EF9635 /* MetalDeviceRendererProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalDeviceRendererProperties.h; sourceTree = "<group>"; };
+		C53F267B21746AE400EF9635 /* MetalRendererProperties.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalRendererProperties.mm; sourceTree = "<group>"; };
+		C53F267D21746AF800EF9635 /* MetalRendererProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalRendererProperties.h; sourceTree = "<group>"; };
+		C53F26AE2175197300EF9635 /* RenderBoxMetalLibrary.metallib */ = {isa = PBXFileReference; explicitFileType = "archive.metal-library"; includeInIndex = 0; path = RenderBoxMetalLibrary.metallib; sourceTree = BUILT_PRODUCTS_DIR; };
 		C57BF1EC2172EF6500A6F06A /* MetalRenderer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalRenderer.mm; sourceTree = "<group>"; };
 		C57BF1EE2172EF6500A6F06A /* SDLMetalRenderTarget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SDLMetalRenderTarget.mm; sourceTree = "<group>"; };
+		C57BF20A2172FCDB00A6F06A /* MetalRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalRenderer.h; sourceTree = "<group>"; };
+		C57BF20B2172FCE800A6F06A /* SDLMetalRenderTarget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDLMetalRenderTarget.h; sourceTree = "<group>"; };
 		C5A070BA20EDF36900379727 /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
 		C5A070BB20EDF36900379727 /* bitmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bitmap.h; sourceTree = "<group>"; };
 		C5A070BC20EDF36900379727 /* ObjectProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectProperties.h; sourceTree = "<group>"; };
@@ -409,6 +427,7 @@
 			isa = PBXGroup;
 			children = (
 				C53978662065D862001AAFFE /* libRenderBox.a */,
+				C53F26AE2175197300EF9635 /* RenderBoxMetalLibrary.metallib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -459,9 +478,14 @@
 				C5A070C220EDF36A00379727 /* Material.h */,
 				C5A070D020EDF36C00379727 /* Matrix.h */,
 				C5A070C620EDF36B00379727 /* Mesh.h */,
+				C53F267721745DDC00EF9635 /* MetalRenderList.h */,
 				C5A070CD20EDF36C00379727 /* MeshBasicMaterial.h */,
+				C53F267421745AF400EF9635 /* MetalBuffer.h */,
+				C53F267A217464BF00EF9635 /* MetalDeviceRendererProperties.h */,
 				C5A070C320EDF36A00379727 /* MeshLambertMaterial.h */,
-				C57BF1E52172EF4E00A6F06A /* MetalRenderer.h */,
+				C53F2670217459AF00EF9635 /* MetalObjectProperties.h */,
+				C53F267D21746AF800EF9635 /* MetalRendererProperties.h */,
+				C57BF20A2172FCDB00A6F06A /* MetalRenderer.h */,
 				C5A070E020EDF36E00379727 /* MTLTokenKinds.def */,
 				C5A070D120EDF36C00379727 /* Object.h */,
 				C5A070BC20EDF36900379727 /* ObjectProperties.h */,
@@ -483,7 +507,7 @@
 				C5A070C420EDF36A00379727 /* Ray.h */,
 				C5A070DA20EDF36D00379727 /* renderbox.h */,
 				C5A070DD20EDF36E00379727 /* Scene.h */,
-				C57BF1EA2172EF5900A6F06A /* SDLMetalRenderTarget.h */,
+				C57BF20B2172FCE800A6F06A /* SDLMetalRenderTarget.h */,
 				C5A070CF20EDF36C00379727 /* SDLOpenGLRenderTarget.h */,
 				C5A070DB20EDF36D00379727 /* Texture.h */,
 				C5A070C820EDF36B00379727 /* Vector.h */,
@@ -501,11 +525,25 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		C53F266821743B0400EF9635 /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				C53F266D21743B2200EF9635 /* MetalLibrary.metal */,
+			);
+			path = shaders;
+			sourceTree = "<group>";
+		};
 		C57BF1EB2172EF6500A6F06A /* metal */ = {
 			isa = PBXGroup;
 			children = (
-				C57BF1EC2172EF6500A6F06A /* MetalRenderer.mm */,
 				C57BF1ED2172EF6500A6F06A /* sdl */,
+				C53F266821743B0400EF9635 /* shaders */,
+				C53F267221745AD500EF9635 /* MetalBuffer.mm */,
+				C53F26782174649900EF9635 /* MetalDeviceRendererProperties.mm */,
+				C53F266F217459AF00EF9635 /* MetalObjectProperties.mm */,
+				C53F267521745DC300EF9635 /* MetalRenderList.mm */,
+				C57BF1EC2172EF6500A6F06A /* MetalRenderer.mm */,
+				C53F267B21746AE400EF9635 /* MetalRendererProperties.mm */,
 			);
 			path = metal;
 			sourceTree = "<group>";
@@ -703,6 +741,21 @@
 			productReference = C53978662065D862001AAFFE /* libRenderBox.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		C53F26AD2175197300EF9635 /* RenderBoxMetalLibrary */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C53F26B22175197300EF9635 /* Build configuration list for PBXNativeTarget "RenderBoxMetalLibrary" */;
+			buildPhases = (
+				C53F26AC2175197300EF9635 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RenderBoxMetalLibrary;
+			productName = RenderBoxMetalLibrary;
+			productReference = C53F26AE2175197300EF9635 /* RenderBoxMetalLibrary.metallib */;
+			productType = "com.apple.product-type.metal-library";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -714,6 +767,10 @@
 				TargetAttributes = {
 					C53978652065D862001AAFFE = {
 						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
+					C53F26AD2175197300EF9635 = {
+						CreatedOnToolsVersion = 10.0;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -737,6 +794,7 @@
 			projectRoot = "";
 			targets = (
 				C53978652065D862001AAFFE /* RenderBox */,
+				C53F26AD2175197300EF9635 /* RenderBoxMetalLibrary */,
 			);
 		};
 /* End PBXProject section */
@@ -786,6 +844,7 @@
 				C5A0712F20EDF38000379727 /* PointLight.cpp in Sources */,
 				C5A0713520EDF38000379727 /* Camera.cpp in Sources */,
 				C5A0712120EDF38000379727 /* OpenGLRenderList.cpp in Sources */,
+				C53F267621745DC300EF9635 /* MetalRenderList.mm in Sources */,
 				C5A0712C20EDF38000379727 /* BoxGeometry.cpp in Sources */,
 				C5A0712220EDF38000379727 /* OpenGLBuffer.cpp in Sources */,
 				C5A0712020EDF38000379727 /* Texture.cpp in Sources */,
@@ -794,17 +853,29 @@
 				C5A0713720EDF38000379727 /* Ray.cpp in Sources */,
 				C5A0713820EDF38000379727 /* Object.cpp in Sources */,
 				C5A0712620EDF38000379727 /* SDLOpenGLRenderTarget.mm in Sources */,
+				C53F267321745AD500EF9635 /* MetalBuffer.mm in Sources */,
 				C5A0712B20EDF38000379727 /* OpenGLProgram.cpp in Sources */,
+				C53F267C21746AE400EF9635 /* MetalRendererProperties.mm in Sources */,
 				C5A0712720EDF38000379727 /* OpenGLRendererProperties.cpp in Sources */,
 				C5A0712920EDF38000379727 /* OpenGLFramebuffer.cpp in Sources */,
+				C53F2671217459AF00EF9635 /* MetalObjectProperties.mm in Sources */,
 				C57BF1F62172F07F00A6F06A /* SDLMetalRenderTarget.mm in Sources */,
 				C5A0713420EDF38000379727 /* Scene.cpp in Sources */,
 				C5A0713A20EDF38000379727 /* GLSLPreprocessor.cpp in Sources */,
 				C5A0712D20EDF38000379727 /* Geometry.cpp in Sources */,
 				C5A0712320EDF38000379727 /* OpenGLRenderer.cpp in Sources */,
+				C53F26792174649900EF9635 /* MetalDeviceRendererProperties.mm in Sources */,
 				C5A0713020EDF38000379727 /* Light.cpp in Sources */,
 				C5A0713320EDF38000379727 /* GLSLMaterial.cpp in Sources */,
 				C5A0712A20EDF38000379727 /* OpenGLVertexArray.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C53F26AC2175197300EF9635 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C53F26B52175197A00EF9635 /* MetalLibrary.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -929,6 +1000,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Debug;
 		};
@@ -946,6 +1018,32 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "i386 x86_64";
+			};
+			name = Release;
+		};
+		C53F26B32175197300EF9635 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4JAEG2S45X;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		C53F26B42175197300EF9635 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4JAEG2S45X;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -966,6 +1064,15 @@
 			buildConfigurations = (
 				C53978702065D862001AAFFE /* Debug */,
 				C53978712065D862001AAFFE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C53F26B22175197300EF9635 /* Build configuration list for PBXNativeTarget "RenderBoxMetalLibrary" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C53F26B32175197300EF9635 /* Debug */,
+				C53F26B42175197300EF9635 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
