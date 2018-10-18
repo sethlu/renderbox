@@ -97,23 +97,20 @@ namespace renderbox {
         OBJLexer lexer(source, source);
         OBJToken token{};
 
-        NextLine:
-
-        lex(lexer, token);
-
-        switch (token.kind) {
-            default:                 break;
-            case obj_tok::eof:       return;
-            case obj_tok::kw_v:      handleVertex(lexer, token); break; // Geometric vertex
-            case obj_tok::kw_vt:     handleTextureVertex(lexer, token); break; // Texture vertex
-            case obj_tok::kw_vn:     handleVertexNormal(lexer, token); break; // Vertex normal
-            case obj_tok::kw_f:      handleFace(lexer, token); break; // Face
-            case obj_tok::kw_o:      handleObject(lexer, token); break; // Object
-            case obj_tok::kw_mtllib: handleMaterialLibrary(lexer, token); break; // Material library
-            case obj_tok::kw_usemtl: handleMaterialName(lexer, token); break; // Material name
+        for (;;) {
+            lex(lexer, token);
+            switch (token.kind) {
+                default:                 break;
+                case obj_tok::eof:       return;
+                case obj_tok::kw_v:      handleVertex(lexer, token); break; // Geometric vertex
+                case obj_tok::kw_vt:     handleTextureVertex(lexer, token); break; // Texture vertex
+                case obj_tok::kw_vn:     handleVertexNormal(lexer, token); break; // Vertex normal
+                case obj_tok::kw_f:      handleFace(lexer, token); break; // Face
+                case obj_tok::kw_o:      handleObject(lexer, token); break; // Object
+                case obj_tok::kw_mtllib: handleMaterialLibrary(lexer, token); break; // Material library
+                case obj_tok::kw_usemtl: handleMaterialName(lexer, token); break; // Material name
+            }
         }
-
-        goto NextLine;
 
     }
 
@@ -122,23 +119,20 @@ namespace renderbox {
         MTLLexer lexer(source, source);
         MTLToken token{};
 
-        NextLine:
-
-        lex(lexer, token);
-
-        switch (token.kind) {
-            default:                 break;
-            case mtl_tok::eof:       return;
-            case mtl_tok::kw_newmtl: handleNewMaterial(lexer, token); break; // Material name
-            case mtl_tok::kw_Ka:
-            case mtl_tok::kw_Kd:
-            case mtl_tok::kw_Ks:     handleMaterialColor(lexer, token); break; // Material color
-            case mtl_tok::kw_map_Ka:
-            case mtl_tok::kw_map_Kd:
-            case mtl_tok::kw_map_Ks: handleTextureMap(lexer, token); break; // Texture map
+        for (;;) {
+            lex(lexer, token);
+            switch (token.kind) {
+                default:                 break;
+                case mtl_tok::eof:       return;
+                case mtl_tok::kw_newmtl: handleNewMaterial(lexer, token); break; // Material name
+                case mtl_tok::kw_Ka:
+                case mtl_tok::kw_Kd:
+                case mtl_tok::kw_Ks:     handleMaterialColor(lexer, token); break; // Material color
+                case mtl_tok::kw_map_Ka:
+                case mtl_tok::kw_map_Kd:
+                case mtl_tok::kw_map_Ks: handleTextureMap(lexer, token); break; // Texture map
+            }
         }
-
-        goto NextLine;
 
     }
 
