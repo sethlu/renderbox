@@ -10,6 +10,10 @@ namespace renderbox {
         return fromBMPFile(filename); // TODO: Check file extension
     }
 
+    Texture *Texture::fromFile(const std::string &filename) {
+        return fromFile(filename.c_str());
+    }
+
     Texture *Texture::fromBMPFile(const char *filename) {
 
         std::ifstream file(filename, std::ios::binary);

@@ -17,6 +17,8 @@ namespace renderbox {
 
         static Texture *fromFile(const char *filename);
 
+        static Texture *fromFile(const std::string &filename);
+
         static Texture *fromBMPFile(const char *filename);
 
     protected:

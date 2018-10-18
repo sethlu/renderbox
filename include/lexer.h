@@ -2,6 +2,10 @@
 #define RENDERBOX_LEX_H_H
 
 
+#import <memory>
+#import <string>
+
+
 namespace renderbox {
 
     // ASCII info based on: http://llvm.org/svn/llvm-project/cfe/trunk/include/clang/Basic/CharInfo.h
@@ -123,6 +127,11 @@ namespace renderbox {
             rewind(f);
             fread(source.get(), sizeof(char), size, f);
             source.get()[size] = '\0';
+
+        };
+
+        explicit Source(const std::string &filename)
+                : Source(filename.c_str()) {
 
         };
 

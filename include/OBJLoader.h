@@ -166,7 +166,7 @@ namespace renderbox {
 
     private:
 
-        std::vector<const char *> sourceFiles;
+        std::vector<const std::string> sourceFiles;
 
         std::shared_ptr<Object> destination;
 

@@ -30,19 +30,23 @@ namespace renderbox {
 
     }
 
-    void OBJLoader::enterOBJSourceFile(const char *filename) {
+    void OBJLoader::enterOBJSourceFile(const char *_filename) {
 
-        if (!sourceFiles.empty()) {
+        std::string filename;
+
+        if (sourceFiles.empty()) {
+
+            filename = _filename;
+
+        } else {
             // Resolve relative path
 
             // Preserve last slash
-            std::string relative(sourceFiles.back());
-            auto separator = relative.find_last_of('/'); // Return -1 if not found
-            relative.resize(separator + 1);
+            filename = sourceFiles.back();
+            auto separator = filename.find_last_of('/'); // Return -1 if not found
+            filename.resize(separator + 1);
             // Append file name
-            relative.append(filename);
-
-            filename = relative.c_str();
+            filename.append(_filename);
 
         }
 
@@ -59,19 +63,23 @@ namespace renderbox {
         enterOBJSourceFile(filename.c_str());
     }
 
-    void OBJLoader::enterMTLSourceFile(const char *filename) {
+    void OBJLoader::enterMTLSourceFile(const char *_filename) {
 
-        if (!sourceFiles.empty()) {
+        std::string filename;
+
+        if (sourceFiles.empty()) {
+
+            filename = _filename;
+
+        } else {
             // Resolve relative path
 
             // Preserve last slash
-            std::string relative(sourceFiles.back());
-            auto separator = relative.find_last_of('/'); // Return -1 if not found
-            relative.resize(separator + 1);
+            filename = sourceFiles.back();
+            auto separator = filename.find_last_of('/'); // Return -1 if not found
+            filename.resize(separator + 1);
             // Append file name
-            relative.append(filename);
-
-            filename = relative.c_str();
+            filename.append(_filename);
 
         }
 
@@ -204,10 +212,10 @@ namespace renderbox {
         lex(lexer, token);
 		if (token.kind == obj_tok::numeric_constant) {
 			// Does not support
-			
+
 			lex(lexer, token);
 		}
-		
+
 		// Expect end of line
         if (token.kind != obj_tok::eol) INVALID_SYNTAX();
 
@@ -495,27 +503,29 @@ namespace renderbox {
         if (token.kind != mtl_tok::unquoted_string_literal) INVALID_SYNTAX();
 
         // Make cleaned name
-        char filename_[token.len + 1];
-        memcpy(filename_, token.pointer, token.len);
-        filename_[token.len] = '\0';
-
-        const char *filename = filename_;
+        char _filename[token.len + 1];
+        memcpy(_filename, token.pointer, token.len);
+        _filename[token.len] = '\0';
 
         // Expect eol
         lex(lexer, token);
         if (token.kind != mtl_tok::eol) INVALID_SYNTAX();
 
-        if (!sourceFiles.empty()) {
+        std::string filename;
+
+        if (sourceFiles.empty()) {
+
+            filename = _filename;
+
+        } else {
             // Resolve relative path
 
             // Preserve last slash
-            std::string relative(sourceFiles.back());
-            auto separator = relative.find_last_of('/'); // Return -1 if not found
-            relative.resize(separator + 1);
+            filename = sourceFiles.back();
+            auto separator = filename.find_last_of('/'); // Return -1 if not found
+            filename.resize(separator + 1);
             // Append file name
-            relative.append(filename);
-
-            filename = relative.c_str();
+            filename.append(_filename);
 
         }
 
