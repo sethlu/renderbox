@@ -120,10 +120,11 @@ namespace renderbox {
                     [encoder setVertexBuffer:objectProperties->getBuffer(0)->bufferObject offset:0 atIndex:0];
                     [encoder setVertexBuffer:uniformBuffer offset:0 atIndex:1];
 
-                    [encoder drawIndexedPrimitives:MTLPrimitiveTypeTriangle indexCount:
-                            object->getGeometry()->getFaces().size() *
-                            3 indexType:MTLIndexTypeUInt32 indexBuffer:objectProperties->getBuffer(
-                            1)->bufferObject indexBufferOffset:0];
+                    [encoder drawIndexedPrimitives:MTLPrimitiveTypeTriangle
+                                        indexCount:object->getGeometry()->getFaces().size() * 3
+                                         indexType:MTLIndexTypeUInt32
+                                       indexBuffer:objectProperties->getBuffer(1)->bufferObject
+                                 indexBufferOffset:0];
 
                 }
 
