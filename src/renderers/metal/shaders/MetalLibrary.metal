@@ -2,7 +2,7 @@
 using namespace metal;
 
 typedef struct {
-    float4x4 rotation_matrix;
+    float4x4 worldProjectionMatrix;
 } Uniforms;
 
 typedef struct {
@@ -18,7 +18,7 @@ vertex VertexOut vertex_function(device VertexIn *vertices [[buffer(0)]],
                                  constant Uniforms &uniforms [[buffer(1)]],
                                  uint vid [[vertex_id]]) {
     VertexOut out;
-    out.position = uniforms.rotation_matrix * float4(vertices[vid].position, 1);
+    out.position = uniforms.worldProjectionMatrix * float4(vertices[vid].position, 1);
     out.color = float4(1, 1, 1, 1);
     return out;
 }

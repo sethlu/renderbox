@@ -12,7 +12,7 @@
 
 
 typedef struct {
-    matrix_float4x4 rotation_matrix;
+    matrix_float4x4 worldProjectionMatrix;
 } Uniforms;
 
 namespace renderbox {
@@ -112,8 +112,9 @@ namespace renderbox {
                     mat4 worldProjectionMatrix = viewProjectionMatrix * object->getWorldMatrix();
 
                     Uniforms uniforms;
-                    memcpy(&uniforms.rotation_matrix, glm::value_ptr(worldProjectionMatrix),
-                           sizeof(uniforms.rotation_matrix));
+                    memcpy(&uniforms.worldProjectionMatrix,
+                           glm::value_ptr(worldProjectionMatrix),
+                           sizeof(uniforms.worldProjectionMatrix));
                     void *bufferPointer = [uniformBuffer contents];
                     memcpy(bufferPointer, &uniforms, sizeof(Uniforms));
 
