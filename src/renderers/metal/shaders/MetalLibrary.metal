@@ -23,12 +23,24 @@ typedef struct {
 
 typedef struct {
     float4 position [[position]];
-    float3 color;
+    float2 uv;
+    float3 ambientColor;
+    float3 diffuseColor;
 } LambertVertexOut;
+
+float4 gammaToLinear(float4 value, float gamma) {
+    return pow(value, float4(gamma));
+}
+
+float4 linearToGamma(float4 value, float gamma) {
+    return pow(value, float4(1.0 / gamma));
+}
 
 float3 dehomogenize(float4 vector) {
     return vector.xyz / vector.w;
 }
+
+constexpr sampler textureSampler(mag_filter::linear, min_filter::linear);
 
 vertex LambertVertexOut lambert_vert(device packed_float3 *vertices [[buffer(0)]],
                                      device packed_float2 *uvs [[buffer(1)]],
@@ -46,11 +58,15 @@ vertex LambertVertexOut lambert_vert(device packed_float3 *vertices [[buffer(0)]
 
     float3 vertexWorldNormal = uniforms.worldNormalMatrix * float3(normals[vid]);
 
+    // UV
+
+    out.uv = uvs[vid];
+
     // Lighting
 
     // Ambient
 
-    float3 vertexAmbientColor = uniforms.sceneAmbientColor * uniforms.materialAmbientColor;
+    out.ambientColor = uniforms.sceneAmbientColor * uniforms.materialAmbientColor;
 
     // Diffuse
 
@@ -66,13 +82,23 @@ vertex LambertVertexOut lambert_vert(device packed_float3 *vertices [[buffer(0)]
             max(dot(N, L), 0.0) / (1.0 + (0.25 * lightDistance * lightDistance));
     }
 
-    vertexDiffuseColor *= uniforms.materialDiffuseColor;
-
-    out.color = vertexAmbientColor + vertexDiffuseColor;
+    out.diffuseColor = vertexDiffuseColor * uniforms.materialDiffuseColor;
 
     return out;
 }
 
-fragment float4 lambert_frag(LambertVertexOut in [[stage_in]]) {
-    return float4(pow(in.color, float3(1.0 / SCREEN_GAMMA)), 1);
+fragment float4 lambert_frag(LambertVertexOut in [[stage_in]],
+                             texture2d<float> ambientMap [[texture(0)]],
+                             texture2d<float> diffuseMap [[texture(1)]]) {
+
+    float4 ambientMapValue = ambientMap.sample(textureSampler, in.uv);
+    float4 diffuseMapValue = diffuseMap.sample(textureSampler, in.uv);
+
+    float4 ambientLinear = float4(in.ambientColor, 1) * gammaToLinear(ambientMapValue, SCREEN_GAMMA);
+    float4 diffuseLinear = float4(in.diffuseColor, 1) * gammaToLinear(diffuseMapValue, SCREEN_GAMMA);
+
+    float4 colorLinear = ambientLinear + diffuseLinear;
+
+    return linearToGamma(colorLinear, SCREEN_GAMMA);
+
 }

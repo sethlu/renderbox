@@ -22,4 +22,20 @@ namespace renderbox {
 
     }
 
+    MetalTexture *MetalObjectProperties::getTexture(int index, bool *blankTexture) {
+
+        auto result = textures.find(index);
+        if (result != textures.end()) {
+            if (blankTexture) *blankTexture = false;
+            return result->second.get();
+        }
+
+        auto texture = new MetalTexture(device);
+        textures.insert(std::make_pair(index, std::unique_ptr<MetalTexture>(texture)));
+
+        if (blankTexture) *blankTexture = true;
+        return texture;
+
+    }
+
 }

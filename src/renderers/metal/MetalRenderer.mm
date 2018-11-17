@@ -190,21 +190,49 @@ namespace renderbox {
                            glm::value_ptr(mat4(glm::transpose(glm::inverse(mat3(object->getWorldMatrix()))))),
                            sizeof(uniforms.worldNormalMatrix));
 
-                    // Material ambient color
+                    // Ambient material
                     if (object->getMaterial()->isAmbientMaterial()) {
                         if (auto material = dynamic_cast<AmbientMaterial *>(object->getMaterial().get())) {
+                            // Material ambient color
+
                             memcpy(&uniforms.materialAmbientColor,
                                    glm::value_ptr(material->getAmbientColor()),
                                    sizeof(uniforms.materialAmbientColor));
+
+                            // Material ambient map
+
+                            auto ambientMap = material->getAmbientMap();
+                            if (ambientMap) {
+                                bool blankTexture;
+                                auto texture = objectProperties->getTexture(0, &blankTexture);
+                                if (blankTexture) {
+                                    texture->texture(ambientMap);
+                                }
+                                [encoder setFragmentTexture:texture->textureObject atIndex:0];
+                            }
                         }
                     }
 
-                    // Material diffuse color
+                    // Diffuse material
                     if (object->getMaterial()->isDiffuseMaterial()) {
                         if (auto material = dynamic_cast<DiffuseMaterial *>(object->getMaterial().get())) {
+                            // Material diffuse color
+
                             memcpy(&uniforms.materialDiffuseColor,
                                    glm::value_ptr(material->getDiffuseColor()),
                                    sizeof(uniforms.materialDiffuseColor));
+
+                            // Material diffuse map
+
+                            auto diffuseMap = material->getDiffuseMap();
+                            if (diffuseMap) {
+                                bool blankTexture;
+                                auto texture = objectProperties->getTexture(1, &blankTexture);
+                                if (blankTexture) {
+                                    texture->texture(diffuseMap);
+                                }
+                                [encoder setFragmentTexture:texture->textureObject atIndex:1];
+                            }
                         }
                     }
 
