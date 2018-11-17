@@ -29,10 +29,14 @@ namespace renderbox {
         unbindTexture(GL_TEXTURE_2D);
     }
 
-    void OpenGLTexture::texture(Texture *texture_) {
-        texture(texture_->pixels.get(),
-                texture_->width,
-                texture_->height);
+    void OpenGLTexture::texture(std::shared_ptr<Texture> texture_) {
+        // Expect first pixel to be at the lower left corner
+        auto convertedTexture = Texture::convert(std::move(texture_),
+                TEXTURE_PIXEL_FORMAT_RGB_UNSIGNED_BYTE, TEXTURE_COORDINATES_UR);
+
+        texture(convertedTexture->pixels.get(),
+                convertedTexture->width,
+                convertedTexture->height);
     }
 
 }

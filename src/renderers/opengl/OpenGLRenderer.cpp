@@ -191,7 +191,7 @@ namespace renderbox {
                     if (blankTexture) {
                         if (auto material = dynamic_cast<AmbientMaterial *>(object->getMaterial().get())) {
                             auto texture = material->getAmbientMap(); // Need to check if texture exists
-                            if (texture) ambientMap->texture(material->getAmbientMap().get());
+                            if (texture) ambientMap->texture(material->getAmbientMap());
                         }
                     }
                 }
@@ -208,7 +208,7 @@ namespace renderbox {
                     if (blankTexture) {
                         if (auto material = dynamic_cast<DiffuseMaterial *>(object->getMaterial().get())) {
                             auto texture = material->getDiffuseMap(); // Need to check if texture exists
-                            if (texture) diffuseMap->texture(material->getDiffuseMap().get());
+                            if (texture) diffuseMap->texture(material->getDiffuseMap());
                         }
                     }
                 }

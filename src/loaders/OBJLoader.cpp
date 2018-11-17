@@ -523,7 +523,7 @@ namespace renderbox {
 
         }
 
-        auto texture = std::shared_ptr<Texture>(Texture::fromFile(filename));
+        auto texture = Texture::fromFile(filename);
 
         switch (keyword.kind) {
             default: break;

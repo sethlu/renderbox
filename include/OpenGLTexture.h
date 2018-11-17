@@ -24,7 +24,7 @@ namespace renderbox {
 
         void texture(const void *pixels, unsigned width, unsigned height);
 
-        void texture(Texture *texture);
+        void texture(std::shared_ptr<Texture> texture);
 
     protected:
 
