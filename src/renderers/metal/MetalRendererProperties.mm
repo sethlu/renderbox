@@ -3,7 +3,7 @@
 
 namespace renderbox {
 
-    MetalDeviceRendererProperties *MetalRendererProperties::getDeviceRendererProperties(id<MTLDevice> device) {
+    MetalDeviceRendererProperties *MetalRendererProperties::getDeviceRendererProperties(id <MTLDevice> device) {
 
         const void *_device = (__bridge const void *) device;
 

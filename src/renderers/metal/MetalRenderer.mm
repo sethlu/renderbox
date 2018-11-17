@@ -66,14 +66,14 @@ namespace renderbox {
             // Render
 
             MetalView *metalView = renderTarget->metalView;
-            id<MTLDevice> device = metalView.metalLayer.device;
-            id<MTLCommandQueue> queue = renderTarget->queue;
-            id<CAMetalDrawable> drawable = [metalView.metalLayer nextDrawable];
+            id <MTLDevice> device = metalView.metalLayer.device;
+            id <MTLCommandQueue> queue = renderTarget->queue;
+            id <CAMetalDrawable> drawable = [metalView.metalLayer nextDrawable];
 
             MetalDeviceRendererProperties *deviceRendererProperties = properties.getDeviceRendererProperties(device);
 
             // Create command buffer
-            id<MTLCommandBuffer> commandBuffer = [queue commandBuffer];
+            id <MTLCommandBuffer> commandBuffer = [queue commandBuffer];
 
             // Create render pass descriptor
             MTLRenderPassDescriptor *renderPassDescriptor = [MTLRenderPassDescriptor renderPassDescriptor];
@@ -86,11 +86,11 @@ namespace renderbox {
             renderPassColorAttachment.storeAction = MTLStoreActionStore;
 
             // Depth attachment texture
-            MTLTextureDescriptor* depthAttachmentTextureDescriptor =
-            [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatDepth32Float
-                                                               width:drawable.texture.width
-                                                              height:drawable.texture.height
-                                                           mipmapped:NO];
+            MTLTextureDescriptor *depthAttachmentTextureDescriptor =
+                    [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatDepth32Float
+                                                                       width:drawable.texture.width
+                                                                      height:drawable.texture.height
+                                                                   mipmapped:NO];
             depthAttachmentTextureDescriptor.resourceOptions = MTLResourceStorageModePrivate;
             depthAttachmentTextureDescriptor.usage = MTLTextureUsageRenderTarget;
 
@@ -106,25 +106,25 @@ namespace renderbox {
             MTLDepthStencilDescriptor *depthStencilDescriptor = [MTLDepthStencilDescriptor new];
             depthStencilDescriptor.depthCompareFunction = MTLCompareFunctionLess;
             depthStencilDescriptor.depthWriteEnabled = YES;
-            id<MTLDepthStencilState> depthStencilState = [device newDepthStencilStateWithDescriptor:depthStencilDescriptor];
+            id <MTLDepthStencilState> depthStencilState = [device newDepthStencilStateWithDescriptor:depthStencilDescriptor];
 
             // Create render command encoder
-            id<MTLRenderCommandEncoder> encoder =
-                [commandBuffer renderCommandEncoderWithDescriptor:renderPassDescriptor];
+            id <MTLRenderCommandEncoder> encoder =
+                    [commandBuffer renderCommandEncoderWithDescriptor:renderPassDescriptor];
             [encoder setDepthStencilState:depthStencilState];
             [encoder setFrontFacingWinding:MTLWindingCounterClockwise];
             [encoder setCullMode:MTLCullModeNone];
 
             // View projection matrix
             mat4 viewProjectionMatrix =
-                mat4(1, 0, 0, 0,
-                     0, 1, 0, 0,
-                     0, 0, 0.5, 0,
-                     0, 0, 0.5, 1) *
-                camera->getViewProjectionMatrix();
+                    mat4(1, 0, 0, 0,
+                         0, 1, 0, 0,
+                         0, 0, 0.5, 0,
+                         0, 0, 0.5, 1) *
+                    camera->getViewProjectionMatrix();
 
             // Uniforms
-            id<MTLBuffer> uniformBuffer = [device newBufferWithLength:sizeof(Uniforms) options:MTLResourceOptionCPUCacheModeDefault];
+            id <MTLBuffer> uniformBuffer = [device newBufferWithLength:sizeof(Uniforms) options:MTLResourceOptionCPUCacheModeDefault];
             Uniforms uniforms;
 
             // Scene ambient color
@@ -161,10 +161,12 @@ namespace renderbox {
 
                         objectProperties->getBuffer(0)->buffer(geometry->vertices);
 
-                        if (geometry->uvs.size() == geometry->vertices.size()) objectProperties->getBuffer(1)->buffer(geometry->uvs);
+                        if (geometry->uvs.size() == geometry->vertices.size())
+                            objectProperties->getBuffer(1)->buffer(geometry->uvs);
                         else if (!geometry->uvs.empty()) throw;
 
-                        if (geometry->normals.size() == geometry->vertices.size()) objectProperties->getBuffer(2)->buffer(geometry->normals);
+                        if (geometry->normals.size() == geometry->vertices.size())
+                            objectProperties->getBuffer(2)->buffer(geometry->normals);
                         else if (!geometry->normals.empty()) throw;
 
                         objectProperties->getBuffer(3)->buffer(geometry->faces);

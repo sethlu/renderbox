@@ -3,7 +3,7 @@
 
 namespace renderbox {
 
-    MetalObjectProperties::MetalObjectProperties(id<MTLDevice> device)
+    MetalObjectProperties::MetalObjectProperties(id <MTLDevice> device)
             : device(device) {
 
     }

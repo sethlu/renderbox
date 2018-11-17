@@ -17,7 +17,7 @@ namespace renderbox {
 
     public:
 
-        MetalDeviceRendererProperties(id<MTLDevice> device);
+        MetalDeviceRendererProperties(id <MTLDevice> device);
 
         MetalRenderPipelineState *getRenderPipelineState(Material *material);
 
@@ -25,7 +25,7 @@ namespace renderbox {
 
     protected:
 
-        id<MTLDevice> device;
+        id <MTLDevice> device;
 
         std::unordered_map<int, std::unique_ptr<MetalObjectProperties>> objectProperties;
 

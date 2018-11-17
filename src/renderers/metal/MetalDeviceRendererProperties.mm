@@ -3,8 +3,8 @@
 
 namespace renderbox {
 
-    MetalDeviceRendererProperties::MetalDeviceRendererProperties(id<MTLDevice> device)
-    : device(device) {}
+    MetalDeviceRendererProperties::MetalDeviceRendererProperties(id <MTLDevice> device)
+            : device(device) {}
 
     MetalRenderPipelineState *
     MetalDeviceRendererProperties::getRenderPipelineState(Material *material) {
@@ -16,7 +16,7 @@ namespace renderbox {
 
         // Make new render pipeline descriptor
 
-        id<MTLRenderPipelineState> renderPipelineStateObject;
+        id <MTLRenderPipelineState> renderPipelineStateObject;
 
         switch (material->getMaterialType()) {
             case MESH_LAMBERT_MATERIAL: {
@@ -24,13 +24,13 @@ namespace renderbox {
                 NSError *err;
 
                 NSString *libPath = [[NSBundle mainBundle] pathForResource:@"RenderBoxMetalLibrary" ofType:@"metallib"];
-                id<MTLLibrary> library = [device newLibraryWithFile:libPath error:&err];
+                id <MTLLibrary> library = [device newLibraryWithFile:libPath error:&err];
                 assert(err == nil);
 
                 MTLRenderPipelineDescriptor *renderPipelineDescriptor = [[MTLRenderPipelineDescriptor alloc] init];
 
-                id<MTLFunction> vertexFunction = [library newFunctionWithName:@"lambert_vert"];
-                id<MTLFunction> fragmentFunction = [library newFunctionWithName:@"lambert_frag"];
+                id <MTLFunction> vertexFunction = [library newFunctionWithName:@"lambert_vert"];
+                id <MTLFunction> fragmentFunction = [library newFunctionWithName:@"lambert_frag"];
 
                 [renderPipelineDescriptor setVertexFunction:vertexFunction];
                 [renderPipelineDescriptor setFragmentFunction:fragmentFunction];
@@ -39,7 +39,7 @@ namespace renderbox {
                 renderPipelineDescriptor.depthAttachmentPixelFormat = MTLPixelFormatDepth32Float;
 
                 renderPipelineStateObject = [device newRenderPipelineStateWithDescriptor:renderPipelineDescriptor
-                                                                             error:&err];
+                                                                                   error:&err];
                 assert(err == nil);
 
                 break;
