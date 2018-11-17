@@ -83,9 +83,9 @@ int main(int argc, char **argv) {
 			switch (event.type) {
                 case SDL_MOUSEMOTION: {
 
-					renderbox::Ray *ray = camera->getRay(renderbox::vec2(0.0f, 0.0f));
-					renderbox::vec3 up = renderbox::vec3(0, 0, 1.0f);
-					renderbox::vec3 right = glm::normalize(glm::cross(ray->getDirection(), up));
+                    auto ray = camera->getRay(renderbox::vec2(0.0f, 0.0f));
+					auto up = renderbox::vec3(0, 0, 1.0f);
+					auto right = glm::normalize(glm::cross(ray->getDirection(), up));
 
 					cube->rotate(up, (float) event.motion.xrel / 100);
 					cube->rotate(right, (float) event.motion.yrel / 100);
