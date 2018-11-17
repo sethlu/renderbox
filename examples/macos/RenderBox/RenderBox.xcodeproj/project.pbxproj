@@ -42,6 +42,7 @@
 		C5A0713820EDF38000379727 /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5A0711420EDF37F00379727 /* Object.cpp */; };
 		C5A0713920EDF38000379727 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5A0711620EDF38000379727 /* Mesh.cpp */; };
 		C5A0713A20EDF38000379727 /* GLSLPreprocessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5A0711F20EDF38000379727 /* GLSLPreprocessor.cpp */; };
+		C5B9FE3A219FC9470013E3B5 /* MetalRenderPipelineState.mm in Sources */ = {isa = PBXBuildFile; fileRef = C56F51F9219F8A6200572A18 /* MetalRenderPipelineState.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -187,6 +188,9 @@
 		C53F267B21746AE400EF9635 /* MetalRendererProperties.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalRendererProperties.mm; sourceTree = "<group>"; };
 		C53F267D21746AF800EF9635 /* MetalRendererProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalRendererProperties.h; sourceTree = "<group>"; };
 		C53F26AE2175197300EF9635 /* RenderBoxMetalLibrary.metallib */ = {isa = PBXFileReference; explicitFileType = "archive.metal-library"; includeInIndex = 0; path = RenderBoxMetalLibrary.metallib; sourceTree = BUILT_PRODUCTS_DIR; };
+		C56F51F7219F7FE600572A18 /* scoped_nsobject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = scoped_nsobject.h; sourceTree = "<group>"; };
+		C56F51F8219F8A4B00572A18 /* MetalRenderPipelineState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalRenderPipelineState.h; sourceTree = "<group>"; };
+		C56F51F9219F8A6200572A18 /* MetalRenderPipelineState.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalRenderPipelineState.mm; sourceTree = "<group>"; };
 		C57BF1EC2172EF6500A6F06A /* MetalRenderer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalRenderer.mm; sourceTree = "<group>"; };
 		C57BF1EE2172EF6500A6F06A /* SDLMetalRenderTarget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = SDLMetalRenderTarget.mm; sourceTree = "<group>"; };
 		C57BF20A2172FCDB00A6F06A /* MetalRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalRenderer.h; sourceTree = "<group>"; };
@@ -477,11 +481,13 @@
 				C5A070BD20EDF36900379727 /* Light.h */,
 				C5A070C220EDF36A00379727 /* Material.h */,
 				C5A070D020EDF36C00379727 /* Matrix.h */,
+				C56F51F7219F7FE600572A18 /* scoped_nsobject.h */,
 				C5A070C620EDF36B00379727 /* Mesh.h */,
 				C53F267721745DDC00EF9635 /* MetalRenderList.h */,
 				C5A070CD20EDF36C00379727 /* MeshBasicMaterial.h */,
 				C53F267421745AF400EF9635 /* MetalBuffer.h */,
 				C53F267A217464BF00EF9635 /* MetalDeviceRendererProperties.h */,
+				C56F51F8219F8A4B00572A18 /* MetalRenderPipelineState.h */,
 				C5A070C320EDF36A00379727 /* MeshLambertMaterial.h */,
 				C53F2670217459AF00EF9635 /* MetalObjectProperties.h */,
 				C53F267D21746AF800EF9635 /* MetalRendererProperties.h */,
@@ -541,6 +547,7 @@
 				C53F267221745AD500EF9635 /* MetalBuffer.mm */,
 				C53F26782174649900EF9635 /* MetalDeviceRendererProperties.mm */,
 				C53F266F217459AF00EF9635 /* MetalObjectProperties.mm */,
+				C56F51F9219F8A6200572A18 /* MetalRenderPipelineState.mm */,
 				C53F267521745DC300EF9635 /* MetalRenderList.mm */,
 				C57BF1EC2172EF6500A6F06A /* MetalRenderer.mm */,
 				C53F267B21746AE400EF9635 /* MetalRendererProperties.mm */,
@@ -868,6 +875,7 @@
 				C5A0713020EDF38000379727 /* Light.cpp in Sources */,
 				C5A0713320EDF38000379727 /* GLSLMaterial.cpp in Sources */,
 				C5A0712A20EDF38000379727 /* OpenGLVertexArray.cpp in Sources */,
+				C5B9FE3A219FC9470013E3B5 /* MetalRenderPipelineState.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

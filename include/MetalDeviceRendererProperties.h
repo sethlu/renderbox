@@ -5,6 +5,7 @@
 #import <Metal/Metal.h>
 
 #include "MetalObjectProperties.h"
+#include "MetalRenderPipelineState.h"
 #include "Object.h"
 
 
@@ -18,6 +19,8 @@ namespace renderbox {
 
         MetalDeviceRendererProperties(id<MTLDevice> device);
 
+        MetalRenderPipelineState *getRenderPipelineState(Material *material);
+
         MetalObjectProperties *getObjectProperties(Object *object, bool *blankObjectProperties = nullptr);
 
     protected:
@@ -26,7 +29,7 @@ namespace renderbox {
 
         std::unordered_map<int, std::unique_ptr<MetalObjectProperties>> objectProperties;
 
-        MTLRenderPipelineDescriptor *renderPipelineDescriptor;
+        std::unordered_map<int, std::unique_ptr<MetalRenderPipelineState>> renderPipelineStates;
 
     };
 
