@@ -16,7 +16,7 @@ namespace renderbox {
 
         void setPerspective(float fovy, float aspectRatio, float zNear = 0.1f, float zFar = 100.0f);
 
-        std::shared_ptr<Ray> getRay(glm::vec2 coordinates = glm::vec2(0)) const override;
+        Ray getRay(glm::vec2 coordinates = glm::vec2(0)) const override;
 
     };
 

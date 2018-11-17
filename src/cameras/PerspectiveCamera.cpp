@@ -13,11 +13,11 @@ namespace renderbox {
         projectionMatrixDidUpdate();
     }
 
-    std::shared_ptr<Ray> PerspectiveCamera::getRay(glm::vec2 coordinates) const {
+    Ray PerspectiveCamera::getRay(glm::vec2 coordinates) const {
         glm::vec3 origin = getWorldPosition();
         glm::vec3 testVector = dehomogenize(glm::inverse(getViewProjectionMatrix())
                                             * glm::vec4(coordinates, -1.0f, 1.0f));
-        return std::make_shared<Ray>(origin, glm::normalize(testVector - origin));
+        return {origin, glm::normalize(testVector - origin)};
     }
 
 }
