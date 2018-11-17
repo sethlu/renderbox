@@ -16,6 +16,10 @@ vec3 linearToGamma(vec3 value, float gamma) {
 #define saturate(v) \
 	clamp((v), 0.0, 1.0)
 
+vec3 dehomogenize(vec4 vector) {
+    return vector.xyz / vector.w;
+}
+
 #endif
 
 )"

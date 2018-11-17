@@ -2,6 +2,7 @@ R"(
 
 #version 330
 
+#include <common>
 #include <lights_preamble>
 
 uniform mat4 rb_worldProjectionMatrix;
@@ -60,10 +61,12 @@ void main() {
         vec3 L = normalize(lightVector);
         float lightDistance = length(lightVector);
 
-        vertexDiffuseColor += rb_materialDiffuseColor * rb_pointLights[i].color *
+        vertexDiffuseColor += rb_pointLights[i].color *
             max(dot(N, L), 0.0) / (1.0 + (0.25 * lightDistance * lightDistance));
 
     }
+
+    vertexDiffuseColor *= rb_materialDiffuseColor;
 
     #endif
 

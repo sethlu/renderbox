@@ -1,5 +1,5 @@
 R"(
 
-vertexWorldPosition = vec3(rb_worldMatrix * vec4(rb_vertexPosition, 1));
+vertexWorldPosition = dehomogenize(rb_worldMatrix * vec4(rb_vertexPosition, 1));
 
 )"
