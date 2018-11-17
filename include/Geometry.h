@@ -22,6 +22,8 @@ namespace renderbox {
 
         std::vector<uvec3> &getFaces();
 
+        void regenerateNormals();
+
     protected:
 
         std::vector<vec3> vertices;
