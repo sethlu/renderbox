@@ -279,6 +279,8 @@
 		C5AA39A420679C9D004E3FDD /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		C5B4AB7121A0059D00A78CED /* MetalTexture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalTexture.h; sourceTree = "<group>"; };
 		C5B4AB7621A005AF00A78CED /* MetalTexture.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalTexture.mm; sourceTree = "<group>"; };
+		C5B4AB7E21A0ECF700A78CED /* _lambert_frag.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = _lambert_frag.metal; sourceTree = "<group>"; };
+		C5B4AB8421A0EE8600A78CED /* _lambert_vert.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = _lambert_vert.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -539,6 +541,8 @@
 			isa = PBXGroup;
 			children = (
 				C53F266D21743B2200EF9635 /* MetalLibrary.metal */,
+				C5B4AB8421A0EE8600A78CED /* _lambert_vert.metal */,
+				C5B4AB7E21A0ECF700A78CED /* _lambert_frag.metal */,
 			);
 			path = shaders;
 			sourceTree = "<group>";

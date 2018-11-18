@@ -1,5 +1,6 @@
 #include "MetalDeviceRendererProperties.h"
 
+#include "MeshLambertMaterial.h"
 
 namespace renderbox {
 
@@ -19,31 +20,46 @@ namespace renderbox {
         id <MTLRenderPipelineState> renderPipelineStateObject;
 
         switch (material->getMaterialType()) {
-            case MESH_LAMBERT_MATERIAL: {
+            case MESH_LAMBERT_MATERIAL:
+                if (auto lambertMaterial = dynamic_cast<MeshLambertMaterial *>(material)) {
 
-                NSError *err;
+                    NSError *err;
 
-                NSString *libPath = [[NSBundle mainBundle] pathForResource:@"RenderBoxMetalLibrary" ofType:@"metallib"];
-                id <MTLLibrary> library = [device newLibraryWithFile:libPath error:&err];
-                assert(err == nil);
+                    NSString *libPath = [[NSBundle mainBundle] pathForResource:@"RenderBoxMetalLibrary" ofType:@"metallib"];
+                    id <MTLLibrary> library = [device newLibraryWithFile:libPath error:&err];
+                    assert(err == nil);
 
-                MTLRenderPipelineDescriptor *renderPipelineDescriptor = [[MTLRenderPipelineDescriptor alloc] init];
+                    MTLRenderPipelineDescriptor *renderPipelineDescriptor = [[MTLRenderPipelineDescriptor alloc] init];
 
-                id <MTLFunction> vertexFunction = [library newFunctionWithName:@"lambert_vert"];
-                id <MTLFunction> fragmentFunction = [library newFunctionWithName:@"lambert_frag"];
+                    NSString *vertexFunctionName = @"lambert_vert";
+                    NSString *fragmentFunctionName = @"lambert_frag";
 
-                [renderPipelineDescriptor setVertexFunction:vertexFunction];
-                [renderPipelineDescriptor setFragmentFunction:fragmentFunction];
+                    auto ambientMap = lambertMaterial->getAmbientMap();
+                    auto diffuseMap = lambertMaterial->getDiffuseMap();
 
-                renderPipelineDescriptor.colorAttachments[0].pixelFormat = MTLPixelFormatBGRA8Unorm;
-                renderPipelineDescriptor.depthAttachmentPixelFormat = MTLPixelFormatDepth32Float;
+                    if (ambientMap || diffuseMap) {
+                        vertexFunctionName = [vertexFunctionName stringByAppendingString:@"_uv"];
+                        if (ambientMap) fragmentFunctionName = [fragmentFunctionName stringByAppendingString:@"_ambientmap"];
+                        if (diffuseMap) fragmentFunctionName = [fragmentFunctionName stringByAppendingString:@"_diffusemap"];
+                    }
 
-                renderPipelineStateObject = [device newRenderPipelineStateWithDescriptor:renderPipelineDescriptor
-                                                                                   error:&err];
-                assert(err == nil);
+                    id <MTLFunction> vertexFunction = [library newFunctionWithName:vertexFunctionName];
+                    id <MTLFunction> fragmentFunction = [library newFunctionWithName:fragmentFunctionName];
 
+                    [renderPipelineDescriptor setVertexFunction:vertexFunction];
+                    [renderPipelineDescriptor setFragmentFunction:fragmentFunction];
+
+                    renderPipelineDescriptor.colorAttachments[0].pixelFormat = MTLPixelFormatBGRA8Unorm;
+                    renderPipelineDescriptor.depthAttachmentPixelFormat = MTLPixelFormatDepth32Float;
+
+                    renderPipelineStateObject = [device newRenderPipelineStateWithDescriptor:renderPipelineDescriptor
+                                                                                       error:&err];
+                    assert(err == nil);
+
+                } else {
+                    throw;
+                };
                 break;
-            }
             default:
                 fprintf(stderr, "Unsupported material type");
                 throw;

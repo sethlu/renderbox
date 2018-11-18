@@ -42,63 +42,20 @@ float3 dehomogenize(float4 vector) {
 
 constexpr sampler textureSampler(mag_filter::linear, min_filter::linear);
 
-vertex LambertVertexOut lambert_vert(device packed_float3 *vertices [[buffer(0)]],
-                                     device packed_float2 *uvs [[buffer(1)]],
-                                     device packed_float3 *normals [[buffer(2)]],
-                                     constant Uniforms &uniforms [[buffer(3)]],
-                                     uint vid [[vertex_id]]) {
-    LambertVertexOut out;
+// Vertex
 
-    // Position
+#include "_lambert_vert.metal"
+#define RB_VERTEX_UV
+#include "_lambert_vert.metal"
+#undef RB_VERTEX_UV
 
-    out.position = uniforms.worldProjectionMatrix * float4(vertices[vid], 1);
-    float3 vertexWorldPosition = dehomogenize(uniforms.worldMatrix * float4(vertices[vid], 1));
+// Fragment
 
-    // Normal
-
-    float3 vertexWorldNormal = uniforms.worldNormalMatrix * float3(normals[vid]);
-
-    // UV
-
-    out.uv = uvs[vid];
-
-    // Lighting
-
-    // Ambient
-
-    out.ambientColor = uniforms.sceneAmbientColor * uniforms.materialAmbientColor;
-
-    // Diffuse
-
-    float3 vertexDiffuseColor = float3(0);
-
-    float3 N = vertexWorldNormal;
-    for (uint i = 0; i < uniforms.numActivePointLights; i++) {
-        float3 lightVector = uniforms.pointLights[i].position - vertexWorldPosition;
-        float3 L = normalize(lightVector);
-        float lightDistance = length(lightVector);
-
-        vertexDiffuseColor += uniforms.pointLights[i].color *
-            max(dot(N, L), 0.0) / (1.0 + (0.25 * lightDistance * lightDistance));
-    }
-
-    out.diffuseColor = vertexDiffuseColor * uniforms.materialDiffuseColor;
-
-    return out;
-}
-
-fragment float4 lambert_frag(LambertVertexOut in [[stage_in]],
-                             texture2d<float> ambientMap [[texture(0)]],
-                             texture2d<float> diffuseMap [[texture(1)]]) {
-
-    float4 ambientMapValue = ambientMap.sample(textureSampler, in.uv);
-    float4 diffuseMapValue = diffuseMap.sample(textureSampler, in.uv);
-
-    float4 ambientLinear = float4(in.ambientColor, 1) * gammaToLinear(ambientMapValue, SCREEN_GAMMA);
-    float4 diffuseLinear = float4(in.diffuseColor, 1) * gammaToLinear(diffuseMapValue, SCREEN_GAMMA);
-
-    float4 colorLinear = ambientLinear + diffuseLinear;
-
-    return linearToGamma(colorLinear, SCREEN_GAMMA);
-
-}
+#include "_lambert_frag.metal"
+#define RB_MATERIAL_AMBIENT_MAP
+#include "_lambert_frag.metal"
+#define RB_MATERIAL_DIFFUSE_MAP
+#include "_lambert_frag.metal"
+#undef RB_MATERIAL_AMBIENT_MAP
+#include "_lambert_frag.metal"
+#undef RB_MATERIAL_DIFFUSE_MAP

@@ -17,6 +17,8 @@ namespace renderbox {
         DIFFUSE_MATERIAL      = MESH_BASIC_MATERIAL | MESH_LAMBERT_MATERIAL,
     };
 
+    // Objects using materials with texture maps must present UV coordinates
+
     class Material {
     public:
 
