@@ -10,7 +10,7 @@ namespace renderbox {
     class Camera : public Object {
     public:
 
-        virtual ~Camera() = default;
+        ~Camera() override = default;
 
         OBJECT_TYPE getObjectType() const override {
             return CAMERA_OBJECT;
@@ -22,7 +22,7 @@ namespace renderbox {
 
         glm::mat4x4 getViewMatrix() const;
 
-        virtual Ray getRay(glm::vec2 coordinates = glm::vec2(0)) const = 0;
+        virtual Ray getRay(glm::vec2 coordinates) const = 0;
 
     protected:
 
