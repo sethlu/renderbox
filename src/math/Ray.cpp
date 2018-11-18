@@ -1,8 +1,10 @@
-#define GLM_ENABLE_EXPERIMENTAL
+#include "Ray.h"
+
 #include <iostream>
+
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/geometric.hpp>
 #include <glm/gtx/intersect.hpp>
-#include "Ray.h"
 
 
 namespace renderbox {
@@ -10,15 +12,6 @@ namespace renderbox {
     Ray::Ray(vec3 origin, vec3 direction) {
         this->origin = origin;
         this->direction = direction;
-    }
-
-    Ray *Ray::copy(mat4 changeOfCoordinates) {
-        vec4 homogeneousOrigin = changeOfCoordinates * vec4(origin, 1.0f);
-        vec4 homogeneousTestVector = changeOfCoordinates * vec4(origin + direction, 1.0f);
-        vec3 copyOrigin = dehomogenize(homogeneousOrigin);
-        vec3 copyDirection = glm::normalize(dehomogenize(homogeneousTestVector)
-                                                 - dehomogenize(homogeneousOrigin));
-        return new Ray(copyOrigin, copyDirection);
     }
 
     vec3 Ray::getOrigin() const {
@@ -38,7 +31,7 @@ namespace renderbox {
         // Calculate ray in object coordinates
 
         mat4 objectWorldMatrix = object->getWorldMatrix();
-        Ray *objectCoordRay = copy(glm::inverse(objectWorldMatrix));
+        Ray objectCoordRay = glm::inverse(objectWorldMatrix) * *this;
 
         // Object geometry
 
@@ -53,11 +46,12 @@ namespace renderbox {
         for (uvec3 face : faces) {
             vec2 intersectionBaryPosition;
 			float intersectionDistance;
-            if (objectCoordRay->intersectTriangle(vertices[face[0]],
-                                                  vertices[face[1]],
-                                                  vertices[face[2]],
-                                                  intersectionBaryPosition,
-												  intersectionDistance)) {
+            if (objectCoordRay.intersectTriangle(
+                    vertices[face[0]],
+                    vertices[face[1]],
+                    vertices[face[2]],
+                    intersectionBaryPosition,
+                    intersectionDistance)) {
                 distances.push_back(intersectionDistance);
                 ++count;
             }
@@ -73,6 +67,15 @@ namespace renderbox {
         }
         return false;
 
+    }
+
+    Ray operator*(const mat4 &matrix, const Ray &ray) {
+        vec4 homogeneousOrigin = matrix * vec4(ray.origin, 1.0f);
+        vec4 homogeneousTestVector = matrix * vec4(ray.origin + ray.direction, 1.0f);
+        vec3 copyOrigin = dehomogenize(homogeneousOrigin);
+        vec3 copyDirection = glm::normalize(dehomogenize(homogeneousTestVector)
+                                            - dehomogenize(homogeneousOrigin));
+        return {copyOrigin, copyDirection};
     }
 
 }

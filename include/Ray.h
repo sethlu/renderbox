@@ -8,9 +8,7 @@ namespace renderbox {
 
     class Ray {
 
-        vec3 origin;
-
-        vec3 direction;
+        friend Ray operator*(const mat4& matrix, const Ray& ray);
 
     public:
 
@@ -24,9 +22,15 @@ namespace renderbox {
 
         bool intersectObject(Object *object, std::vector<vec3> &positions);
 
-        Ray *copy(mat4 changeOfCoordinates);
+    protected:
+
+        vec3 origin;
+
+        vec3 direction;
 
     };
+
+    Ray operator*(const mat4 &matrix, const Ray &ray);
 
 }
 
