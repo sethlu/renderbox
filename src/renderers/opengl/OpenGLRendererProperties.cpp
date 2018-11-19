@@ -76,15 +76,15 @@ namespace renderbox {
         switch (material->getMaterialType()) {
             case MESH_BASIC_MATERIAL:
                 program = OpenGLProgram::createProgramWithPreprocessedSources(
-                    #if defined(RENDERBOX_MACOS)
+                    #if defined(RENDERBOX_OS_MACOS)
                     #include "shaders/mesh_basic_vert.glsl"
-                    #elif defined(RENDERBOX_IPHONEOS)
+                    #elif defined(RENDERBOX_OS_IPHONEOS)
                     #include "shaders/es/mesh_basic_vert.glsl"
                     #endif
                     ,
-                    #if defined(RENDERBOX_MACOS)
+                    #if defined(RENDERBOX_OS_MACOS)
                     #include "shaders/mesh_basic_frag.glsl"
-                    #elif defined(RENDERBOX_IPHONEOS)
+                    #elif defined(RENDERBOX_OS_IPHONEOS)
                     #include "shaders/es/mesh_basic_frag.glsl"
                     #endif
                     , bootstrap.str()
@@ -92,15 +92,15 @@ namespace renderbox {
                 break;
             case MESH_LAMBERT_MATERIAL:
                 program = OpenGLProgram::createProgramWithPreprocessedSources(
-                    #if defined(RENDERBOX_MACOS)
+                    #if defined(RENDERBOX_OS_MACOS)
                     #include "shaders/mesh_lambert_vert.glsl"
-                    #elif defined(RENDERBOX_IPHONEOS)
+                    #elif defined(RENDERBOX_OS_IPHONEOS)
                     #include "shaders/es/mesh_lambert_vert.glsl"
                     #endif
                     ,
-                    #if defined(RENDERBOX_MACOS)
+                    #if defined(RENDERBOX_OS_MACOS)
                     #include "shaders/mesh_lambert_frag.glsl"
-                    #elif defined(RENDERBOX_IPHONEOS)
+                    #elif defined(RENDERBOX_OS_IPHONEOS)
                     #include "shaders/es/mesh_lambert_frag.glsl"
                     #endif
                     , bootstrap.str()

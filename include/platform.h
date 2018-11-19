@@ -6,9 +6,9 @@
 #include "TargetConditionals.h"
 
 #if TARGET_OS_IPHONE
-#define RENDERBOX_IPHONEOS 1
+#define RENDERBOX_OS_IPHONEOS 1
 #else
-#define RENDERBOX_MACOS  1
+#define RENDERBOX_OS_MACOS  1
 #endif
 
 

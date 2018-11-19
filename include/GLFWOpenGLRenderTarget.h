@@ -3,7 +3,7 @@
 
 
 #include "platform.h"
-#if defined(RENDERBOX_MACOS)
+#if defined(RENDERBOX_OS_MACOS)
 
 #include "OpenGLRenderTarget.h"
 
@@ -39,7 +39,7 @@ namespace renderbox {
 
 }
 
-#endif //defined(RENDERBOX_MACOS)
+#endif //defined(RENDERBOX_OS_MACOS)
 
 
 #endif //RENDERBOX_OPENGLGLFWRENDERER_H

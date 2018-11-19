@@ -4,9 +4,9 @@
 
 #include "platform.h"
 
-#if defined(RENDERBOX_MACOS)
+#if defined(RENDERBOX_OS_MACOS)
 #include <OpenGL/gl3.h>
-#elif defined(RENDERBOX_IPHONEOS)
+#elif defined(RENDERBOX_OS_IPHONEOS)
 #include <OpenGLES/ES3/gl.h>
 #endif
 
