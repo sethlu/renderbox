@@ -4,6 +4,7 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 namespace renderbox {
 
@@ -17,6 +18,13 @@ namespace renderbox {
         return vec3(vector) / vector.w;
     };
 
+}
+
+
+template<glm::length_t L, typename T, glm::qualifier Q = glm::defaultp>
+std::ostream &operator<<(std::ostream &os, glm::vec<L, T, Q> const &vec) {
+    os << glm::to_string(vec);
+    return os;
 }
 
 
