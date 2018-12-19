@@ -40,11 +40,11 @@ namespace renderbox {
 
         // Create window
 
-#if defined(RENDERBOX_MACOS)
+#if defined(RENDERBOX_OS_MACOS)
         window = SDL_CreateWindow(nullptr, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                   WINDOW_WIDTH, WINDOW_HEIGHT,
                                   SDL_WINDOW_ALLOW_HIGHDPI);
-#elif defined(RENDERBOX_IPHONEOS)
+#elif defined(RENDERBOX_OS_IPHONEOS)
         SDL_DisplayMode displayMode;
         SDL_GetDesktopDisplayMode(0, &displayMode);
         
