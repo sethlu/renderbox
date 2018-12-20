@@ -10,8 +10,6 @@ namespace renderbox {
     class Camera : public Object {
     public:
 
-        ~Camera() override = default;
-
         OBJECT_TYPE getObjectType() const override {
             return CAMERA_OBJECT;
         };

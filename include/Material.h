@@ -25,6 +25,8 @@ namespace renderbox {
 
         Material() = default;
 
+        virtual ~Material();
+
         int getMaterialId();
 
         virtual MATERIAL_TYPE getMaterialType() const = 0;
@@ -48,6 +50,8 @@ namespace renderbox {
     class AmbientMaterial {
     public:
 
+        virtual ~AmbientMaterial();
+
         explicit AmbientMaterial(vec3 ambientColor) : ambientColor(ambientColor) {};
 
         vec3 getAmbientColor() const { return ambientColor; }
@@ -68,6 +72,8 @@ namespace renderbox {
 
     class DiffuseMaterial {
     public:
+
+        virtual ~DiffuseMaterial();
 
         explicit DiffuseMaterial(vec3 diffuseColor) : diffuseColor(diffuseColor) {};
 

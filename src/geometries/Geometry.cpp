@@ -4,17 +4,19 @@
 
 namespace renderbox {
 
+    Geometry::~Geometry() = default;
+
     std::vector<vec3> &Geometry::getVertices() {
         return vertices;
-    };
+    }
 
     std::vector<vec2> &Geometry::getUVs() {
         return uvs;
-    };
+    }
 
     std::vector<vec3> &Geometry::getNormals() {
         return normals;
-    };
+    }
 
     std::vector<uvec3> &Geometry::getFaces() {
         return faces;
@@ -41,6 +43,6 @@ namespace renderbox {
         for (auto i = 0; i < numVertices; i++) {
             normals[i] /= numFaces[i];
         }
-    };
+    }
 
 }

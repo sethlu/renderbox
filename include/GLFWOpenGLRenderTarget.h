@@ -17,7 +17,7 @@ namespace renderbox {
 
         GLFWOpenGLRenderTarget();
 
-        ~GLFWOpenGLRenderTarget();
+        ~GLFWOpenGLRenderTarget() override;
 
         GLFWwindow *getWindow() const;
 

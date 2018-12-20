@@ -17,6 +17,8 @@ namespace renderbox {
 
     public:
 
+        virtual ~Geometry();
+
         std::vector<vec3> &getVertices();
 
         std::vector<vec2> &getUVs();

@@ -9,6 +9,8 @@ namespace renderbox {
     class OpenGLRenderTarget {
     public:
 
+        virtual ~OpenGLRenderTarget() = default;
+
         GLuint getFramebufferId() const {
             return framebufferId;
         }

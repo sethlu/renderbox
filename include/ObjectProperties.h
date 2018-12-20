@@ -5,6 +5,9 @@
 namespace renderbox {
 
     class ObjectProperties {
+    public:
+
+        virtual ~ObjectProperties() = default;
 
     };
 
