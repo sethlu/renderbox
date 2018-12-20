@@ -11,9 +11,9 @@ namespace renderbox {
     class SDLOpenGLRenderTarget : public OpenGLRenderTarget {
     public:
 
-        SDLOpenGLRenderTarget(Uint32 additionalInitFlags = 0);
+        explicit SDLOpenGLRenderTarget(Uint32 additionalInitFlags = 0);
 
-        virtual ~SDLOpenGLRenderTarget();
+        ~SDLOpenGLRenderTarget() override;
 
         SDL_Window *getWindow() const;
 
@@ -22,7 +22,7 @@ namespace renderbox {
         int getFramebufferHeight() const override;
 
         void frameDidRender() override;
-        
+
     protected:
 
         SDL_Window *window;

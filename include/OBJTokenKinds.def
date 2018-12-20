@@ -3,7 +3,7 @@
 #define TOK(X)
 #endif
 #ifndef PUNCTUATOR
-#define PUNCTUATOR(X,Y) TOK(X)
+#define PUNCTUATOR(X, Y) TOK(X)
 #endif
 #ifndef KEYWORD
 #define KEYWORD(X) TOK(kw_ ## X)

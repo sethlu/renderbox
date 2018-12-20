@@ -17,7 +17,7 @@ namespace renderbox {
 
         std::unordered_map<MetalRenderPipelineState *, std::vector<Object *>> objects;
 
-        void addObject(MetalRenderPipelineState * renderPipelineState, Object *object);
+        void addObject(MetalRenderPipelineState *renderPipelineState, Object *object);
 
         std::vector<PointLight *> pointLights;
 

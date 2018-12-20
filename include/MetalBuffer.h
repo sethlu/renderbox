@@ -14,7 +14,7 @@ namespace renderbox {
 
     public:
 
-        MetalBuffer(id <MTLDevice> device);
+        explicit MetalBuffer(id <MTLDevice> device);
 
         void buffer(const void *data, NSUInteger size, MTLResourceOptions options);
 

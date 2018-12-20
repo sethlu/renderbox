@@ -16,7 +16,7 @@ namespace renderbox {
 
     public:
 
-        MetalTexture(id <MTLDevice> device);
+        explicit MetalTexture(id <MTLDevice> device);
 
         void texture(const void *pixels, NSUInteger width, NSUInteger height);
 

@@ -16,7 +16,7 @@ namespace renderbox {
 
         std::unordered_map<const void *, std::unique_ptr<MetalDeviceRendererProperties>> deviceRendererProperties;
 
-        MetalDeviceRendererProperties *getDeviceRendererProperties(id<MTLDevice> device);
+        MetalDeviceRendererProperties *getDeviceRendererProperties(id <MTLDevice> device);
 
     };
 

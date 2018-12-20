@@ -14,7 +14,7 @@ namespace renderbox {
     class MetalObjectProperties : public ObjectProperties {
     public:
 
-        MetalObjectProperties(id<MTLDevice> device);
+        explicit MetalObjectProperties(id <MTLDevice> device);
 
         MetalBuffer *getBuffer(int index);
 
@@ -24,7 +24,7 @@ namespace renderbox {
 
     protected:
 
-        id<MTLDevice> device;
+        id <MTLDevice> device;
 
         std::unordered_map<int, std::unique_ptr<MetalBuffer>> buffers;
 

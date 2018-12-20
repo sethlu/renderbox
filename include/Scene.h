@@ -9,9 +9,7 @@ namespace renderbox {
     class Scene : public Object {
     public:
 
-        Scene() : ambientColor(vec3(0)) {
-
-        };
+        Scene();
 
         vec3 getAmbientColor() const;
 

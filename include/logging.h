@@ -18,7 +18,7 @@ namespace renderbox {
     public:
         // This has to be an operator with a precedence lower than << but higher than ?:
         // Resolves issue with ?: having void and std::ostream differently typed operands
-        void operator&(std::ostream&) {}
+        void operator&(std::ostream &) {};
     };
 
 }

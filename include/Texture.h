@@ -29,6 +29,7 @@ namespace renderbox {
     class Texture {
 
         friend class OpenGLTexture;
+
         friend class MetalTexture;
 
     public:
@@ -36,7 +37,7 @@ namespace renderbox {
         Texture(unsigned char const *pixels, unsigned size, unsigned width, unsigned height,
                 TEXTURE_PIXEL_FORMAT pixelFormat, TEXTURE_COORDINATES coordinates);
 
-        Texture(const Texture& texture);
+        Texture(const Texture &texture);
 
         static std::shared_ptr<Texture> fromFile(const char *filename);
 

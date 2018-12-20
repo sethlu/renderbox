@@ -8,7 +8,7 @@ namespace renderbox {
 
     class Ray {
 
-        friend Ray operator*(const mat4& matrix, const Ray& ray);
+        friend Ray operator*(const mat4 &matrix, const Ray &ray);
 
     public:
 

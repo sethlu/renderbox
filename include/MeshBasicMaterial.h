@@ -10,7 +10,7 @@ namespace renderbox {
     public:
 
         explicit MeshBasicMaterial(vec3 diffuseColor = vec3(1.0f))
-            : DiffuseMaterial(diffuseColor) {
+                : DiffuseMaterial(diffuseColor) {
 
         };
 
