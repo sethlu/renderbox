@@ -9,14 +9,15 @@
 #include "ObjectProperties.h"
 #include "PointLight.h"
 #include "Scene.h"
+#include "MetalRenderPipelineState.h"
 
 namespace renderbox {
 
     struct MetalRenderList {
 
-        std::unordered_map<Material *, std::vector<Object *>> objects;
+        std::unordered_map<MetalRenderPipelineState *, std::vector<Object *>> objects;
 
-        void addObject(Material *material, Object *object);
+        void addObject(MetalRenderPipelineState * renderPipelineState, Object *object);
 
         std::vector<PointLight *> pointLights;
 

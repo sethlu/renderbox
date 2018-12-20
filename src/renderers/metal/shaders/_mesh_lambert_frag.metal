@@ -1,15 +1,14 @@
-
 #ifdef RB_MATERIAL_AMBIENT_MAP
 #ifdef RB_MATERIAL_DIFFUSE_MAP
-fragment float4 lambert_frag_ambientmap_diffusemap(
+fragment float4 mesh_lambert_frag_ambientmap_diffusemap(
 #else
-fragment float4 lambert_frag_ambientmap(
+fragment float4 mesh_lambert_frag_ambientmap(
 #endif
 #else
 #ifdef RB_MATERIAL_DIFFUSE_MAP
-fragment float4 lambert_frag_diffusemap(
+fragment float4 mesh_lambert_frag_diffusemap(
 #else
-fragment float4 lambert_frag(
+fragment float4 mesh_lambert_frag(
 #endif
 #endif
                              LambertVertexOut in [[stage_in]]

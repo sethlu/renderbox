@@ -14,11 +14,11 @@ namespace renderbox {
 
     public:
 
-        explicit MetalRenderPipelineState(id<MTLRenderPipelineState> renderPipelineState);
+        explicit MetalRenderPipelineState(id <MTLRenderPipelineState> renderPipelineState);
 
     private:
 
-        scoped_nsprotocol<id<MTLRenderPipelineState>> renderPipelineStateObject;
+        scoped_nsprotocol<id <MTLRenderPipelineState>> renderPipelineStateObject;
 
     };
 

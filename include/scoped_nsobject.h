@@ -11,10 +11,10 @@ namespace renderbox {
     public:
 
         explicit scoped_nsprotocol(NST object = nil)
-        : object_(object) {};
+            : object_(object) {};
 
         scoped_nsprotocol(const scoped_nsprotocol<NST>& that)
-        : object_(/*[*/that.object_/* retain]*/) {};
+            : object_(/*[*/that.object_/* retain]*/) {};
 
         ~scoped_nsprotocol() {
             // [object_ release];

@@ -21,13 +21,6 @@ typedef struct {
     PointLight pointLights[NUM_POINT_LIGHTS];
 } Uniforms;
 
-typedef struct {
-    float4 position [[position]];
-    float2 uv;
-    float3 ambientColor;
-    float3 diffuseColor;
-} LambertVertexOut;
-
 float4 gammaToLinear(float4 value, float gamma) {
     return pow(value, float4(gamma));
 }
@@ -42,20 +35,10 @@ float3 dehomogenize(float4 vector) {
 
 constexpr sampler textureSampler(mag_filter::linear, min_filter::linear);
 
-// Vertex
+// Basic
 
-#include "_lambert_vert.metal"
-#define RB_VERTEX_UV
-#include "_lambert_vert.metal"
-#undef RB_VERTEX_UV
+#include "_mesh_basic.metal"
 
-// Fragment
+// Lambert
 
-#include "_lambert_frag.metal"
-#define RB_MATERIAL_AMBIENT_MAP
-#include "_lambert_frag.metal"
-#define RB_MATERIAL_DIFFUSE_MAP
-#include "_lambert_frag.metal"
-#undef RB_MATERIAL_AMBIENT_MAP
-#include "_lambert_frag.metal"
-#undef RB_MATERIAL_DIFFUSE_MAP
+#include "_mesh_lambert.metal"

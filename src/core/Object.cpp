@@ -92,6 +92,7 @@ namespace renderbox {
         for (const auto &child : children) {
             child->didTransform();
         }
+        didUpdate();
     }
 
     vec3 Object::getTranslation() const {

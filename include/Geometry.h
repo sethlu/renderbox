@@ -5,10 +5,11 @@
 #include <vector>
 
 #include "Vector.h"
+#include "VersionTrackedObject.h"
 
 namespace renderbox {
 
-    class Geometry {
+    class Geometry : public VersionTrackedObject {
 
         friend class OpenGLRenderer;
 

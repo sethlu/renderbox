@@ -66,12 +66,15 @@ namespace renderbox {
         SDL_GetWindowWMInfo(window, &info);
         NSView *sdlView = info.info.cocoa.window.contentView;
 
-        // Create metal view
+        // Create Metal view
         metalView = [[MetalView alloc] initWithFrame:sdlView.frame];
         [sdlView addSubview:metalView];
 
+        // Keep Metal device
+        metalDevice = metalView.metalLayer.device;
+
         // Create command queue
-        queue = [metalView.metalLayer.device newCommandQueue];
+        metalQueue.reset([metalDevice newCommandQueue]);
 
     }
 

@@ -3,14 +3,14 @@
 
 namespace renderbox {
 
-    void MetalRenderList::addObject(Material *material, Object *object) {
-        auto result = objects.find(material);
+    void MetalRenderList::addObject(MetalRenderPipelineState *renderPipelineState, Object *object) {
+        auto result = objects.find(renderPipelineState);
         if (result != objects.end()) {
             result->second.insert(result->second.end(), object);
         } else {
             std::vector<Object *> objectList;
             objectList.insert(objectList.end(), object);
-            objects.insert(std::pair<Material *, std::vector<Object *>>(material, objectList));
+            objects.insert(std::make_pair(renderPipelineState, objectList));
         }
     }
 

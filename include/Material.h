@@ -6,6 +6,7 @@
 
 #include "Vector.h"
 #include "Texture.h"
+#include "VersionTrackedObject.h"
 
 namespace renderbox {
 
@@ -19,7 +20,7 @@ namespace renderbox {
 
     // Objects using materials with texture maps must present UV coordinates
 
-    class Material {
+    class Material : public VersionTrackedObject {
     public:
 
         Material() = default;

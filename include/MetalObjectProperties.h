@@ -7,6 +7,7 @@
 #include "ObjectProperties.h"
 #include "MetalBuffer.h"
 #include "MetalTexture.h"
+#include "VersionTrackedObject.h"
 
 namespace renderbox {
 
@@ -18,6 +19,8 @@ namespace renderbox {
         MetalBuffer *getBuffer(int index);
 
         MetalTexture *getTexture(int index, bool *blankTexture);
+
+        VersionTrackedObject::version_type geometryVersion;
 
     protected:
 

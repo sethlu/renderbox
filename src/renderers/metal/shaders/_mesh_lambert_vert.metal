@@ -1,8 +1,7 @@
-
 #ifdef RB_VERTEX_UV
-vertex LambertVertexOut lambert_vert_uv(
+vertex LambertVertexOut mesh_lambert_vert_uv(
 #else
-vertex LambertVertexOut lambert_vert(
+vertex LambertVertexOut mesh_lambert_vert(
 #endif
                                      device packed_float3 *vertices [[buffer(0)]],
 #ifdef RB_VERTEX_UV

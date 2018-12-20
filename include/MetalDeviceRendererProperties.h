@@ -7,9 +7,15 @@
 #include "MetalObjectProperties.h"
 #include "MetalRenderPipelineState.h"
 #include "Object.h"
+#include "VersionTrackedObject.h"
 
 
 namespace renderbox {
+
+    struct MaterialMetalRenderPipelineState {
+        std::shared_ptr<MetalRenderPipelineState> renderPipelineState;
+        VersionTrackedObject::version_type materialVersion;
+    };
 
     class MetalDeviceRendererProperties {
 
@@ -17,7 +23,7 @@ namespace renderbox {
 
     public:
 
-        MetalDeviceRendererProperties(id <MTLDevice> device);
+        explicit MetalDeviceRendererProperties(id <MTLDevice> device);
 
         MetalRenderPipelineState *getRenderPipelineState(Material *material);
 
@@ -27,9 +33,21 @@ namespace renderbox {
 
         id <MTLDevice> device;
 
-        std::unordered_map<int, std::unique_ptr<MetalObjectProperties>> objectProperties;
+    private:
 
-        std::unordered_map<int, std::unique_ptr<MetalRenderPipelineState>> renderPipelineStates;
+        id <MTLLibrary> defaultMetalLibrary_;
+
+        std::unordered_map<int, std::unique_ptr<MetalObjectProperties>> objectProperties_;
+
+        std::unordered_map<std::string, std::shared_ptr<MetalRenderPipelineState>> cachedRenderPipelineStates_;
+
+        std::unordered_map<int, MaterialMetalRenderPipelineState> materialRenderPipelineStates_;
+
+        id <MTLLibrary> getDefaultMetalLibrary();
+
+        std::shared_ptr<MetalRenderPipelineState>
+        getRenderPipelineStateWithFunctionNames(std::string const &vertexFunctionName,
+                                                std::string const &fragmentFunctionName);
 
     };
 

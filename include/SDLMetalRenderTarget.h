@@ -10,6 +10,8 @@
 
 #include "Scene.h"
 #include "Camera.h"
+#include "scoped_nsobject.h"
+
 
 @interface MetalView : NSView
 
@@ -43,7 +45,9 @@ namespace renderbox {
 
         MetalView *metalView;
 
-        id<MTLCommandQueue> queue;
+        id <MTLDevice> metalDevice;
+
+        scoped_nsprotocol<id <MTLCommandQueue>> metalQueue;
 
         MTLRenderPassDescriptor *renderPassDescriptor;
 

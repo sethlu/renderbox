@@ -35,6 +35,12 @@ namespace renderbox {
 
         @autoreleasepool {
 
+            MetalView *metalView = renderTarget->metalView;
+            id <MTLDevice> device = renderTarget->metalDevice;
+            id <MTLCommandQueue> queue = renderTarget->metalQueue;
+
+            MetalDeviceRendererProperties *deviceRendererProperties = properties.getDeviceRendererProperties(device);
+
             // Prepass scene
 
             MetalRenderList renderList;
@@ -51,7 +57,8 @@ namespace renderbox {
 
                 // Do not add objects without geometry or material
                 if (object->hasGeometry() && object->hasMaterial()) {
-                    renderList.addObject(object->getMaterial().get(), object);
+                    renderList.addObject(deviceRendererProperties->getRenderPipelineState(object->getMaterial().get()),
+                                         object);
                 }
 
                 if (object->isLight()) {
@@ -65,12 +72,7 @@ namespace renderbox {
 
             // Render
 
-            MetalView *metalView = renderTarget->metalView;
-            id <MTLDevice> device = metalView.metalLayer.device;
-            id <MTLCommandQueue> queue = renderTarget->queue;
             id <CAMetalDrawable> drawable = [metalView.metalLayer nextDrawable];
-
-            MetalDeviceRendererProperties *deviceRendererProperties = properties.getDeviceRendererProperties(device);
 
             // Create command buffer
             id <MTLCommandBuffer> commandBuffer = [queue commandBuffer];
@@ -143,11 +145,10 @@ namespace renderbox {
                        sizeof(uniforms.pointLights[i].color));
             }
 
-            for (const auto &it : renderList.objects) {
+            for (auto const &it : renderList.objects) {
 
                 // Use the render pipeline state for the material
-                auto renderPipelineState = deviceRendererProperties->getRenderPipelineState(it.first);
-                [encoder setRenderPipelineState:renderPipelineState->renderPipelineStateObject.get()];
+                [encoder setRenderPipelineState:it.first->renderPipelineStateObject.get()];
 
                 for (Object *object : it.second) {
 
@@ -155,9 +156,10 @@ namespace renderbox {
                     auto objectProperties =
                             deviceRendererProperties->getObjectProperties(object, &blankObjectProperties);
 
-                    if (blankObjectProperties) {
+                    auto geometry = object->getGeometry();
+                    auto material = object->getMaterial();
 
-                        auto geometry = object->getGeometry();
+                    if (blankObjectProperties || objectProperties->geometryVersion != geometry->getVersion()) {
 
                         objectProperties->getBuffer(0)->buffer(geometry->vertices);
 
@@ -191,17 +193,17 @@ namespace renderbox {
                            sizeof(uniforms.worldNormalMatrix));
 
                     // Ambient material
-                    if (object->getMaterial()->isAmbientMaterial()) {
-                        if (auto material = dynamic_cast<AmbientMaterial *>(object->getMaterial().get())) {
+                    if (material->isAmbientMaterial()) {
+                        if (auto ambientMaterial = dynamic_cast<AmbientMaterial *>(material.get())) {
                             // Material ambient color
 
                             memcpy(&uniforms.materialAmbientColor,
-                                   glm::value_ptr(material->getAmbientColor()),
+                                   glm::value_ptr(ambientMaterial->getAmbientColor()),
                                    sizeof(uniforms.materialAmbientColor));
 
                             // Material ambient map
 
-                            auto ambientMap = material->getAmbientMap();
+                            auto ambientMap = ambientMaterial->getAmbientMap();
                             if (ambientMap) {
                                 bool blankTexture;
                                 auto texture = objectProperties->getTexture(0, &blankTexture);
@@ -214,17 +216,17 @@ namespace renderbox {
                     }
 
                     // Diffuse material
-                    if (object->getMaterial()->isDiffuseMaterial()) {
-                        if (auto material = dynamic_cast<DiffuseMaterial *>(object->getMaterial().get())) {
+                    if (material->isDiffuseMaterial()) {
+                        if (auto diffuseMaterial = dynamic_cast<DiffuseMaterial *>(material.get())) {
                             // Material diffuse color
 
                             memcpy(&uniforms.materialDiffuseColor,
-                                   glm::value_ptr(material->getDiffuseColor()),
+                                   glm::value_ptr(diffuseMaterial->getDiffuseColor()),
                                    sizeof(uniforms.materialDiffuseColor));
 
                             // Material diffuse map
 
-                            auto diffuseMap = material->getDiffuseMap();
+                            auto diffuseMap = diffuseMaterial->getDiffuseMap();
                             if (diffuseMap) {
                                 bool blankTexture;
                                 auto texture = objectProperties->getTexture(1, &blankTexture);

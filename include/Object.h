@@ -7,6 +7,7 @@
 #include "Geometry.h"
 #include "Material.h"
 #include "Matrix.h"
+#include "VersionTrackedObject.h"
 
 namespace renderbox {
 
@@ -18,7 +19,7 @@ namespace renderbox {
         LIGHT_OBJECT  = 0x8,
     };
 
-    class Object {
+    class Object : public VersionTrackedObject {
     public:
 
         Object() = default;

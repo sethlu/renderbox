@@ -24,14 +24,16 @@ namespace renderbox {
 }
 
 
-#define LOG_SEVERITY_DEBUG      0
-#define LOG_SEVERITY_INFO       1
-#define LOG_SEVERITY_WARNING    2
+#define LOG_SEVERITY_VERBOSE    -1
+#define LOG_SEVERITY_INFO       0
+#define LOG_SEVERITY_WARNING    1
+#define LOG_SEVERITY_ERROR      2
 #define LOG_SEVERITY_FATAL      3
 
-#define LOG_STREAM_DEBUG        std::clog << __FILE__ << ":" << __LINE__ << " DEBUG "
+#define LOG_STREAM_VERBOSE      std::clog << __FILE__ << ":" << __LINE__ << " VEERBOSE "
 #define LOG_STREAM_INFO         std::clog << __FILE__ << ":" << __LINE__ << " INFO "
 #define LOG_STREAM_WARNING      std::clog << __FILE__ << ":" << __LINE__ << " WARNING "
+#define LOG_STREAM_ERROR        std::clog << __FILE__ << ":" << __LINE__ << " ERROR "
 #define LOG_STREAM_FATAL        std::clog << __FILE__ << ":" << __LINE__ << " FATAL "
 
 #define LOG_SEVERITY(severity) LOG_SEVERITY_ ## severity
@@ -48,7 +50,9 @@ namespace renderbox {
 
 #define LOG_IF(severity, condition) LAZY_STREAM(LOG_STREAM(severity), LOG_IS_ON(severity) && (condition))
 
-#define LOG_ASSERT(condition) LOG_IF(FATAL, !(condition)) << "Assert failed: " #condition "."
+#define LOG_ASSERT(condition) LOG_IF(FATAL, !(condition)) << "Assert failed: " #condition ". "
+
+#define NOTREACHED() LOG(ERROR) << "NOTREACHED() hit. "
 
 
 #endif //RENDERBOX_LOGGING_H
