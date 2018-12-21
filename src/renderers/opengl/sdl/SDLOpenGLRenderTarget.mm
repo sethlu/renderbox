@@ -39,7 +39,7 @@ namespace renderbox {
         
         window = SDL_CreateWindow(nullptr, 0, 0,
                 displayMode.w, displayMode.h,
-                SDL_WINDOW_BORDERLESS | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI);
+                SDL_WINDOW_BORDERLESS | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI);
 #endif
         
         if (!window) {

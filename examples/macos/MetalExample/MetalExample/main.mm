@@ -1,18 +1,18 @@
-
-#define OPENGL_COMPANION
+//#define OPENGL_COMPANION
 
 #ifdef OPENGL_COMPANION
 #define RENDERBOX_USE_OPENGL
 #endif //OPENGL_COMPANION
 
 #include <iostream>
+
 #define RENDERBOX_USE_METAL
 #define RENDERBOX_USE_SDL
-#include <renderbox.h>
+#include "renderbox.h"
 
 
 std::shared_ptr<renderbox::Scene> scene;
-std::shared_ptr<renderbox::Camera> camera;
+std::shared_ptr<renderbox::PerspectiveCamera> camera;
 
 std::unique_ptr<renderbox::MetalRenderer> renderer0;
 std::unique_ptr<renderbox::SDLMetalRenderTarget> renderTarget0;
@@ -62,13 +62,13 @@ void render() {
 }
 
 int main(int argc, char **argv) {
-	
+
 #ifdef OPENGL_COMPANION
     renderer1.reset(new renderbox::OpenGLRenderer());
     renderTarget1.reset(new renderbox::SDLOpenGLRenderTarget());
 #endif //OPENGL_COMPANION
-    
-    renderer0.reset(new renderbox::MetalRenderer());
+
+	renderer0.reset(new renderbox::MetalRenderer());
     renderTarget0.reset(new renderbox::SDLMetalRenderTarget());
 
 	// Render loop

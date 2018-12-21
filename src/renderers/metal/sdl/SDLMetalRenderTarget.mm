@@ -1,10 +1,13 @@
-#import "platform.h"
 #import "SDLMetalRenderTarget.h"
+#import "platform.h"
 
 #include <SDL_syswm.h>
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
+
+
+#ifdef RENDERBOX_OS_MACOS
 
 @implementation MetalView
 
@@ -12,20 +15,77 @@
     return [[CAMetalLayer alloc] init];
 }
 
-- (instancetype)initWithFrame:(NSRect)frame {
+- (instancetype)initWithFrame:(NSRect)frame scale:(CGFloat)scale {
     if (self = [super initWithFrame:frame]) {
         self.wantsLayer = YES;
+        self.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+        self.layer.contentsScale = scale;
 
         _metalLayer = (CAMetalLayer *) self.layer;
         _metalLayer.device = MTLCreateSystemDefaultDevice();
         _metalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
         _metalLayer.framebufferOnly = true;
+
+        [self updateMetalLayerDrawableSize];
     }
 
     return self;
 }
 
+- (void)setFrameSize:(NSSize)newSize {
+    [super setFrameSize:newSize];
+    [self updateMetalLayerDrawableSize];
+}
+
+- (void)updateMetalLayerDrawableSize {
+    CGSize size = self.layer.bounds.size;
+    size.width *= self.layer.contentsScale;
+    size.height *= self.layer.contentsScale;
+    _metalLayer.drawableSize = size;
+}
+
 @end
+
+#else
+
+@implementation MetalView
+
++ (Class)layerClass {
+    return [CAMetalLayer class];
+}
+
+- (instancetype)initWithFrame:(CGRect)frame scale:(CGFloat)scale {
+    if (self = [super initWithFrame:frame]) {
+        self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.contentScaleFactor = scale;
+
+        _metalLayer = (CAMetalLayer *) self.layer;
+        _metalLayer.device = MTLCreateSystemDefaultDevice();
+        _metalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
+        _metalLayer.framebufferOnly = true;
+
+        [self updateDrawableSize];
+    }
+
+    return self;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    [self updateDrawableSize];
+}
+
+- (void)updateDrawableSize {
+    CGSize size = self.bounds.size;
+    size.width *= self.contentScaleFactor;
+    size.height *= self.contentScaleFactor;
+    _metalLayer.drawableSize = size;
+}
+
+@end
+
+#endif
+
 
 namespace renderbox {
 
@@ -40,20 +100,20 @@ namespace renderbox {
 
         // Create window
 
-#if defined(RENDERBOX_OS_MACOS)
-        window = SDL_CreateWindow(nullptr, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                  WINDOW_WIDTH, WINDOW_HEIGHT,
-                                  SDL_WINDOW_ALLOW_HIGHDPI);
-#elif defined(RENDERBOX_OS_IPHONEOS)
+#if RENDERBOX_OS_MACOS
+        sdlWindow = SDL_CreateWindow(nullptr, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                                     WINDOW_WIDTH, WINDOW_HEIGHT,
+                                     SDL_WINDOW_ALLOW_HIGHDPI);
+#else
         SDL_DisplayMode displayMode;
         SDL_GetDesktopDisplayMode(0, &displayMode);
         
-        window = SDL_CreateWindow(nullptr, 0, 0,
-                displayMode.w, displayMode.h,
-                SDL_WINDOW_BORDERLESS | SDL_WINDOW_ALLOW_HIGHDPI);
+        sdlWindow = SDL_CreateWindow(nullptr, 0, 0,
+                                     displayMode.w, displayMode.h,
+                                     SDL_WINDOW_BORDERLESS | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
 #endif
 
-        if (!window) {
+        if (!sdlWindow) {
             fprintf(stderr, "Failed to init window\n");
             throw 2;
         }
@@ -63,11 +123,19 @@ namespace renderbox {
         // Get SDL view
         SDL_SysWMinfo info;
         SDL_VERSION(&info.version);
-        SDL_GetWindowWMInfo(window, &info);
-        NSView *sdlView = info.info.cocoa.window.contentView;
+        SDL_GetWindowWMInfo(sdlWindow, &info);
 
         // Create Metal view
-        metalView = [[MetalView alloc] initWithFrame:sdlView.frame];
+
+#ifdef RENDERBOX_OS_MACOS
+        sdlView = info.info.cocoa.window.contentView;
+        metalView = [[MetalView alloc] initWithFrame:sdlView.frame
+                                               scale:info.info.cocoa.window.backingScaleFactor];
+#else
+        sdlView = info.info.uikit.window.rootViewController.view;
+        metalView = [[MetalView alloc] initWithFrame:sdlView.frame scale:[UIScreen mainScreen].nativeScale];
+#endif
+
         [sdlView addSubview:metalView];
 
         // Keep Metal device
@@ -81,24 +149,20 @@ namespace renderbox {
     SDLMetalRenderTarget::~SDLMetalRenderTarget() {
 
         SDL_GL_DeleteContext(context);
-        SDL_DestroyWindow(window);
+        SDL_DestroyWindow(sdlWindow);
 
     }
 
     SDL_Window *SDLMetalRenderTarget::getWindow() const {
-        return window;
+        return sdlWindow;
     }
 
     int SDLMetalRenderTarget::getFramebufferWidth() const {
-        int width;
-        SDL_GL_GetDrawableSize(window, &width, nullptr);
-        return width;
+        return ((CAMetalLayer *) metalView.layer).drawableSize.width;
     }
 
     int SDLMetalRenderTarget::getFramebufferHeight() const {
-        int height;
-        SDL_GL_GetDrawableSize(window, nullptr, &height);
-        return height;
+        return ((CAMetalLayer *) metalView.layer).drawableSize.height;
     }
 
 }

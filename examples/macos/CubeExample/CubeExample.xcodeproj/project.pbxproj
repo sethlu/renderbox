@@ -40,6 +40,13 @@
 			remoteGlobalIDString = C53978652065D862001AAFFE;
 			remoteInfo = RenderBox;
 		};
+		C541226F21CD289E001DE2FF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C539790B2065D8E9001AAFFE /* RenderBox.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C53F26AE2175197300EF9635;
+			remoteInfo = RenderBoxMetalLibrary;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -64,7 +71,6 @@
 		C5C674F21F94A1A000CFACA5 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		C5C674F41F94A1A600CFACA5 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		C5C674F61F94A1AD00CFACA5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		C5C675AE1F94AAAE00CFACA5 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C5EA44822069EF7F0047AE76 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		C5FE796D2069EE52002585C6 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		C5FE796F2069EE60002585C6 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
@@ -100,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				C53979102065D8EA001AAFFE /* libRenderBox.a */,
+				C541227021CD289E001DE2FF /* RenderBoxMetalLibrary.metallib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -127,7 +134,6 @@
 			children = (
 				C5C674881F949FBF00CFACA5 /* Assets.xcassets */,
 				C5C6748D1F949FBF00CFACA5 /* Info.plist */,
-				C5C675AE1F94AAAE00CFACA5 /* LaunchScreen.storyboard */,
 				C5C6748E1F949FBF00CFACA5 /* main.cpp */,
 			);
 			path = CubeExample;
@@ -226,6 +232,13 @@
 			fileType = archive.ar;
 			path = libRenderBox.a;
 			remoteRef = C539790F2065D8EA001AAFFE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C541227021CD289E001DE2FF /* RenderBoxMetalLibrary.metallib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "archive.metal-library";
+			path = RenderBoxMetalLibrary.metallib;
+			remoteRef = C541226F21CD289E001DE2FF /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

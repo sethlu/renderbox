@@ -10,7 +10,6 @@
 #define GLFW_EXPOSE_NATIVE_NSGL
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
-#include <GLFWOpenGLRenderTarget.h>
 
 
 namespace renderbox {

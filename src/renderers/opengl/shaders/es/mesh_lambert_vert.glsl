@@ -4,6 +4,7 @@ R"(
 
 precision mediump float;
 
+#include <common>
 #include <lights_preamble>
 
 uniform mat4 rb_worldProjectionMatrix;

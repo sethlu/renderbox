@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C5397A222065DA94001AAFFE /* libRenderBox.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C53979102065D8EA001AAFFE /* libRenderBox.a */; };
+		C5397A222065DA94001AAFFE /* libRenderBox-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C53979102065D8EA001AAFFE /* libRenderBox-iOS.a */; };
+		C571A7D621CBE17D00953C07 /* RenderBoxMetalLibrary-iOS.metallib in Resources */ = {isa = PBXBuildFile; fileRef = C571A7B721CBDF5800953C07 /* RenderBoxMetalLibrary-iOS.metallib */; };
 		C5C674891F949FBF00CFACA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C5C674881F949FBF00CFACA5 /* Assets.xcassets */; };
 		C5C6748F1F949FBF00CFACA5 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C5C6748E1F949FBF00CFACA5 /* main.cpp */; };
 		C5C674E91F94A18000CFACA5 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5C674E81F94A18000CFACA5 /* GLKit.framework */; };
@@ -32,12 +33,26 @@
 			remoteGlobalIDString = C53978662065D862001AAFFE;
 			remoteInfo = RenderBox;
 		};
-		C5397A242065DC83001AAFFE /* PBXContainerItemProxy */ = {
+		C571A7B621CBDF5800953C07 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C539790B2065D8E9001AAFFE /* RenderBox.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = C571A7A821CBDEF400953C07;
+			remoteInfo = "RenderBoxMetalLibrary-iOS";
+		};
+		C571A7C921CBE14000953C07 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C539790B2065D8E9001AAFFE /* RenderBox.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = C571A7CD21CBE15D00953C07;
+			remoteInfo = "RenderBoxMetalLibrary-iOS";
+		};
+		C571A7D721CBE19500953C07 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C539790B2065D8E9001AAFFE /* RenderBox.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = C53978652065D862001AAFFE;
-			remoteInfo = RenderBox;
+			remoteInfo = "RenderBox-iOS";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -79,7 +94,7 @@
 				C5C674ED1F94A18C00CFACA5 /* UIKit.framework in Frameworks */,
 				C5C674EB1F94A18700CFACA5 /* Foundation.framework in Frameworks */,
 				C5C674E91F94A18000CFACA5 /* GLKit.framework in Frameworks */,
-				C5397A222065DA94001AAFFE /* libRenderBox.a in Frameworks */,
+				C5397A222065DA94001AAFFE /* libRenderBox-iOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,7 +104,8 @@
 		C539790C2065D8E9001AAFFE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C53979102065D8EA001AAFFE /* libRenderBox.a */,
+				C53979102065D8EA001AAFFE /* libRenderBox-iOS.a */,
+				C571A7B721CBDF5800953C07 /* RenderBoxMetalLibrary-iOS.metallib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -156,7 +172,8 @@
 			buildRules = (
 			);
 			dependencies = (
-				C5397A252065DC83001AAFFE /* PBXTargetDependency */,
+				C571A7D821CBE19500953C07 /* PBXTargetDependency */,
+				C571A7CA21CBE14000953C07 /* PBXTargetDependency */,
 			);
 			name = CubeExample;
 			productName = "vox-ios";
@@ -203,11 +220,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		C53979102065D8EA001AAFFE /* libRenderBox.a */ = {
+		C53979102065D8EA001AAFFE /* libRenderBox-iOS.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libRenderBox.a;
+			path = "libRenderBox-iOS.a";
 			remoteRef = C539790F2065D8EA001AAFFE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		C571A7B721CBDF5800953C07 /* RenderBoxMetalLibrary-iOS.metallib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "archive.metal-library";
+			path = "RenderBoxMetalLibrary-iOS.metallib";
+			remoteRef = C571A7B621CBDF5800953C07 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -218,6 +242,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C5C674891F949FBF00CFACA5 /* Assets.xcassets in Resources */,
+				C571A7D621CBE17D00953C07 /* RenderBoxMetalLibrary-iOS.metallib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,10 +260,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		C5397A252065DC83001AAFFE /* PBXTargetDependency */ = {
+		C571A7CA21CBE14000953C07 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = RenderBox;
-			targetProxy = C5397A242065DC83001AAFFE /* PBXContainerItemProxy */;
+			name = "RenderBoxMetalLibrary-iOS";
+			targetProxy = C571A7C921CBE14000953C07 /* PBXContainerItemProxy */;
+		};
+		C571A7D821CBE19500953C07 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "RenderBox-iOS";
+			targetProxy = C571A7D721CBE19500953C07 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -367,7 +397,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = net.mintkit.CubeExample;
+				PRODUCT_BUNDLE_IDENTIFIER = "net.mintkit.CubeExample-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -393,7 +423,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
-				PRODUCT_BUNDLE_IDENTIFIER = net.mintkit.CubeExample;
+				PRODUCT_BUNDLE_IDENTIFIER = "net.mintkit.CubeExample-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

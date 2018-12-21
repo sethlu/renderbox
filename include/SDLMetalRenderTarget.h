@@ -2,7 +2,13 @@
 #define RENDERBOX_METALSDLRENDERER_H
 
 
+#include "platform.h"
+#ifdef RENDERBOX_OS_MACOS
 #import <Cocoa/Cocoa.h>
+#else
+#import <UIKit/UIView.h>
+#endif
+
 #import <Metal/Metal.h>
 #import <QuartzCore/CAMetalLayer.h>
 
@@ -13,11 +19,23 @@
 #include "scoped_nsobject.h"
 
 
+#ifdef RENDERBOX_OS_MACOS
+
 @interface MetalView : NSView
 
 @property(nonatomic) CAMetalLayer *metalLayer;
 
 @end
+
+#else
+
+@interface MetalView : UIView
+
+@property(nonatomic) CAMetalLayer *metalLayer;
+
+@end
+
+#endif
 
 namespace renderbox {
 
@@ -39,7 +57,13 @@ namespace renderbox {
 
     protected:
 
-        SDL_Window *window;
+        SDL_Window *sdlWindow;
+
+#ifdef RENDERBOX_OS_MACOS
+        NSView *sdlView;
+#else
+        UIView *sdlView;
+#endif
 
         SDL_GLContext context;
 

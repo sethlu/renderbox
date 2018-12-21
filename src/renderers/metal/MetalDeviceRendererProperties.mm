@@ -2,6 +2,7 @@
 #include "MeshBasicMaterial.h"
 #include "MeshLambertMaterial.h"
 #include "logging.h"
+#include "platform.h"
 
 namespace renderbox {
 
@@ -14,7 +15,13 @@ namespace renderbox {
     MetalDeviceRendererProperties::getDefaultMetalLibrary() {
         if (!defaultMetalLibrary_) {
             NSError *err;
+
+#ifdef RENDERBOX_OS_MACOS
             auto *libPath = [[NSBundle mainBundle] pathForResource:@"RenderBoxMetalLibrary" ofType:@"metallib"];
+#else
+            auto *libPath = [[NSBundle mainBundle] pathForResource:@"RenderBoxMetalLibrary-iOS" ofType:@"metallib"];
+#endif
+
             defaultMetalLibrary_ = [device newLibraryWithFile:libPath error:&err];
             if (!defaultMetalLibrary_) {
                 LOG(ERROR) << "Failed to load Metal library." << std::endl;
