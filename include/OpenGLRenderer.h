@@ -19,7 +19,7 @@ namespace renderbox {
 
         // Render
 
-        void render(Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget, bool forceClear = false);
+        void render(Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget);
 
     protected:
 

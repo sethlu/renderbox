@@ -7,7 +7,7 @@
 
 namespace renderbox {
 
-    void OpenGLRenderer::render(Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget, bool forceClear) {
+    void OpenGLRenderer::render(Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget) {
 
         // Prepass scene
 
