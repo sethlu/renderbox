@@ -55,9 +55,9 @@ void update() {
 
     // Camera
 
-    glm::vec3 cameraDirection = camera->getRay()->getDirection();
-    glm::vec3 forward = glm::normalize(glm::vec3(cameraDirection.x, cameraDirection.y, 0));
-    glm::vec3 right = glm::normalize(glm::vec3(cameraDirection.y, - cameraDirection.x, 0));
+    auto cameraDirection = camera->getRay(renderbox::vec2()).getDirection();
+    auto forward = glm::normalize(glm::vec3(cameraDirection.x, cameraDirection.y, 0));
+    auto right = glm::normalize(glm::vec3(cameraDirection.y, - cameraDirection.x, 0));
     cameraRig->translate(glm::vec3(right * cameraVelocity[0] + forward * cameraVelocity[1])
                          * deltaTime * cameraDistance * 0.01f);
     cameraRig->clearRotation();
@@ -162,9 +162,9 @@ void cursorPosCallback(GLFWwindow *window, double x, double y) {
 }
 
 void scrollCallback(GLFWwindow *window, double deltaX, double deltaY) {
-    glm::vec3 cameraDirection = camera->getRay()->getDirection();
-    glm::vec3 forward = glm::normalize(glm::vec3(cameraDirection.x, cameraDirection.y, 0));
-    glm::vec3 right = glm::normalize(glm::vec3(cameraDirection.y, - cameraDirection.x, 0));
+    auto cameraDirection = camera->getRay(renderbox::vec2()).getDirection();
+    auto forward = glm::normalize(glm::vec3(cameraDirection.x, cameraDirection.y, 0));
+    auto right = glm::normalize(glm::vec3(cameraDirection.y, - cameraDirection.x, 0));
     if (keyMods & GLFW_MOD_ALT) {
         cameraAngle[1] += (float) - deltaY;
         return;
