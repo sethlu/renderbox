@@ -10,11 +10,11 @@ namespace renderbox {
     class PerspectiveCamera : public Camera {
     public:
 
-        PerspectiveCamera(float fovy, float aspectRatio, float zNear = 0.1f, float zFar = 100.0f);
+        PerspectiveCamera(float fovy, float aspectRatio, float zNear = 0.1f, float zFar = 1000.0f);
 
         ~PerspectiveCamera() override = default;
 
-        void setPerspective(float fovy, float aspectRatio, float zNear = 0.1f, float zFar = 100.0f);
+        void setPerspective(float fovy, float aspectRatio, float zNear = 0.1f, float zFar = 1000.0f);
 
         Ray getRay(glm::vec2 coordinates) const override;
 
