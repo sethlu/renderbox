@@ -160,6 +160,7 @@ namespace renderbox {
                     auto material = object->getMaterial();
 
                     if (blankObjectProperties || objectProperties->geometryVersion != geometry->getVersion()) {
+                        objectProperties->geometryVersion = geometry->getVersion();
 
                         objectProperties->getBuffer(0)->buffer(geometry->vertices);
 
