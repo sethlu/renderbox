@@ -99,20 +99,21 @@ namespace renderbox {
 
                 OpenGLVertexArray *vertexArray = objectProperties->getVertexArray(0);
 
-                if (blankObjectProperties) {
+                auto geometry = object->getGeometry();
+                auto material = object->getMaterial();
 
-                    auto geometry(object->getGeometry());
-                    auto vertices(geometry->vertices);
-                    auto uvs(geometry->uvs);
-                    auto normals(geometry->normals);
+                if (blankObjectProperties || objectProperties->geometryVersion != geometry->getVersion()) {
+                    objectProperties->geometryVersion = geometry->getVersion();
 
-                    objectProperties->getBuffer(0)->buffer(vertices);
+                    objectProperties->getBuffer(0)->buffer(geometry->vertices);
 
-                    if (uvs.size() == vertices.size()) objectProperties->getBuffer(1)->buffer(uvs);
-                    else if (!uvs.empty()) throw 2;
+                    if (geometry->uvs.size() == geometry->vertices.size())
+                        objectProperties->getBuffer(1)->buffer(geometry->uvs);
+                    else if (!geometry->uvs.empty()) throw 2;
 
-                    if (normals.size() == vertices.size()) objectProperties->getBuffer(2)->buffer(normals);
-                    else if (!normals.empty()) throw 2;
+                    if (geometry->normals.size() == geometry->vertices.size())
+                        objectProperties->getBuffer(2)->buffer(geometry->normals);
+                    else if (!geometry->normals.empty()) throw 2;
 
                     objectProperties->getBuffer(3)->buffer(geometry->faces);
 
@@ -189,9 +190,9 @@ namespace renderbox {
                     bool blankTexture;
                     ambientMap = objectProperties->getTexture(0, &blankTexture);
                     if (blankTexture) {
-                        if (auto material = dynamic_cast<AmbientMaterial *>(object->getMaterial().get())) {
-                            auto texture = material->getAmbientMap(); // Need to check if texture exists
-                            if (texture) ambientMap->texture(material->getAmbientMap());
+                        if (auto ambientMaterial = dynamic_cast<AmbientMaterial *>(object->getMaterial().get())) {
+                            auto texture = ambientMaterial->getAmbientMap(); // Need to check if texture exists
+                            if (texture) ambientMap->texture(texture);
                         }
                     }
                 }
@@ -206,9 +207,9 @@ namespace renderbox {
                     bool blankTexture;
                     diffuseMap = objectProperties->getTexture(1, &blankTexture);
                     if (blankTexture) {
-                        if (auto material = dynamic_cast<DiffuseMaterial *>(object->getMaterial().get())) {
-                            auto texture = material->getDiffuseMap(); // Need to check if texture exists
-                            if (texture) diffuseMap->texture(material->getDiffuseMap());
+                        if (auto diffuseMaterial = dynamic_cast<DiffuseMaterial *>(object->getMaterial().get())) {
+                            auto texture = diffuseMaterial->getDiffuseMap(); // Need to check if texture exists
+                            if (texture) diffuseMap->texture(texture);
                         }
                     }
                 }
@@ -222,7 +223,7 @@ namespace renderbox {
                 vertexArray->bindVertexArray();
 
                 // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                glDrawElements(GL_TRIANGLES, (GLsizei) object->getGeometry()->getFaces().size() * 3, GL_UNSIGNED_INT, 0);
+                glDrawElements(GL_TRIANGLES, (GLsizei) object->getGeometry()->faces.size() * 3, GL_UNSIGNED_INT, 0);
 
             }
         }
@@ -233,27 +234,5 @@ namespace renderbox {
         renderTarget->frameDidRender();
 
 	}
-
-    void OpenGLRenderer::loadObject(Object *object) {
-        OpenGLObjectProperties *objectProperties = properties.getObjectProperties(object);
-
-        auto geometry = object->getGeometry();
-        auto vertices = geometry->vertices;
-        auto uvs = geometry->uvs;
-        auto normals = geometry->normals;
-
-        objectProperties->getBuffer(0)->buffer(vertices);
-
-        if (uvs.size() == vertices.size()) objectProperties->getBuffer(1)->buffer(uvs);
-        else if (!uvs.empty()) throw 2;
-
-        if (normals.size() == vertices.size()) objectProperties->getBuffer(2)->buffer(normals);
-        else if (!normals.empty()) throw 2;
-
-        objectProperties->getBuffer(3)->buffer(geometry->faces);
-
-        // TODO: This method doesn't update the vertex array attributes
-
-    }
 
 }

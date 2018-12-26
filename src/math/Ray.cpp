@@ -37,8 +37,8 @@ namespace renderbox {
 
         int count = 0;
 
-        auto &vertices = object->getGeometry()->getVertices();
-        auto &faces = object->getGeometry()->getFaces();
+        auto &vertices = object->getGeometry()->vertices;
+        auto &faces = object->getGeometry()->faces;
 
         std::vector<float> distances;
 

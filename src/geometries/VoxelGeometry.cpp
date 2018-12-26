@@ -2,7 +2,9 @@
 
 #include <iostream>
 #include <cfloat>
+
 #include <glm/geometric.hpp>
+
 #include "Vector.h"
 #include "VoxelGeometry.h"
 
@@ -798,6 +800,9 @@ namespace renderbox {
                 }
             }
         }
+
+        // Update geometry version
+        didUpdate();
 
     }
 

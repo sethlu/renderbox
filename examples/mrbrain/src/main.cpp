@@ -1,12 +1,16 @@
 #include <iostream>
 #include <fstream>
+
 #include <glm/glm.hpp>
+
+#define RENDERBOX_USE_OPENGL
 #define RENDERBOX_USE_GLFW
 #include "renderbox.h"
 
 std::shared_ptr<renderbox::Scene> scene;
 std::shared_ptr<renderbox::PerspectiveCamera> camera;
-std::unique_ptr<renderbox::OpenGLGLFWRenderer> renderer;
+std::unique_ptr<renderbox::OpenGLRenderer> renderer;
+std::unique_ptr<renderbox::GLFWOpenGLRenderTarget> renderTarget;
 
 std::shared_ptr<renderbox::Object> cameraRig;
 std::shared_ptr<renderbox::Mesh> brain;
@@ -66,8 +70,8 @@ void init() {
     scene->addChild(brain);
 
     // Camera
-    camera = std::make_shared<renderbox::PerspectiveCamera>(
-        glm::radians(45.0f), (float) renderer->getWindowWidth() / (float) renderer->getWindowHeight());
+    camera = std::make_shared<renderbox::PerspectiveCamera>(glm::radians(45.0f),
+        (float) renderTarget->getWindowWidth() / (float) renderTarget->getWindowHeight());
     camera->setTranslation(glm::vec3(0, 0, cameraDistance));
     cameraRig = std::make_shared<renderbox::Object>();
     cameraRig->addChild(camera);
@@ -88,9 +92,9 @@ void update() {
 
     // Camera
 
-    glm::vec3 cameraDirection = camera->getRay()->getDirection();
-    glm::vec3 forward = glm::normalize(glm::vec3(cameraDirection.x, cameraDirection.y, 0));
-    glm::vec3 right = glm::normalize(glm::vec3(cameraDirection.y, - cameraDirection.x, 0));
+    auto cameraDirection = camera->getRay(renderbox::vec2()).getDirection();
+    auto forward = glm::normalize(glm::vec3(cameraDirection.x, cameraDirection.y, 0));
+    auto right = glm::normalize(glm::vec3(cameraDirection.y, - cameraDirection.x, 0));
     cameraRig->translate(glm::vec3(right * cameraVelocity[0] + forward * cameraVelocity[1])
                          * deltaTime * cameraDistance * 0.01f);
     cameraRig->clearRotation();
@@ -102,7 +106,7 @@ void update() {
 
     // Render
 
-    renderer->render(scene.get(), camera.get());
+    renderer->render(scene.get(), camera.get(), renderTarget.get());
 
     lastTime = currentTime;
 
@@ -113,7 +117,8 @@ void uninit() {
 }
 
 void windowSizeCallback(GLFWwindow *window, int width, int height) {
-    camera->setPerspective(glm::radians(45.0f), (float) renderer->getWindowWidth() / (float) renderer->getWindowHeight());
+    camera->setPerspective(glm::radians(45.0f),
+            (float) renderTarget->getWindowWidth() / (float) renderTarget->getWindowHeight());
 }
 
 int keyMods = 0;
@@ -161,22 +166,20 @@ void keyCallback(GLFWwindow *window, int key, int scanCode, int action, int mods
             isolevel += 0.01f;
             std::cout << "isolevel " << isolevel << "\n";
             ((renderbox::VoxelGeometry *) brain->getGeometry().get())->updateGeometryByMarchingCube(isolevel, true);
-            renderer->loadObject(brain.get());
         }
     } else if (key == GLFW_KEY_MINUS) {
         if (action == GLFW_RELEASE) {
             isolevel -= 0.01f;
             std::cout << "isolevel " << isolevel << "\n";
             ((renderbox::VoxelGeometry *) brain->getGeometry().get())->updateGeometryByMarchingCube(isolevel, true);
-            renderer->loadObject(brain.get());
         }
     }
 }
 
 void scrollCallback(GLFWwindow *window, double deltaX, double deltaY) {
-    glm::vec3 cameraDirection = camera->getRay()->getDirection();
-    glm::vec3 forward = glm::normalize(glm::vec3(cameraDirection.x, cameraDirection.y, 0));
-    glm::vec3 right = glm::normalize(glm::vec3(cameraDirection.y, - cameraDirection.x, 0));
+    auto cameraDirection = camera->getRay(renderbox::vec2()).getDirection();
+    auto forward = glm::normalize(glm::vec3(cameraDirection.x, cameraDirection.y, 0));
+    auto right = glm::normalize(glm::vec3(cameraDirection.y, - cameraDirection.x, 0));
     if (keyMods & GLFW_MOD_ALT) {
         cameraAngle[1] += (float) - deltaY;
         return;
@@ -196,8 +199,9 @@ void rotateCallback(GLFWwindow *window, double rotation) {
 
 int main(int argc, char **argv) {
 
-    renderer.reset(new renderbox::OpenGLGLFWRenderer());
-    GLFWwindow *window = renderer->getWindow();
+    renderer.reset(new renderbox::OpenGLRenderer());
+    renderTarget.reset(new renderbox::GLFWOpenGLRenderTarget());
+    GLFWwindow *window = renderTarget->getWindow();
 
     // Callbacks
 
@@ -223,11 +227,12 @@ int main(int argc, char **argv) {
             lastTime = currentTime;
         }
 
+        glfwPollEvents();
+
         update();
 
         // Swap buffers
         glfwSwapBuffers(window);
-        glfwPollEvents();
 
     }
     uninit();

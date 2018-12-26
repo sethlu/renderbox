@@ -21,8 +21,6 @@ namespace renderbox {
 
         void render(Scene *scene, Camera *camera, OpenGLRenderTarget *renderTarget, bool forceClear = false);
 
-        void loadObject(Object *object);
-
     protected:
 
         OpenGLRendererProperties properties;

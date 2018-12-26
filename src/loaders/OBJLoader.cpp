@@ -349,13 +349,13 @@ namespace renderbox {
 
         if (v.size() > 4) INVALID_SYNTAX(); // Only support triangle and quad
 
-        geometry->getFaces().emplace_back(uvec3(
+        geometry->faces.emplace_back(uvec3(
             getVertexIndex(v[0] - 1, (bvt ? vt[0] : 0) - 1, (bvn ? vn[0] : 0) - 1),
             getVertexIndex(v[1] - 1, (bvt ? vt[1] : 0) - 1, (bvn ? vn[1] : 0) - 1),
             getVertexIndex(v[2] - 1, (bvt ? vt[2] : 0) - 1, (bvn ? vn[2] : 0) - 1)));
 
         if (v.size() == 4) { // Quad
-            geometry->getFaces().emplace_back(uvec3(
+            geometry->faces.emplace_back(uvec3(
                 getVertexIndex(v[2] - 1, (bvt ? vt[2] : 0) - 1, (bvn ? vn[2] : 0) - 1),
                 getVertexIndex(v[3] - 1, (bvt ? vt[3] : 0) - 1, (bvn ? vn[3] : 0) - 1),
                 getVertexIndex(v[0] - 1, (bvt ? vt[0] : 0) - 1, (bvn ? vn[0] : 0) - 1)));
@@ -606,11 +606,11 @@ namespace renderbox {
             return it->second;
         }
 
-        geometry->getVertices().emplace_back(vertices[v]);
-        if (vt >= 0) geometry->getUVs().emplace_back(uvs[vt]);
-        if (vn >= 0) geometry->getNormals().emplace_back(normals[vn]);
+        geometry->vertices.emplace_back(vertices[v]);
+        if (vt >= 0) geometry->uvs.emplace_back(uvs[vt]);
+        if (vn >= 0) geometry->normals.emplace_back(normals[vn]);
 
-        auto index = static_cast<unsigned>(geometry->getVertices().size() - 1);
+        auto index = static_cast<unsigned>(geometry->vertices.size() - 1);
         geometryVertexIndices[key] = index;
 
         return index;

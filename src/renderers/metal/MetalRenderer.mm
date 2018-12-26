@@ -252,7 +252,7 @@ namespace renderbox {
                                       offset:0 atIndex:3];
 
                     [encoder drawIndexedPrimitives:MTLPrimitiveTypeTriangle
-                                        indexCount:object->getGeometry()->getFaces().size() * 3
+                                        indexCount:object->getGeometry()->faces.size() * 3
                                          indexType:MTLIndexTypeUInt32
                                        indexBuffer:objectProperties->getBuffer(3)->bufferObject
                                  indexBufferOffset:0];

@@ -19,18 +19,6 @@ namespace renderbox {
 
         virtual ~Geometry();
 
-        std::vector<vec3> &getVertices();
-
-        std::vector<vec2> &getUVs();
-
-        std::vector<vec3> &getNormals();
-
-        std::vector<uvec3> &getFaces();
-
-        void regenerateNormals();
-
-    protected:
-
         std::vector<vec3> vertices;
 
         std::vector<vec2> uvs;
@@ -38,6 +26,8 @@ namespace renderbox {
         std::vector<vec3> normals;
 
         std::vector<uvec3> faces;
+
+        void regenerateNormals();
 
     };
 

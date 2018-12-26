@@ -95,7 +95,6 @@ void update() {
             voxelGeometry->brush(objectPosition, 8, 0.4f, isolevel);
 
             voxelGeometry->updateGeometryByMarchingCube(isolevel);
-            renderer->loadObject(terrain.get());
         }
 
         mouseLastSync = currentTime;
@@ -118,7 +117,7 @@ void update() {
 
     // Camera
 
-    auto cameraDirection = camera->getRay().getDirection();
+    auto cameraDirection = camera->getRay(renderbox::vec2()).getDirection();
     auto forward = glm::normalize(glm::vec3(cameraDirection.x, cameraDirection.y, 0));
     auto right = glm::normalize(glm::vec3(cameraDirection.y, - cameraDirection.x, 0));
     cameraRig->translate(glm::vec3(right * cameraVelocity[0] + forward * cameraVelocity[1])
@@ -170,7 +169,6 @@ void mouseclick(GLFWwindow *window) {
         voxelGeometry->brush(objectPosition, 8, 0.4f, isolevel);
 
         voxelGeometry->updateGeometryByMarchingCube(isolevel);
-        renderer->loadObject(terrain.get());
     }
 
 }
@@ -242,7 +240,7 @@ void cursorPosCallback(GLFWwindow *window, double x, double y) {
 }
 
 void scrollCallback(GLFWwindow *window, double deltaX, double deltaY) {
-    auto cameraDirection = camera->getRay().getDirection();
+    auto cameraDirection = camera->getRay(renderbox::vec2()).getDirection();
     auto forward = glm::normalize(glm::vec3(cameraDirection.x, cameraDirection.y, 0));
     auto right = glm::normalize(glm::vec3(cameraDirection.y, - cameraDirection.x, 0));
     if (keyMods & GLFW_MOD_ALT) {
@@ -315,11 +313,11 @@ int main(int argc, char **argv) {
             lastTime = currentTime;
         }
 
+        glfwPollEvents();
+
         update();
 
-        // Swap buffers
         glfwSwapBuffers(window);
-        glfwPollEvents();
 
     }
     uninit();

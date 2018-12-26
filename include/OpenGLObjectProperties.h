@@ -24,6 +24,8 @@ namespace renderbox {
 
         OpenGLTexture *getTexture(int index, bool *blankTexture = nullptr);
 
+        VersionTrackedObject::version_type geometryVersion;
+
     protected:
 
         std::unordered_map<int, std::unique_ptr<OpenGLBuffer>> buffers;
