@@ -3,6 +3,7 @@
 #define RENDERBOX_USE_OPENGL
 #define RENDERBOX_USE_GLFW
 #include "renderbox.h"
+#include "logging.h"
 
 std::shared_ptr<renderbox::Scene> scene;
 std::shared_ptr<renderbox::PerspectiveCamera> camera;
@@ -23,6 +24,11 @@ double mouseX = -1, mouseY = -1, startMouseX = -1, startMouseY = -1;
 
 float isolevel = 0.5f;
 
+std::shared_ptr<renderbox::Material> curveMaterial;
+std::shared_ptr<renderbox::CurveGeometry> curveGeometry;
+std::shared_ptr<renderbox::Object> curveObject;
+std::shared_ptr<renderbox::CatmullRomCurve> curve;
+
 void init() {
 
     // Scene
@@ -40,6 +46,7 @@ void init() {
     terrain = std::make_shared<renderbox::Object>(
         voxelGeometry,
         std::make_shared<renderbox::MeshLambertMaterial>(glm::vec3(1.0f)));
+    terrain->setScale(renderbox::vec3(4));
     scene->addChild(terrain);
 
     // Test cube
@@ -66,6 +73,21 @@ void init() {
                                                    32));
         scene->addChild(pointLight);
     }
+
+    // Curve
+
+    curveMaterial = std::make_shared<renderbox::MeshLambertMaterial>();
+    curve = std::make_shared<renderbox::CatmullRomCurve>();
+    curveGeometry = std::make_shared<renderbox::CurveGeometry>(curve);
+    curveGeometry->crossSection = {
+            {1, 0},
+            {1, 1},
+            {-1, 1},
+            {-1, 0},
+    };
+    curveObject = std::make_shared<renderbox::Object>(curveGeometry, curveMaterial);
+    curveGeometry->updateGeometry();
+    scene->addChild(curveObject);
 
 }
 
@@ -160,15 +182,11 @@ void mouseclick(GLFWwindow *window) {
             1.0f - 2 * mouseY / renderTarget->getWindowHeight()));
     std::vector<glm::vec3> worldPositions;
     if (cameraRay.intersectObject(terrain.get(), worldPositions)) {
-        glm::vec3 objectPosition = renderbox::dehomogenize(
-                glm::inverse(terrain->getWorldMatrix())
-                * glm::vec4(worldPositions[0] - glm::vec3(0.5f), 1.0f));
+        auto worldPosition = worldPositions[0];
 
-        renderbox::VoxelGeometry *voxelGeometry = (renderbox::VoxelGeometry *) terrain->getGeometry().get();
-
-        voxelGeometry->brush(objectPosition, 8, 0.4f, isolevel);
-
-        voxelGeometry->updateGeometryByMarchingCube(isolevel);
+        curve->points.emplace_back(worldPosition);
+        curveGeometry->updateGeometry();
+        LOG(WARNING) << worldPosition << std::endl;
     }
 
 }

@@ -3,6 +3,7 @@
 
 
 #include "Object.h"
+#include "Curve.h"
 
 #include "Vector.h"
 #include "Matrix.h"
@@ -15,6 +16,7 @@
 #include "BoxGeometry.h"
 #include "SphereGeometry.h"
 #include "VoxelGeometry.h"
+#include "CurveGeometry.h"
 
 #include "Material.h"
 #include "MeshBasicMaterial.h"
