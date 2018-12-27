@@ -61,7 +61,7 @@ namespace renderbox {
             // Sort all distances
             std::sort(distances.begin(), distances.end());
             for (float distance : distances) {
-                positions.push_back(origin + direction * distance);
+                positions.emplace_back(dehomogenize(objectWorldMatrix * vec4(objectCoordRay.origin + objectCoordRay.direction * distance, 1)));
             }
             return true;
         }
