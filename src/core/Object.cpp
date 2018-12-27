@@ -9,6 +9,8 @@ namespace renderbox {
 
     int Object::count = 0;
 
+    Object::Object() = default;
+
     Object::Object(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material)
         : geometry(geometry), material(material) {
 
@@ -59,6 +61,7 @@ namespace renderbox {
 
     void Object::setGeometry(std::shared_ptr<Geometry> geometry_) {
         geometry = std::move(geometry_);
+        didUpdate();
     }
 
     bool Object::hasMaterial() {
@@ -71,6 +74,7 @@ namespace renderbox {
 
     void Object::setMaterial(std::shared_ptr<Material> material_) {
         material = std::move(material_);
+        didUpdate();
     }
 
     mat4 Object::getWorldMatrix() const {

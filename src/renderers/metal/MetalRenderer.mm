@@ -8,10 +8,13 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Light.h"
+#include "Mesh.h"
 #include "MetalRenderList.h"
+#include "logging.h"
 
 
-#define NUM_POINT_LIGHTS 4
+uint const NUM_MAX_POINT_LIGHTS = 4;
+uint const NUM_MAX_BONES = 8;
 
 typedef struct {
     simd_float3 position;
@@ -26,7 +29,8 @@ typedef struct {
     simd_float3 materialAmbientColor;
     simd_float3 materialDiffuseColor;
     uint numActivePointLights;
-    PointLight pointLights[NUM_POINT_LIGHTS];
+    PointLight pointLights[NUM_MAX_POINT_LIGHTS];
+    matrix_float4x4 boneMatrics[NUM_MAX_BONES];
 } Uniforms;
 
 namespace renderbox {
@@ -166,17 +170,27 @@ namespace renderbox {
                     if (blankObjectProperties || objectProperties->geometryVersion != geometry->getVersion()) {
                         objectProperties->geometryVersion = geometry->getVersion();
 
+                        auto numVertices = geometry->vertices.size();
+
                         objectProperties->getBuffer(0)->buffer(geometry->vertices);
 
-                        if (geometry->uvs.size() == geometry->vertices.size())
+                        if (geometry->uvs.size() == numVertices)
                             objectProperties->getBuffer(1)->buffer(geometry->uvs);
                         else if (!geometry->uvs.empty()) throw;
 
-                        if (geometry->normals.size() == geometry->vertices.size())
+                        if (geometry->normals.size() == numVertices)
                             objectProperties->getBuffer(2)->buffer(geometry->normals);
                         else if (!geometry->normals.empty()) throw;
 
-                        objectProperties->getBuffer(3)->buffer(geometry->faces);
+                        if (geometry->skinIndices.size() == numVertices)
+                            objectProperties->getBuffer(3)->buffer(geometry->skinIndices);
+                        else if (!geometry->skinIndices.empty()) throw;
+
+                        if (geometry->skinWeights.size() == numVertices)
+                            objectProperties->getBuffer(4)->buffer(geometry->skinWeights);
+                        else if (!geometry->skinWeights.empty()) throw;
+
+                        objectProperties->getBuffer(5)->buffer(geometry->faces);
 
                     }
 
@@ -243,6 +257,19 @@ namespace renderbox {
                         }
                     }
 
+                    // Bones
+                    if (object->isMesh()) {
+                        if (auto mesh = dynamic_cast<Mesh *>(object)) {
+                            auto numBones = mesh->bones.size();
+                            for (auto i = 0; i < numBones; i++) {
+                                auto boneMatrix = glm::inverse(object->getWorldMatrix()) * mesh->bones[i]->getWorldMatrix() * mesh->bones[i]->getBoneInverse();
+                                memcpy(&uniforms.boneMatrics[i], glm::value_ptr(boneMatrix), sizeof(uniforms.boneMatrics[0]));
+                            }
+                        } else {
+                            NOTREACHED();
+                        }
+                    }
+
                     void *bufferPointer = [objectProperties->uniformBuffer contents];
                     memcpy(bufferPointer, &uniforms, sizeof(Uniforms));
 
@@ -254,11 +281,15 @@ namespace renderbox {
                                       offset:0 atIndex:2];
                     [encoder setVertexBuffer:objectProperties->uniformBuffer
                                       offset:0 atIndex:3];
+                    [encoder setVertexBuffer:objectProperties->getBuffer(3)->bufferObject
+                                      offset:0 atIndex:4];
+                    [encoder setVertexBuffer:objectProperties->getBuffer(4)->bufferObject
+                                      offset:0 atIndex:5];
 
                     [encoder drawIndexedPrimitives:MTLPrimitiveTypeTriangle
                                         indexCount:object->getGeometry()->faces.size() * 3
                                          indexType:MTLIndexTypeUInt32
-                                       indexBuffer:objectProperties->getBuffer(3)->bufferObject
+                                       indexBuffer:objectProperties->getBuffer(5)->bufferObject
                                  indexBufferOffset:0];
 
                 }

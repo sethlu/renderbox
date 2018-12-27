@@ -17,12 +17,13 @@ namespace renderbox {
         SCENE_OBJECT  = 0x2,
         CAMERA_OBJECT = 0x4,
         LIGHT_OBJECT  = 0x8,
+        BONE_OBJECT   = 0x10,
     };
 
     class Object : public VersionTrackedObject {
     public:
 
-        Object() = default;
+        Object();
 
         Object(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material);
 
@@ -32,6 +33,10 @@ namespace renderbox {
 
         virtual OBJECT_TYPE getObjectType() const {
             return GROUP_OBJECT;
+        }
+
+        bool isMesh() const {
+            return (getObjectType() & MESH_OBJECT) != 0;
         }
 
         bool isLight() const {

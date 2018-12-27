@@ -21,6 +21,7 @@
 #include "GLSLMaterial.h"
 
 #include "Mesh.h"
+#include "Bone.h"
 
 #include "Light.h"
 #include "PointLight.h"

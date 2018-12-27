@@ -3,7 +3,9 @@
 using namespace metal;
 
 #define SCREEN_GAMMA 2.2
-#define NUM_POINT_LIGHTS 4
+
+#define NUM_MAX_POINT_LIGHTS 4
+#define NUM_MAX_BONES 8
 
 typedef struct {
     float3 position;
@@ -18,7 +20,8 @@ typedef struct {
     float3 materialAmbientColor;
     float3 materialDiffuseColor;
     uint numActivePointLights;
-    PointLight pointLights[NUM_POINT_LIGHTS];
+    PointLight pointLights[NUM_MAX_POINT_LIGHTS];
+    float4x4 boneMatrics[NUM_MAX_BONES];
 } Uniforms;
 
 float4 gammaToLinear(float4 value, float gamma) {
