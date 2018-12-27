@@ -126,7 +126,6 @@ namespace renderbox {
                     camera->getViewProjectionMatrix();
 
             // Uniforms
-            id <MTLBuffer> uniformBuffer = [device newBufferWithLength:sizeof(Uniforms) options:MTLResourceOptionCPUCacheModeDefault];
             Uniforms uniforms;
 
             // Scene ambient color
@@ -155,6 +154,11 @@ namespace renderbox {
                     bool blankObjectProperties;
                     auto objectProperties =
                             deviceRendererProperties->getObjectProperties(object, &blankObjectProperties);
+
+                    if (blankObjectProperties) {
+                        objectProperties->uniformBuffer =
+                            [device newBufferWithLength:sizeof(Uniforms) options:MTLResourceOptionCPUCacheModeDefault];
+                    }
 
                     auto geometry = object->getGeometry();
                     auto material = object->getMaterial();
@@ -239,7 +243,7 @@ namespace renderbox {
                         }
                     }
 
-                    void *bufferPointer = [uniformBuffer contents];
+                    void *bufferPointer = [objectProperties->uniformBuffer contents];
                     memcpy(bufferPointer, &uniforms, sizeof(Uniforms));
 
                     [encoder setVertexBuffer:objectProperties->getBuffer(0)->bufferObject
@@ -248,7 +252,7 @@ namespace renderbox {
                                       offset:0 atIndex:1];
                     [encoder setVertexBuffer:objectProperties->getBuffer(2)->bufferObject
                                       offset:0 atIndex:2];
-                    [encoder setVertexBuffer:uniformBuffer
+                    [encoder setVertexBuffer:objectProperties->uniformBuffer
                                       offset:0 atIndex:3];
 
                     [encoder drawIndexedPrimitives:MTLPrimitiveTypeTriangle

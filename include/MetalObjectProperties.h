@@ -22,6 +22,8 @@ namespace renderbox {
 
         VersionTrackedObject::version_type geometryVersion;
 
+        id <MTLBuffer> uniformBuffer;
+
     protected:
 
         id <MTLDevice> device;
