@@ -1,8 +1,6 @@
 #import "SDLMetalRenderTarget.h"
 #import "platform.h"
 
-#include <SDL_syswm.h>
-
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
 
@@ -121,7 +119,6 @@ namespace renderbox {
         // Set up Metal
 
         // Get SDL view
-        SDL_SysWMinfo info;
         SDL_VERSION(&info.version);
         SDL_GetWindowWMInfo(sdlWindow, &info);
 
@@ -155,6 +152,26 @@ namespace renderbox {
 
     SDL_Window *SDLMetalRenderTarget::getWindow() const {
         return sdlWindow;
+    }
+
+    int SDLMetalRenderTarget::getWindowWidth() const {
+#if RENDERBOX_OS_MACOS
+        return info.info.cocoa.window.contentView.frame.size.width;
+#else
+        return info.info.uikit.window.rootViewController.view.frame.size.width;
+#endif
+    }
+
+    int SDLMetalRenderTarget::getWindowHeight() const {
+        SDL_SysWMinfo info;
+        SDL_VERSION(&info.version);
+        SDL_GetWindowWMInfo(sdlWindow, &info);
+
+#if RENDERBOX_OS_MACOS
+        return info.info.cocoa.window.contentView.frame.size.height;
+#else
+        return info.info.uikit.window.rootViewController.view.frame.size.height;
+#endif
     }
 
     int SDLMetalRenderTarget::getFramebufferWidth() const {

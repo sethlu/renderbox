@@ -13,6 +13,7 @@
 #import <QuartzCore/CAMetalLayer.h>
 
 #include <SDL.h>
+#include <SDL_syswm.h>
 
 #include "Scene.h"
 #include "Camera.h"
@@ -51,6 +52,10 @@ namespace renderbox {
 
         SDL_Window *getWindow() const;
 
+        int getWindowWidth() const;
+
+        int getWindowHeight() const;
+
         virtual int getFramebufferWidth() const;
 
         virtual int getFramebufferHeight() const;
@@ -58,6 +63,8 @@ namespace renderbox {
     protected:
 
         SDL_Window *sdlWindow;
+
+        SDL_SysWMinfo info;
 
 #ifdef RENDERBOX_OS_MACOS
         NSView *sdlView;
