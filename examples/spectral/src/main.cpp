@@ -235,11 +235,12 @@ int main(int argc, char **argv) {
             lastTime = currentTime;
         }
 
+        glfwPollEvents();
+
         update();
 
         // Swap buffers
         glfwSwapBuffers(window);
-        glfwPollEvents();
 
     }
     uninit();

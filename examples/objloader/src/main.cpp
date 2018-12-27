@@ -60,11 +60,12 @@ int main(int argc, char **argv) {
             lastTime = currentTime;
         }
 
+        glfwPollEvents();
+
         renderer->render(scene.get(), camera.get(), renderTarget.get());
 
         // Swap buffers
         glfwSwapBuffers(window);
-        glfwPollEvents();
 
     }
 
