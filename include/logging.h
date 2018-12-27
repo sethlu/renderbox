@@ -30,7 +30,7 @@ namespace renderbox {
 #define LOG_SEVERITY_ERROR      2
 #define LOG_SEVERITY_FATAL      3
 
-#define LOG_STREAM_VERBOSE      std::clog << __FILE__ << ":" << __LINE__ << " VEERBOSE "
+#define LOG_STREAM_VERBOSE      std::clog << __FILE__ << ":" << __LINE__ << " VERBOSE "
 #define LOG_STREAM_INFO         std::clog << __FILE__ << ":" << __LINE__ << " INFO "
 #define LOG_STREAM_WARNING      std::clog << __FILE__ << ":" << __LINE__ << " WARNING "
 #define LOG_STREAM_ERROR        std::clog << __FILE__ << ":" << __LINE__ << " ERROR "
