@@ -7,6 +7,9 @@
 
 #import <iostream>
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/string_cast.hpp>
+
 
 namespace renderbox {
 
@@ -53,6 +56,19 @@ namespace renderbox {
 #define LOG_ASSERT(condition) LOG_IF(FATAL, !(condition)) << "Assert failed: " #condition ". "
 
 #define NOTREACHED() LOG(ERROR) << "NOTREACHED() hit. "
+
+
+template<glm::length_t L, typename T, glm::qualifier Q = glm::defaultp>
+std::ostream &operator<<(std::ostream &os, glm::vec<L, T, Q> const &vec) {
+    os << glm::to_string(vec);
+    return os;
+}
+
+template<glm::length_t C, glm::length_t R, typename T, glm::qualifier Q>
+std::ostream &operator<<(std::ostream &os, glm::mat<C, R, T, Q> const &mat) {
+    os << glm::to_string(mat);
+    return os;
+}
 
 
 #endif //RENDERBOX_LOGGING_H
