@@ -29,6 +29,11 @@
 
 #include "Scene.h"
 
+#include "KeyframeTrack.h"
+#include "AnimationClip.h"
+#include "AnimationAction.h"
+#include "AnimationMixer.h"
+
 #if defined(RENDERBOX_USE_OPENGL)
 #include "OpenGLRenderer.h"
 #endif

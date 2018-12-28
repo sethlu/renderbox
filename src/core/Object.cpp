@@ -1,8 +1,12 @@
+#include "Object.h"
+
 #include <iostream>
+#include <utility>
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/matrix_access.hpp>
+
 #include "Vector.h"
-#include "Object.h"
 
 
 namespace renderbox {
@@ -12,12 +16,12 @@ namespace renderbox {
     Object::Object() = default;
 
     Object::Object(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material)
-        : geometry(geometry), material(material) {
+            : geometry(std::move(geometry)), material(std::move(material)) {
 
     }
 
     Object::~Object() {
-        // Release parents
+        // Release children's parent reference
         for (const auto &child : children) {
             child->parent = nullptr;
         }
@@ -49,6 +53,12 @@ namespace renderbox {
         child->didTransform();
 
         children.push_back(child);
+    }
+
+    Object *Object::getRoot() {
+        auto root = this;
+        while (root->hasParent()) root = root->parent;
+        return root;
     }
 
     bool Object::hasGeometry() {
@@ -99,16 +109,16 @@ namespace renderbox {
         didUpdate();
     }
 
-    vec3 Object::getTranslation() const {
+    Object::translation_type Object::getTranslation() const {
         return translation;
     }
 
-    void Object::setTranslation(vec3 translation) {
+    void Object::setTranslation(Object::translation_type translation) {
         this->translation = translation;
         didTransform();
     }
 
-    void Object::translate(vec3 delta) {
+    void Object::translate(Object::translation_type delta) {
         translation += delta;
         didTransform();
     }

@@ -23,6 +23,8 @@ namespace renderbox {
     class Object : public VersionTrackedObject {
     public:
 
+        typedef vec3 translation_type;
+
         Object();
 
         Object(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material);
@@ -64,6 +66,8 @@ namespace renderbox {
 
         void addChild(std::shared_ptr<Object> child);
 
+        Object *getRoot();
+
         // Geometry
 
         bool hasGeometry();
@@ -90,11 +94,11 @@ namespace renderbox {
 
         // Translation
 
-        vec3 getTranslation() const;
+        translation_type getTranslation() const;
 
-        void setTranslation(vec3 translation);
+        void setTranslation(translation_type translation);
 
-        void translate(vec3 delta);
+        void translate(translation_type delta);
 
         // Rotation
 

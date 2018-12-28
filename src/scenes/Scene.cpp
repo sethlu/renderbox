@@ -15,4 +15,10 @@ namespace renderbox {
         ambientColor = ambientColor_;
     }
 
+    void Scene::updateAnimations(float t) {
+        for (auto &animationMixer : animationMixers) {
+            animationMixer->update(t);
+        }
+    }
+
 }
