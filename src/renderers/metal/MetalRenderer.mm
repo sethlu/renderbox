@@ -8,7 +8,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Light.h"
-#include "Mesh.h"
+#include "SkinnedMesh.h"
 #include "MetalRenderList.h"
 #include "logging.h"
 
@@ -258,15 +258,11 @@ namespace renderbox {
                     }
 
                     // Bones
-                    if (object->isMesh()) {
-                        if (auto mesh = dynamic_cast<Mesh *>(object)) {
-                            auto numBones = mesh->bones.size();
-                            for (auto i = 0; i < numBones; i++) {
-                                auto boneMatrix = glm::inverse(object->getWorldMatrix()) * mesh->bones[i]->getWorldMatrix() * mesh->bones[i]->getBoneInverse();
-                                memcpy(&uniforms.boneMatrics[i], glm::value_ptr(boneMatrix), sizeof(uniforms.boneMatrics[0]));
-                            }
-                        } else {
-                            NOTREACHED();
+                    if (auto skinnedMesh = dynamic_cast<SkinnedMesh *>(object)) {
+                        auto numBones = skinnedMesh->bones.size();
+                        for (auto i = 0; i < numBones; i++) {
+                            auto boneMatrix = glm::inverse(object->getWorldMatrix()) * skinnedMesh->bones[i]->getWorldMatrix() * skinnedMesh->bones[i]->getBoneInverse();
+                            memcpy(&uniforms.boneMatrics[i], glm::value_ptr(boneMatrix), sizeof(uniforms.boneMatrics[0]));
                         }
                     }
 
