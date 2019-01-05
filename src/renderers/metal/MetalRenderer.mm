@@ -261,7 +261,7 @@ namespace renderbox {
                     if (auto skinnedMesh = dynamic_cast<SkinnedMesh *>(object)) {
                         auto numBones = skinnedMesh->bones.size();
                         for (auto i = 0; i < numBones; i++) {
-                            auto boneMatrix = glm::inverse(object->getWorldMatrix()) * skinnedMesh->bones[i]->getWorldMatrix() * skinnedMesh->bones[i]->getBoneInverse();
+                            auto boneMatrix = skinnedMesh->bones[i]->getWorldMatrix() * skinnedMesh->bones[i]->getBoneInverse();
                             memcpy(&uniforms.boneMatrics[i], glm::value_ptr(boneMatrix), sizeof(uniforms.boneMatrics[0]));
                         }
                     }
