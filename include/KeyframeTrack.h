@@ -43,9 +43,7 @@ namespace renderbox {
         return (1 - w) * values[i - 1] + w * values[i];
     }
 
-    class Vector3KeyframeTrack : public TypedKeyframeTrack<vec3> {
-
-    };
+    typedef TypedKeyframeTrack<vec3> Vector3KeyframeTrack;
 
 }
 
