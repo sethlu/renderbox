@@ -49,35 +49,6 @@ namespace renderbox {
         return buffer == correct;
     }
 
-    union FBXPropertyValue {
-#define PARAM(TYPE, CTYPE) CTYPE TYPE;
-#include "FBXParameterTypes.def"
-        void *ptr; // For array & special types
-    };
-
-    struct FBXProperty {
-        char type;
-        FBXPropertyValue value;
-
-        ~FBXProperty() {
-            // Free non-primitive-typed value
-            switch (type) {
-                default:
-                    if (value.ptr) free(value.ptr);
-                    break;
-#define PARAM(TYPE, CTYPE) case (#TYPE)[0]:
-#include "FBXParameterTypes.def"
-                    break;
-            }
-        };
-    };
-
-    struct FBXNode {
-        std::string name;
-        std::vector<std::unique_ptr<FBXProperty>> properties;
-        std::vector<std::unique_ptr<FBXNode>> subNodes;
-    };
-
     std::unique_ptr<FBXProperty> parseProperty(std::istream &source, version_type version) {
 
         auto property = std::make_unique<FBXProperty>();
@@ -109,7 +80,7 @@ namespace renderbox {
         property->value.ptr = reinterpret_cast<void *>(getArray<char>(source, length)); \
         break; \
     }
-#include "FBXParameterTypes.def"
+#include "../../include/FBXParameterTypes.def"
         }
 
         return property;
@@ -165,9 +136,13 @@ namespace renderbox {
         LOG(INFO) << "FBX binary version: " << version << std::endl;
 
         while (auto node = parseNode(source, version)) {
-            LOG(INFO) << "Parsed node" << std::endl;
+            handleNode(node.get());
         }
 
+    }
+
+    void FBXLoader::handleNode(FBXNode *node) {
+        LOG(VERBOSE) << "Handling node: " << node->name << std::endl;
     }
 
 }
