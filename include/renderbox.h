@@ -57,6 +57,7 @@
 #include "GLSLPreprocessor.h"
 
 #include "OBJLoader.h"
+#include "FBXLoader.h"
 
 
 #endif //RENDERBOX_RENDERBOX_H
