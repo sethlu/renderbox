@@ -2,6 +2,8 @@
 #define RENDERBOX_FBXLOADER_H
 
 
+#include <unordered_map>
+
 #include "Object.h"
 
 
@@ -16,16 +18,21 @@ namespace renderbox {
     struct FBXProperty {
         char type;
         FBXPropertyValue value;
+        size_t size;
+
+        bool isPrimitiveProperty() {
+            switch (type) {
+                default: return false;
+#define PARAM(TYPE, CTYPE) case (#TYPE)[0]:
+#include "FBXParameterTypes.def"
+                return true;
+            }
+        }
 
         ~FBXProperty() {
             // Free non-primitive-typed value
-            switch (type) {
-                default:
+            if (!isPrimitiveProperty()) {
                 if (value.ptr) free(value.ptr);
-                break;
-#define PARAM(TYPE, CTYPE) case (#TYPE)[0]:
-#include "FBXParameterTypes.def"
-                break;
             }
         };
     };
@@ -34,6 +41,11 @@ namespace renderbox {
         std::string name;
         std::vector<std::unique_ptr<FBXProperty>> properties;
         std::vector<std::unique_ptr<FBXNode>> subNodes;
+    };
+
+    struct FBXDocument {
+        std::vector<std::unique_ptr<FBXNode>> nodes;
+        std::unordered_map<std::string, FBXNode *> namedNodes;
     };
 
     class FBXLoader {
@@ -49,7 +61,7 @@ namespace renderbox {
 
         void enterFBXSource(std::istream &source);
 
-        void handleNode(FBXNode *node);
+        void parseDocument(FBXDocument *doc);
 
     };
 

@@ -6,6 +6,8 @@
 #include <fstream>
 #include <vector>
 
+#include <zlib.h>
+
 #include "logging.h"
 
 
@@ -43,13 +45,39 @@ namespace renderbox {
         return reinterpret_cast<V *>(array);
     }
 
+    template<typename V>
+    V *getCompressedArray(std::istream &source, size_t length, size_t compressedLength) {
+        // Input
+        std::vector<char> compressed(compressedLength);
+        source.read(compressed.data(), compressedLength);
+        // Output
+        size_t arrayByteSize = sizeof(V) * length;
+        char *array = reinterpret_cast<char *>(malloc(arrayByteSize));
+
+        z_stream infstream;
+        infstream.zalloc = Z_NULL;
+        infstream.zfree = Z_NULL;
+        infstream.opaque = Z_NULL;
+        infstream.avail_in = static_cast<uint>(compressedLength);
+        infstream.next_in = reinterpret_cast<Bytef *>(compressed.data());
+        infstream.avail_out = static_cast<uint>(arrayByteSize);
+        infstream.next_out = reinterpret_cast<Bytef *>(array);
+
+        // Inflate
+        inflateInit(&infstream);
+        inflate(&infstream, Z_NO_FLUSH);
+        inflateEnd(&infstream);
+
+        return reinterpret_cast<V *>(array);
+    }
+
     bool isFBXFormatBinary(std::istream &source) {
         std::string const correct = "Kaydara FBX Binary  ";
         std::string buffer = getString(source, correct.size());
         return buffer == correct;
     }
 
-    std::unique_ptr<FBXProperty> parseProperty(std::istream &source, version_type version) {
+    std::unique_ptr<FBXProperty> readProperty(std::istream &source, version_type version) {
 
         auto property = std::make_unique<FBXProperty>();
         property->type = get<char>(source);
@@ -67,17 +95,18 @@ namespace renderbox {
         auto encoding = get<uint32_t>(source); \
         auto compressedLength = get<uint32_t>(source); \
         if (encoding == 1) { \
-            LOG(WARNING) << "Encoding not supported" << std::endl; \
-            getArray<char>(source, compressedLength); \
+            property->value.ptr = reinterpret_cast<void *>(getCompressedArray<CTYPE>(source, arrayLength, compressedLength)); \
         } else { \
             property->value.ptr = reinterpret_cast<void *>(getArray<CTYPE>(source, arrayLength)); \
         } \
+        property->size = arrayLength; \
         break; \
     }
 #define SPECIAL_PARAM(TYPE) \
     case (#TYPE)[0]: { \
         auto length = get<uint32_t>(source); \
         property->value.ptr = reinterpret_cast<void *>(getArray<char>(source, length)); \
+        property->size = length; \
         break; \
     }
 #include "../../include/FBXParameterTypes.def"
@@ -87,7 +116,7 @@ namespace renderbox {
 
     }
 
-    std::unique_ptr<FBXNode> parseNode(std::istream &source, version_type version) {
+    std::unique_ptr<FBXNode> readNode(std::istream &source, version_type version) {
 
         // Get end offset
         // Distance from the beginning of the file to the end of the node record
@@ -113,12 +142,13 @@ namespace renderbox {
         node->name = name;
 
         for (auto i = 0; i < numProperties; i++) {
-            node->properties.emplace_back(parseProperty(source, version));
+            node->properties.emplace_back(readProperty(source, version));
         }
 
         while (source.tellg() < endOffset) {
-            auto subNode = parseNode(source, version);
-            node->subNodes.emplace_back(std::move(subNode));
+            if (auto subNode = readNode(source, version)) {
+                node->subNodes.emplace_back(std::move(subNode));
+            }
         }
 
         return node;
@@ -135,14 +165,59 @@ namespace renderbox {
         auto version = get<version_type>(source.seekg(23));
         LOG(INFO) << "FBX binary version: " << version << std::endl;
 
-        while (auto node = parseNode(source, version)) {
-            handleNode(node.get());
+        FBXDocument doc;
+
+        while (auto node = readNode(source, version)) {
+            if (!node->name.empty()) {
+                doc.namedNodes.insert(std::make_pair(node->name, node.get()));
+            }
+            doc.nodes.emplace_back(std::move(node));
         }
+
+        parseDocument(&doc);
 
     }
 
-    void FBXLoader::handleNode(FBXNode *node) {
-        LOG(VERBOSE) << "Handling node: " << node->name << std::endl;
+    void debugDisplayProperty(FBXProperty const *property) {
+        std::cout << " property[" << property->type << "]='";
+
+        switch (property->type) {
+            default: break;
+#define PARAM(TYPE, CTYPE) \
+    case (#TYPE)[0]: std::cout << property->value.TYPE; break;
+#define ARRAY_PARAM(TYPE, CTYPE) \
+    case (#TYPE)[0]: \
+        std::cout << property->size << "["; \
+        for (int i = 0, n = property->size <= 100 ? property->size : 100; i < n; i++) \
+            std::cout << reinterpret_cast<CTYPE *>(property->value.ptr)[i] << ", "; \
+        break;
+#include "../../include/FBXParameterTypes.def"
+            case 'S': for (auto i = 0; i < property->size; i++) std::cout << reinterpret_cast<char *>(property->value.ptr)[i]; break;
+        }
+
+        std::cout << "'";
+    }
+
+    void debugDisplayNode(FBXNode const *node, std::string prefix = "") {
+        std::cout << prefix << "<" << node->name;
+        for (auto &property : node->properties) {
+            debugDisplayProperty(property.get());
+        }
+        if (node->subNodes.size() > 0) {
+            std::cout << ">" << std::endl;
+            for (auto &subNode : node->subNodes) {
+                debugDisplayNode(subNode.get(), prefix + "  ");
+            }
+            std::cout << prefix << "</" << node->name << ">" << std::endl;
+        } else {
+            std::cout << " />" << std::endl;
+        }
+    }
+
+    void FBXLoader::parseDocument(FBXDocument *doc) {
+        for (auto const &node : doc->nodes) {
+            debugDisplayNode(node.get());
+        }
     }
 
 }
