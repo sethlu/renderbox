@@ -20,6 +20,13 @@ namespace renderbox {
         FBXPropertyValue value;
         size_t size;
 
+        ~FBXProperty() {
+            // Free non-primitive-typed value
+            if (!isPrimitiveProperty()) {
+                if (value.ptr) free(value.ptr);
+            }
+        }
+
         bool isPrimitiveProperty() {
             switch (type) {
                 default: return false;
@@ -29,12 +36,7 @@ namespace renderbox {
             }
         }
 
-        ~FBXProperty() {
-            // Free non-primitive-typed value
-            if (!isPrimitiveProperty()) {
-                if (value.ptr) free(value.ptr);
-            }
-        };
+
     };
 
     struct FBXNode {
@@ -44,8 +46,16 @@ namespace renderbox {
     };
 
     struct FBXDocument {
-        std::vector<std::unique_ptr<FBXNode>> nodes;
-        std::unordered_map<std::string, FBXNode *> namedNodes;
+        typedef uint32_t version_type;
+        typedef int64_t node_id_type;
+
+        version_type version;
+        std::vector<std::unique_ptr<FBXNode>> subNodes;
+
+        // Assistant instance variables used in parsing
+        std::unordered_map<std::string, FBXNode *> namedSubNodes;
+        std::unordered_map<node_id_type, FBXNode *> nodesById;
+        std::unordered_map<FBXNode *, std::pair<std::vector<std::pair<std::string, FBXNode *>>, std::vector<std::pair<std::string, FBXNode *>>>> connections;
     };
 
     class FBXLoader {
@@ -61,7 +71,7 @@ namespace renderbox {
 
         void enterFBXSource(std::istream &source);
 
-        void parseDocument(FBXDocument *doc);
+        void parseDocument(FBXDocument &doc);
 
     };
 

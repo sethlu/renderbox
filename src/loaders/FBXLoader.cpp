@@ -23,8 +23,6 @@ namespace renderbox {
         }
     }
 
-    typedef uint32_t version_type;
-
     template<typename V>
     V get(std::istream &source) {
         V value;
@@ -77,8 +75,7 @@ namespace renderbox {
         return buffer == correct;
     }
 
-    std::unique_ptr<FBXProperty> readProperty(std::istream &source, version_type version) {
-
+    std::unique_ptr<FBXProperty> readProperty(std::istream &source, FBXDocument &doc) {
         auto property = std::make_unique<FBXProperty>();
         property->type = get<char>(source);
 
@@ -116,7 +113,8 @@ namespace renderbox {
 
     }
 
-    std::unique_ptr<FBXNode> readNode(std::istream &source, version_type version) {
+    std::unique_ptr<FBXNode> readNode(std::istream &source, FBXDocument &doc) {
+        auto const &version = doc.version;
 
         // Get end offset
         // Distance from the beginning of the file to the end of the node record
@@ -142,17 +140,39 @@ namespace renderbox {
         node->name = name;
 
         for (auto i = 0; i < numProperties; i++) {
-            node->properties.emplace_back(readProperty(source, version));
+            node->properties.emplace_back(readProperty(source, doc));
         }
 
         while (source.tellg() < endOffset) {
-            if (auto subNode = readNode(source, version)) {
+            if (auto subNode = readNode(source, doc)) {
                 node->subNodes.emplace_back(std::move(subNode));
             }
         }
 
+        // Record node by id
+        if (node->properties.size() >= 1 && node->properties[0]->type == 'L') {
+            doc.nodesById.insert(std::make_pair(node->properties[0]->value.L, node.get()));
+        }
+
         return node;
 
+    }
+
+    FBXDocument readBinaryDocument(std::istream &source) {
+        FBXDocument doc;
+
+        // Version is stored in little endian byte order
+        doc.version = get<FBXDocument::version_type>(source.seekg(23));
+        LOG(INFO) << "FBX binary version: " << doc.version << std::endl;
+
+        while (auto node = readNode(source, doc)) {
+            if (!node->name.empty()) {
+                doc.namedSubNodes.insert(std::make_pair(node->name, node.get()));
+            }
+            doc.subNodes.emplace_back(std::move(node));
+        }
+
+        return doc;
     }
 
     void FBXLoader::enterFBXSource(std::istream &source) {
@@ -161,20 +181,8 @@ namespace renderbox {
             exit(EXIT_FAILURE);
         }
 
-        // Version is stored in little endian byte order
-        auto version = get<version_type>(source.seekg(23));
-        LOG(INFO) << "FBX binary version: " << version << std::endl;
-
-        FBXDocument doc;
-
-        while (auto node = readNode(source, version)) {
-            if (!node->name.empty()) {
-                doc.namedNodes.insert(std::make_pair(node->name, node.get()));
-            }
-            doc.nodes.emplace_back(std::move(node));
-        }
-
-        parseDocument(&doc);
+        FBXDocument doc = readBinaryDocument(source);
+        parseDocument(doc);
 
     }
 
@@ -198,15 +206,19 @@ namespace renderbox {
         std::cout << "'";
     }
 
-    void debugDisplayNode(FBXNode const *node, std::string prefix = "") {
+    void debugDisplayNode(FBXNode const *node, bool recursive = false, std::string prefix = "") {
         std::cout << prefix << "<" << node->name;
         for (auto &property : node->properties) {
             debugDisplayProperty(property.get());
         }
         if (node->subNodes.size() > 0) {
             std::cout << ">" << std::endl;
-            for (auto &subNode : node->subNodes) {
-                debugDisplayNode(subNode.get(), prefix + "  ");
+            if (!recursive) {
+                for (auto &subNode : node->subNodes) {
+                    debugDisplayNode(subNode.get(), recursive, prefix + "  ");
+                }
+            } else {
+                std::cout << prefix << "..." << std::endl;
             }
             std::cout << prefix << "</" << node->name << ">" << std::endl;
         } else {
@@ -214,10 +226,79 @@ namespace renderbox {
         }
     }
 
-    void FBXLoader::parseDocument(FBXDocument *doc) {
-        for (auto const &node : doc->nodes) {
-            debugDisplayNode(node.get());
+    void parseConnections(FBXDocument &doc) {
+        auto it = doc.namedSubNodes.find("Connections");
+        if (it != doc.namedSubNodes.end()) {
+            auto const &connectionsNode = it->second;
+
+            for (auto const &connectionNode : connectionsNode->subNodes) {
+
+                // Verify connection format
+
+                auto numProperties = connectionNode->properties.size();
+
+                auto safeCheck =
+                    numProperties >= 3 &&
+                    connectionNode->properties[1]->type == 'L' &&
+                    connectionNode->properties[2]->type == 'L';
+                if (!safeCheck) {
+                    LOG(WARNING) << "Bad connection format" << std::endl;
+                    continue;
+                }
+
+                auto fromId = connectionNode->properties[1]->value.L;
+                auto toId = connectionNode->properties[2]->value.L;
+                std::string relationship;
+
+                if (connectionNode->properties.size() >= 4) {
+                    safeCheck = connectionNode->properties[3]->type == 'S';
+                    if (!safeCheck) {
+                        LOG(WARNING) << "Bad connection format" << std::endl;
+                        continue;
+                    }
+
+                    relationship = std::string(reinterpret_cast<char *>(connectionNode->properties[3]->value.ptr), connectionNode->properties[3]->size);
+                }
+
+                // Verify connection nodes
+
+                auto fromNodeIt = doc.nodesById.find(fromId);
+                auto toNodeIt = doc.nodesById.find(toId);
+
+                safeCheck =
+                    fromNodeIt != doc.nodesById.end() &&
+                    toNodeIt != doc.nodesById.end();
+                if (!safeCheck) {
+                    LOG(WARNING) << "Bad connection format" << std::endl;
+                    continue;
+                }
+
+                // Record connection
+
+                auto fromNode = fromNodeIt->second;
+                auto toNode = toNodeIt->second;
+
+                auto fromIt = doc.connections.find(fromNode);
+                if (fromIt == doc.connections.end()) {
+                    doc.connections.insert(std::pair<FBXNode *, std::pair<std::vector<std::pair<std::string, FBXNode *>>, std::vector<std::pair<std::string, FBXNode *>>>>(fromNode, {{}, {{relationship, toNode}}}));
+                } else {
+                    fromIt->second.second.emplace_back(std::make_pair(relationship, toNode));
+                }
+
+                auto toIt = doc.connections.find(toNode);
+                if (toIt == doc.connections.end()) {
+                    doc.connections.insert(std::pair<FBXNode *, std::pair<std::vector<std::pair<std::string, FBXNode *>>, std::vector<std::pair<std::string, FBXNode *>>>>(toNode, {{{relationship, fromNode}}, {}}));
+                } else {
+                    toIt->second.second.emplace_back(std::make_pair(relationship, fromNode));
+                }
+
+            }
+
         }
+    }
+
+    void FBXLoader::parseDocument(FBXDocument &doc) {
+        parseConnections(doc);
     }
 
 }
