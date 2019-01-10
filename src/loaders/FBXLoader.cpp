@@ -77,10 +77,10 @@ break;
 
             auto relationshipsIt = doc.connections.find(node);
             if (relationshipsIt != doc.connections.end()) {
-                auto const &parents = relationshipsIt->second.first;
-                if (!parents.empty()) {
+                auto const &children = relationshipsIt->second.second;
+                if (!children.empty()) {
                     std::cout << std::endl;
-                    for (auto const &relationship : parents) {
+                    for (auto const &relationship : children) {
                         debugPrintConnections(doc, relationship.second, prefix + "  ");
                     }
                     std::cout << prefix;
@@ -327,16 +327,16 @@ break;
 
                 auto fromIt = doc.connections.find(fromNode);
                 if (fromIt == doc.connections.end()) {
-                    doc.connections.insert(std::pair<FBXNode *, std::pair<std::vector<std::pair<std::string, FBXNode *>>, std::vector<std::pair<std::string, FBXNode *>>>>(fromNode, {{}, {{relationship, toNode}}}));
+                    doc.connections.insert(std::pair<FBXNode *, std::pair<std::vector<std::pair<std::string, FBXNode *>>, std::vector<std::pair<std::string, FBXNode *>>>>(fromNode, {{{relationship, toNode}}, {}}));
                 } else {
-                    fromIt->second.second.emplace_back(std::make_pair(relationship, toNode));
+                    fromIt->second.first.emplace_back(std::make_pair(relationship, toNode));
                 }
 
                 auto toIt = doc.connections.find(toNode);
                 if (toIt == doc.connections.end()) {
-                    doc.connections.insert(std::pair<FBXNode *, std::pair<std::vector<std::pair<std::string, FBXNode *>>, std::vector<std::pair<std::string, FBXNode *>>>>(toNode, {{{relationship, fromNode}}, {}}));
+                    doc.connections.insert(std::pair<FBXNode *, std::pair<std::vector<std::pair<std::string, FBXNode *>>, std::vector<std::pair<std::string, FBXNode *>>>>(toNode, {{}, {{relationship, fromNode}}}));
                 } else {
-                    toIt->second.first.emplace_back(std::make_pair(relationship, fromNode));
+                    toIt->second.second.emplace_back(std::make_pair(relationship, fromNode));
                 }
 
             }
