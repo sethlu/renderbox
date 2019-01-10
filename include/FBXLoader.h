@@ -55,7 +55,7 @@ namespace renderbox {
         // Assistant instance variables used in parsing
         std::unordered_map<std::string, FBXNode *> namedSubNodes;
         std::unordered_map<node_id_type, FBXNode *> nodesById;
-        std::unordered_map<FBXNode *, std::pair<std::vector<std::pair<std::string, FBXNode *>>, std::vector<std::pair<std::string, FBXNode *>>>> connections;
+        std::unordered_map<FBXNode const *, std::pair<std::vector<std::pair<std::string, FBXNode *>>, std::vector<std::pair<std::string, FBXNode *>>>> connections;
     };
 
     class FBXLoader {

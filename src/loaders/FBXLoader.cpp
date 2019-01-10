@@ -13,6 +13,93 @@
 
 namespace renderbox {
 
+    namespace {
+
+        void debugPrintProperty(FBXProperty const *property) {
+            std::cout << " property[" << property->type << "]='";
+
+            switch (property->type) {
+                default: break;
+#define PARAM(TYPE, CTYPE) \
+case (#TYPE)[0]: std::cout << property->value.TYPE; break;
+#define ARRAY_PARAM(TYPE, CTYPE) \
+case (#TYPE)[0]: \
+std::cout << property->size << "["; \
+for (int i = 0, n = property->size <= 100 ? property->size : 100; i < n; i++) \
+std::cout << reinterpret_cast<CTYPE *>(property->value.ptr)[i] << ", "; \
+break;
+#include "../../include/FBXParameterTypes.def"
+                case 'S': for (auto i = 0; i < property->size; i++) std::cout << reinterpret_cast<char *>(property->value.ptr)[i]; break;
+            }
+
+            std::cout << "'";
+        }
+
+        void debugPrintNodeBegin(FBXNode const *node, std::string prefix = "") {
+            std::cout << prefix << "<" << node->name;
+            for (auto &property : node->properties) {
+                debugPrintProperty(property.get());
+            }
+            std::cout << ">";
+        }
+
+        void debugPrintNodeEnd(FBXNode const *node, std::string prefix = "") {
+            std::cout << prefix << "</" << node->name << ">";
+        }
+
+        void debugPrintNode(FBXNode const *node, bool recursive = false, std::string prefix = "") {
+            debugPrintNodeBegin(node, prefix);
+
+            if (node->subNodes.size() > 0) {
+                std::cout << std::endl;
+                if (recursive) {
+                    for (auto &subNode : node->subNodes) {
+                        debugPrintNode(subNode.get(), recursive, prefix + "  ");
+                    }
+                } else {
+                    std::cout << prefix << "..." << std::endl;
+                }
+                std::cout << prefix;
+            }
+
+            debugPrintNodeEnd(node);
+            std::cout << std::endl;
+        }
+
+        void debugPrintDocument(FBXDocument const & doc) {
+            for (auto const &node : doc.subNodes) {
+                debugPrintNode(node.get(), true);
+            }
+        }
+
+        void debugPrintConnections(FBXDocument const &doc, FBXNode const *node, std::string prefix = "") {
+            debugPrintNodeBegin(node, prefix);
+
+            auto relationshipsIt = doc.connections.find(node);
+            if (relationshipsIt != doc.connections.end()) {
+                auto const &parents = relationshipsIt->second.first;
+                if (!parents.empty()) {
+                    std::cout << std::endl;
+                    for (auto const &relationship : parents) {
+                        debugPrintConnections(doc, relationship.second, prefix + "  ");
+                    }
+                    std::cout << prefix;
+                }
+            }
+
+            debugPrintNodeEnd(node);
+            std::cout << std::endl;
+        }
+
+        void debugPrintConnections(FBXDocument const &doc, FBXDocument::node_id_type id = 0, std::string prefix = "") {
+            auto it = doc.nodesById.find(id);
+            if (it == doc.nodesById.end()) return;
+
+            debugPrintConnections(doc, it->second, prefix);
+        }
+
+    }
+
     FBXLoader::FBXLoader(std::shared_ptr<Object> destination)
     : destination(std::move(destination)) {}
 
@@ -182,48 +269,8 @@ namespace renderbox {
         }
 
         FBXDocument doc = readBinaryDocument(source);
+//        debugPrintDocument(doc);
         parseDocument(doc);
-
-    }
-
-    void debugDisplayProperty(FBXProperty const *property) {
-        std::cout << " property[" << property->type << "]='";
-
-        switch (property->type) {
-            default: break;
-#define PARAM(TYPE, CTYPE) \
-    case (#TYPE)[0]: std::cout << property->value.TYPE; break;
-#define ARRAY_PARAM(TYPE, CTYPE) \
-    case (#TYPE)[0]: \
-        std::cout << property->size << "["; \
-        for (int i = 0, n = property->size <= 100 ? property->size : 100; i < n; i++) \
-            std::cout << reinterpret_cast<CTYPE *>(property->value.ptr)[i] << ", "; \
-        break;
-#include "../../include/FBXParameterTypes.def"
-            case 'S': for (auto i = 0; i < property->size; i++) std::cout << reinterpret_cast<char *>(property->value.ptr)[i]; break;
-        }
-
-        std::cout << "'";
-    }
-
-    void debugDisplayNode(FBXNode const *node, bool recursive = false, std::string prefix = "") {
-        std::cout << prefix << "<" << node->name;
-        for (auto &property : node->properties) {
-            debugDisplayProperty(property.get());
-        }
-        if (node->subNodes.size() > 0) {
-            std::cout << ">" << std::endl;
-            if (!recursive) {
-                for (auto &subNode : node->subNodes) {
-                    debugDisplayNode(subNode.get(), recursive, prefix + "  ");
-                }
-            } else {
-                std::cout << prefix << "..." << std::endl;
-            }
-            std::cout << prefix << "</" << node->name << ">" << std::endl;
-        } else {
-            std::cout << " />" << std::endl;
-        }
     }
 
     void parseConnections(FBXDocument &doc) {
@@ -299,6 +346,7 @@ namespace renderbox {
 
     void FBXLoader::parseDocument(FBXDocument &doc) {
         parseConnections(doc);
+//        debugPrintConnections(doc);
     }
 
 }
