@@ -289,7 +289,7 @@ namespace renderbox {
                 if (toIt == doc.connections.end()) {
                     doc.connections.insert(std::pair<FBXNode *, std::pair<std::vector<std::pair<std::string, FBXNode *>>, std::vector<std::pair<std::string, FBXNode *>>>>(toNode, {{{relationship, fromNode}}, {}}));
                 } else {
-                    toIt->second.second.emplace_back(std::make_pair(relationship, fromNode));
+                    toIt->second.first.emplace_back(std::make_pair(relationship, fromNode));
                 }
 
             }
