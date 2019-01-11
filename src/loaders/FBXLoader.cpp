@@ -81,6 +81,9 @@ break;
                 if (!children.empty()) {
                     std::cout << std::endl;
                     for (auto const &relationship : children) {
+                        if (!relationship.first.empty()) {
+                            std::cout << prefix << "  (" + relationship.first + ")" << std::endl;
+                        }
                         debugPrintConnections(doc, relationship.second, prefix + "  ");
                     }
                     std::cout << prefix;
@@ -271,13 +274,19 @@ break;
         FBXDocument doc = readBinaryDocument(source);
 //        debugPrintDocument(doc);
         parseDocument(doc);
+
+        for (auto &object : doc.objects) {
+            destination->addChild(object.second);
+        }
     }
 
-    void parseConnections(FBXDocument &doc) {
-        auto it = doc.namedSubNodes.find("Connections");
-        if (it != doc.namedSubNodes.end()) {
-            auto const &connectionsNode = it->second;
+    namespace {
 
+        void parseConnections(FBXDocument &doc) {
+            auto it = doc.namedSubNodes.find("Connections");
+            if (it == doc.namedSubNodes.end()) return;
+
+            auto const &connectionsNode = it->second;
             for (auto const &connectionNode : connectionsNode->subNodes) {
 
                 // Verify connection format
@@ -340,13 +349,148 @@ break;
                 }
 
             }
-
         }
+
+        std::shared_ptr<Geometry> parseMeshGeometry(FBXDocument &doc, FBXNode const *node) {
+            auto geometry = std::make_shared<Geometry>();
+
+            for (auto const &subNode : node->subNodes) {
+                if (subNode->name == "Vertices") {
+                    auto safeCheck =
+                        subNode->properties.size() >= 1 &&
+                        subNode->properties[0]->type == 'd';
+                    if (!safeCheck) {
+                        LOG(WARNING) << "Bad vertices format" << std::endl;
+                        continue;
+                    }
+
+                    // TODO: Make this more efficient
+                    auto size = subNode->properties[0]->size / 3;
+                    auto array = reinterpret_cast<double_t *>(subNode->properties[0]->value.ptr);
+                    geometry->vertices.resize(size);
+                    for (auto i = 0; i < size; i += 1) {
+                        geometry->vertices[i] = vec3(array[3 * i],
+                                                     array[3 * i + 1],
+                                                     array[3 * i + 2]);
+                    }
+
+                } else if (subNode->name == "PolygonVertexIndex") {
+                    auto safeCheck =
+                        subNode->properties.size() >= 1 &&
+                        subNode->properties[0]->type == 'i';
+                    if (!safeCheck) {
+                        LOG(WARNING) << "Bad polygon vertex index format" << std::endl;
+                        continue;
+                    }
+
+                    // TODO: Make this more efficient
+                    std::vector<uvec3::value_type> indices(3);
+                    auto array = reinterpret_cast<int32_t *>(subNode->properties[0]->value.ptr);
+                    geometry->faces.resize(subNode->properties[0]->size / 4);
+                    for (size_t i = 0, n = subNode->properties[0]->size; i < n; i++) {
+                        auto endOfFace = array[i] < 0;
+                        auto index = endOfFace ? array[i] ^ -1 : array[i];
+                        indices.emplace_back(index);
+
+                        if (endOfFace) {
+                            if (indices.size() == 3) {
+                                geometry->faces.emplace_back(indices[0], indices[1], indices[2]);
+                            } else if (indices.size() == 4) {
+                                geometry->faces.emplace_back(indices[0], indices[1], indices[2]);
+                                geometry->faces.emplace_back(indices[2], indices[3], indices[0]);
+                            } else {
+                                LOG(WARNING) << "Only tri & quad faces are supported: " << indices.size() << std::endl;
+                            }
+                            indices.clear();
+                        }
+                    }
+                }
+            }
+
+            if (geometry->normals.empty()) geometry->regenerateNormals();
+
+            return geometry;
+        }
+
+        void parseGeometries(FBXDocument &doc) {
+            auto it = doc.namedSubNodes.find("Objects");
+            if (it == doc.namedSubNodes.end()) return;
+
+            auto const &objectsNode = it->second;
+            for (auto const &objectNode : objectsNode->subNodes) {
+                if (objectNode->name != "Geometry") continue;
+
+                auto safeCheck =
+                objectNode->properties.size() >= 3 &&
+                objectNode->properties[2]->type == 'S';
+                if (!safeCheck) {
+                    LOG(WARNING) << "Bad geometry format" << std::endl;
+                    continue;
+                }
+
+                auto type = std::string(reinterpret_cast<char *>(objectNode->properties[2]->value.ptr), objectNode->properties[2]->size);
+
+                if (type == "Mesh") {
+                    auto geometry = parseMeshGeometry(doc, objectNode.get());
+                    doc.geometries.insert(std::make_pair(objectNode.get(), geometry));
+                }
+            }
+        }
+
+        std::shared_ptr<Object> parseMeshModel(FBXDocument &doc, FBXNode const *node) {
+            std::shared_ptr<Geometry> geometry;
+
+            auto relationships = doc.connections.at(node);
+            for (auto const &child : relationships.second) {
+                if (child.second->name == "Geometry") {
+                    auto it = doc.geometries.find(child.second);
+                    if (it == doc.geometries.end()) {
+                        LOG(WARNING) << "Referenced geometry in mesh model cannot be found" << std::endl;
+                        continue;
+                    }
+                    geometry = it->second;
+                }
+            }
+
+            if (!geometry) {
+                LOG(WARNING) << "No geometry in mesh model" << std::endl;
+            }
+
+            return std::make_shared<Object>(geometry);
+        }
+
+        void parseModels(FBXDocument &doc) {
+            auto it = doc.namedSubNodes.find("Objects");
+            if (it == doc.namedSubNodes.end()) return;
+
+            auto const &objectsNode = it->second;
+            for (auto const &objectNode : objectsNode->subNodes) {
+                if (objectNode->name != "Model") continue;
+
+                auto safeCheck =
+                    objectNode->properties.size() >= 3 &&
+                    objectNode->properties[2]->type == 'S';
+                if (!safeCheck) {
+                    LOG(WARNING) << "Bad model format" << std::endl;
+                    continue;
+                }
+
+                auto type = std::string(reinterpret_cast<char *>(objectNode->properties[2]->value.ptr), objectNode->properties[2]->size);
+
+                if (type == "Mesh") {
+                    auto object = parseMeshModel(doc, objectNode.get());
+                    doc.objects.insert(std::make_pair(objectNode.get(), object));
+                }
+            }
+        }
+
     }
 
     void FBXLoader::parseDocument(FBXDocument &doc) {
         parseConnections(doc);
 //        debugPrintConnections(doc);
+        parseGeometries(doc);
+        parseModels(doc);
     }
 
 }

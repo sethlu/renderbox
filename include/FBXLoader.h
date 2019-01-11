@@ -18,7 +18,7 @@ namespace renderbox {
     struct FBXProperty {
         char type;
         FBXPropertyValue value;
-        size_t size;
+        size_t size; // Length of array of specified type
 
         ~FBXProperty() {
             // Free non-primitive-typed value
@@ -56,6 +56,10 @@ namespace renderbox {
         std::unordered_map<std::string, FBXNode *> namedSubNodes;
         std::unordered_map<node_id_type, FBXNode *> nodesById;
         std::unordered_map<FBXNode const *, std::pair<std::vector<std::pair<std::string, FBXNode *>>, std::vector<std::pair<std::string, FBXNode *>>>> connections;
+
+        // Results from parsing
+        std::unordered_map<FBXNode const *, std::shared_ptr<Geometry>> geometries;
+        std::unordered_map<FBXNode const *, std::shared_ptr<Object>> objects;
     };
 
     class FBXLoader {
