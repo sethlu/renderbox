@@ -25,9 +25,7 @@ namespace renderbox {
 
         typedef vec3 translation_type;
 
-        Object();
-
-        Object(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material);
+        explicit Object(std::shared_ptr<Geometry> geometry = nullptr, std::shared_ptr<Material> material = nullptr);
 
         virtual ~Object();
 

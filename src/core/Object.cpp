@@ -13,8 +13,6 @@ namespace renderbox {
 
     int Object::count = 0;
 
-    Object::Object() = default;
-
     Object::Object(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material)
             : geometry(std::move(geometry)), material(std::move(material)) {
 
