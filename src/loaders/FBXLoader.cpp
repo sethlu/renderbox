@@ -8,6 +8,8 @@
 
 #include <zlib.h>
 
+#include "Mesh.h"
+#include "Bone.h"
 #include "MeshLambertMaterial.h"
 #include "logging.h"
 
@@ -275,10 +277,6 @@ break;
         FBXDocument doc = readBinaryDocument(source);
 //        debugPrintDocument(doc);
         parseDocument(doc);
-
-        for (auto &object : doc.objects) {
-            destination->addChild(object.second);
-        }
     }
 
     namespace {
@@ -522,58 +520,107 @@ break;
             }
         }
 
-        std::shared_ptr<Object> parseMeshModel(FBXDocument &doc, FBXNode const *node) {
-            std::shared_ptr<Geometry> geometry;
-            std::shared_ptr<Material> material;
-
+        void parseModel(FBXDocument &doc, std::shared_ptr<Object> &dest, FBXNode const *node) {
             auto relationships = doc.connections.at(node);
             for (auto const &relationship : relationships.second) {
-                if (relationship.second->name == "Geometry") {
-                    auto it = doc.geometries.find(relationship.second);
-                    if (it == doc.geometries.end()) {
-                        LOG(WARNING) << "Referenced geometry in mesh model cannot be found" << std::endl;
-                        continue;
-                    }
-                    geometry = it->second;
-                } else if (relationship.second->name == "Material") {
-                    auto it = doc.materials.find(relationship.second);
-                    if (it == doc.materials.end()) {
-                        LOG(WARNING) << "Referenced material in mesh model cannot be found" << std::endl;
-                        continue;
-                    }
-                    material = it->second;
-                }
-            }
+                auto &&childNode = relationship.second;
 
-            if (!geometry) {
-                LOG(WARNING) << "No geometry in mesh model" << std::endl;
-            }
-
-            return std::make_shared<Object>(geometry, material);
-        }
-
-        void parseModels(FBXDocument &doc) {
-            auto it = doc.namedSubNodes.find("Objects");
-            if (it == doc.namedSubNodes.end()) return;
-
-            auto const &objectsNode = it->second;
-            for (auto const &objectNode : objectsNode->subNodes) {
-                if (objectNode->name != "Model") continue;
+                if (childNode->name != "Model") continue;
 
                 auto safeCheck =
-                    objectNode->properties.size() >= 3 &&
-                    objectNode->properties[2]->type == 'S';
+                    childNode->properties.size() >= 3 &&
+                    childNode->properties[2]->type == 'S';
                 if (!safeCheck) {
                     LOG(WARNING) << "Bad model format" << std::endl;
                     continue;
                 }
 
-                auto &&type = objectNode->properties[2]->toString();
+                std::shared_ptr<Object> object;
+
+                auto &&type = childNode->properties[2]->toString();
                 if (type == "Mesh") {
-                    auto &&object = parseMeshModel(doc, objectNode.get());
-                    doc.objects.insert(std::make_pair(objectNode.get(), object));
+                    object = std::make_shared<Mesh>();
+                } else if (type == "LimbNode") {
+                    object = std::make_shared<Bone>();
+                } else {
+                    LOG(WARNING) << "Unhandled model type" << std::endl;
+                    continue;
                 }
+
+                for (auto const &subNode : childNode->subNodes) {
+                    if (subNode->name == "Properties70") {
+                        for (auto const &propertyNode : subNode->subNodes) {
+                            if (propertyNode->name != "P") {
+                                LOG(WARNING) << "Unexpected node in Properties70, ignored" << std::endl;
+                                continue;
+                            }
+
+                            auto safeCheck =
+                                propertyNode->properties.size() >= 2 &&
+                                propertyNode->properties[0]->type == 'S' &&
+                                propertyNode->properties[1]->type == 'S';
+                            if (!safeCheck) {
+                                LOG(WARNING) << "Bad property node format" << std::endl;
+                                continue;
+                            }
+
+                            auto &&propertyName = propertyNode->properties[0]->toString();
+                            auto &&propertyType = propertyNode->properties[1]->toString();
+                            if (propertyType == "Lcl Translation") {
+                                safeCheck =
+                                    propertyNode->properties.size() >= 7 &&
+                                    propertyNode->properties[4]->type == 'D' &&
+                                    propertyNode->properties[5]->type == 'D' &&
+                                    propertyNode->properties[6]->type == 'D';
+                                if (!safeCheck) {
+                                    LOG(WARNING) << "Bad color property node format" << std::endl;
+                                    continue;
+                                }
+
+                                auto &&value = vec3(propertyNode->properties[4]->value.D,
+                                                    propertyNode->properties[5]->value.D,
+                                                    propertyNode->properties[6]->value.D);
+                                if (propertyName == "Lcl Translation") {
+                                    object->setTranslation(value);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                auto relationships = doc.connections.at(childNode);
+                for (auto const &relationship : relationships.second) {
+                    auto &&childNode = relationship.second;
+
+                    if (childNode->name == "Geometry") {
+                        auto it = doc.geometries.find(childNode);
+                        if (it == doc.geometries.end()) {
+                            LOG(WARNING) << "Referenced geometry in mesh model cannot be found" << std::endl;
+                            continue;
+                        }
+                        object->setGeometry(it->second);
+                    } else if (childNode->name == "Material") {
+                        auto it = doc.materials.find(childNode);
+                        if (it == doc.materials.end()) {
+                            LOG(WARNING) << "Referenced material in mesh model cannot be found" << std::endl;
+                            continue;
+                        }
+                        object->setMaterial(it->second);
+                    } else if (childNode->name == "Model") {
+                        parseModel(doc, object, childNode);
+                    }
+                }
+
+                doc.objects.insert(std::make_pair(childNode, object));
+                dest->addChild(object);
             }
+        }
+
+        void parseModels(FBXDocument &doc, std::shared_ptr<Object> &dest) {
+            auto it = doc.nodesById.find(0);
+            if (it == doc.nodesById.end()) return;
+
+            parseModel(doc, dest, it->second);
         }
 
     }
@@ -583,7 +630,7 @@ break;
 //        debugPrintConnections(doc);
         parseGeometries(doc);
         parseMaterials(doc);
-        parseModels(doc);
+        parseModels(doc, destination);
     }
 
 }

@@ -13,7 +13,7 @@ namespace renderbox {
 
         SkinnedMesh(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material);
 
-        std::vector<Bone *> bones;
+        std::vector<std::shared_ptr<Bone>> bones;
 
     };
 
