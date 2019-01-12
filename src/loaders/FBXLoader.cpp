@@ -67,7 +67,7 @@ break;
             std::cout << std::endl;
         }
 
-        void debugPrintDocument(FBXDocument const & doc) {
+        void debugPrintDocument(FBXDocument const &doc) {
             for (auto const &node : doc.subNodes) {
                 debugPrintNode(node.get(), true);
             }
@@ -527,16 +527,16 @@ break;
             std::shared_ptr<Material> material;
 
             auto relationships = doc.connections.at(node);
-            for (auto const &child : relationships.second) {
-                if (child.second->name == "Geometry") {
-                    auto it = doc.geometries.find(child.second);
+            for (auto const &relationship : relationships.second) {
+                if (relationship.second->name == "Geometry") {
+                    auto it = doc.geometries.find(relationship.second);
                     if (it == doc.geometries.end()) {
                         LOG(WARNING) << "Referenced geometry in mesh model cannot be found" << std::endl;
                         continue;
                     }
                     geometry = it->second;
-                } else if (child.second->name == "Material") {
-                    auto it = doc.materials.find(child.second);
+                } else if (relationship.second->name == "Material") {
+                    auto it = doc.materials.find(relationship.second);
                     if (it == doc.materials.end()) {
                         LOG(WARNING) << "Referenced material in mesh model cannot be found" << std::endl;
                         continue;
