@@ -72,7 +72,7 @@ namespace renderbox {
 
         std::shared_ptr<Geometry> getGeometry();
 
-        void setGeometry(std::shared_ptr<Geometry> geometry);
+        void setGeometry(std::shared_ptr<Geometry> const &geometry);
 
         // Material
 
@@ -80,7 +80,7 @@ namespace renderbox {
 
         std::shared_ptr<Material> getMaterial();
 
-        void setMaterial(std::shared_ptr<Material> material);
+        void setMaterial(std::shared_ptr<Material> const &material);
 
         // Object transformation
 

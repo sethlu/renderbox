@@ -67,7 +67,7 @@ namespace renderbox {
         return geometry;
     }
 
-    void Object::setGeometry(std::shared_ptr<Geometry> geometry_) {
+    void Object::setGeometry(std::shared_ptr<Geometry> const &geometry_) {
         geometry = std::move(geometry_);
         didUpdate();
     }
@@ -80,7 +80,7 @@ namespace renderbox {
         return material;
     }
 
-    void Object::setMaterial(std::shared_ptr<Material> material_) {
+    void Object::setMaterial(std::shared_ptr<Material> const &material_) {
         material = std::move(material_);
         didUpdate();
     }
