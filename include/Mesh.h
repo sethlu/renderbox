@@ -2,9 +2,7 @@
 #define RENDERBOX_MESH_H
 
 
-#include "Geometry.h"
-#include "Material.h"
-#include "Object.h"
+#include "Bone.h"
 
 
 namespace renderbox {
@@ -17,6 +15,8 @@ namespace renderbox {
         OBJECT_TYPE getObjectType() const override {
             return MESH_OBJECT;
         };
+
+        std::vector<std::shared_ptr<Bone>> bones;
 
     };
 

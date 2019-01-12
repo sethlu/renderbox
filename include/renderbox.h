@@ -22,7 +22,6 @@
 
 #include "Mesh.h"
 #include "Bone.h"
-#include "SkinnedMesh.h"
 
 #include "Light.h"
 #include "PointLight.h"
