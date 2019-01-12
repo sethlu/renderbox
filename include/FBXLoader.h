@@ -36,7 +36,10 @@ namespace renderbox {
             }
         }
 
-
+        std::string toString() {
+            if (type != 'S') return {};
+            return {reinterpret_cast<char *>(value.ptr), size};
+        }
     };
 
     struct FBXNode {
@@ -59,6 +62,7 @@ namespace renderbox {
 
         // Results from parsing
         std::unordered_map<FBXNode const *, std::shared_ptr<Geometry>> geometries;
+        std::unordered_map<FBXNode const *, std::shared_ptr<Material>> materials;
         std::unordered_map<FBXNode const *, std::shared_ptr<Object>> objects;
     };
 

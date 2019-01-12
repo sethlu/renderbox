@@ -8,6 +8,7 @@
 
 #include <zlib.h>
 
+#include "MeshLambertMaterial.h"
 #include "logging.h"
 
 
@@ -313,7 +314,7 @@ break;
                         continue;
                     }
 
-                    relationship = std::string(reinterpret_cast<char *>(connectionNode->properties[3]->value.ptr), connectionNode->properties[3]->size);
+                    relationship = connectionNode->properties[3]->toString();
                 }
 
                 // Verify connection nodes
@@ -421,15 +422,14 @@ break;
                 if (objectNode->name != "Geometry") continue;
 
                 auto safeCheck =
-                objectNode->properties.size() >= 3 &&
-                objectNode->properties[2]->type == 'S';
+                    objectNode->properties.size() >= 3 &&
+                    objectNode->properties[2]->type == 'S';
                 if (!safeCheck) {
                     LOG(WARNING) << "Bad geometry format" << std::endl;
                     continue;
                 }
 
-                auto type = std::string(reinterpret_cast<char *>(objectNode->properties[2]->value.ptr), objectNode->properties[2]->size);
-
+                auto &&type = objectNode->properties[2]->toString();
                 if (type == "Mesh") {
                     auto geometry = parseMeshGeometry(doc, objectNode.get());
                     doc.geometries.insert(std::make_pair(objectNode.get(), geometry));
@@ -437,8 +437,94 @@ break;
             }
         }
 
+        std::shared_ptr<Material> parseMaterial(FBXDocument &doc, FBXNode const *node) {
+            auto material = std::make_shared<MeshLambertMaterial>();
+
+            for (auto const &subNode : node->subNodes) {
+                if (subNode->name == "Properties70") {
+                    for (auto const &propertyNode : subNode->subNodes) {
+                        if (propertyNode->name != "P") {
+                            LOG(WARNING) << "Unexpected node in Properties70, ignored" << std::endl;
+                            continue;
+                        }
+
+                        auto safeCheck =
+                            propertyNode->properties.size() >= 2 &&
+                            propertyNode->properties[0]->type == 'S' &&
+                            propertyNode->properties[1]->type == 'S';
+                        if (!safeCheck) {
+                            LOG(WARNING) << "Bad property node format" << std::endl;
+                            continue;
+                        }
+
+                        vec3 ambientColor;
+                        float ambientFactor = 1.f;
+                        vec3 diffuseColor;
+                        float diffuseFactor = 1.f;
+
+                        auto &&propertyName = propertyNode->properties[0]->toString();
+                        auto &&propertyType = propertyNode->properties[1]->toString();
+                        if (propertyType == "Color") {
+                            safeCheck =
+                                propertyNode->properties.size() >= 7 &&
+                                propertyNode->properties[4]->type == 'D' &&
+                                propertyNode->properties[5]->type == 'D' &&
+                                propertyNode->properties[6]->type == 'D';
+                            if (!safeCheck) {
+                                LOG(WARNING) << "Bad color property node format" << std::endl;
+                                continue;
+                            }
+
+                            auto &&color = vec3(propertyNode->properties[4]->value.D,
+                                               propertyNode->properties[5]->value.D,
+                                               propertyNode->properties[6]->value.D);
+                            if (propertyName == "AmbientColor") {
+                                ambientColor = color;
+                            } else if (propertyName == "DiffuseColor") {
+                                diffuseColor = color;
+                            }
+                        } else if (propertyType == "Number") {
+                            safeCheck =
+                                propertyNode->properties.size() >= 5 &&
+                                propertyNode->properties[4]->type == 'D';
+                            if (!safeCheck) {
+                                LOG(WARNING) << "Bad number property node format" << std::endl;
+                                continue;
+                            }
+
+                            auto &&value = propertyNode->properties[4]->value.D;
+                            if (propertyName == "AmbientFactor") {
+                                ambientFactor = value;
+                            } else if (propertyName == "DiffuseFactor") {
+                                diffuseFactor = value;
+                            }
+                        }
+
+                        material->setAmbientColor(ambientFactor * ambientColor);
+                        material->setDiffuseColor(diffuseFactor * diffuseColor);
+                    }
+                }
+            }
+
+            return material;
+        }
+
+        void parseMaterials(FBXDocument &doc) {
+            auto it = doc.namedSubNodes.find("Objects");
+            if (it == doc.namedSubNodes.end()) return;
+
+            auto const &objectsNode = it->second;
+            for (auto const &objectNode : objectsNode->subNodes) {
+                if (objectNode->name != "Material") continue;
+
+                auto &&material = parseMaterial(doc, objectNode.get());
+                doc.materials.insert(std::make_pair(objectNode.get(), material));
+            }
+        }
+
         std::shared_ptr<Object> parseMeshModel(FBXDocument &doc, FBXNode const *node) {
             std::shared_ptr<Geometry> geometry;
+            std::shared_ptr<Material> material;
 
             auto relationships = doc.connections.at(node);
             for (auto const &child : relationships.second) {
@@ -449,6 +535,13 @@ break;
                         continue;
                     }
                     geometry = it->second;
+                } else if (child.second->name == "Material") {
+                    auto it = doc.materials.find(child.second);
+                    if (it == doc.materials.end()) {
+                        LOG(WARNING) << "Referenced material in mesh model cannot be found" << std::endl;
+                        continue;
+                    }
+                    material = it->second;
                 }
             }
 
@@ -456,7 +549,7 @@ break;
                 LOG(WARNING) << "No geometry in mesh model" << std::endl;
             }
 
-            return std::make_shared<Object>(geometry);
+            return std::make_shared<Object>(geometry, material);
         }
 
         void parseModels(FBXDocument &doc) {
@@ -475,10 +568,9 @@ break;
                     continue;
                 }
 
-                auto type = std::string(reinterpret_cast<char *>(objectNode->properties[2]->value.ptr), objectNode->properties[2]->size);
-
+                auto &&type = objectNode->properties[2]->toString();
                 if (type == "Mesh") {
-                    auto object = parseMeshModel(doc, objectNode.get());
+                    auto &&object = parseMeshModel(doc, objectNode.get());
                     doc.objects.insert(std::make_pair(objectNode.get(), object));
                 }
             }
@@ -490,6 +582,7 @@ break;
         parseConnections(doc);
 //        debugPrintConnections(doc);
         parseGeometries(doc);
+        parseMaterials(doc);
         parseModels(doc);
     }
 
