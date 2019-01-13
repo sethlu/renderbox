@@ -43,6 +43,10 @@ namespace renderbox {
             return (getObjectType() & LIGHT_OBJECT) != 0;
         }
 
+        bool isBone() const {
+            return (getObjectType() & BONE_OBJECT) != 0;
+        }
+
         /**
          * Returns a shallow copy of the object
          */

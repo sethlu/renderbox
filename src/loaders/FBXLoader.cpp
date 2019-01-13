@@ -281,6 +281,27 @@ break;
 
     namespace {
 
+        int64_t getNodeId(FBXNode const *node) {
+            if (node->properties.size() >= 1 && node->properties[0]->type == 'L') {
+                return node->properties[0]->value.L;
+            }
+            return 0;
+        }
+
+        std::string getNodeAttrName(FBXNode const *node) {
+            if (node->properties.size() >= 2 && node->properties[1]->type == 'S') {
+                return node->properties[1]->toString();
+            }
+            return "";
+        }
+
+        std::string getNodeAttrType(FBXNode const *node) {
+            if (node->properties.size() >= 3 && node->properties[2]->type == 'S') {
+                return node->properties[2]->toString();
+            }
+            return "";
+        }
+
         void parseConnections(FBXDocument &doc) {
             auto it = doc.namedSubNodes.find("Connections");
             if (it == doc.namedSubNodes.end()) return;
@@ -350,6 +371,82 @@ break;
             }
         }
 
+        void parseMeshGeometrySkinClusterDeformer(FBXDocument &doc, FBXNode const *node, Geometry *geometry, unsigned int clusterIndex) {
+            FBXNode const *indexesSubNode = nullptr;
+            FBXNode const *weightsSubNode = nullptr;
+
+            for (auto const &subNode : node->subNodes) {
+                if (subNode->name == "Indexes") {
+                    auto safeCheck =
+                        subNode->properties.size() >= 1 &&
+                        subNode->properties[0]->type == 'i';
+                    if (!safeCheck) {
+                        LOG(WARNING) << "Bad indexes format" << std::endl;
+                        continue;
+                    }
+                    indexesSubNode = subNode.get();
+                } else if (subNode->name == "Weights") {
+                    auto safeCheck =
+                        subNode->properties.size() >= 1 &&
+                        subNode->properties[0]->type == 'd';
+                    if (!safeCheck) {
+                        LOG(WARNING) << "Bad weights format" << std::endl;
+                        continue;
+                    }
+                    weightsSubNode = subNode.get();
+                }
+            }
+
+            if (indexesSubNode && weightsSubNode) {
+                auto indexesSize = indexesSubNode->properties[0]->size;
+                auto weightsSize = weightsSubNode->properties[0]->size;
+
+                if (indexesSize != weightsSize) {
+                    LOG(WARNING) << "Skin cluster indices & weights size mismatch" << std::endl;
+                } else {
+                    auto indexesArray = reinterpret_cast<int32_t *>(indexesSubNode->properties[0]->value.ptr);
+                    auto weightsArray = reinterpret_cast<double_t *>(weightsSubNode->properties[0]->value.ptr);
+
+                    for (auto i = 0; i < indexesSize; i += 1) {
+                        auto index = indexesArray[i];
+
+                        if (geometry->skinWeights[index][0] == 0) {
+                            geometry->skinIndices[index][0] = clusterIndex;
+                            geometry->skinWeights[index][0] = weightsArray[i];
+                        } else if (geometry->skinWeights[index][1] == 0) {
+                            geometry->skinIndices[index][1] = clusterIndex;
+                            geometry->skinWeights[index][1] = weightsArray[i];
+                        } else if (geometry->skinWeights[index][2] == 0) {
+                            geometry->skinIndices[index][2] = clusterIndex;
+                            geometry->skinWeights[index][2] = weightsArray[i];
+                        } else if (geometry->skinWeights[index][3] == 0) {
+                            geometry->skinIndices[index][3] = clusterIndex;
+                            geometry->skinWeights[index][3] = weightsArray[i];
+                        }
+                    }
+                }
+            }
+
+        }
+
+        void parseMeshGeometrySkinDeformer(FBXDocument &doc, FBXNode const *node, Geometry *geometry) {
+            auto const &relationships = doc.connections.at(node);
+            unsigned int clusterIndex = 0;
+            for (auto relationship : relationships.second) {
+                auto const &childNode = relationship.second;
+
+                auto const &type = getNodeAttrType(childNode);
+                if (childNode->name == "Deformer") {
+                    if (type == "Cluster") {
+                        geometry->skinIndices.resize(geometry->vertices.size());
+                        geometry->skinWeights.resize(geometry->vertices.size());
+
+                        parseMeshGeometrySkinClusterDeformer(doc, childNode, geometry, clusterIndex++);
+                    }
+                }
+            }
+        }
+
         std::shared_ptr<Geometry> parseMeshGeometry(FBXDocument &doc, FBXNode const *node) {
             auto geometry = std::make_shared<Geometry>();
 
@@ -406,6 +503,18 @@ break;
                 }
             }
 
+            auto const &relationships = doc.connections.at(node);
+            for (auto relationship : relationships.second) {
+                auto const &childNode = relationship.second;
+
+                auto const &type = getNodeAttrType(childNode);
+                if (childNode->name == "Deformer") {
+                    if (type == "Skin") {
+                        parseMeshGeometrySkinDeformer(doc, childNode, geometry.get());
+                    }
+                }
+            }
+
             if (geometry->normals.empty()) geometry->regenerateNormals();
 
             return geometry;
@@ -419,15 +528,7 @@ break;
             for (auto const &objectNode : objectsNode->subNodes) {
                 if (objectNode->name != "Geometry") continue;
 
-                auto safeCheck =
-                    objectNode->properties.size() >= 3 &&
-                    objectNode->properties[2]->type == 'S';
-                if (!safeCheck) {
-                    LOG(WARNING) << "Bad geometry format" << std::endl;
-                    continue;
-                }
-
-                auto const &type = objectNode->properties[2]->toString();
+                auto const &type = getNodeAttrType(objectNode.get());
                 if (type == "Mesh") {
                     auto geometry = parseMeshGeometry(doc, objectNode.get());
                     doc.geometries.insert(std::make_pair(objectNode.get(), geometry));
@@ -520,24 +621,50 @@ break;
             }
         }
 
-        void parseModel(FBXDocument &doc, std::shared_ptr<Object> &dest, FBXNode const *node) {
+        void parseMeshModelMeshGeometrySkinClusterDeformer(FBXDocument &doc, FBXNode const *node, Mesh *mesh, unsigned int clusterIndex) {
+            auto const &relationships = doc.connections.at(node);
+            for (auto relationship : relationships.second) {
+                auto const &childNode = relationship.second;
+
+                auto const &type = getNodeAttrType(childNode);
+                if (childNode->name == "Model" && type == "LimbNode") {
+                    auto it = doc.objects.find(childNode);
+                    if (it == doc.objects.end()) {
+                        LOG(WARNING) << "Unexpected limb model referenced in deformer: limb node id " << getNodeId(childNode) << std::endl;
+                        continue;
+                    }
+                    if (auto bone = std::dynamic_pointer_cast<Bone>(it->second)) {
+                        mesh->bones.assign(clusterIndex, bone);
+                    }
+                }
+            }
+        }
+
+        void parseMeshModelMeshGeometrySkinDeformer(FBXDocument &doc, FBXNode const *node, Mesh *mesh) {
+            auto const &relationships = doc.connections.at(node);
+            unsigned int clusterIndex = 0;
+            for (auto relationship : relationships.second) {
+                auto const &childNode = relationship.second;
+
+                auto const &type = getNodeAttrType(childNode);
+                if (childNode->name == "Deformer") {
+                    if (type == "Cluster") {
+                        parseMeshModelMeshGeometrySkinClusterDeformer(doc, childNode, mesh, clusterIndex++);
+                    }
+                }
+            }
+        }
+
+        void parseModels(FBXDocument &doc, std::shared_ptr<Object> &dest, FBXNode const *node) {
             auto const &relationships = doc.connections.at(node);
             for (auto const &relationship : relationships.second) {
                 auto const &childNode = relationship.second;
 
                 if (childNode->name != "Model") continue;
 
-                auto safeCheck =
-                    childNode->properties.size() >= 3 &&
-                    childNode->properties[2]->type == 'S';
-                if (!safeCheck) {
-                    LOG(WARNING) << "Bad model format" << std::endl;
-                    continue;
-                }
-
                 std::shared_ptr<Object> object;
 
-                auto const &type = childNode->properties[2]->toString();
+                auto const &type = getNodeAttrType(childNode);
                 if (type == "Mesh") {
                     object = std::make_shared<Mesh>();
                 } else if (type == "LimbNode") {
@@ -588,6 +715,12 @@ break;
                     }
                 }
 
+                doc.objects.insert(std::make_pair(childNode, object));
+
+                dest->addChild(object);
+
+                parseModels(doc, object, childNode);
+
                 auto const &relationships = doc.connections.at(childNode);
                 for (auto const &relationship : relationships.second) {
                     auto const &childNode = relationship.second;
@@ -599,6 +732,23 @@ break;
                             continue;
                         }
                         object->setGeometry(it->second);
+
+                        auto const &relationships = doc.connections.at(childNode);
+                        for (auto relationship : relationships.second) {
+                            auto const &childNode = relationship.second;
+
+                            auto const &type = getNodeAttrType(childNode);
+                            if (childNode->name == "Deformer") {
+                                if (type == "Skin") {
+                                    if (object->isMesh()) {
+                                        if (auto mesh = dynamic_cast<Mesh *>(object.get())) {
+                                            parseMeshModelMeshGeometrySkinDeformer(doc, childNode, mesh);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
                     } else if (childNode->name == "Material") {
                         auto it = doc.materials.find(childNode);
                         if (it == doc.materials.end()) {
@@ -606,13 +756,8 @@ break;
                             continue;
                         }
                         object->setMaterial(it->second);
-                    } else if (childNode->name == "Model") {
-                        parseModel(doc, object, childNode);
                     }
                 }
-
-                doc.objects.insert(std::make_pair(childNode, object));
-                dest->addChild(object);
             }
         }
 
@@ -620,7 +765,7 @@ break;
             auto it = doc.nodesById.find(0);
             if (it == doc.nodesById.end()) return;
 
-            parseModel(doc, dest, it->second);
+            parseModels(doc, dest, it->second);
         }
 
     }
