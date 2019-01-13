@@ -14,7 +14,7 @@
 
 
 uint const NUM_MAX_POINT_LIGHTS = 4;
-uint const NUM_MAX_BONES = 8;
+uint const NUM_MAX_BONES = 64;
 
 typedef struct {
     simd_float3 position;

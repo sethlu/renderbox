@@ -5,7 +5,7 @@ using namespace metal;
 #define SCREEN_GAMMA 2.2
 
 #define NUM_MAX_POINT_LIGHTS 4
-#define NUM_MAX_BONES 8
+#define NUM_MAX_BONES 64
 
 typedef struct {
     float3 position;
