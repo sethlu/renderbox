@@ -427,7 +427,7 @@ break;
                     continue;
                 }
 
-                auto &&type = objectNode->properties[2]->toString();
+                auto const &type = objectNode->properties[2]->toString();
                 if (type == "Mesh") {
                     auto geometry = parseMeshGeometry(doc, objectNode.get());
                     doc.geometries.insert(std::make_pair(objectNode.get(), geometry));
@@ -460,8 +460,8 @@ break;
                         vec3 diffuseColor;
                         float diffuseFactor = 1.f;
 
-                        auto &&propertyName = propertyNode->properties[0]->toString();
-                        auto &&propertyType = propertyNode->properties[1]->toString();
+                        auto const &propertyName = propertyNode->properties[0]->toString();
+                        auto const &propertyType = propertyNode->properties[1]->toString();
                         if (propertyType == "Color") {
                             safeCheck =
                                 propertyNode->properties.size() >= 7 &&
@@ -473,9 +473,9 @@ break;
                                 continue;
                             }
 
-                            auto &&color = vec3(propertyNode->properties[4]->value.D,
-                                               propertyNode->properties[5]->value.D,
-                                               propertyNode->properties[6]->value.D);
+                            auto const &color = vec3(propertyNode->properties[4]->value.D,
+                                                     propertyNode->properties[5]->value.D,
+                                                     propertyNode->properties[6]->value.D);
                             if (propertyName == "AmbientColor") {
                                 ambientColor = color;
                             } else if (propertyName == "DiffuseColor") {
@@ -490,7 +490,7 @@ break;
                                 continue;
                             }
 
-                            auto &&value = propertyNode->properties[4]->value.D;
+                            auto const &value = propertyNode->properties[4]->value.D;
                             if (propertyName == "AmbientFactor") {
                                 ambientFactor = value;
                             } else if (propertyName == "DiffuseFactor") {
@@ -515,15 +515,15 @@ break;
             for (auto const &objectNode : objectsNode->subNodes) {
                 if (objectNode->name != "Material") continue;
 
-                auto &&material = parseMaterial(doc, objectNode.get());
+                auto const &material = parseMaterial(doc, objectNode.get());
                 doc.materials.insert(std::make_pair(objectNode.get(), material));
             }
         }
 
         void parseModel(FBXDocument &doc, std::shared_ptr<Object> &dest, FBXNode const *node) {
-            auto relationships = doc.connections.at(node);
+            auto const &relationships = doc.connections.at(node);
             for (auto const &relationship : relationships.second) {
-                auto &&childNode = relationship.second;
+                auto const &childNode = relationship.second;
 
                 if (childNode->name != "Model") continue;
 
@@ -537,7 +537,7 @@ break;
 
                 std::shared_ptr<Object> object;
 
-                auto &&type = childNode->properties[2]->toString();
+                auto const &type = childNode->properties[2]->toString();
                 if (type == "Mesh") {
                     object = std::make_shared<Mesh>();
                 } else if (type == "LimbNode") {
@@ -564,8 +564,8 @@ break;
                                 continue;
                             }
 
-                            auto &&propertyName = propertyNode->properties[0]->toString();
-                            auto &&propertyType = propertyNode->properties[1]->toString();
+                            auto const &propertyName = propertyNode->properties[0]->toString();
+                            auto const &propertyType = propertyNode->properties[1]->toString();
                             if (propertyType == "Lcl Translation") {
                                 safeCheck =
                                     propertyNode->properties.size() >= 7 &&
@@ -577,9 +577,9 @@ break;
                                     continue;
                                 }
 
-                                auto &&value = vec3(propertyNode->properties[4]->value.D,
-                                                    propertyNode->properties[5]->value.D,
-                                                    propertyNode->properties[6]->value.D);
+                                auto const &value = vec3(propertyNode->properties[4]->value.D,
+                                                         propertyNode->properties[5]->value.D,
+                                                         propertyNode->properties[6]->value.D);
                                 if (propertyName == "Lcl Translation") {
                                     object->setTranslation(value);
                                 }
@@ -588,9 +588,9 @@ break;
                     }
                 }
 
-                auto relationships = doc.connections.at(childNode);
+                auto const &relationships = doc.connections.at(childNode);
                 for (auto const &relationship : relationships.second) {
-                    auto &&childNode = relationship.second;
+                    auto const &childNode = relationship.second;
 
                     if (childNode->name == "Geometry") {
                         auto it = doc.geometries.find(childNode);
