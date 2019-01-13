@@ -14,7 +14,7 @@ namespace renderbox {
             return BONE_OBJECT;
         }
 
-        void bindMatrix();
+        void bindMatrix(bool recursive = false);
 
         mat4 getBoneInverse() const;
 
