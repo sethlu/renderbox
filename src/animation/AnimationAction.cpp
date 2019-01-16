@@ -5,7 +5,7 @@
 
 namespace renderbox {
 
-    void AnimationAction::bind(PropertyMixer *propertyMixer, int clipTrackIndex) {
+    void AnimationAction::bind(PropertyMixer *propertyMixer, size_t clipTrackIndex) {
         bindings.insert(std::make_pair(propertyMixer, clipTrackIndex));
     }
 

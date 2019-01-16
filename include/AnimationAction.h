@@ -15,11 +15,11 @@ namespace renderbox {
 
         std::shared_ptr<AnimationClip> clip;
 
-        std::unordered_map<PropertyMixer *, int> bindings;
+        std::unordered_map<PropertyMixer *, size_t> bindings;
 
         float weight = 1.f;
 
-        void bind(PropertyMixer *propertyMixer, int clipTrackIndex);
+        void bind(PropertyMixer *propertyMixer, size_t clipTrackIndex);
 
     };
 
