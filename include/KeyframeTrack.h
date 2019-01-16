@@ -13,7 +13,7 @@ namespace renderbox {
     struct KeyframeTrack {
     public:
 
-        virtual ~KeyframeTrack();
+        virtual ~KeyframeTrack() = default;
 
         std::vector<float> times;
 
@@ -43,6 +43,7 @@ namespace renderbox {
         return (1 - w) * values[i - 1] + w * values[i];
     }
 
+    typedef TypedKeyframeTrack<float> FloatKeyframeTrack;
     typedef TypedKeyframeTrack<vec3> Vector3KeyframeTrack;
 
 }
