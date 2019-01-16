@@ -78,19 +78,17 @@ break;
         void debugPrintConnections(FBXDocument const &doc, FBXNode const *node, std::string prefix = "") {
             debugPrintNodeBegin(node, prefix);
 
-            auto relationshipsIt = doc.connections.find(node);
-            if (relationshipsIt != doc.connections.end()) {
-                auto const &children = relationshipsIt->second.second;
-                if (!children.empty()) {
-                    std::cout << std::endl;
-                    for (auto const &relationship : children) {
-                        if (!relationship.first.empty()) {
-                            std::cout << prefix << "  (" + relationship.first + ")" << std::endl;
-                        }
-                        debugPrintConnections(doc, relationship.second, prefix + "  ");
+            auto const &relationships = doc.connections.at(node);
+            auto const &childRelationships = relationships.second;
+            if (!childRelationships.empty()) {
+                std::cout << std::endl;
+                for (auto const &relationship : childRelationships) {
+                    if (!relationship.first.empty()) {
+                        std::cout << prefix << "  (" + relationship.first + ")" << std::endl;
                     }
-                    std::cout << prefix;
+                    debugPrintConnections(doc, relationship.second, prefix + "  ");
                 }
+                std::cout << prefix;
             }
 
             debugPrintNodeEnd(node);
@@ -114,6 +112,10 @@ break;
         if (is) {
             enterFBXSource(is);
         }
+    }
+
+    std::vector<std::shared_ptr<AnimationMixer>> FBXLoader::getAnimationMixers() {
+        return animationMixers;
     }
 
     template<typename V>
@@ -770,12 +772,185 @@ break;
 
     }
 
+    std::shared_ptr<KeyframeTrack> parseAnimationCurve(FBXDocument &doc, FBXNode const *node) {
+        FBXNode const *timeSubNode = nullptr;
+        FBXNode const *valueSubNode = nullptr;
+
+        for (auto const &subNode : node->subNodes) {
+            if (subNode->name == "KeyTime") {
+                auto safeCheck =
+                    subNode->properties.size() >= 1 &&
+                    subNode->properties[0]->type == 'l';
+                if (!safeCheck) {
+                    LOG(WARNING) << "Bad key time format" << std::endl;
+                    continue;
+                }
+                timeSubNode = subNode.get();
+            } else if (subNode->name == "KeyValueFloat") {
+                auto safeCheck =
+                    subNode->properties.size() >= 1 &&
+                    subNode->properties[0]->type == 'f';
+                if (!safeCheck) {
+                    LOG(WARNING) << "Bad key value format" << std::endl;
+                    continue;
+                }
+                valueSubNode = subNode.get();
+            }
+        }
+
+        auto keyframeTrack = std::make_shared<FloatKeyframeTrack>();
+
+        if (timeSubNode && valueSubNode) {
+            auto timeSize = timeSubNode->properties[0]->size;
+            auto valueSize = valueSubNode->properties[0]->size;
+
+            if (timeSize != valueSize) {
+                LOG(WARNING) << "Skin cluster indices & weights size mismatch" << std::endl;
+            } else {
+                auto timeArray = reinterpret_cast<long *>(timeSubNode->properties[0]->value.ptr);
+                auto valueArray = reinterpret_cast<float *>(valueSubNode->properties[0]->value.ptr);
+
+                keyframeTrack->times.resize(timeSize);
+                keyframeTrack->values.resize(valueSize);
+
+                for (auto i = 0; i < timeSize; i++) {
+                    keyframeTrack->times[i] = timeArray[i] / 46186158000.f;
+                    keyframeTrack->values[i] = valueArray[i];
+                }
+            }
+        }
+
+        return keyframeTrack;
+    }
+
+    void parseAnimationCurveNode(FBXDocument &doc, FBXNode const *node, AnimationMixer *mixer, AnimationAction *action) {
+        auto const &name = getNodeAttrName(node);
+
+        auto keyframeTrack = std::make_shared<KeyframeTrack>();
+
+        auto const &relationships = doc.connections.at(node);
+        if (name[0] == 'T') { // Not the best way check name
+            for (auto const &relationship : relationships.second) {
+                auto const &childNode = relationship.second;
+                if (relationship.first == "d|X") {
+                    auto keyframeTrack = parseAnimationCurve(doc, childNode);
+                    auto i = action->clip->tracks.size();
+                    action->clip->tracks.emplace_back(keyframeTrack);
+
+                    for (auto const &relationship : relationships.first) {
+                        auto const &parentNode = relationship.second;
+                        if (parentNode->name != "Model") continue;
+                        action->bind(mixer->getPropertyMixer(doc.objects.at(parentNode),
+                                                             OBJECT_PROPERTY_TRANSLATION_X), i);
+                    }
+                } else if (relationship.first == "d|Y") {
+                    auto keyframeTrack = parseAnimationCurve(doc, childNode);
+                    auto i = action->clip->tracks.size();
+                    action->clip->tracks.emplace_back(keyframeTrack);
+
+                    for (auto const &relationship : relationships.first) {
+                        auto const &parentNode = relationship.second;
+                        if (parentNode->name != "Model") continue;
+                        action->bind(mixer->getPropertyMixer(doc.objects.at(parentNode),
+                                                             OBJECT_PROPERTY_TRANSLATION_Y), i);
+                    }
+                } else if (relationship.first == "d|Z") {
+                    auto keyframeTrack = parseAnimationCurve(doc, childNode);
+                    auto i = action->clip->tracks.size();
+                    action->clip->tracks.emplace_back(keyframeTrack);
+
+                    for (auto const &relationship : relationships.first) {
+                        auto const &parentNode = relationship.second;
+                        if (parentNode->name != "Model") continue;
+                        action->bind(mixer->getPropertyMixer(doc.objects.at(parentNode),
+                                                             OBJECT_PROPERTY_TRANSLATION_Z), i);
+                    }
+                }
+            }
+        }
+    }
+
+    std::shared_ptr<AnimationMixer> parseAnimationStacks(FBXDocument &doc) {
+        auto animationMixer = std::make_shared<AnimationMixer>();
+
+        auto it = doc.namedSubNodes.find("Objects");
+        if (it == doc.namedSubNodes.end()) return animationMixer;
+
+        auto const &objectsNode = it->second;
+        for (auto const &objectNode : objectsNode->subNodes) {
+            if (objectNode->name != "AnimationStack") continue;
+
+            auto animationClip = std::make_shared<AnimationClip>();
+            doc.animationClips.insert(std::make_pair(objectNode.get(), animationClip));
+
+            auto animationAction = std::make_unique<AnimationAction>();
+            animationAction->clip = animationClip;
+
+            for (auto const &subNode : objectNode->subNodes) {
+                if (subNode->name == "Properties70") {
+                    for (auto const &propertyNode : subNode->subNodes) {
+                        if (propertyNode->name != "P") {
+                            LOG(WARNING) << "Unexpected node in Properties70, ignored" << std::endl;
+                            continue;
+                        }
+
+                        auto safeCheck =
+                            propertyNode->properties.size() >= 2 &&
+                            propertyNode->properties[0]->type == 'S' &&
+                            propertyNode->properties[1]->type == 'S';
+                        if (!safeCheck) {
+                            LOG(WARNING) << "Bad property node format" << std::endl;
+                            continue;
+                        }
+
+                        auto const &propertyName = propertyNode->properties[0]->toString();
+                        auto const &propertyType = propertyNode->properties[1]->toString();
+                        if (propertyType == "KTime") {
+                            safeCheck =
+                                propertyNode->properties.size() >= 5 &&
+                                propertyNode->properties[4]->type == 'L';
+                            if (!safeCheck) {
+                                LOG(WARNING) << "Bad time property node format" << std::endl;
+                                continue;
+                            }
+
+                            auto const &time = propertyNode->properties[4]->value.L / 46186158000.f;
+                            if (propertyName == "LocalStop") {
+                                animationClip->duration = time;
+                            }
+                        }
+                    }
+                }
+            }
+
+            auto const &relationships = doc.connections.at(objectNode.get());
+            for (auto const &relationship : relationships.second) {
+                auto const &childNode = relationship.second;
+                if (childNode->name != "AnimationLayer") continue;
+
+                auto const &relationships = doc.connections.at(childNode);
+                for (auto const &relationship : relationships.second) {
+                    auto const &childNode = relationship.second;
+                    if (childNode->name != "AnimationCurveNode") continue;
+
+                    parseAnimationCurveNode(doc, childNode, animationMixer.get(), animationAction.get());
+                }
+            }
+
+            animationMixer->actions.emplace_back(std::move(animationAction));
+        }
+
+        return animationMixer;
+    }
+
     void FBXLoader::parseDocument(FBXDocument &doc) {
         parseConnections(doc);
 //        debugPrintConnections(doc);
         parseGeometries(doc);
         parseMaterials(doc);
         parseModels(doc, destination);
+        auto animationMixer = parseAnimationStacks(doc);
+        animationMixers.emplace_back(animationMixer);
     }
 
 }

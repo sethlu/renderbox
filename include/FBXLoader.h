@@ -5,6 +5,7 @@
 #include <unordered_map>
 
 #include "Object.h"
+#include "AnimationMixer.h"
 
 
 namespace renderbox {
@@ -64,6 +65,7 @@ namespace renderbox {
         std::unordered_map<FBXNode const *, std::shared_ptr<Geometry>> geometries;
         std::unordered_map<FBXNode const *, std::shared_ptr<Material>> materials;
         std::unordered_map<FBXNode const *, std::shared_ptr<Object>> objects;
+        std::unordered_map<FBXNode const *, std::shared_ptr<AnimationClip>> animationClips;
     };
 
     class FBXLoader {
@@ -73,6 +75,8 @@ namespace renderbox {
 
         void enterFBXSourceFile(char const *filename);
 
+        std::vector<std::shared_ptr<AnimationMixer>> getAnimationMixers();
+
     private:
 
         std::shared_ptr<Object> destination;
@@ -80,6 +84,8 @@ namespace renderbox {
         void enterFBXSource(std::istream &source);
 
         void parseDocument(FBXDocument &doc);
+
+        std::vector<std::shared_ptr<AnimationMixer>> animationMixers;
 
     };
 

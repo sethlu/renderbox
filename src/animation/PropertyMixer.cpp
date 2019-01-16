@@ -5,36 +5,23 @@
 
 namespace renderbox {
 
-    PropertyMixer::PropertyMixer(std::shared_ptr<Object> object)
-            : object(std::move(object)) {
+    void SplitObjectTranslationPropertyMixer::clear() {
+        x.clear();
+        y.clear();
+        z.clear();
+    }
+
+    void SplitObjectTranslationPropertyMixer::apply() {
+        object->setTranslation(vec3(x.value(), y.value(), z.value()));
+    }
+
+    ObjectTranslationPropertyMixer::ObjectTranslationPropertyMixer(std::shared_ptr<Object> object)
+            : TypedObjectPropertyMixer<Object::translation_type>(std::move(object)) {
 
     }
 
-    PropertyMixer::~PropertyMixer() = default;
-
-    template<typename V>
-    TypedPropertyMixer<V>::TypedPropertyMixer(std::shared_ptr<Object> object)
-            : PropertyMixer(object) {
-
-    }
-
-    template<typename V>
-    void TypedPropertyMixer<V>::clear() {
-        value = {};
-    }
-
-    template<typename V>
-    void TypedPropertyMixer<V>::accumulate(V incoming, float weight) {
-        value += incoming * weight;
-    }
-
-    TranslationPropertyMixer::TranslationPropertyMixer(std::shared_ptr<Object> object)
-            : TypedPropertyMixer<Object::translation_type>(std::move(object)) {
-
-    }
-
-    void TranslationPropertyMixer::apply() {
-        object->setTranslation(value);
+    void ObjectTranslationPropertyMixer::apply() {
+        object->setTranslation(_value);
     }
 
 }

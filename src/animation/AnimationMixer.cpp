@@ -8,40 +8,40 @@
 namespace renderbox {
 
     void AnimationMixer::update(float t) {
-        for (auto propertyMixer : propertyMixers) {
+        for (auto const &propertyMixer : propertyMixers) {
             propertyMixer->clear();
         }
 
-        for (auto &action : actions) {
+        for (auto const &action : actions) {
             auto const &tracks = action->clip->tracks;
             auto weight = action->weight;
 
-            for (auto pair : action->bindings) {
+            for (auto const &pair : action->bindings) {
                 auto &propertyMixer = pair.first;
                 auto &trackIndex = pair.second;
                 auto track = tracks[trackIndex];
 
-                switch (propertyMixer->getObjectProperty()) {
-                    default: {
-                        NOTREACHED() << "Unhandled object property";
-                        exit(EXIT_FAILURE);
-                    }
-                    case OBJECT_PROPERTY_TRANSLATION: {
-                        auto translationPropertyMixer = dynamic_cast<TranslationPropertyMixer *>(propertyMixer);
-                        auto vector3KeyframeTrack = dynamic_cast<Vector3KeyframeTrack *>(track.get());
-                        if (translationPropertyMixer && vector3KeyframeTrack) {
-                            translationPropertyMixer->accumulate(
-                                    vector3KeyframeTrack->interpolate(fmod(t, action->clip->duration)), weight);
-                        } else {
-                            NOTREACHED();
-                        }
-                    }
+                auto floatPropertyMixer = dynamic_cast<AccumulableFloatPropertyMixer *>(propertyMixer);
+                auto vector3PropertyMixer = dynamic_cast<AccumulableVector3PropertyMixer *>(propertyMixer);
+
+                auto vector3KeyframeTrack = dynamic_cast<Vector3KeyframeTrack *>(track.get());
+                auto floatKeyframeTrack = dynamic_cast<FloatKeyframeTrack *>(track.get());
+
+                if (floatPropertyMixer && floatKeyframeTrack) {
+                    floatPropertyMixer->accumulate(floatKeyframeTrack->interpolate(fmod(t, action->clip->duration)), weight);
+                } else if (vector3PropertyMixer && vector3KeyframeTrack) {
+                    vector3PropertyMixer->accumulate(vector3KeyframeTrack->interpolate(fmod(t, action->clip->duration)), weight);
+                } else {
+                    NOTREACHED() << "Unhandled property mixer";
+                    exit(EXIT_FAILURE);
                 }
             }
         }
 
-        for (auto propertyMixer : propertyMixers) {
-            propertyMixer->apply();
+        for (auto const &propertyMixer : propertyMixers) {
+            if (auto objectPropertyMixer = dynamic_cast<ObjectPropertyMixer *>(propertyMixer)) {
+                objectPropertyMixer->apply();
+            }
         }
     }
 
@@ -64,10 +64,37 @@ namespace renderbox {
                 if (mixers->translationPropertyMixer) {
                     return mixers->translationPropertyMixer.get();
                 }
-                auto newMixer = new TranslationPropertyMixer(object);
+                auto newMixer = new ObjectTranslationPropertyMixer(object);
                 mixers->translationPropertyMixer.reset(newMixer);
                 propertyMixers.insert(newMixer);
                 return newMixer;
+            }
+            case OBJECT_PROPERTY_TRANSLATION_X: {
+                if (mixers->splitTranslationPropertyMixer) {
+                    return &(mixers->splitTranslationPropertyMixer->x);
+                }
+                auto newMixer = new SplitObjectTranslationPropertyMixer(object);
+                mixers->splitTranslationPropertyMixer.reset(newMixer);
+                propertyMixers.insert(newMixer);
+                return &(newMixer->x);
+            }
+            case OBJECT_PROPERTY_TRANSLATION_Y: {
+                if (mixers->splitTranslationPropertyMixer) {
+                    return &(mixers->splitTranslationPropertyMixer->y);
+                }
+                auto newMixer = new SplitObjectTranslationPropertyMixer(object);
+                mixers->splitTranslationPropertyMixer.reset(newMixer);
+                propertyMixers.insert(newMixer);
+                return &(newMixer->y);
+            }
+            case OBJECT_PROPERTY_TRANSLATION_Z: {
+                if (mixers->splitTranslationPropertyMixer) {
+                    return &(mixers->splitTranslationPropertyMixer->z);
+                }
+                auto newMixer = new SplitObjectTranslationPropertyMixer(object);
+                mixers->splitTranslationPropertyMixer.reset(newMixer);
+                propertyMixers.insert(newMixer);
+                return &(newMixer->z);
             }
         }
     }

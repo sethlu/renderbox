@@ -21,7 +21,7 @@ namespace renderbox {
 
         void setAmbientColor(const vec3 &ambientColor);
 
-        std::vector<std::unique_ptr<AnimationMixer>> animationMixers;
+        std::vector<std::shared_ptr<AnimationMixer>> animationMixers;
 
         void updateAnimations(float t);
 
