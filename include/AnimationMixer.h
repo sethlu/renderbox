@@ -30,6 +30,7 @@ namespace renderbox {
         struct ObjectPropertyMixers {
             std::unique_ptr<ObjectTranslationPropertyMixer> translationPropertyMixer;
             std::unique_ptr<SplitObjectTranslationPropertyMixer> splitTranslationPropertyMixer;
+            std::unique_ptr<SplitObjectRotationPropertyMixer> splitRotationPropertyMixer;
         };
 
         std::unordered_map<Object *, std::unique_ptr<ObjectPropertyMixers>> objectPropertyMixers;

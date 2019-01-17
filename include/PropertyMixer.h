@@ -60,6 +60,9 @@ namespace renderbox {
         OBJECT_PROPERTY_TRANSLATION_X,
         OBJECT_PROPERTY_TRANSLATION_Y,
         OBJECT_PROPERTY_TRANSLATION_Z,
+        OBJECT_PROPERTY_ROTATION_X,
+        OBJECT_PROPERTY_ROTATION_Y,
+        OBJECT_PROPERTY_ROTATION_Z,
     };
 
     class ObjectPropertyMixer : public PropertyMixer {
@@ -78,7 +81,22 @@ namespace renderbox {
     class SplitObjectTranslationPropertyMixer : public ObjectPropertyMixer {
     public:
 
-        explicit SplitObjectTranslationPropertyMixer(std::shared_ptr<Object> object) : ObjectPropertyMixer(std::move(object)) {}
+        explicit SplitObjectTranslationPropertyMixer(std::shared_ptr<Object> const &object) : ObjectPropertyMixer(object) {}
+
+        void clear() override;
+
+        void apply() override;
+
+        FloatPropertyMixer x;
+        FloatPropertyMixer y;
+        FloatPropertyMixer z;
+
+    };
+
+    class SplitObjectRotationPropertyMixer : public ObjectPropertyMixer {
+    public:
+
+        explicit SplitObjectRotationPropertyMixer(std::shared_ptr<Object> const &object) : ObjectPropertyMixer(object) {}
 
         void clear() override;
 
@@ -115,7 +133,7 @@ namespace renderbox {
     class ObjectTranslationPropertyMixer : public TypedObjectPropertyMixer<Object::translation_type> {
     public:
 
-        explicit ObjectTranslationPropertyMixer(std::shared_ptr<Object> object);
+        explicit ObjectTranslationPropertyMixer(std::shared_ptr<Object> const &object);
 
         void apply() override;
 

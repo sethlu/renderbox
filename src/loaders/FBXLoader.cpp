@@ -867,6 +867,44 @@ break;
                     }
                 }
             }
+        } else if (name[0] == 'R') { // Not the best way check name
+            for (auto const &relationship : relationships.second) {
+                auto const &childNode = relationship.second;
+                if (relationship.first == "d|X") {
+                    auto keyframeTrack = parseAnimationCurve(doc, childNode);
+                    auto i = action->clip->tracks.size();
+                    action->clip->tracks.emplace_back(keyframeTrack);
+
+                    for (auto const &relationship : relationships.first) {
+                        auto const &parentNode = relationship.second;
+                        if (parentNode->name != "Model") continue;
+                        action->bind(mixer->getPropertyMixer(doc.objects.at(parentNode),
+                                                             OBJECT_PROPERTY_ROTATION_X), i);
+                    }
+                } else if (relationship.first == "d|Y") {
+                    auto keyframeTrack = parseAnimationCurve(doc, childNode);
+                    auto i = action->clip->tracks.size();
+                    action->clip->tracks.emplace_back(keyframeTrack);
+
+                    for (auto const &relationship : relationships.first) {
+                        auto const &parentNode = relationship.second;
+                        if (parentNode->name != "Model") continue;
+                        action->bind(mixer->getPropertyMixer(doc.objects.at(parentNode),
+                                                             OBJECT_PROPERTY_ROTATION_Y), i);
+                    }
+                } else if (relationship.first == "d|Z") {
+                    auto keyframeTrack = parseAnimationCurve(doc, childNode);
+                    auto i = action->clip->tracks.size();
+                    action->clip->tracks.emplace_back(keyframeTrack);
+
+                    for (auto const &relationship : relationships.first) {
+                        auto const &parentNode = relationship.second;
+                        if (parentNode->name != "Model") continue;
+                        action->bind(mixer->getPropertyMixer(doc.objects.at(parentNode),
+                                                             OBJECT_PROPERTY_ROTATION_Z), i);
+                    }
+                }
+            }
         }
     }
 

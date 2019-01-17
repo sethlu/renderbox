@@ -96,6 +96,33 @@ namespace renderbox {
                 propertyMixers.insert(newMixer);
                 return &(newMixer->z);
             }
+            case OBJECT_PROPERTY_ROTATION_X: {
+                if (mixers->splitRotationPropertyMixer) {
+                    return &(mixers->splitRotationPropertyMixer->x);
+                }
+                auto newMixer = new SplitObjectRotationPropertyMixer(object);
+                mixers->splitRotationPropertyMixer.reset(newMixer);
+                propertyMixers.insert(newMixer);
+                return &(newMixer->x);
+            }
+            case OBJECT_PROPERTY_ROTATION_Y: {
+                if (mixers->splitRotationPropertyMixer) {
+                    return &(mixers->splitRotationPropertyMixer->y);
+                }
+                auto newMixer = new SplitObjectRotationPropertyMixer(object);
+                mixers->splitRotationPropertyMixer.reset(newMixer);
+                propertyMixers.insert(newMixer);
+                return &(newMixer->y);
+            }
+            case OBJECT_PROPERTY_ROTATION_Z: {
+                if (mixers->splitRotationPropertyMixer) {
+                    return &(mixers->splitRotationPropertyMixer->z);
+                }
+                auto newMixer = new SplitObjectRotationPropertyMixer(object);
+                mixers->splitRotationPropertyMixer.reset(newMixer);
+                propertyMixers.insert(newMixer);
+                return &(newMixer->z);
+            }
         }
     }
 
