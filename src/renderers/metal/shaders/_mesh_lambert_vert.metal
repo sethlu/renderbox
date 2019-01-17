@@ -41,7 +41,15 @@ vertex LambertVertexOut mesh_lambert_vert(
 
     // Normal
 
-    float3 vertexWorldNormal = uniforms.worldNormalMatrix * float3(normals[vid]);
+    auto localNormal = float3(normals[vid]);
+
+#ifdef RB_VERTEX_SKIN
+    localNormal = float3x3(float3(boneMatrix[0]),
+                           float3(boneMatrix[1]),
+                           float3(boneMatrix[2])) * localNormal;
+#endif // RB_VERTEX_SKIN
+
+    float3 vertexWorldNormal = uniforms.worldNormalMatrix * localNormal;
 
     // UV
 
