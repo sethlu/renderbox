@@ -636,7 +636,7 @@ break;
                         continue;
                     }
                     if (auto bone = std::dynamic_pointer_cast<Bone>(it->second)) {
-                        mesh->bones.assign(clusterIndex, bone);
+                        mesh->bones.emplace_back(bone);
                     }
                 }
             }
