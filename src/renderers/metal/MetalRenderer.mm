@@ -61,8 +61,7 @@ namespace renderbox {
 
                 // Do not add objects without geometry or material
                 if (object->hasGeometry() && object->hasMaterial()) {
-                    renderList.addObject(deviceRendererProperties->getRenderPipelineState(object->getMaterial().get()),
-                                         object);
+                    renderList.addObject(deviceRendererProperties->getRenderPipelineState(object), object);
                 }
 
                 if (object->isLight()) {
@@ -164,8 +163,8 @@ namespace renderbox {
                             [device newBufferWithLength:sizeof(Uniforms) options:MTLResourceOptionCPUCacheModeDefault];
                     }
 
-                    auto geometry = object->getGeometry();
-                    auto material = object->getMaterial();
+                    auto const &geometry = object->getGeometry();
+                    auto const &material = object->getMaterial();
 
                     if (blankObjectProperties || objectProperties->geometryVersion != geometry->getVersion()) {
                         objectProperties->geometryVersion = geometry->getVersion();

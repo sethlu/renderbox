@@ -82,33 +82,40 @@ namespace renderbox {
     }
 
     MetalRenderPipelineState *
-    MetalDeviceRendererProperties::getRenderPipelineState(Material *material) {
+    MetalDeviceRendererProperties::getRenderPipelineState(Object *object) {
+        auto const &geometry = object->getGeometry();
+        auto const &material = object->getMaterial();
 
-        auto result = materialRenderPipelineStates_.find(material->getMaterialId());
-        if (result != materialRenderPipelineStates_.end()) {
-            if (result->second.materialVersion == material->getVersion()) {
+        auto result = renderPipelineStates_.find(object);
+        if (result != renderPipelineStates_.end()) {
+            if (result->second.geometryVersion == geometry->getVersion() &&
+                result->second.materialVersion == material->getVersion()) {
                 return result->second.renderPipelineState.get();
             } else {
-                LOG(VERBOSE) << "getRenderPipelineState: MISS (invalidated) " << material << std::endl;
+                LOG(VERBOSE) << "getRenderPipelineState: MISS (invalidated) object=" << object->getObjectId() << std::endl;
             }
         } else {
-            LOG(VERBOSE) << "getRenderPipelineState: MISS (cold) " << material << std::endl;
+            LOG(VERBOSE) << "getRenderPipelineState: MISS (cold) object=" << object->getObjectId() << std::endl;
         }
 
         // Make new render pipeline descriptor
 
         std::shared_ptr<MetalRenderPipelineState> renderPipelineState;
 
-        switch (material->getMaterialType()) {
+        switch (object->getMaterial()->getMaterialType()) {
             default:
                 LOG(FATAL) << "Unsupported material type." << std::endl;
                 exit(EXIT_FAILURE);
                 break;
             case MESH_BASIC_MATERIAL:
-                if (auto basicMaterial = dynamic_cast<MeshBasicMaterial *>(material)) {
+                if (auto basicMaterial = std::dynamic_pointer_cast<MeshBasicMaterial>(material)) {
 
                     std::string vertexFunctionName = "mesh_basic_vert";
                     std::string fragmentFunctionName = "mesh_basic_frag";
+
+                    if (!geometry->skinIndices.empty() && !geometry->skinWeights.empty()) {
+                        vertexFunctionName += "_skin";
+                    }
 
                     auto diffuseMap = basicMaterial->getDiffuseMap();
 
@@ -126,10 +133,14 @@ namespace renderbox {
                 }
                 break;
             case MESH_LAMBERT_MATERIAL:
-                if (auto lambertMaterial = dynamic_cast<MeshLambertMaterial *>(material)) {
+                if (auto lambertMaterial = std::dynamic_pointer_cast<MeshLambertMaterial>(material)) {
 
                     std::string vertexFunctionName = "mesh_lambert_vert";
                     std::string fragmentFunctionName = "mesh_lambert_frag";
+
+                    if (!geometry->skinIndices.empty() && !geometry->skinWeights.empty()) {
+                        vertexFunctionName += "_skin";
+                    }
 
                     auto ambientMap = lambertMaterial->getAmbientMap();
                     auto diffuseMap = lambertMaterial->getDiffuseMap();
@@ -150,8 +161,9 @@ namespace renderbox {
                 break;
         }
 
-        materialRenderPipelineStates_.insert(std::make_pair(material->getMaterialId(), (MaterialMetalRenderPipelineState) {
+        renderPipelineStates_.insert(std::make_pair(object, (ObjectMetalRenderPipelineState) {
             renderPipelineState,
+            geometry->getVersion(),
             material->getVersion()
         }));
 

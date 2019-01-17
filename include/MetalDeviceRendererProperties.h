@@ -12,8 +12,9 @@
 
 namespace renderbox {
 
-    struct MaterialMetalRenderPipelineState {
+    struct ObjectMetalRenderPipelineState {
         std::shared_ptr<MetalRenderPipelineState> renderPipelineState;
+        VersionTrackedObject::version_type geometryVersion;
         VersionTrackedObject::version_type materialVersion;
     };
 
@@ -25,7 +26,7 @@ namespace renderbox {
 
         explicit MetalDeviceRendererProperties(id <MTLDevice> device);
 
-        MetalRenderPipelineState *getRenderPipelineState(Material *material);
+        MetalRenderPipelineState *getRenderPipelineState(Object *object);
 
         MetalObjectProperties *getObjectProperties(Object *object, bool *blankObjectProperties = nullptr);
 
@@ -41,7 +42,7 @@ namespace renderbox {
 
         std::unordered_map<std::string, std::shared_ptr<MetalRenderPipelineState>> cachedRenderPipelineStates_;
 
-        std::unordered_map<int, MaterialMetalRenderPipelineState> materialRenderPipelineStates_;
+        std::unordered_map<Object *, ObjectMetalRenderPipelineState> renderPipelineStates_;
 
         id <MTLLibrary> getDefaultMetalLibrary();
 

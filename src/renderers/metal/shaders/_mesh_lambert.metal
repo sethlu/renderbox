@@ -10,7 +10,11 @@ typedef struct {
 #include "_mesh_lambert_vert.metal"
 #define RB_VERTEX_UV
 #include "_mesh_lambert_vert.metal"
+#define RB_VERTEX_SKIN
+#include "_mesh_lambert_vert.metal"
 #undef RB_VERTEX_UV
+#include "_mesh_lambert_vert.metal"
+#undef RB_VERTEX_SKIN
 
 // Fragment
 
