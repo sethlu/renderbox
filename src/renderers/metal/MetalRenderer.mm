@@ -261,7 +261,8 @@ namespace renderbox {
                     if (auto mesh = dynamic_cast<Mesh *>(object)) {
                         auto numBones = mesh->bones.size();
                         for (auto i = 0; i < numBones; i++) {
-                            auto boneMatrix = mesh->bones[i]->getWorldMatrix() * mesh->bones[i]->getBoneInverse();
+                            // TODO: Optimize this formula
+                            auto boneMatrix = glm::inverse(mesh->getWorldMatrix()) * mesh->bones[i]->getWorldMatrix() * mesh->bones[i]->getBoneInverse() * mesh->getWorldMatrix();
                             memcpy(&uniforms.boneMatrics[i], glm::value_ptr(boneMatrix), sizeof(uniforms.boneMatrics[0]));
                         }
                     }
