@@ -14,13 +14,19 @@ namespace renderbox {
             return BONE_OBJECT;
         }
 
-        void bindMatrix(bool recursive = false);
+        void bindBoneMatrix(bool recursive = false);
 
-        mat4 getBoneInverse() const;
+        mat4 getBoneMatrix() const;
+
+        mat4 getBoundBoneMatrixInverse() const;
 
     protected:
 
-        mat4 boneInverse;
+        mat4 boneMatrix;
+
+        mat4 boundBoneMatrixInverse;
+
+        void didTransform() override;
 
     };
 
