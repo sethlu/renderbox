@@ -61,69 +61,52 @@ namespace renderbox {
                 exit(EXIT_FAILURE);
             }
             case OBJECT_PROPERTY_TRANSLATION: {
-                if (mixers->translationPropertyMixer) {
-                    return mixers->translationPropertyMixer.get();
+                if (!mixers->translationPropertyMixer) {
+                    auto newMixer = new ObjectTranslationPropertyMixer(object);
+                    mixers->translationPropertyMixer.reset(newMixer);
+                    propertyMixers.insert(newMixer);
                 }
-                auto newMixer = new ObjectTranslationPropertyMixer(object);
-                mixers->translationPropertyMixer.reset(newMixer);
-                propertyMixers.insert(newMixer);
-                return newMixer;
+
+                return mixers->translationPropertyMixer.get();
             }
-            case OBJECT_PROPERTY_TRANSLATION_X: {
-                if (mixers->splitTranslationPropertyMixer) {
-                    return &(mixers->splitTranslationPropertyMixer->x);
-                }
-                auto newMixer = new SplitObjectTranslationPropertyMixer(object);
-                mixers->splitTranslationPropertyMixer.reset(newMixer);
-                propertyMixers.insert(newMixer);
-                return &(newMixer->x);
-            }
-            case OBJECT_PROPERTY_TRANSLATION_Y: {
-                if (mixers->splitTranslationPropertyMixer) {
-                    return &(mixers->splitTranslationPropertyMixer->y);
-                }
-                auto newMixer = new SplitObjectTranslationPropertyMixer(object);
-                mixers->splitTranslationPropertyMixer.reset(newMixer);
-                propertyMixers.insert(newMixer);
-                return &(newMixer->y);
-            }
+            case OBJECT_PROPERTY_TRANSLATION_X:
+            case OBJECT_PROPERTY_TRANSLATION_Y:
             case OBJECT_PROPERTY_TRANSLATION_Z: {
-                if (mixers->splitTranslationPropertyMixer) {
+                if (!mixers->splitTranslationPropertyMixer) {
+                    auto newMixer = new SplitObjectTranslationPropertyMixer(object);
+                    mixers->splitTranslationPropertyMixer.reset(newMixer);
+                    propertyMixers.insert(newMixer);
+                }
+
+                if (property == OBJECT_PROPERTY_TRANSLATION_X)
+                    return &(mixers->splitTranslationPropertyMixer->x);
+                else if (property == OBJECT_PROPERTY_TRANSLATION_Y)
+                    return &(mixers->splitTranslationPropertyMixer->y);
+                else if (property == OBJECT_PROPERTY_TRANSLATION_Z)
                     return &(mixers->splitTranslationPropertyMixer->z);
-                }
-                auto newMixer = new SplitObjectTranslationPropertyMixer(object);
-                mixers->splitTranslationPropertyMixer.reset(newMixer);
-                propertyMixers.insert(newMixer);
-                return &(newMixer->z);
+                break;
             }
-            case OBJECT_PROPERTY_ROTATION_X: {
-                if (mixers->splitRotationPropertyMixer) {
-                    return &(mixers->splitRotationPropertyMixer->x);
-                }
-                auto newMixer = new SplitObjectRotationPropertyMixer(object);
-                mixers->splitRotationPropertyMixer.reset(newMixer);
-                propertyMixers.insert(newMixer);
-                return &(newMixer->x);
-            }
-            case OBJECT_PROPERTY_ROTATION_Y: {
-                if (mixers->splitRotationPropertyMixer) {
-                    return &(mixers->splitRotationPropertyMixer->y);
-                }
-                auto newMixer = new SplitObjectRotationPropertyMixer(object);
-                mixers->splitRotationPropertyMixer.reset(newMixer);
-                propertyMixers.insert(newMixer);
-                return &(newMixer->y);
-            }
+            case OBJECT_PROPERTY_ROTATION_X:
+            case OBJECT_PROPERTY_ROTATION_Y:
             case OBJECT_PROPERTY_ROTATION_Z: {
-                if (mixers->splitRotationPropertyMixer) {
-                    return &(mixers->splitRotationPropertyMixer->z);
+                if (!mixers->splitRotationPropertyMixer) {
+                    auto newMixer = new SplitObjectRotationPropertyMixer(object);
+                    mixers->splitRotationPropertyMixer.reset(newMixer);
+                    propertyMixers.insert(newMixer);
                 }
-                auto newMixer = new SplitObjectRotationPropertyMixer(object);
-                mixers->splitRotationPropertyMixer.reset(newMixer);
-                propertyMixers.insert(newMixer);
-                return &(newMixer->z);
+
+                if (property == OBJECT_PROPERTY_ROTATION_X)
+                    return &(mixers->splitRotationPropertyMixer->x);
+                else if (property == OBJECT_PROPERTY_ROTATION_Y)
+                    return &(mixers->splitRotationPropertyMixer->y);
+                else if (property == OBJECT_PROPERTY_ROTATION_Z)
+                    return &(mixers->splitRotationPropertyMixer->z);
+                break;
             }
         }
+
+        NOTREACHED();
+        exit(EXIT_FAILURE);
     }
 
     void AnimationMixer::removePropertyMixers(Object *object) {
