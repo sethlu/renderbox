@@ -22,7 +22,7 @@
         _metalLayer = (CAMetalLayer *) self.layer;
         _metalLayer.device = MTLCreateSystemDefaultDevice();
         _metalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
-        _metalLayer.framebufferOnly = true;
+        _metalLayer.framebufferOnly = YES;
 
         [self updateMetalLayerDrawableSize];
     }
@@ -60,7 +60,7 @@
         _metalLayer = (CAMetalLayer *) self.layer;
         _metalLayer.device = MTLCreateSystemDefaultDevice();
         _metalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
-        _metalLayer.framebufferOnly = true;
+        _metalLayer.framebufferOnly = YES;
 
         [self updateDrawableSize];
     }
