@@ -30,6 +30,10 @@ namespace renderbox {
 
         MetalObjectProperties *getObjectProperties(Object *object, bool *blankObjectProperties = nullptr);
 
+        MTLRenderPassDescriptor *getRenderPassDescriptor(id <MTLTexture> targetTexture);
+
+        id <MTLDepthStencilState> getDepthStencilState();
+
     protected:
 
         id <MTLDevice> device;
@@ -49,6 +53,13 @@ namespace renderbox {
         std::shared_ptr<MetalRenderPipelineState>
         getRenderPipelineStateWithFunctionNames(std::string const &vertexFunctionName,
                                                 std::string const &fragmentFunctionName);
+
+        scoped_nsobject<MTLRenderPassDescriptor> renderPassDescriptor;
+
+        NSUInteger depthAttachmentTextureWidth;
+        NSUInteger depthAttachmentTextureHeight;
+
+        scoped_nsprotocol<id <MTLDepthStencilState>> depthStencilState;
 
     };
 

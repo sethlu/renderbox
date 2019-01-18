@@ -9,6 +9,30 @@ namespace renderbox {
     MetalDeviceRendererProperties::MetalDeviceRendererProperties(id <MTLDevice> device)
         : device(device) {
 
+        // Render pass descriptor
+
+        renderPassDescriptor.reset([MTLRenderPassDescriptor renderPassDescriptor]);
+
+        // Color attachment
+        MTLRenderPassColorAttachmentDescriptor *renderPassColorAttachment = [renderPassDescriptor colorAttachments][0];
+        renderPassColorAttachment.loadAction = MTLLoadActionClear;
+        renderPassColorAttachment.clearColor = MTLClearColorMake(0, 0, 0, 1);
+        renderPassColorAttachment.storeAction = MTLStoreActionStore;
+
+        // Depth attachment
+        MTLRenderPassDepthAttachmentDescriptor *renderPassDepthAttachment = [renderPassDescriptor depthAttachment];
+        renderPassDepthAttachment.loadAction = MTLLoadActionClear;
+        renderPassDepthAttachment.clearDepth = 1.0f;
+        renderPassDepthAttachment.storeAction = MTLStoreActionDontCare;
+
+        // Depth stencil
+
+        MTLDepthStencilDescriptor *depthStencilDescriptor = [MTLDepthStencilDescriptor new];
+        depthStencilDescriptor.depthCompareFunction = MTLCompareFunctionLess;
+        depthStencilDescriptor.depthWriteEnabled = YES;
+
+        depthStencilState.reset([device newDepthStencilStateWithDescriptor:depthStencilDescriptor]);
+
     }
 
     id <MTLLibrary>
@@ -187,6 +211,35 @@ namespace renderbox {
         if (blankObjectProperties) *blankObjectProperties = true;
         return properties;
 
+    }
+
+    MTLRenderPassDescriptor *MetalDeviceRendererProperties::getRenderPassDescriptor(id <MTLTexture> targetTexture) {
+        [renderPassDescriptor colorAttachments][0].texture = targetTexture;
+
+        if (targetTexture.width != depthAttachmentTextureWidth ||
+            targetTexture.height != depthAttachmentTextureHeight) {
+
+            depthAttachmentTextureWidth = targetTexture.width;
+            depthAttachmentTextureHeight = targetTexture.height;
+
+            // Depth attachment texture
+            MTLTextureDescriptor *depthAttachmentTextureDescriptor =
+            [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatDepth32Float
+                                                               width:depthAttachmentTextureWidth
+                                                              height:depthAttachmentTextureHeight
+                                                           mipmapped:NO];
+            depthAttachmentTextureDescriptor.resourceOptions = MTLResourceStorageModePrivate;
+            depthAttachmentTextureDescriptor.usage = MTLTextureUsageRenderTarget;
+
+            [renderPassDescriptor depthAttachment].texture = [device newTextureWithDescriptor:depthAttachmentTextureDescriptor];
+
+        }
+
+        return renderPassDescriptor;
+    }
+
+    id <MTLDepthStencilState> MetalDeviceRendererProperties::getDepthStencilState() {
+        return depthStencilState;
     }
 
 }

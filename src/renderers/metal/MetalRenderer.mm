@@ -73,49 +73,19 @@ namespace renderbox {
                 }
             }
 
-            // Render
-
-            id <CAMetalDrawable> drawable = [metalView.metalLayer nextDrawable];
-
             // Create command buffer
             id <MTLCommandBuffer> commandBuffer = [queue commandBuffer];
 
-            // Create render pass descriptor
-            MTLRenderPassDescriptor *renderPassDescriptor = [MTLRenderPassDescriptor renderPassDescriptor];
+            // Drawable
+            id <CAMetalDrawable> drawable = [metalView.metalLayer nextDrawable];
 
-            // Color attachment
-            MTLRenderPassColorAttachmentDescriptor *renderPassColorAttachment = renderPassDescriptor.colorAttachments[0];
-            renderPassColorAttachment.texture = drawable.texture;
-            renderPassColorAttachment.loadAction = MTLLoadActionClear;
-            renderPassColorAttachment.clearColor = MTLClearColorMake(0, 0, 0, 1);
-            renderPassColorAttachment.storeAction = MTLStoreActionStore;
-
-            // Depth attachment texture
-            MTLTextureDescriptor *depthAttachmentTextureDescriptor =
-                    [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatDepth32Float
-                                                                       width:drawable.texture.width
-                                                                      height:drawable.texture.height
-                                                                   mipmapped:NO];
-            depthAttachmentTextureDescriptor.resourceOptions = MTLResourceStorageModePrivate;
-            depthAttachmentTextureDescriptor.usage = MTLTextureUsageRenderTarget;
-
-            // Depth attachment
-            MTLRenderPassDepthAttachmentDescriptor *renderPassDepthAttachment = renderPassDescriptor.depthAttachment;
-            renderPassDepthAttachment.texture = [device newTextureWithDescriptor:depthAttachmentTextureDescriptor];
-            renderPassDepthAttachment.loadAction = MTLLoadActionClear;
-            renderPassDepthAttachment.clearDepth = 1.0f;
-            renderPassDepthAttachment.storeAction = MTLStoreActionDontCare;
-
-            // Depth stencil
-
-            MTLDepthStencilDescriptor *depthStencilDescriptor = [MTLDepthStencilDescriptor new];
-            depthStencilDescriptor.depthCompareFunction = MTLCompareFunctionLess;
-            depthStencilDescriptor.depthWriteEnabled = YES;
-            id <MTLDepthStencilState> depthStencilState = [device newDepthStencilStateWithDescriptor:depthStencilDescriptor];
+            auto const &renderPassDescriptor = deviceRendererProperties->getRenderPassDescriptor(drawable.texture);
+            auto const &depthStencilState = deviceRendererProperties->getDepthStencilState();
 
             // Create render command encoder
             id <MTLRenderCommandEncoder> encoder =
                     [commandBuffer renderCommandEncoderWithDescriptor:renderPassDescriptor];
+
             [encoder setDepthStencilState:depthStencilState];
             [encoder setFrontFacingWinding:MTLWindingCounterClockwise];
             [encoder setCullMode:MTLCullModeNone];
