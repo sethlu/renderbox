@@ -8,10 +8,13 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Light.h"
+#include "Mesh.h"
 #include "MetalRenderList.h"
+#include "logging.h"
 
 
-#define NUM_POINT_LIGHTS 4
+uint const NUM_MAX_POINT_LIGHTS = 4;
+uint const NUM_MAX_BONES = 64;
 
 typedef struct {
     simd_float3 position;
@@ -26,7 +29,8 @@ typedef struct {
     simd_float3 materialAmbientColor;
     simd_float3 materialDiffuseColor;
     uint numActivePointLights;
-    PointLight pointLights[NUM_POINT_LIGHTS];
+    PointLight pointLights[NUM_MAX_POINT_LIGHTS];
+    matrix_float4x4 boneMatrics[NUM_MAX_BONES];
 } Uniforms;
 
 namespace renderbox {
@@ -57,8 +61,7 @@ namespace renderbox {
 
                 // Do not add objects without geometry or material
                 if (object->hasGeometry() && object->hasMaterial()) {
-                    renderList.addObject(deviceRendererProperties->getRenderPipelineState(object->getMaterial().get()),
-                                         object);
+                    renderList.addObject(deviceRendererProperties->getRenderPipelineState(object), object);
                 }
 
                 if (object->isLight()) {
@@ -70,49 +73,19 @@ namespace renderbox {
                 }
             }
 
-            // Render
-
-            id <CAMetalDrawable> drawable = [metalView.metalLayer nextDrawable];
-
             // Create command buffer
             id <MTLCommandBuffer> commandBuffer = [queue commandBuffer];
 
-            // Create render pass descriptor
-            MTLRenderPassDescriptor *renderPassDescriptor = [MTLRenderPassDescriptor renderPassDescriptor];
+            // Drawable
+            id <CAMetalDrawable> drawable = [metalView.metalLayer nextDrawable];
 
-            // Color attachment
-            MTLRenderPassColorAttachmentDescriptor *renderPassColorAttachment = renderPassDescriptor.colorAttachments[0];
-            renderPassColorAttachment.texture = drawable.texture;
-            renderPassColorAttachment.loadAction = MTLLoadActionClear;
-            renderPassColorAttachment.clearColor = MTLClearColorMake(0, 0, 0, 1);
-            renderPassColorAttachment.storeAction = MTLStoreActionStore;
-
-            // Depth attachment texture
-            MTLTextureDescriptor *depthAttachmentTextureDescriptor =
-                    [MTLTextureDescriptor texture2DDescriptorWithPixelFormat:MTLPixelFormatDepth32Float
-                                                                       width:drawable.texture.width
-                                                                      height:drawable.texture.height
-                                                                   mipmapped:NO];
-            depthAttachmentTextureDescriptor.resourceOptions = MTLResourceStorageModePrivate;
-            depthAttachmentTextureDescriptor.usage = MTLTextureUsageRenderTarget;
-
-            // Depth attachment
-            MTLRenderPassDepthAttachmentDescriptor *renderPassDepthAttachment = renderPassDescriptor.depthAttachment;
-            renderPassDepthAttachment.texture = [device newTextureWithDescriptor:depthAttachmentTextureDescriptor];
-            renderPassDepthAttachment.loadAction = MTLLoadActionClear;
-            renderPassDepthAttachment.clearDepth = 1.0f;
-            renderPassDepthAttachment.storeAction = MTLStoreActionDontCare;
-
-            // Depth stencil
-
-            MTLDepthStencilDescriptor *depthStencilDescriptor = [MTLDepthStencilDescriptor new];
-            depthStencilDescriptor.depthCompareFunction = MTLCompareFunctionLess;
-            depthStencilDescriptor.depthWriteEnabled = YES;
-            id <MTLDepthStencilState> depthStencilState = [device newDepthStencilStateWithDescriptor:depthStencilDescriptor];
+            auto const &renderPassDescriptor = deviceRendererProperties->getRenderPassDescriptor(drawable.texture);
+            auto const &depthStencilState = deviceRendererProperties->getDepthStencilState();
 
             // Create render command encoder
             id <MTLRenderCommandEncoder> encoder =
                     [commandBuffer renderCommandEncoderWithDescriptor:renderPassDescriptor];
+
             [encoder setDepthStencilState:depthStencilState];
             [encoder setFrontFacingWinding:MTLWindingCounterClockwise];
             [encoder setCullMode:MTLCullModeNone];
@@ -160,23 +133,33 @@ namespace renderbox {
                             [device newBufferWithLength:sizeof(Uniforms) options:MTLResourceOptionCPUCacheModeDefault];
                     }
 
-                    auto geometry = object->getGeometry();
-                    auto material = object->getMaterial();
+                    auto const &geometry = object->getGeometry();
+                    auto const &material = object->getMaterial();
 
                     if (blankObjectProperties || objectProperties->geometryVersion != geometry->getVersion()) {
                         objectProperties->geometryVersion = geometry->getVersion();
 
+                        auto numVertices = geometry->vertices.size();
+
                         objectProperties->getBuffer(0)->buffer(geometry->vertices);
 
-                        if (geometry->uvs.size() == geometry->vertices.size())
+                        if (geometry->uvs.size() == numVertices)
                             objectProperties->getBuffer(1)->buffer(geometry->uvs);
                         else if (!geometry->uvs.empty()) throw;
 
-                        if (geometry->normals.size() == geometry->vertices.size())
+                        if (geometry->normals.size() == numVertices)
                             objectProperties->getBuffer(2)->buffer(geometry->normals);
                         else if (!geometry->normals.empty()) throw;
 
-                        objectProperties->getBuffer(3)->buffer(geometry->faces);
+                        if (geometry->skinIndices.size() == numVertices)
+                            objectProperties->getBuffer(3)->buffer(geometry->skinIndices);
+                        else if (!geometry->skinIndices.empty()) throw;
+
+                        if (geometry->skinWeights.size() == numVertices)
+                            objectProperties->getBuffer(4)->buffer(geometry->skinWeights);
+                        else if (!geometry->skinWeights.empty()) throw;
+
+                        objectProperties->getBuffer(5)->buffer(geometry->faces);
 
                     }
 
@@ -243,6 +226,15 @@ namespace renderbox {
                         }
                     }
 
+                    // Bones
+                    if (auto mesh = dynamic_cast<Mesh *>(object)) {
+                        auto numBones = mesh->bones.size();
+                        for (auto i = 0; i < numBones; i++) {
+                            auto boneMatrix = mesh->bones[i]->getBoneMatrix() * mesh->bones[i]->getBoundBoneMatrixInverse();
+                            memcpy(&uniforms.boneMatrics[i], glm::value_ptr(boneMatrix), sizeof(uniforms.boneMatrics[0]));
+                        }
+                    }
+
                     void *bufferPointer = [objectProperties->uniformBuffer contents];
                     memcpy(bufferPointer, &uniforms, sizeof(Uniforms));
 
@@ -254,11 +246,15 @@ namespace renderbox {
                                       offset:0 atIndex:2];
                     [encoder setVertexBuffer:objectProperties->uniformBuffer
                                       offset:0 atIndex:3];
+                    [encoder setVertexBuffer:objectProperties->getBuffer(3)->bufferObject
+                                      offset:0 atIndex:4];
+                    [encoder setVertexBuffer:objectProperties->getBuffer(4)->bufferObject
+                                      offset:0 atIndex:5];
 
                     [encoder drawIndexedPrimitives:MTLPrimitiveTypeTriangle
                                         indexCount:object->getGeometry()->faces.size() * 3
                                          indexType:MTLIndexTypeUInt32
-                                       indexBuffer:objectProperties->getBuffer(3)->bufferObject
+                                       indexBuffer:objectProperties->getBuffer(5)->bufferObject
                                  indexBufferOffset:0];
 
                 }

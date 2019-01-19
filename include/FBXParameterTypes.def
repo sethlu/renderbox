@@ -1,0 +1,29 @@
+#ifndef PARAM
+#define PARAM(TYPE, CTYPE)
+#endif
+#ifndef ARRAY_PARAM
+#define ARRAY_PARAM(TYPE, CTYPE)
+#endif
+#ifndef SPECIAL_PARAM
+#define SPECIAL_PARAM(TYPE)
+#endif
+
+PARAM(C, bool)
+PARAM(Y, int16_t)
+PARAM(I, int32_t)
+PARAM(L, int64_t)
+PARAM(F, float_t)
+PARAM(D, double_t)
+
+ARRAY_PARAM(b, bool)
+ARRAY_PARAM(i, int32_t)
+ARRAY_PARAM(l, int64_t)
+ARRAY_PARAM(f, float_t)
+ARRAY_PARAM(d, double_t)
+
+SPECIAL_PARAM(S)
+SPECIAL_PARAM(R)
+
+#undef SPECIAL_PARAM
+#undef ARRAY_PARAM
+#undef PARAM

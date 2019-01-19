@@ -3,6 +3,8 @@
 
 
 #include "Object.h"
+#include "AnimationMixer.h"
+
 
 namespace renderbox {
 
@@ -18,6 +20,10 @@ namespace renderbox {
         };
 
         void setAmbientColor(const vec3 &ambientColor);
+
+        std::vector<std::shared_ptr<AnimationMixer>> animationMixers;
+
+        void updateAnimations(float t);
 
     protected:
 

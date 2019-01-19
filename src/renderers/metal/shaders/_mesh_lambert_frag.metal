@@ -11,14 +11,14 @@ fragment float4 mesh_lambert_frag_diffusemap(
 fragment float4 mesh_lambert_frag(
 #endif
 #endif
-                             LambertVertexOut in [[stage_in]]
+                                  LambertVertexOut in [[stage_in]]
 #ifdef RB_MATERIAL_AMBIENT_MAP
-                             , texture2d<float> ambientMap [[texture(0)]]
+                                  , texture2d<float> ambientMap [[texture(0)]]
 #endif
 #ifdef RB_MATERIAL_DIFFUSE_MAP
-                             , texture2d<float> diffuseMap [[texture(1)]]
+                                  , texture2d<float> diffuseMap [[texture(1)]]
 #endif
-                             ) {
+                                  ) {
 
 #ifdef RB_MATERIAL_AMBIENT_MAP
     float4 ambientMapValue = ambientMap.sample(textureSampler, in.uv);

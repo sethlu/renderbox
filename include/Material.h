@@ -52,11 +52,11 @@ namespace renderbox {
 
         virtual ~AmbientMaterial();
 
-        explicit AmbientMaterial(vec3 ambientColor) : ambientColor(ambientColor) {};
+        explicit AmbientMaterial(vec3 const &ambientColor) : ambientColor(ambientColor) {};
 
         vec3 getAmbientColor() const { return ambientColor; }
 
-        void setAmbientColor(vec3 &ambientColor_) { ambientColor = ambientColor_; }
+        void setAmbientColor(vec3 const &ambientColor_) { ambientColor = ambientColor_; }
 
         std::shared_ptr<Texture> getAmbientMap() const { return ambientMap; }
 
@@ -75,11 +75,11 @@ namespace renderbox {
 
         virtual ~DiffuseMaterial();
 
-        explicit DiffuseMaterial(vec3 diffuseColor) : diffuseColor(diffuseColor) {};
+        explicit DiffuseMaterial(vec3 const &diffuseColor) : diffuseColor(diffuseColor) {};
 
         vec3 getDiffuseColor() const { return diffuseColor; }
 
-        void setDiffuseColor(vec3 &diffuseColor_) { diffuseColor = diffuseColor_; }
+        void setDiffuseColor(vec3 const &diffuseColor_) { diffuseColor = diffuseColor_; }
 
         std::shared_ptr<Texture> getDiffuseMap() const { return diffuseMap; }
 

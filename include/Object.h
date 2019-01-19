@@ -17,14 +17,15 @@ namespace renderbox {
         SCENE_OBJECT  = 0x2,
         CAMERA_OBJECT = 0x4,
         LIGHT_OBJECT  = 0x8,
+        BONE_OBJECT   = 0x10,
     };
 
     class Object : public VersionTrackedObject {
     public:
 
-        Object() = default;
+        typedef vec3 translation_type;
 
-        Object(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material);
+        explicit Object(std::shared_ptr<Geometry> geometry = nullptr, std::shared_ptr<Material> material = nullptr);
 
         virtual ~Object();
 
@@ -34,8 +35,16 @@ namespace renderbox {
             return GROUP_OBJECT;
         }
 
+        bool isMesh() const {
+            return (getObjectType() & MESH_OBJECT) != 0;
+        }
+
         bool isLight() const {
             return (getObjectType() & LIGHT_OBJECT) != 0;
+        }
+
+        bool isBone() const {
+            return (getObjectType() & BONE_OBJECT) != 0;
         }
 
         /**
@@ -59,13 +68,15 @@ namespace renderbox {
 
         void addChild(std::shared_ptr<Object> child);
 
+        Object *getRoot();
+
         // Geometry
 
         bool hasGeometry();
 
         std::shared_ptr<Geometry> getGeometry();
 
-        void setGeometry(std::shared_ptr<Geometry> geometry);
+        void setGeometry(std::shared_ptr<Geometry> const &geometry);
 
         // Material
 
@@ -73,7 +84,7 @@ namespace renderbox {
 
         std::shared_ptr<Material> getMaterial();
 
-        void setMaterial(std::shared_ptr<Material> material);
+        void setMaterial(std::shared_ptr<Material> const &material);
 
         // Object transformation
 
@@ -85,11 +96,11 @@ namespace renderbox {
 
         // Translation
 
-        vec3 getTranslation() const;
+        translation_type getTranslation() const;
 
-        void setTranslation(vec3 translation);
+        void setTranslation(translation_type translation);
 
-        void translate(vec3 delta);
+        void translate(translation_type delta);
 
         // Rotation
 

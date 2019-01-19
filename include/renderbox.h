@@ -21,11 +21,17 @@
 #include "GLSLMaterial.h"
 
 #include "Mesh.h"
+#include "Bone.h"
 
 #include "Light.h"
 #include "PointLight.h"
 
 #include "Scene.h"
+
+#include "KeyframeTrack.h"
+#include "AnimationClip.h"
+#include "AnimationAction.h"
+#include "AnimationMixer.h"
 
 #if defined(RENDERBOX_USE_OPENGL)
 #include "OpenGLRenderer.h"
@@ -50,6 +56,7 @@
 #include "GLSLPreprocessor.h"
 
 #include "OBJLoader.h"
+#include "FBXLoader.h"
 
 
 #endif //RENDERBOX_RENDERBOX_H

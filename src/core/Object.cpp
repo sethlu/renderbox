@@ -1,8 +1,12 @@
+#include "Object.h"
+
 #include <iostream>
+#include <utility>
+
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/matrix_access.hpp>
+
 #include "Vector.h"
-#include "Object.h"
 
 
 namespace renderbox {
@@ -10,12 +14,12 @@ namespace renderbox {
     int Object::count = 0;
 
     Object::Object(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material)
-        : geometry(geometry), material(material) {
+            : geometry(std::move(geometry)), material(std::move(material)) {
 
     }
 
     Object::~Object() {
-        // Release parents
+        // Release children's parent reference
         for (const auto &child : children) {
             child->parent = nullptr;
         }
@@ -49,6 +53,12 @@ namespace renderbox {
         children.push_back(child);
     }
 
+    Object *Object::getRoot() {
+        auto root = this;
+        while (root->hasParent()) root = root->parent;
+        return root;
+    }
+
     bool Object::hasGeometry() {
         return !!geometry;
     }
@@ -57,8 +67,9 @@ namespace renderbox {
         return geometry;
     }
 
-    void Object::setGeometry(std::shared_ptr<Geometry> geometry_) {
+    void Object::setGeometry(std::shared_ptr<Geometry> const &geometry_) {
         geometry = std::move(geometry_);
+        didUpdate();
     }
 
     bool Object::hasMaterial() {
@@ -69,8 +80,9 @@ namespace renderbox {
         return material;
     }
 
-    void Object::setMaterial(std::shared_ptr<Material> material_) {
+    void Object::setMaterial(std::shared_ptr<Material> const &material_) {
         material = std::move(material_);
+        didUpdate();
     }
 
     mat4 Object::getWorldMatrix() const {
@@ -95,16 +107,16 @@ namespace renderbox {
         didUpdate();
     }
 
-    vec3 Object::getTranslation() const {
+    Object::translation_type Object::getTranslation() const {
         return translation;
     }
 
-    void Object::setTranslation(vec3 translation) {
+    void Object::setTranslation(Object::translation_type translation) {
         this->translation = translation;
         didTransform();
     }
 
-    void Object::translate(vec3 delta) {
+    void Object::translate(Object::translation_type delta) {
         translation += delta;
         didTransform();
     }

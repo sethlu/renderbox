@@ -27,6 +27,10 @@ namespace renderbox {
 
         std::vector<uvec3> faces;
 
+        std::vector<uvec4> skinIndices;
+
+        std::vector<vec4> skinWeights;
+
         void regenerateNormals();
 
     };
