@@ -10,8 +10,8 @@ std::unique_ptr<renderbox::OpenGLRenderer> renderer;
 std::unique_ptr<renderbox::GLFWOpenGLRenderTarget> renderTarget;
 
 std::shared_ptr<renderbox::Object> cameraRig;
-std::shared_ptr<renderbox::Mesh> terrain;
-std::shared_ptr<renderbox::Mesh> testCube;
+std::shared_ptr<renderbox::Object> terrain;
+std::shared_ptr<renderbox::Object> testCube;
 
 float cameraDistance = 40.0f;
 float cameraAngularVelocity = 0.0f;
@@ -37,13 +37,13 @@ void init() {
         }
     }
     voxelGeometry->updateGeometryByMarchingCube(isolevel); // Refresh geometry
-    terrain = std::make_shared<renderbox::Mesh>(
+    terrain = std::make_shared<renderbox::Object>(
         voxelGeometry,
         std::make_shared<renderbox::MeshLambertMaterial>(glm::vec3(1.0f)));
     scene->addChild(terrain);
 
     // Test cube
-    testCube = std::make_shared<renderbox::Mesh>(
+    testCube = std::make_shared<renderbox::Object>(
         std::make_shared<renderbox::BoxGeometry>(0.5f, 0.5f, 0.5f),
         std::make_shared<renderbox::MeshBasicMaterial>(glm::vec3(1.0f, 0, 0)));
     scene->addChild(testCube);

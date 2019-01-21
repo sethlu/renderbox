@@ -37,7 +37,7 @@ void init() {
     cameraRig->rotate(glm::vec3(1.0f, 0, 0), glm::radians(cameraAngle[1]));
 
     // Test cube
-    testCube = std::make_shared<renderbox::Mesh>(
+    testCube = std::make_shared<renderbox::Object>(
         std::make_shared<renderbox::BoxGeometry>(1, 1, 1),
         std::make_shared<renderbox::GLSLMaterial>(
             renderbox::readFile("shaders/spectral_vert.glsl"),

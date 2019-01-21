@@ -13,7 +13,7 @@ std::unique_ptr<renderbox::OpenGLRenderer> renderer;
 std::unique_ptr<renderbox::GLFWOpenGLRenderTarget> renderTarget;
 
 std::shared_ptr<renderbox::Object> cameraRig;
-std::shared_ptr<renderbox::Mesh> brain;
+std::shared_ptr<renderbox::Object> brain;
 
 float cameraDistance = 80.0f;
 float cameraAngularVelocity = 0.0f;
@@ -63,7 +63,7 @@ void init() {
 
     std::cout << "isolevel " << isolevel << "\n";
     voxelGeometry->updateGeometryByMarchingCube(isolevel); // Refresh geometry
-    brain = std::make_shared<renderbox::Mesh>(voxelGeometry,
+    brain = std::make_shared<renderbox::Object>(voxelGeometry,
                                               std::make_shared<renderbox::MeshLambertMaterial>());
     brain->setScale(glm::vec3(1, 1, 2));
     brain->setTranslation(glm::vec3(-256 / 2 / steps, -256 / 2 / steps, -109 / steps));
