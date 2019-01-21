@@ -1,12 +1,15 @@
+#include "OpenGLRendererProperties.h"
+
 #include <sstream>
 #include <iostream>
-#include "OpenGLRendererProperties.h"
+
 #include "GLSLMaterial.h"
+#include "logging.h"
 
 
 namespace renderbox {
 
-    std::unordered_map<int, std::unique_ptr<OpenGLProgram>> OpenGLRendererProperties::programs;
+    std::unordered_map<Material *, ObjectOpenGLProgram> OpenGLRendererProperties::programs;
 
     OpenGLObjectProperties *OpenGLRendererProperties::getObjectProperties(Object *object, bool *blankObjectProperties) {
 
@@ -36,16 +39,24 @@ namespace renderbox {
     }
 
     OpenGLProgram *OpenGLRendererProperties::getProgram(Material *material, bool forceRecompile) {
+        auto const &openglMaterial = dynamic_cast<OpenGLMaterial *>(material);
+        if (!openglMaterial) {
+            LOG(ERROR) << "Unsupported material type" << std::endl;
+            exit(EXIT_FAILURE);
+        };
 
-        std::unique_ptr<OpenGLProgram> *owner = nullptr;
+        ObjectOpenGLProgram *objectOpenGLProgram = nullptr;
 
-        int materialId = material->getMaterialId();
-        auto result = programs.find(materialId);
+        auto result = programs.find(material);
         if (result != programs.end()) {
-            if (!forceRecompile) {
-                return result->second.get();
+            if (result->second.materialVersion == material->getVersion() && !forceRecompile) {
+                return result->second.program;
+            } else {
+                LOG(VERBOSE) << "getProgram: MISS (invalidated)" << std::endl;
+                objectOpenGLProgram = &result->second;
             }
-            owner = &result->second;
+        } else {
+            LOG(VERBOSE) << "getProgram: MISS (cold)" << std::endl;
         }
 
         std::ostringstream bootstrap;
@@ -54,7 +65,6 @@ namespace renderbox {
 
         BOOTSTRAP(RB_NUM_POINT_LIGHTS, upperPowerOfTwo(numPointLights));
 
-        // TODO: Program needs to be invalidated if material updates
 		if (material->isAmbientMaterial()) {
 			if (auto m = dynamic_cast<AmbientMaterial *>(material)) {
 				if (m->getAmbientMap()) {
@@ -72,56 +82,19 @@ namespace renderbox {
 
 #undef BOOTSTRAP
 
-        OpenGLProgram *program;
-        switch (material->getMaterialType()) {
-            case MESH_BASIC_MATERIAL:
-                program = OpenGLProgram::createProgramWithPreprocessedSources(
-                    #if defined(RENDERBOX_OS_MACOS)
-                    #include "shaders/mesh_basic_vert.glsl"
-                    #elif defined(RENDERBOX_OS_IPHONEOS)
-                    #include "shaders/es/mesh_basic_vert.glsl"
-                    #endif
-                    ,
-                    #if defined(RENDERBOX_OS_MACOS)
-                    #include "shaders/mesh_basic_frag.glsl"
-                    #elif defined(RENDERBOX_OS_IPHONEOS)
-                    #include "shaders/es/mesh_basic_frag.glsl"
-                    #endif
-                    , bootstrap.str()
-                );
-                break;
-            case MESH_LAMBERT_MATERIAL:
-                program = OpenGLProgram::createProgramWithPreprocessedSources(
-                    #if defined(RENDERBOX_OS_MACOS)
-                    #include "shaders/mesh_lambert_vert.glsl"
-                    #elif defined(RENDERBOX_OS_IPHONEOS)
-                    #include "shaders/es/mesh_lambert_vert.glsl"
-                    #endif
-                    ,
-                    #if defined(RENDERBOX_OS_MACOS)
-                    #include "shaders/mesh_lambert_frag.glsl"
-                    #elif defined(RENDERBOX_OS_IPHONEOS)
-                    #include "shaders/es/mesh_lambert_frag.glsl"
-                    #endif
-                    , bootstrap.str()
-                );
-                break;
-            case GLSL_MATERIAL:
-                program = OpenGLProgram::createProgramWithPreprocessedSources(
-                    ((GLSLMaterial *) material)->getVertexShaderSource(),
-                    ((GLSLMaterial *) material)->getFragmentShaderSource()
-                );
-                break;
-            default:
-                fprintf(stderr, "Unsupported material type");
-                throw 2;
-        }
+        OpenGLProgram *program = OpenGLProgram::createProgramWithPreprocessedSources(
+                openglMaterial->getOpenGLVertexShaderSource(nullptr),
+                openglMaterial->getOpenGLFragmentShaderSource(nullptr),
+                bootstrap.str());
 
-        if (owner) {
-            (*owner).reset(program);
+        if (objectOpenGLProgram) {
+            objectOpenGLProgram->program = program;
+            objectOpenGLProgram->materialVersion = material->getVersion();
         } else {
-            programs.insert(std::pair<int, std::unique_ptr<OpenGLProgram>>(
-                materialId, std::unique_ptr<OpenGLProgram>(program)));
+            programs.insert(std::make_pair(material, (ObjectOpenGLProgram) {
+                program,
+                material->getVersion()
+            }));
         }
 
         return program;

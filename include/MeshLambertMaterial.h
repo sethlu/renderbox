@@ -6,7 +6,7 @@
 
 namespace renderbox {
 
-    class MeshLambertMaterial : public Material, public AmbientMaterial, public DiffuseMaterial {
+    class MeshLambertMaterial : public Material, public AmbientMaterial, public DiffuseMaterial, public OpenGLMaterial, public MetalMaterial {
     public:
 
         explicit MeshLambertMaterial(vec3 diffuseColor = vec3(1.0f))
@@ -20,9 +20,17 @@ namespace renderbox {
 
         };
 
-        MATERIAL_TYPE getMaterialType() const override {
-            return MESH_LAMBERT_MATERIAL;
+        unsigned int getMaterialType() const override {
+            return MESH_MATERIAL | AMBIENT_MATERIAL | DIFFUSE_MATERIAL;
         };
+
+        char const *getOpenGLVertexShaderSource(Geometry *geometry) const override;
+
+        char const *getOpenGLFragmentShaderSource(Geometry *geometry) const override;
+
+        std::string getMetalVertexFunctionName(Geometry *geometry) const override;
+
+        std::string getMetalFragmentFunctionName(Geometry *geometry) const override;
 
     };
 

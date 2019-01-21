@@ -3,9 +3,11 @@
 
 
 #include <unordered_map>
+#include <string>
 
 #include "OpenGL.h"
 #include "OpenGLBuffer.h"
+
 
 namespace renderbox {
 

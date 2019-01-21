@@ -2,11 +2,12 @@
 #define RENDERBOX_BOXGEOMETRY_H
 
 
-#include "Geometry.h"
+#include "MeshGeometry.h"
+
 
 namespace renderbox {
 
-    class BoxGeometry : public Geometry {
+    class BoxGeometry : public MeshGeometry {
     public:
 
         BoxGeometry(float width, float height, float depth);

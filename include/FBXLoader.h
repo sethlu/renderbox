@@ -5,6 +5,7 @@
 #include <unordered_map>
 
 #include "Object.h"
+#include "MeshGeometry.h"
 #include "AnimationMixer.h"
 
 
@@ -62,7 +63,7 @@ namespace renderbox {
         std::unordered_map<FBXNode const *, std::pair<std::vector<std::pair<std::string, FBXNode *>>, std::vector<std::pair<std::string, FBXNode *>>>> connections;
 
         // Results from parsing
-        std::unordered_map<FBXNode const *, std::shared_ptr<Geometry>> geometries;
+        std::unordered_map<FBXNode const *, std::shared_ptr<MeshGeometry>> geometries;
         std::unordered_map<FBXNode const *, std::shared_ptr<Material>> materials;
         std::unordered_map<FBXNode const *, std::shared_ptr<Object>> objects;
         std::unordered_map<FBXNode const *, std::shared_ptr<AnimationClip>> animationClips;

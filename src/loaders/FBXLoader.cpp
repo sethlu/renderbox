@@ -373,7 +373,7 @@ break;
             }
         }
 
-        void parseMeshGeometrySkinClusterDeformer(FBXDocument &doc, FBXNode const *node, Geometry *geometry, unsigned int clusterIndex) {
+        void parseMeshGeometrySkinClusterDeformer(FBXDocument &doc, FBXNode const *node, MeshGeometry *geometry, unsigned int clusterIndex) {
             FBXNode const *indexesSubNode = nullptr;
             FBXNode const *weightsSubNode = nullptr;
 
@@ -431,7 +431,7 @@ break;
 
         }
 
-        void parseMeshGeometrySkinDeformer(FBXDocument &doc, FBXNode const *node, Geometry *geometry) {
+        void parseMeshGeometrySkinDeformer(FBXDocument &doc, FBXNode const *node, MeshGeometry *geometry) {
             auto const &relationships = doc.connections.at(node);
             unsigned int clusterIndex = 0;
             for (auto relationship : relationships.second) {
@@ -449,8 +449,8 @@ break;
             }
         }
 
-        std::shared_ptr<Geometry> parseMeshGeometry(FBXDocument &doc, FBXNode const *node) {
-            auto geometry = std::make_shared<Geometry>();
+        std::shared_ptr<MeshGeometry> parseMeshGeometry(FBXDocument &doc, FBXNode const *node) {
+            auto geometry = std::make_shared<MeshGeometry>();
 
             for (auto const &subNode : node->subNodes) {
                 if (subNode->name == "Vertices") {

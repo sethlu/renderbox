@@ -8,6 +8,8 @@
 
 #include "lexer.h"
 #include "Scene.h"
+#include "MeshGeometry.h"
+
 
 namespace std {
     namespace {
@@ -179,7 +181,7 @@ namespace renderbox {
 
         Object *object;
 
-        Geometry *geometry;
+        MeshGeometry *geometry;
 
         std::unordered_map<std::tuple<int, int, int>, unsigned> geometryVertexIndices;
 

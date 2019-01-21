@@ -9,6 +9,7 @@
 
 #include "Light.h"
 #include "Mesh.h"
+#include "MeshGeometry.h"
 #include "MetalRenderList.h"
 #include "logging.h"
 
@@ -60,8 +61,10 @@ namespace renderbox {
                 if (!object->visible) continue;
 
                 // Do not add objects without geometry or material
-                if (object->hasGeometry() && object->hasMaterial()) {
-                    renderList.addObject(deviceRendererProperties->getRenderPipelineState(object), object);
+                if (object->hasGeometry() && object->hasMaterial() &&
+                    object->getMaterial()->supportsGeometry(object->getGeometry())) {
+                    renderList.addObject(deviceRendererProperties->getRenderPipelineState(object->getMaterial().get(),
+                                                                                          object->getGeometry().get()), object);
                 }
 
                 if (object->isLight()) {
@@ -133,35 +136,7 @@ namespace renderbox {
                             [device newBufferWithLength:sizeof(Uniforms) options:MTLResourceOptionCPUCacheModeDefault];
                     }
 
-                    auto const &geometry = object->getGeometry();
                     auto const &material = object->getMaterial();
-
-                    if (blankObjectProperties || objectProperties->geometryVersion != geometry->getVersion()) {
-                        objectProperties->geometryVersion = geometry->getVersion();
-
-                        auto numVertices = geometry->vertices.size();
-
-                        objectProperties->getBuffer(0)->buffer(geometry->vertices);
-
-                        if (geometry->uvs.size() == numVertices)
-                            objectProperties->getBuffer(1)->buffer(geometry->uvs);
-                        else if (!geometry->uvs.empty()) throw;
-
-                        if (geometry->normals.size() == numVertices)
-                            objectProperties->getBuffer(2)->buffer(geometry->normals);
-                        else if (!geometry->normals.empty()) throw;
-
-                        if (geometry->skinIndices.size() == numVertices)
-                            objectProperties->getBuffer(3)->buffer(geometry->skinIndices);
-                        else if (!geometry->skinIndices.empty()) throw;
-
-                        if (geometry->skinWeights.size() == numVertices)
-                            objectProperties->getBuffer(4)->buffer(geometry->skinWeights);
-                        else if (!geometry->skinWeights.empty()) throw;
-
-                        objectProperties->getBuffer(5)->buffer(geometry->faces);
-
-                    }
 
                     // World projection matrix
                     mat4 worldProjectionMatrix = viewProjectionMatrix * object->getWorldMatrix();
@@ -238,24 +213,58 @@ namespace renderbox {
                     void *bufferPointer = [objectProperties->uniformBuffer contents];
                     memcpy(bufferPointer, &uniforms, sizeof(Uniforms));
 
-                    [encoder setVertexBuffer:objectProperties->getBuffer(0)->bufferObject
-                                      offset:0 atIndex:0];
-                    [encoder setVertexBuffer:objectProperties->getBuffer(1)->bufferObject
-                                      offset:0 atIndex:1];
-                    [encoder setVertexBuffer:objectProperties->getBuffer(2)->bufferObject
-                                      offset:0 atIndex:2];
-                    [encoder setVertexBuffer:objectProperties->uniformBuffer
-                                      offset:0 atIndex:3];
-                    [encoder setVertexBuffer:objectProperties->getBuffer(3)->bufferObject
-                                      offset:0 atIndex:4];
-                    [encoder setVertexBuffer:objectProperties->getBuffer(4)->bufferObject
-                                      offset:0 atIndex:5];
+                    if (auto geometry = dynamic_cast<MeshGeometry *>(object->getGeometry().get())) {
 
-                    [encoder drawIndexedPrimitives:MTLPrimitiveTypeTriangle
-                                        indexCount:object->getGeometry()->faces.size() * 3
-                                         indexType:MTLIndexTypeUInt32
-                                       indexBuffer:objectProperties->getBuffer(5)->bufferObject
-                                 indexBufferOffset:0];
+                        if (objectProperties->geometryVersion != geometry->getVersion()) {
+                            objectProperties->geometryVersion = geometry->getVersion();
+
+                            auto numVertices = geometry->vertices.size();
+
+                            objectProperties->getBuffer(0)->buffer(geometry->vertices);
+
+                            if (geometry->uvs.size() == numVertices)
+                                objectProperties->getBuffer(1)->buffer(geometry->uvs);
+                            else if (!geometry->uvs.empty()) throw;
+
+                            if (geometry->normals.size() == numVertices)
+                                objectProperties->getBuffer(2)->buffer(geometry->normals);
+                            else if (!geometry->normals.empty()) throw;
+
+                            if (geometry->skinIndices.size() == numVertices)
+                                objectProperties->getBuffer(3)->buffer(geometry->skinIndices);
+                            else if (!geometry->skinIndices.empty()) throw;
+
+                            if (geometry->skinWeights.size() == numVertices)
+                                objectProperties->getBuffer(4)->buffer(geometry->skinWeights);
+                            else if (!geometry->skinWeights.empty()) throw;
+
+                            objectProperties->getBuffer(5)->buffer(geometry->faces);
+
+                        }
+
+                        [encoder setVertexBuffer:objectProperties->getBuffer(0)->bufferObject
+                                          offset:0 atIndex:0];
+                        [encoder setVertexBuffer:objectProperties->getBuffer(1)->bufferObject
+                                          offset:0 atIndex:1];
+                        [encoder setVertexBuffer:objectProperties->getBuffer(2)->bufferObject
+                                          offset:0 atIndex:2];
+                        [encoder setVertexBuffer:objectProperties->uniformBuffer
+                                          offset:0 atIndex:3];
+                        [encoder setVertexBuffer:objectProperties->getBuffer(3)->bufferObject
+                                          offset:0 atIndex:4];
+                        [encoder setVertexBuffer:objectProperties->getBuffer(4)->bufferObject
+                                          offset:0 atIndex:5];
+
+                        [encoder drawIndexedPrimitives:MTLPrimitiveTypeTriangle
+                                            indexCount:geometry->faces.size() * 3
+                                             indexType:MTLIndexTypeUInt32
+                                           indexBuffer:objectProperties->getBuffer(5)->bufferObject
+                                     indexBufferOffset:0];
+
+                    } else {
+                        NOTREACHED() << "Only mesh geometry is supported" << std::endl;
+                        exit(EXIT_FAILURE);
+                    }
 
                 }
 

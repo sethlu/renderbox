@@ -7,15 +7,19 @@
 #include "Vector.h"
 #include "Texture.h"
 #include "VersionTrackedObject.h"
+#include "OpenGLProgram.h"
+#include "Geometry.h"
+#include "MeshGeometry.h"
+
 
 namespace renderbox {
 
     enum MATERIAL_TYPE {
-        MESH_BASIC_MATERIAL   = 0x01,
-        MESH_LAMBERT_MATERIAL = 0x02,
-        GLSL_MATERIAL         = 0x04,
-        AMBIENT_MATERIAL      = MESH_LAMBERT_MATERIAL,
-        DIFFUSE_MATERIAL      = MESH_BASIC_MATERIAL | MESH_LAMBERT_MATERIAL,
+        POINT_MATERIAL      = 0x01,
+        LINE_MATERIAL       = 0x02,
+        MESH_MATERIAL       = 0x04,
+        AMBIENT_MATERIAL    = 0x08,
+        DIFFUSE_MATERIAL    = 0x10,
     };
 
     // Objects using materials with texture maps must present UV coordinates
@@ -23,13 +27,11 @@ namespace renderbox {
     class Material : public VersionTrackedObject {
     public:
 
-        Material() = default;
-
-        virtual ~Material();
+        virtual ~Material() = default;
 
         int getMaterialId();
 
-        virtual MATERIAL_TYPE getMaterialType() const = 0;
+        virtual unsigned int getMaterialType() const = 0;
 
         bool isAmbientMaterial() const {
             return (getMaterialType() & AMBIENT_MATERIAL) != 0;
@@ -37,6 +39,18 @@ namespace renderbox {
 
         bool isDiffuseMaterial() const {
             return (getMaterialType() & DIFFUSE_MATERIAL) != 0;
+        }
+
+        bool supportsMeshGeometry() const {
+            return (getMaterialType() & MESH_MATERIAL) != 0;
+        }
+
+        bool supportsGeometry(Geometry *geometry) const {
+            return supportsMeshGeometry() && dynamic_cast<MeshGeometry *>(geometry);
+        }
+
+        bool supportsGeometry(std::shared_ptr<Geometry> const &geometry) const {
+            return supportsGeometry(geometry.get());
         }
 
     protected:
@@ -50,46 +64,60 @@ namespace renderbox {
     class AmbientMaterial {
     public:
 
-        virtual ~AmbientMaterial();
+        explicit AmbientMaterial(vec3 const &ambientColor) : _ambientColor(ambientColor) {};
 
-        explicit AmbientMaterial(vec3 const &ambientColor) : ambientColor(ambientColor) {};
+        vec3 getAmbientColor() const { return _ambientColor; }
 
-        vec3 getAmbientColor() const { return ambientColor; }
+        void setAmbientColor(vec3 const &ambientColor) { _ambientColor = ambientColor; }
 
-        void setAmbientColor(vec3 const &ambientColor_) { ambientColor = ambientColor_; }
+        std::shared_ptr<Texture> getAmbientMap() const { return _ambientMap; }
 
-        std::shared_ptr<Texture> getAmbientMap() const { return ambientMap; }
-
-        void setAmbientMap(std::shared_ptr<Texture> ambientMap_) { ambientMap = ambientMap_; }
+        void setAmbientMap(std::shared_ptr<Texture> const &ambientMap) { _ambientMap = ambientMap; }
 
     protected:
 
-        vec3 ambientColor;
+        vec3 _ambientColor;
 
-        std::shared_ptr<Texture> ambientMap;
+        std::shared_ptr<Texture> _ambientMap;
 
     };
 
     class DiffuseMaterial {
     public:
 
-        virtual ~DiffuseMaterial();
+        explicit DiffuseMaterial(vec3 const &diffuseColor) : _diffuseColor(diffuseColor) {};
 
-        explicit DiffuseMaterial(vec3 const &diffuseColor) : diffuseColor(diffuseColor) {};
+        vec3 getDiffuseColor() const { return _diffuseColor; }
 
-        vec3 getDiffuseColor() const { return diffuseColor; }
+        void setDiffuseColor(vec3 const &diffuseColor) { _diffuseColor = diffuseColor; }
 
-        void setDiffuseColor(vec3 const &diffuseColor_) { diffuseColor = diffuseColor_; }
+        std::shared_ptr<Texture> getDiffuseMap() const { return _diffuseMap; }
 
-        std::shared_ptr<Texture> getDiffuseMap() const { return diffuseMap; }
-
-        void setDiffuseMap(std::shared_ptr<Texture> diffuseMap_) { diffuseMap = diffuseMap_; }
+        void setDiffuseMap(std::shared_ptr<Texture> const &diffuseMap) { _diffuseMap = diffuseMap; }
 
     protected:
 
-        vec3 diffuseColor;
+        vec3 _diffuseColor;
 
-        std::shared_ptr<Texture> diffuseMap;
+        std::shared_ptr<Texture> _diffuseMap;
+
+    };
+
+    class OpenGLMaterial {
+    public:
+
+        virtual char const *getOpenGLVertexShaderSource(Geometry *geometry) const = 0;
+
+        virtual char const *getOpenGLFragmentShaderSource(Geometry *geometry) const = 0;
+
+    };
+
+    class MetalMaterial {
+    public:
+
+        virtual std::string getMetalVertexFunctionName(Geometry *geometry) const = 0;
+
+        virtual std::string getMetalFragmentFunctionName(Geometry *geometry) const = 0;
 
     };
 

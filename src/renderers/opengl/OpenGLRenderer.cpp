@@ -1,8 +1,12 @@
+#include "OpenGLRenderer.h"
+
 #include <iostream>
 #include <queue>
+
 #include <glm/gtc/type_ptr.hpp>
+
 #include "Light.h"
-#include "OpenGLRenderer.h"
+#include "MeshGeometry.h"
 
 
 namespace renderbox {
@@ -24,7 +28,8 @@ namespace renderbox {
             if (!object->visible) continue;
 
             // Do not add objects without geometry or material
-            if (object->hasGeometry() && object->hasMaterial()) {
+            if (object->hasGeometry() && object->hasMaterial() &&
+                object->getMaterial()->supportsGeometry(object->getGeometry())) {
                 renderList.addObject(object->getMaterial().get(), object);
             }
 
@@ -95,76 +100,24 @@ namespace renderbox {
 
                 bool blankObjectProperties;
                 OpenGLObjectProperties *objectProperties =
-                    properties.getObjectProperties(object, &blankObjectProperties);
+                        properties.getObjectProperties(object, &blankObjectProperties);
 
-                OpenGLVertexArray *vertexArray = objectProperties->getVertexArray(0);
-
-                auto geometry = object->getGeometry();
-                auto material = object->getMaterial();
-
-                if (blankObjectProperties || objectProperties->geometryVersion != geometry->getVersion()) {
-                    objectProperties->geometryVersion = geometry->getVersion();
-
-                    objectProperties->getBuffer(0)->buffer(geometry->vertices);
-
-                    if (geometry->uvs.size() == geometry->vertices.size())
-                        objectProperties->getBuffer(1)->buffer(geometry->uvs);
-                    else if (!geometry->uvs.empty()) throw 2;
-
-                    if (geometry->normals.size() == geometry->vertices.size())
-                        objectProperties->getBuffer(2)->buffer(geometry->normals);
-                    else if (!geometry->normals.empty()) throw 2;
-
-                    objectProperties->getBuffer(3)->buffer(geometry->faces);
-
-                    vertexArray->setElementBuffer(objectProperties->getBuffer(3));
-
-                    goto UpdateVertexArray;
-
-                } else if (invalidatePrograms) {
-
-                    UpdateVertexArray:
-
-                    auto buffer0(objectProperties->getBuffer(0));
-                    if (buffer0->size) {
-                        vertexArray->setAttributeBuffer(program, "rb_vertexPosition", buffer0);
-                        vertexArray->enableAttribute(program, "rb_vertexPosition");
-                    } else {
-                        vertexArray->disableAttribute(program, "rb_vertexPosition");
-                    }
-
-                    auto buffer1(objectProperties->getBuffer(1));
-                    if (buffer1->size) {
-                        vertexArray->setAttributeBuffer(program, "rb_vertexUV", buffer1, 2);
-                        vertexArray->enableAttribute(program, "rb_vertexUV");
-                    } else {
-                        vertexArray->disableAttribute(program, "rb_vertexUV");
-                    }
-
-                    auto buffer2(objectProperties->getBuffer(2));
-                    if (buffer2->size) {
-                        vertexArray->setAttributeBuffer(program, "rb_vertexNormal", buffer2);
-                        vertexArray->enableAttribute(program, "rb_vertexNormal");
-                    } else {
-                        vertexArray->disableAttribute(program, "rb_vertexNormal");
-                    }
-
-                }
+                auto const &material = object->getMaterial();
 
                 // World projection matrix
                 mat4 worldProjectionMatrix = viewProjectionMatrix * object->getWorldMatrix();
 
                 if (program->materialAmbientColor != -1) {
-                    if (auto material = dynamic_cast<AmbientMaterial *>(object->getMaterial().get()))
+                    if (auto ambientMaterial = dynamic_cast<AmbientMaterial *>(material.get()))
                         glUniform3fv(program->materialAmbientColor,
                                      1,
-                                     glm::value_ptr(material->getAmbientColor()));
+                                     glm::value_ptr(ambientMaterial->getAmbientColor()));
                 }
                 if (program->materialDiffuseColor != -1) {
-                    if (auto material = dynamic_cast<DiffuseMaterial *>(object->getMaterial().get()))
+                    if (auto diffuseMaterial = dynamic_cast<DiffuseMaterial *>(material.get()))
                         glUniform3fv(program->materialDiffuseColor,
                                      1,
-                                     glm::value_ptr(material->getDiffuseColor()));
+                                     glm::value_ptr(diffuseMaterial->getDiffuseColor()));
                 }
                 if (program->worldMatrix != -1) {
                     glUniformMatrix4fv(program->worldMatrix,
@@ -186,11 +139,11 @@ namespace renderbox {
                 }
 
                 OpenGLTexture *ambientMap(nullptr);
-                if (object->getMaterial()->isAmbientMaterial()) {
+                if (material->isAmbientMaterial()) {
                     bool blankTexture;
                     ambientMap = objectProperties->getTexture(0, &blankTexture);
                     if (blankTexture) {
-                        if (auto ambientMaterial = dynamic_cast<AmbientMaterial *>(object->getMaterial().get())) {
+                        if (auto ambientMaterial = dynamic_cast<AmbientMaterial *>(material.get())) {
                             auto texture = ambientMaterial->getAmbientMap(); // Need to check if texture exists
                             if (texture) ambientMap->texture(texture);
                         }
@@ -203,11 +156,11 @@ namespace renderbox {
                 }
 
                 OpenGLTexture *diffuseMap(nullptr);
-                if (object->getMaterial()->isDiffuseMaterial()) {
+                if (material->isDiffuseMaterial()) {
                     bool blankTexture;
                     diffuseMap = objectProperties->getTexture(1, &blankTexture);
                     if (blankTexture) {
-                        if (auto diffuseMaterial = dynamic_cast<DiffuseMaterial *>(object->getMaterial().get())) {
+                        if (auto diffuseMaterial = dynamic_cast<DiffuseMaterial *>(material.get())) {
                             auto texture = diffuseMaterial->getDiffuseMap(); // Need to check if texture exists
                             if (texture) diffuseMap->texture(texture);
                         }
@@ -219,11 +172,69 @@ namespace renderbox {
                     glUniform1i(program->materialDiffuseMap, 1);
                 }
 
-                // Bind vertex array
-                vertexArray->bindVertexArray();
+                if (auto geometry = dynamic_cast<MeshGeometry *>(object->getGeometry().get())) {
 
-                // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                glDrawElements(GL_TRIANGLES, (GLsizei) object->getGeometry()->faces.size() * 3, GL_UNSIGNED_INT, 0);
+                    OpenGLVertexArray *vertexArray = objectProperties->getVertexArray(0);
+
+                    if (blankObjectProperties || objectProperties->geometryVersion != geometry->getVersion()) {
+                        objectProperties->geometryVersion = geometry->getVersion();
+
+                        objectProperties->getBuffer(0)->buffer(geometry->vertices);
+
+                        if (geometry->uvs.size() == geometry->vertices.size())
+                            objectProperties->getBuffer(1)->buffer(geometry->uvs);
+                        else if (!geometry->uvs.empty()) throw 2;
+
+                        if (geometry->normals.size() == geometry->vertices.size())
+                            objectProperties->getBuffer(2)->buffer(geometry->normals);
+                        else if (!geometry->normals.empty()) throw 2;
+
+                        objectProperties->getBuffer(3)->buffer(geometry->faces);
+
+                        vertexArray->setElementBuffer(objectProperties->getBuffer(3));
+
+                        goto UpdateVertexArray;
+
+                    } else if (invalidatePrograms) {
+
+                        UpdateVertexArray:
+
+                        auto buffer0(objectProperties->getBuffer(0));
+                        if (buffer0->size) {
+                            vertexArray->setAttributeBuffer(program, "rb_vertexPosition", buffer0);
+                            vertexArray->enableAttribute(program, "rb_vertexPosition");
+                        } else {
+                            vertexArray->disableAttribute(program, "rb_vertexPosition");
+                        }
+
+                        auto buffer1(objectProperties->getBuffer(1));
+                        if (buffer1->size) {
+                            vertexArray->setAttributeBuffer(program, "rb_vertexUV", buffer1, 2);
+                            vertexArray->enableAttribute(program, "rb_vertexUV");
+                        } else {
+                            vertexArray->disableAttribute(program, "rb_vertexUV");
+                        }
+
+                        auto buffer2(objectProperties->getBuffer(2));
+                        if (buffer2->size) {
+                            vertexArray->setAttributeBuffer(program, "rb_vertexNormal", buffer2);
+                            vertexArray->enableAttribute(program, "rb_vertexNormal");
+                        } else {
+                            vertexArray->disableAttribute(program, "rb_vertexNormal");
+                        }
+
+                    }
+
+                    // Bind vertex array
+                    vertexArray->bindVertexArray();
+
+                    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+                    glDrawElements(GL_TRIANGLES, (GLsizei) geometry->faces.size() * 3, GL_UNSIGNED_INT, 0);
+
+                } else {
+                    NOTREACHED() << "Only mesh geometry is supported" << std::endl;
+                    exit(EXIT_FAILURE);
+                }
 
             }
         }

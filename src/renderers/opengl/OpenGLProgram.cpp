@@ -1,9 +1,12 @@
-#include <string>
-#include <fstream>
-#include <glm/gtc/type_ptr.hpp>
-#include <iostream>
 #include "OpenGLProgram.h"
+
+#include <fstream>
+#include <iostream>
+
+#include <glm/gtc/type_ptr.hpp>
+
 #include "GLSLPreprocessor.h"
+#include "logging.h"
 
 
 namespace renderbox {
@@ -68,7 +71,7 @@ namespace renderbox {
             glGetActiveUniform(programId, uniformIndex, uniformNameBufferSize, &uniformNameSize,
                                nullptr, nullptr, uniformName);
 
-            std::cout << uniformName << std::endl;
+            LOG(VERBOSE) << "Uniform: " << uniformName << std::endl;
 
             // Assign bool flags for "built-in" uniforms
 
@@ -191,10 +194,6 @@ namespace renderbox {
     OpenGLShader::OpenGLShader(const char *source, GLenum type) {
 
         shaderId = glCreateShader(type);
-
-        std::cout << "OPENGL_SHADER" << std::endl
-                  << source
-                  << "END OPENGL SHADER" << std::endl;
 
         // Compile shader
         glShaderSource(shaderId, 1, &source, nullptr);

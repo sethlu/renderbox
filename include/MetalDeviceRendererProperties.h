@@ -10,12 +10,26 @@
 #include "VersionTrackedObject.h"
 
 
+namespace std {
+
+    template<typename T1, typename T2>
+    struct hash<std::pair<T1 *, T2 *>> {
+    public:
+        size_t operator()(std::pair<T1 *, T2 *> const &x) const {
+            size_t h = reinterpret_cast<size_t>(x.first) + reinterpret_cast<size_t>(x.second);
+            return h;
+        }
+    };
+
+}
+
+
 namespace renderbox {
 
     struct ObjectMetalRenderPipelineState {
         std::shared_ptr<MetalRenderPipelineState> renderPipelineState;
-        VersionTrackedObject::version_type geometryVersion;
         VersionTrackedObject::version_type materialVersion;
+        VersionTrackedObject::version_type geometryVersion;
     };
 
     class MetalDeviceRendererProperties {
@@ -26,7 +40,7 @@ namespace renderbox {
 
         explicit MetalDeviceRendererProperties(id <MTLDevice> device);
 
-        MetalRenderPipelineState *getRenderPipelineState(Object *object);
+        MetalRenderPipelineState *getRenderPipelineState(Material *material, Geometry *geometry);
 
         MetalObjectProperties *getObjectProperties(Object *object, bool *blankObjectProperties = nullptr);
 
@@ -40,13 +54,13 @@ namespace renderbox {
 
     private:
 
-        id <MTLLibrary> defaultMetalLibrary_;
+        id <MTLLibrary> _defaultMetalLibrary;
 
-        std::unordered_map<int, std::unique_ptr<MetalObjectProperties>> objectProperties_;
+        std::unordered_map<int, std::unique_ptr<MetalObjectProperties>> _objectProperties;
 
-        std::unordered_map<std::string, std::shared_ptr<MetalRenderPipelineState>> cachedRenderPipelineStates_;
+        std::unordered_map<std::string, std::shared_ptr<MetalRenderPipelineState>> _cachedRenderPipelineStates;
 
-        std::unordered_map<Object *, ObjectMetalRenderPipelineState> renderPipelineStates_;
+        std::unordered_map<std::pair<Material *, Geometry *>, ObjectMetalRenderPipelineState> _renderPipelineStates;
 
         id <MTLLibrary> getDefaultMetalLibrary();
 

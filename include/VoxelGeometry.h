@@ -2,9 +2,10 @@
 #define RENDERBOX_VOXELGEOMETRY_H
 
 
+#include "MeshGeometry.h"
+
 #include <unordered_map>
 
-#include "Geometry.h"
 
 namespace renderbox {
 
@@ -12,7 +13,7 @@ namespace renderbox {
     unsigned constexpr VOXEL_CHUNK_DIMENSION2 = VOXEL_CHUNK_DIMENSION * VOXEL_CHUNK_DIMENSION;
     unsigned constexpr VOXEL_CHUNK_DIMENSION3 = VOXEL_CHUNK_DIMENSION2 * VOXEL_CHUNK_DIMENSION;
 
-    class VoxelGeometry : public Geometry {
+    class VoxelGeometry : public MeshGeometry {
     public:
 
         bool isOccupied(int x, int y, int z);

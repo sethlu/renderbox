@@ -8,16 +8,18 @@
 
 namespace renderbox {
 
-    class GLSLMaterial : public Material {
+    class GLSLMaterial : public Material, public OpenGLMaterial {
     public:
 
         GLSLMaterial(const std::string &vertexShaderSource, const std::string &fragmentShaderSource);
 
-        const char *getVertexShaderSource() const;
+        char const *getOpenGLVertexShaderSource(Geometry *geometry) const override;
 
-        const char *getFragmentShaderSource() const;
+        char const *getOpenGLFragmentShaderSource(Geometry *geometry) const override;
 
-        MATERIAL_TYPE getMaterialType() const override;
+        unsigned int getMaterialType() const override {
+            return MESH_MATERIAL;
+        }
 
     private:
 

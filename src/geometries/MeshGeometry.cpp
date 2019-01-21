@@ -1,12 +1,9 @@
-#include "Vector.h"
-#include "Geometry.h"
+#include "MeshGeometry.h"
 
 
 namespace renderbox {
 
-    Geometry::~Geometry() = default;
-
-    void Geometry::regenerateNormals() {
+    void MeshGeometry::regenerateNormals() {
         auto const numVertices = vertices.size();
 
         normals.resize(numVertices);

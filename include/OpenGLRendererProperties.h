@@ -11,6 +11,11 @@
 
 namespace renderbox {
 
+    struct ObjectOpenGLProgram {
+        OpenGLProgram *program;
+        VersionTrackedObject::version_type materialVersion;
+    };
+
     class OpenGLRendererProperties {
     public:
 
@@ -24,7 +29,7 @@ namespace renderbox {
 
     private:
 
-        static std::unordered_map<int, std::unique_ptr<OpenGLProgram>> programs;
+        static std::unordered_map<Material *, ObjectOpenGLProgram> programs;
 
         std::unordered_map<int, std::unique_ptr<OpenGLObjectProperties>> objectProperties;
 

@@ -1,4 +1,6 @@
 #include "MetalDeviceRendererProperties.h"
+
+#include "MeshGeometry.h"
 #include "MeshBasicMaterial.h"
 #include "MeshLambertMaterial.h"
 #include "logging.h"
@@ -37,7 +39,7 @@ namespace renderbox {
 
     id <MTLLibrary>
     MetalDeviceRendererProperties::getDefaultMetalLibrary() {
-        if (!defaultMetalLibrary_) {
+        if (!_defaultMetalLibrary) {
             NSError *err;
 
 #ifdef RENDERBOX_OS_MACOS
@@ -46,14 +48,14 @@ namespace renderbox {
             auto *libPath = [[NSBundle mainBundle] pathForResource:@"RenderBoxMetalLibrary-iOS" ofType:@"metallib"];
 #endif
 
-            defaultMetalLibrary_ = [device newLibraryWithFile:libPath error:&err];
-            if (!defaultMetalLibrary_) {
+            _defaultMetalLibrary = [device newLibraryWithFile:libPath error:&err];
+            if (!_defaultMetalLibrary) {
                 LOG(ERROR) << "Failed to load Metal library." << std::endl;
                 NSLog(@"%@", err);
                 exit(EXIT_FAILURE);
             }
         }
-        return defaultMetalLibrary_;
+        return _defaultMetalLibrary;
     }
 
     std::shared_ptr<MetalRenderPipelineState>
@@ -63,8 +65,8 @@ namespace renderbox {
 
         auto const &key = vertexFunctionName + "$" + fragmentFunctionName;
 
-        auto result = cachedRenderPipelineStates_.find(key);
-        if (result != cachedRenderPipelineStates_.end()) {
+        auto result = _cachedRenderPipelineStates.find(key);
+        if (result != _cachedRenderPipelineStates.end()) {
             return result->second;
         }
 
@@ -99,97 +101,53 @@ namespace renderbox {
 
 
         auto renderPipelineState = std::make_shared<MetalRenderPipelineState>(renderPipelineStateObject);
-        cachedRenderPipelineStates_.insert(std::make_pair(key, renderPipelineState));
+        _cachedRenderPipelineStates.insert(std::make_pair(key, renderPipelineState));
 
         return renderPipelineState;
 
     }
 
     MetalRenderPipelineState *
-    MetalDeviceRendererProperties::getRenderPipelineState(Object *object) {
-        auto const &geometry = object->getGeometry();
-        auto const &material = object->getMaterial();
+    MetalDeviceRendererProperties::getRenderPipelineState(Material *material, Geometry *geometry) {
+        auto const &metalMaterial = dynamic_cast<MetalMaterial *>(material);
+        if (!metalMaterial) {
+            LOG(ERROR) << "Unsupported material type" << std::endl;
+            exit(EXIT_FAILURE);
+        };
 
-        auto result = renderPipelineStates_.find(object);
-        if (result != renderPipelineStates_.end()) {
-            if (result->second.geometryVersion == geometry->getVersion() &&
-                result->second.materialVersion == material->getVersion()) {
+        auto const &materialGeometryPair = std::make_pair(material, geometry);
+
+        ObjectMetalRenderPipelineState *objectMetalRenderPipelineState = nullptr;
+
+        auto result = _renderPipelineStates.find(materialGeometryPair);
+        if (result != _renderPipelineStates.end()) {
+            if (result->second.materialVersion == material->getVersion() &&
+                result->second.geometryVersion == geometry->getVersion()) {
                 return result->second.renderPipelineState.get();
             } else {
-                LOG(VERBOSE) << "getRenderPipelineState: MISS (invalidated) object=" << object->getObjectId() << std::endl;
+                LOG(VERBOSE) << "getRenderPipelineState: MISS (invalidated)" << std::endl;
+                objectMetalRenderPipelineState = &result->second;
             }
         } else {
-            LOG(VERBOSE) << "getRenderPipelineState: MISS (cold) object=" << object->getObjectId() << std::endl;
+            LOG(VERBOSE) << "getRenderPipelineState: MISS (cold)" << std::endl;
         }
 
-        // Make new render pipeline descriptor
+        std::shared_ptr<MetalRenderPipelineState> renderPipelineState =
+                getRenderPipelineStateWithFunctionNames(
+                        metalMaterial->getMetalVertexFunctionName(geometry),
+                        metalMaterial->getMetalFragmentFunctionName(geometry));
 
-        std::shared_ptr<MetalRenderPipelineState> renderPipelineState;
-
-        switch (object->getMaterial()->getMaterialType()) {
-            default:
-                LOG(FATAL) << "Unsupported material type." << std::endl;
-                exit(EXIT_FAILURE);
-                break;
-            case MESH_BASIC_MATERIAL:
-                if (auto basicMaterial = std::dynamic_pointer_cast<MeshBasicMaterial>(material)) {
-
-                    std::string vertexFunctionName = "mesh_basic_vert";
-                    std::string fragmentFunctionName = "mesh_basic_frag";
-
-                    if (!geometry->skinIndices.empty() && !geometry->skinWeights.empty()) {
-                        vertexFunctionName += "_skin";
-                    }
-
-                    auto diffuseMap = basicMaterial->getDiffuseMap();
-
-                    if (diffuseMap) {
-                        vertexFunctionName += "_uv";
-                        fragmentFunctionName += "_diffusemap";
-                    }
-
-                    renderPipelineState =
-                        getRenderPipelineStateWithFunctionNames(vertexFunctionName,
-                                                                fragmentFunctionName);
-
-                } else {
-                    NOTREACHED();
-                }
-                break;
-            case MESH_LAMBERT_MATERIAL:
-                if (auto lambertMaterial = std::dynamic_pointer_cast<MeshLambertMaterial>(material)) {
-
-                    std::string vertexFunctionName = "mesh_lambert_vert";
-                    std::string fragmentFunctionName = "mesh_lambert_frag";
-
-                    if (!geometry->skinIndices.empty() && !geometry->skinWeights.empty()) {
-                        vertexFunctionName += "_skin";
-                    }
-
-                    auto ambientMap = lambertMaterial->getAmbientMap();
-                    auto diffuseMap = lambertMaterial->getDiffuseMap();
-
-                    if (ambientMap || diffuseMap) {
-                        vertexFunctionName += "_uv";
-                        if (ambientMap) fragmentFunctionName += "_ambientmap";
-                        if (diffuseMap) fragmentFunctionName += "_diffusemap";
-                    }
-
-                    renderPipelineState =
-                        getRenderPipelineStateWithFunctionNames(vertexFunctionName,
-                                                                fragmentFunctionName);
-
-                } else {
-                    NOTREACHED();
-                }
-                break;
+        if (objectMetalRenderPipelineState) {
+            objectMetalRenderPipelineState->renderPipelineState = renderPipelineState;
+            objectMetalRenderPipelineState->materialVersion = material->getVersion();
+            objectMetalRenderPipelineState->geometryVersion = geometry->getVersion();
+        } else {
+            _renderPipelineStates.insert(std::make_pair(materialGeometryPair, (ObjectMetalRenderPipelineState) {
+                renderPipelineState,
+                material->getVersion(),
+                geometry->getVersion()
+            }));
         }
-
-        renderPipelineStates_.insert(std::make_pair(object, (ObjectMetalRenderPipelineState) {
-            renderPipelineState,
-            geometry->getVersion(),
-            material->getVersion()
-        }));
 
         return renderPipelineState.get();
 
@@ -198,14 +156,14 @@ namespace renderbox {
     MetalObjectProperties *
     MetalDeviceRendererProperties::getObjectProperties(Object *object, bool *blankObjectProperties) {
 
-        auto result = objectProperties_.find(object->getObjectId());
-        if (result != objectProperties_.end()) {
+        auto result = _objectProperties.find(object->getObjectId());
+        if (result != _objectProperties.end()) {
             if (blankObjectProperties) *blankObjectProperties = false;
             return result->second.get();
         }
 
         auto *properties = new MetalObjectProperties(device);
-        objectProperties_.insert(std::make_pair(object->getObjectId(),
+        _objectProperties.insert(std::make_pair(object->getObjectId(),
                                                 std::unique_ptr<MetalObjectProperties>(properties)));
 
         if (blankObjectProperties) *blankObjectProperties = true;

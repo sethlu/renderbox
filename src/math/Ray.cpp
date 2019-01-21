@@ -6,6 +6,8 @@
 #include <glm/geometric.hpp>
 #include <glm/gtx/intersect.hpp>
 
+#include "MeshGeometry.h"
+
 
 namespace renderbox {
 
@@ -27,6 +29,8 @@ namespace renderbox {
     }
 
     bool Ray::intersectObject(Object *object, std::vector<vec3> &positions) {
+        auto geometry = dynamic_cast<MeshGeometry *>(object->getGeometry().get());
+        if (!geometry) return false;
 
         // Calculate ray in object coordinates
 
@@ -37,8 +41,8 @@ namespace renderbox {
 
         int count = 0;
 
-        auto &vertices = object->getGeometry()->vertices;
-        auto &faces = object->getGeometry()->faces;
+        auto &vertices = geometry->vertices;
+        auto &faces = geometry->faces;
 
         std::vector<float> distances;
 

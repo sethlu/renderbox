@@ -365,7 +365,7 @@ namespace renderbox {
 
     void OBJLoader::handleObject(OBJLexer &lexer, OBJToken &token) {
 
-        geometry = new Geometry;
+        geometry = new MeshGeometry;
         object = new Object(std::shared_ptr<Geometry>(geometry), nullptr);
         destination->addChild(std::shared_ptr<Object>(object));
 
