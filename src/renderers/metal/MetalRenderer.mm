@@ -218,7 +218,7 @@ namespace renderbox {
 
                     if (auto geometry = dynamic_cast<MeshGeometry *>(object->getGeometry().get())) {
 
-                        if (objectProperties->geometryVersion != geometry->getVersion()) {
+                        if (blankObjectProperties || objectProperties->geometryVersion != geometry->getVersion()) {
                             objectProperties->geometryVersion = geometry->getVersion();
 
                             auto numVertices = geometry->vertices.size();
