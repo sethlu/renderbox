@@ -20,7 +20,7 @@
 #include "MeshLambertMaterial.h"
 #include "GLSLMaterial.h"
 
-#include "Mesh.h"
+#include "SkinnedObject.h"
 #include "Bone.h"
 
 #include "Light.h"

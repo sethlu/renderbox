@@ -7,51 +7,51 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C52A250121F56DED0041CEB6 /* MetalRenderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = C52A24AA21F56DED0041CEB6 /* MetalRenderer.mm */; };
-		C52A250221F56DED0041CEB6 /* MetalTexture.mm in Sources */ = {isa = PBXBuildFile; fileRef = C52A24AB21F56DED0041CEB6 /* MetalTexture.mm */; };
-		C52A250321F56DED0041CEB6 /* MetalRendererProperties.mm in Sources */ = {isa = PBXBuildFile; fileRef = C52A24AC21F56DED0041CEB6 /* MetalRendererProperties.mm */; };
-		C52A250421F56DED0041CEB6 /* MetalRenderList.mm in Sources */ = {isa = PBXBuildFile; fileRef = C52A24AD21F56DED0041CEB6 /* MetalRenderList.mm */; };
-		C52A250521F56DED0041CEB6 /* MetalRenderPipelineState.mm in Sources */ = {isa = PBXBuildFile; fileRef = C52A24AE21F56DED0041CEB6 /* MetalRenderPipelineState.mm */; };
-		C52A250621F56DED0041CEB6 /* SDLMetalRenderTarget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C52A24B021F56DED0041CEB6 /* SDLMetalRenderTarget.mm */; };
-		C52A250E21F56DED0041CEB6 /* MetalBuffer.mm in Sources */ = {isa = PBXBuildFile; fileRef = C52A24B921F56DED0041CEB6 /* MetalBuffer.mm */; };
-		C52A250F21F56DED0041CEB6 /* MetalDeviceRendererProperties.mm in Sources */ = {isa = PBXBuildFile; fileRef = C52A24BA21F56DED0041CEB6 /* MetalDeviceRendererProperties.mm */; };
-		C52A251021F56DED0041CEB6 /* MetalObjectProperties.mm in Sources */ = {isa = PBXBuildFile; fileRef = C52A24BB21F56DED0041CEB6 /* MetalObjectProperties.mm */; };
-		C52A251121F56DED0041CEB6 /* OpenGLRenderList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24BD21F56DED0041CEB6 /* OpenGLRenderList.cpp */; };
-		C52A251221F56DED0041CEB6 /* OpenGLBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24BE21F56DED0041CEB6 /* OpenGLBuffer.cpp */; };
-		C52A251321F56DED0041CEB6 /* OpenGLRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24BF21F56DED0041CEB6 /* OpenGLRenderer.cpp */; };
-		C52A251421F56DED0041CEB6 /* OpenGLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24C021F56DED0041CEB6 /* OpenGLTexture.cpp */; };
-		C52A251521F56DED0041CEB6 /* OpenGLObjectProperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24C121F56DED0041CEB6 /* OpenGLObjectProperties.cpp */; };
-		C52A251621F56DED0041CEB6 /* SDLOpenGLRenderTarget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C52A24C321F56DED0041CEB6 /* SDLOpenGLRenderTarget.mm */; };
-		C52A251721F56DED0041CEB6 /* OpenGLRendererProperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24C421F56DED0041CEB6 /* OpenGLRendererProperties.cpp */; };
-		C52A251821F56DED0041CEB6 /* GLFWOpenGLRenderTarget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C52A24C621F56DED0041CEB6 /* GLFWOpenGLRenderTarget.mm */; };
-		C52A251921F56DED0041CEB6 /* OpenGLFramebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24C721F56DED0041CEB6 /* OpenGLFramebuffer.cpp */; };
-		C52A251A21F56DED0041CEB6 /* OpenGLVertexArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24C821F56DED0041CEB6 /* OpenGLVertexArray.cpp */; };
-		C52A251B21F56DED0041CEB6 /* OpenGLProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24C921F56DED0041CEB6 /* OpenGLProgram.cpp */; };
-		C52A251C21F56DED0041CEB6 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24CB21F56DED0041CEB6 /* Texture.cpp */; };
-		C52A251D21F56DED0041CEB6 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24CD21F56DED0041CEB6 /* Scene.cpp */; };
-		C52A251E21F56DED0041CEB6 /* MeshBasicMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24CF21F56DED0041CEB6 /* MeshBasicMaterial.cpp */; };
-		C52A251F21F56DED0041CEB6 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24D021F56DED0041CEB6 /* Material.cpp */; };
-		C52A252021F56DED0041CEB6 /* MeshLambertMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24D121F56DED0041CEB6 /* MeshLambertMaterial.cpp */; };
-		C52A252121F56DED0041CEB6 /* GLSLMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24DD21F56DED0041CEB6 /* GLSLMaterial.cpp */; };
-		C52A252221F56DED0041CEB6 /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24DF21F56DED0041CEB6 /* Object.cpp */; };
-		C52A252321F56DED0041CEB6 /* AnimationAction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24E121F56DED0041CEB6 /* AnimationAction.cpp */; };
-		C52A252421F56DED0041CEB6 /* PropertyMixer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24E221F56DED0041CEB6 /* PropertyMixer.cpp */; };
-		C52A252521F56DED0041CEB6 /* AnimationMixer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24E321F56DED0041CEB6 /* AnimationMixer.cpp */; };
-		C52A252621F56DED0041CEB6 /* Bone.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24E521F56DED0041CEB6 /* Bone.cpp */; };
-		C52A252721F56DED0041CEB6 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24E621F56DED0041CEB6 /* Mesh.cpp */; };
-		C52A252821F56DED0041CEB6 /* logging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24E821F56DED0041CEB6 /* logging.cpp */; };
-		C52A252921F56DED0041CEB6 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24EA21F56DED0041CEB6 /* Camera.cpp */; };
-		C52A252A21F56DED0041CEB6 /* PerspectiveCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24EB21F56DED0041CEB6 /* PerspectiveCamera.cpp */; };
-		C52A252B21F56DED0041CEB6 /* Ray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24ED21F56DED0041CEB6 /* Ray.cpp */; };
-		C52A252C21F56DED0041CEB6 /* GLSLPreprocessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24F621F56DED0041CEB6 /* GLSLPreprocessor.cpp */; };
-		C52A252D21F56DED0041CEB6 /* BoxGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24F821F56DED0041CEB6 /* BoxGeometry.cpp */; };
-		C52A252E21F56DED0041CEB6 /* MeshGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24F921F56DED0041CEB6 /* MeshGeometry.cpp */; };
-		C52A252F21F56DED0041CEB6 /* VoxelGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24FA21F56DED0041CEB6 /* VoxelGeometry.cpp */; };
-		C52A253021F56DED0041CEB6 /* OBJLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24FC21F56DED0041CEB6 /* OBJLoader.cpp */; };
-		C52A253121F56DED0041CEB6 /* FBXLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24FD21F56DED0041CEB6 /* FBXLoader.cpp */; };
-		C52A253221F56DED0041CEB6 /* PointLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A24FF21F56DED0041CEB6 /* PointLight.cpp */; };
-		C52A253321F56DED0041CEB6 /* Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C52A250021F56DED0041CEB6 /* Light.cpp */; };
-		C52A253421F56DFF0041CEB6 /* MetalLibrary.metal in Sources */ = {isa = PBXBuildFile; fileRef = C52A24B221F56DED0041CEB6 /* MetalLibrary.metal */; };
+		C50FEFBB21F598E500946156 /* MetalRenderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF6421F598E500946156 /* MetalRenderer.mm */; };
+		C50FEFBC21F598E500946156 /* MetalTexture.mm in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF6521F598E500946156 /* MetalTexture.mm */; };
+		C50FEFBD21F598E500946156 /* MetalRendererProperties.mm in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF6621F598E500946156 /* MetalRendererProperties.mm */; };
+		C50FEFBE21F598E500946156 /* MetalRenderList.mm in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF6721F598E500946156 /* MetalRenderList.mm */; };
+		C50FEFBF21F598E500946156 /* MetalRenderPipelineState.mm in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF6821F598E500946156 /* MetalRenderPipelineState.mm */; };
+		C50FEFC021F598E500946156 /* SDLMetalRenderTarget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF6A21F598E500946156 /* SDLMetalRenderTarget.mm */; };
+		C50FEFC821F598E500946156 /* MetalBuffer.mm in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF7321F598E500946156 /* MetalBuffer.mm */; };
+		C50FEFC921F598E500946156 /* MetalDeviceRendererProperties.mm in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF7421F598E500946156 /* MetalDeviceRendererProperties.mm */; };
+		C50FEFCA21F598E500946156 /* MetalObjectProperties.mm in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF7521F598E500946156 /* MetalObjectProperties.mm */; };
+		C50FEFCB21F598E500946156 /* OpenGLRenderList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF7721F598E500946156 /* OpenGLRenderList.cpp */; };
+		C50FEFCC21F598E500946156 /* OpenGLBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF7821F598E500946156 /* OpenGLBuffer.cpp */; };
+		C50FEFCD21F598E500946156 /* OpenGLRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF7921F598E500946156 /* OpenGLRenderer.cpp */; };
+		C50FEFCE21F598E500946156 /* OpenGLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF7A21F598E500946156 /* OpenGLTexture.cpp */; };
+		C50FEFCF21F598E500946156 /* OpenGLObjectProperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF7B21F598E500946156 /* OpenGLObjectProperties.cpp */; };
+		C50FEFD021F598E500946156 /* SDLOpenGLRenderTarget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF7D21F598E500946156 /* SDLOpenGLRenderTarget.mm */; };
+		C50FEFD121F598E500946156 /* OpenGLRendererProperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF7E21F598E500946156 /* OpenGLRendererProperties.cpp */; };
+		C50FEFD221F598E500946156 /* GLFWOpenGLRenderTarget.mm in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF8021F598E500946156 /* GLFWOpenGLRenderTarget.mm */; };
+		C50FEFD321F598E500946156 /* OpenGLFramebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF8121F598E500946156 /* OpenGLFramebuffer.cpp */; };
+		C50FEFD421F598E500946156 /* OpenGLVertexArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF8221F598E500946156 /* OpenGLVertexArray.cpp */; };
+		C50FEFD521F598E500946156 /* OpenGLProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF8321F598E500946156 /* OpenGLProgram.cpp */; };
+		C50FEFD621F598E500946156 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF8521F598E500946156 /* Texture.cpp */; };
+		C50FEFD721F598E500946156 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF8721F598E500946156 /* Scene.cpp */; };
+		C50FEFD821F598E500946156 /* MeshBasicMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF8921F598E500946156 /* MeshBasicMaterial.cpp */; };
+		C50FEFD921F598E500946156 /* Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF8A21F598E500946156 /* Material.cpp */; };
+		C50FEFDA21F598E500946156 /* MeshLambertMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF8B21F598E500946156 /* MeshLambertMaterial.cpp */; };
+		C50FEFDB21F598E500946156 /* GLSLMaterial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF9721F598E500946156 /* GLSLMaterial.cpp */; };
+		C50FEFDC21F598E500946156 /* Object.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF9921F598E500946156 /* Object.cpp */; };
+		C50FEFDD21F598E500946156 /* AnimationAction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF9B21F598E500946156 /* AnimationAction.cpp */; };
+		C50FEFDE21F598E500946156 /* PropertyMixer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF9C21F598E500946156 /* PropertyMixer.cpp */; };
+		C50FEFDF21F598E500946156 /* AnimationMixer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF9D21F598E500946156 /* AnimationMixer.cpp */; };
+		C50FEFE021F598E500946156 /* Bone.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF9F21F598E500946156 /* Bone.cpp */; };
+		C50FEFE121F598E500946156 /* SkinnedObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEFA021F598E500946156 /* SkinnedObject.cpp */; };
+		C50FEFE221F598E500946156 /* logging.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEFA221F598E500946156 /* logging.cpp */; };
+		C50FEFE321F598E500946156 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEFA421F598E500946156 /* Camera.cpp */; };
+		C50FEFE421F598E500946156 /* PerspectiveCamera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEFA521F598E500946156 /* PerspectiveCamera.cpp */; };
+		C50FEFE521F598E500946156 /* Ray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEFA721F598E500946156 /* Ray.cpp */; };
+		C50FEFE621F598E500946156 /* GLSLPreprocessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEFB021F598E500946156 /* GLSLPreprocessor.cpp */; };
+		C50FEFE721F598E500946156 /* BoxGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEFB221F598E500946156 /* BoxGeometry.cpp */; };
+		C50FEFE821F598E500946156 /* MeshGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEFB321F598E500946156 /* MeshGeometry.cpp */; };
+		C50FEFE921F598E500946156 /* VoxelGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEFB421F598E500946156 /* VoxelGeometry.cpp */; };
+		C50FEFEA21F598E500946156 /* OBJLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEFB621F598E500946156 /* OBJLoader.cpp */; };
+		C50FEFEB21F598E500946156 /* FBXLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEFB721F598E500946156 /* FBXLoader.cpp */; };
+		C50FEFEC21F598E500946156 /* PointLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEFB921F598E500946156 /* PointLight.cpp */; };
+		C50FEFED21F598E500946156 /* Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C50FEFBA21F598E500946156 /* Light.cpp */; };
+		C50FEFEF21F5991400946156 /* MetalLibrary.metal in Sources */ = {isa = PBXBuildFile; fileRef = C50FEF6C21F598E500946156 /* MetalLibrary.metal */; };
 		C53776DD20A13E5F00DFD1D9 /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C53776D120A137F400DFD1D9 /* libSDL2.a */; };
 /* End PBXBuildFile section */
 
@@ -100,134 +100,134 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		C52A240E21F56DDD0041CEB6 /* MetalRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalRenderer.h; sourceTree = "<group>"; };
-		C52A240F21F56DDD0041CEB6 /* PerspectiveCamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PerspectiveCamera.h; sourceTree = "<group>"; };
-		C52A241021F56DDD0041CEB6 /* MetalTexture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalTexture.h; sourceTree = "<group>"; };
-		C52A241121F56DDD0041CEB6 /* VoxelGeometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VoxelGeometry.h; sourceTree = "<group>"; };
-		C52A241221F56DDD0041CEB6 /* PointLight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PointLight.h; sourceTree = "<group>"; };
-		C52A241321F56DDD0041CEB6 /* MeshGeometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MeshGeometry.h; sourceTree = "<group>"; };
-		C52A241421F56DDD0041CEB6 /* OBJLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OBJLoader.h; sourceTree = "<group>"; };
-		C52A241521F56DDD0041CEB6 /* OpenGLRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLRenderer.h; sourceTree = "<group>"; };
-		C52A241621F56DDD0041CEB6 /* OpenGLBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLBuffer.h; sourceTree = "<group>"; };
-		C52A241721F56DDD0041CEB6 /* OpenGLFramebuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLFramebuffer.h; sourceTree = "<group>"; };
-		C52A241821F56DDD0041CEB6 /* OpenGLObjectProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLObjectProperties.h; sourceTree = "<group>"; };
-		C52A241921F56DDD0041CEB6 /* OpenGL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGL.h; sourceTree = "<group>"; };
-		C52A241A21F56DDD0041CEB6 /* OpenGLRenderTarget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLRenderTarget.h; sourceTree = "<group>"; };
-		C52A241B21F56DDD0041CEB6 /* MeshLambertMaterial.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MeshLambertMaterial.h; sourceTree = "<group>"; };
-		C52A241C21F56DDD0041CEB6 /* Light.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Light.h; sourceTree = "<group>"; };
-		C52A241D21F56DDD0041CEB6 /* FBXLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FBXLoader.h; sourceTree = "<group>"; };
-		C52A241E21F56DDD0041CEB6 /* Bone.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Bone.h; sourceTree = "<group>"; };
-		C52A241F21F56DDD0041CEB6 /* Camera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
-		C52A242021F56DDD0041CEB6 /* OpenGLProgram.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLProgram.h; sourceTree = "<group>"; };
-		C52A242121F56DDD0041CEB6 /* VersionTrackedObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VersionTrackedObject.h; sourceTree = "<group>"; };
-		C52A242221F56DDD0041CEB6 /* MetalBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalBuffer.h; sourceTree = "<group>"; };
-		C52A242321F56DDD0041CEB6 /* OpenGLTexture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLTexture.h; sourceTree = "<group>"; };
-		C52A242421F56DDD0041CEB6 /* Material.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
-		C52A242521F56DDD0041CEB6 /* Matrix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Matrix.h; sourceTree = "<group>"; };
-		C52A242621F56DDD0041CEB6 /* scoped_nsobject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = scoped_nsobject.h; sourceTree = "<group>"; };
-		C52A242721F56DDD0041CEB6 /* CameraProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraProperties.h; sourceTree = "<group>"; };
-		C52A242821F56DDD0041CEB6 /* OBJTokenKinds.def */ = {isa = PBXFileReference; lastKnownFileType = text; path = OBJTokenKinds.def; sourceTree = "<group>"; };
-		C52A242921F56DDD0041CEB6 /* GLSLMaterial.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GLSLMaterial.h; sourceTree = "<group>"; };
-		C52A242A21F56DDD0041CEB6 /* PropertyMixer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PropertyMixer.h; sourceTree = "<group>"; };
-		C52A242B21F56DDD0041CEB6 /* SDLMetalRenderTarget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDLMetalRenderTarget.h; sourceTree = "<group>"; };
-		C52A242C21F56DDD0041CEB6 /* logging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = logging.h; sourceTree = "<group>"; };
-		C52A242D21F56DDD0041CEB6 /* Mesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mesh.h; sourceTree = "<group>"; };
-		C52A242E21F56DDD0041CEB6 /* GLSLTokenKinds.def */ = {isa = PBXFileReference; lastKnownFileType = text; path = GLSLTokenKinds.def; sourceTree = "<group>"; };
-		C52A242F21F56DDD0041CEB6 /* MetalRenderPipelineState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalRenderPipelineState.h; sourceTree = "<group>"; };
-		C52A243021F56DDD0041CEB6 /* MetalObjectProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalObjectProperties.h; sourceTree = "<group>"; };
-		C52A243121F56DDD0041CEB6 /* AnimationAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnimationAction.h; sourceTree = "<group>"; };
-		C52A243221F56DDD0041CEB6 /* AnimationMixer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnimationMixer.h; sourceTree = "<group>"; };
-		C52A243321F56DDD0041CEB6 /* MetalRendererProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalRendererProperties.h; sourceTree = "<group>"; };
-		C52A243421F56DDD0041CEB6 /* GLSLPreprocessor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GLSLPreprocessor.h; sourceTree = "<group>"; };
-		C52A243521F56DDD0041CEB6 /* Ray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Ray.h; sourceTree = "<group>"; };
-		C52A243621F56DDD0041CEB6 /* OpenGLRenderList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLRenderList.h; sourceTree = "<group>"; };
-		C52A243721F56DDD0041CEB6 /* Object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
-		C52A243821F56DDD0041CEB6 /* lexer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lexer.h; sourceTree = "<group>"; };
-		C52A243921F56DDD0041CEB6 /* Texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
-		C52A243A21F56DDD0041CEB6 /* AnimationClip.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnimationClip.h; sourceTree = "<group>"; };
-		C52A243B21F56DDD0041CEB6 /* renderbox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = renderbox.h; sourceTree = "<group>"; };
-		C52A243C21F56DDD0041CEB6 /* OpenGLRendererProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLRendererProperties.h; sourceTree = "<group>"; };
-		C52A243D21F56DDD0041CEB6 /* FBXParameterTypes.def */ = {isa = PBXFileReference; lastKnownFileType = text; path = FBXParameterTypes.def; sourceTree = "<group>"; };
-		C52A243E21F56DDD0041CEB6 /* Vector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Vector.h; sourceTree = "<group>"; };
-		C52A243F21F56DDD0041CEB6 /* bitmap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bitmap.h; sourceTree = "<group>"; };
-		C52A244021F56DDD0041CEB6 /* MetalDeviceRendererProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalDeviceRendererProperties.h; sourceTree = "<group>"; };
-		C52A244121F56DDD0041CEB6 /* ObjectProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjectProperties.h; sourceTree = "<group>"; };
-		C52A244221F56DDD0041CEB6 /* platform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = platform.h; sourceTree = "<group>"; };
-		C52A244321F56DDD0041CEB6 /* MeshBasicMaterial.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MeshBasicMaterial.h; sourceTree = "<group>"; };
-		C52A244421F56DDD0041CEB6 /* GLFWOpenGLRenderTarget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GLFWOpenGLRenderTarget.h; sourceTree = "<group>"; };
-		C52A244521F56DDD0041CEB6 /* KeyframeTrack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyframeTrack.h; sourceTree = "<group>"; };
-		C52A244621F56DDD0041CEB6 /* SDLOpenGLRenderTarget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDLOpenGLRenderTarget.h; sourceTree = "<group>"; };
-		C52A244721F56DDD0041CEB6 /* Geometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Geometry.h; sourceTree = "<group>"; };
-		C52A244821F56DDD0041CEB6 /* BoxGeometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BoxGeometry.h; sourceTree = "<group>"; };
-		C52A244921F56DDD0041CEB6 /* MTLTokenKinds.def */ = {isa = PBXFileReference; lastKnownFileType = text; path = MTLTokenKinds.def; sourceTree = "<group>"; };
-		C52A244A21F56DDD0041CEB6 /* MetalRenderList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalRenderList.h; sourceTree = "<group>"; };
-		C52A244B21F56DDD0041CEB6 /* Scene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Scene.h; sourceTree = "<group>"; };
-		C52A244C21F56DDD0041CEB6 /* OpenGLVertexArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLVertexArray.h; sourceTree = "<group>"; };
-		C52A24AA21F56DED0041CEB6 /* MetalRenderer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalRenderer.mm; sourceTree = "<group>"; };
-		C52A24AB21F56DED0041CEB6 /* MetalTexture.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalTexture.mm; sourceTree = "<group>"; };
-		C52A24AC21F56DED0041CEB6 /* MetalRendererProperties.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalRendererProperties.mm; sourceTree = "<group>"; };
-		C52A24AD21F56DED0041CEB6 /* MetalRenderList.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalRenderList.mm; sourceTree = "<group>"; };
-		C52A24AE21F56DED0041CEB6 /* MetalRenderPipelineState.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalRenderPipelineState.mm; sourceTree = "<group>"; };
-		C52A24B021F56DED0041CEB6 /* SDLMetalRenderTarget.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SDLMetalRenderTarget.mm; sourceTree = "<group>"; };
-		C52A24B221F56DED0041CEB6 /* MetalLibrary.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = MetalLibrary.metal; sourceTree = "<group>"; };
-		C52A24B321F56DED0041CEB6 /* _mesh_lambert_frag.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = _mesh_lambert_frag.metal; sourceTree = "<group>"; };
-		C52A24B421F56DED0041CEB6 /* _mesh_basic_frag.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = _mesh_basic_frag.metal; sourceTree = "<group>"; };
-		C52A24B521F56DED0041CEB6 /* _mesh_basic.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = _mesh_basic.metal; sourceTree = "<group>"; };
-		C52A24B621F56DED0041CEB6 /* _mesh_lambert.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = _mesh_lambert.metal; sourceTree = "<group>"; };
-		C52A24B721F56DED0041CEB6 /* _mesh_lambert_vert.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = _mesh_lambert_vert.metal; sourceTree = "<group>"; };
-		C52A24B821F56DED0041CEB6 /* _mesh_basic_vert.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = _mesh_basic_vert.metal; sourceTree = "<group>"; };
-		C52A24B921F56DED0041CEB6 /* MetalBuffer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalBuffer.mm; sourceTree = "<group>"; };
-		C52A24BA21F56DED0041CEB6 /* MetalDeviceRendererProperties.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalDeviceRendererProperties.mm; sourceTree = "<group>"; };
-		C52A24BB21F56DED0041CEB6 /* MetalObjectProperties.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalObjectProperties.mm; sourceTree = "<group>"; };
-		C52A24BD21F56DED0041CEB6 /* OpenGLRenderList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLRenderList.cpp; sourceTree = "<group>"; };
-		C52A24BE21F56DED0041CEB6 /* OpenGLBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLBuffer.cpp; sourceTree = "<group>"; };
-		C52A24BF21F56DED0041CEB6 /* OpenGLRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLRenderer.cpp; sourceTree = "<group>"; };
-		C52A24C021F56DED0041CEB6 /* OpenGLTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLTexture.cpp; sourceTree = "<group>"; };
-		C52A24C121F56DED0041CEB6 /* OpenGLObjectProperties.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLObjectProperties.cpp; sourceTree = "<group>"; };
-		C52A24C321F56DED0041CEB6 /* SDLOpenGLRenderTarget.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SDLOpenGLRenderTarget.mm; sourceTree = "<group>"; };
-		C52A24C421F56DED0041CEB6 /* OpenGLRendererProperties.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLRendererProperties.cpp; sourceTree = "<group>"; };
-		C52A24C621F56DED0041CEB6 /* GLFWOpenGLRenderTarget.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GLFWOpenGLRenderTarget.mm; sourceTree = "<group>"; };
-		C52A24C721F56DED0041CEB6 /* OpenGLFramebuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLFramebuffer.cpp; sourceTree = "<group>"; };
-		C52A24C821F56DED0041CEB6 /* OpenGLVertexArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLVertexArray.cpp; sourceTree = "<group>"; };
-		C52A24C921F56DED0041CEB6 /* OpenGLProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLProgram.cpp; sourceTree = "<group>"; };
-		C52A24CB21F56DED0041CEB6 /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
-		C52A24CD21F56DED0041CEB6 /* Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Scene.cpp; sourceTree = "<group>"; };
-		C52A24CF21F56DED0041CEB6 /* MeshBasicMaterial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshBasicMaterial.cpp; sourceTree = "<group>"; };
-		C52A24D021F56DED0041CEB6 /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
-		C52A24D121F56DED0041CEB6 /* MeshLambertMaterial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshLambertMaterial.cpp; sourceTree = "<group>"; };
-		C52A24D421F56DED0041CEB6 /* mesh_basic_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mesh_basic_vert.glsl; sourceTree = "<group>"; };
-		C52A24D521F56DED0041CEB6 /* mesh_lambert_frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mesh_lambert_frag.glsl; sourceTree = "<group>"; };
-		C52A24D621F56DED0041CEB6 /* mesh_basic_frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mesh_basic_frag.glsl; sourceTree = "<group>"; };
-		C52A24D721F56DED0041CEB6 /* mesh_lambert_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mesh_lambert_vert.glsl; sourceTree = "<group>"; };
-		C52A24D921F56DED0041CEB6 /* mesh_basic_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mesh_basic_vert.glsl; sourceTree = "<group>"; };
-		C52A24DA21F56DED0041CEB6 /* mesh_lambert_frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mesh_lambert_frag.glsl; sourceTree = "<group>"; };
-		C52A24DB21F56DED0041CEB6 /* mesh_basic_frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mesh_basic_frag.glsl; sourceTree = "<group>"; };
-		C52A24DC21F56DED0041CEB6 /* mesh_lambert_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mesh_lambert_vert.glsl; sourceTree = "<group>"; };
-		C52A24DD21F56DED0041CEB6 /* GLSLMaterial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLMaterial.cpp; sourceTree = "<group>"; };
-		C52A24DF21F56DED0041CEB6 /* Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Object.cpp; sourceTree = "<group>"; };
-		C52A24E121F56DED0041CEB6 /* AnimationAction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AnimationAction.cpp; sourceTree = "<group>"; };
-		C52A24E221F56DED0041CEB6 /* PropertyMixer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PropertyMixer.cpp; sourceTree = "<group>"; };
-		C52A24E321F56DED0041CEB6 /* AnimationMixer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AnimationMixer.cpp; sourceTree = "<group>"; };
-		C52A24E521F56DED0041CEB6 /* Bone.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Bone.cpp; sourceTree = "<group>"; };
-		C52A24E621F56DED0041CEB6 /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
-		C52A24E821F56DED0041CEB6 /* logging.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logging.cpp; sourceTree = "<group>"; };
-		C52A24EA21F56DED0041CEB6 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
-		C52A24EB21F56DED0041CEB6 /* PerspectiveCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PerspectiveCamera.cpp; sourceTree = "<group>"; };
-		C52A24ED21F56DED0041CEB6 /* Ray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Ray.cpp; sourceTree = "<group>"; };
-		C52A24F021F56DED0041CEB6 /* common.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = common.glsl; sourceTree = "<group>"; };
-		C52A24F121F56DED0041CEB6 /* lights_preamble.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = lights_preamble.glsl; sourceTree = "<group>"; };
-		C52A24F221F56DED0041CEB6 /* worldposition_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = worldposition_vert.glsl; sourceTree = "<group>"; };
-		C52A24F321F56DED0041CEB6 /* worldnormal_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = worldnormal_vert.glsl; sourceTree = "<group>"; };
-		C52A24F421F56DED0041CEB6 /* glposition_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = glposition_vert.glsl; sourceTree = "<group>"; };
-		C52A24F521F56DED0041CEB6 /* begin_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = begin_vert.glsl; sourceTree = "<group>"; };
-		C52A24F621F56DED0041CEB6 /* GLSLPreprocessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLPreprocessor.cpp; sourceTree = "<group>"; };
-		C52A24F821F56DED0041CEB6 /* BoxGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BoxGeometry.cpp; sourceTree = "<group>"; };
-		C52A24F921F56DED0041CEB6 /* MeshGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshGeometry.cpp; sourceTree = "<group>"; };
-		C52A24FA21F56DED0041CEB6 /* VoxelGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VoxelGeometry.cpp; sourceTree = "<group>"; };
-		C52A24FC21F56DED0041CEB6 /* OBJLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OBJLoader.cpp; sourceTree = "<group>"; };
-		C52A24FD21F56DED0041CEB6 /* FBXLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FBXLoader.cpp; sourceTree = "<group>"; };
-		C52A24FF21F56DED0041CEB6 /* PointLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PointLight.cpp; sourceTree = "<group>"; };
-		C52A250021F56DED0041CEB6 /* Light.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Light.cpp; sourceTree = "<group>"; };
+		C50FEF2221F598DD00946156 /* MetalRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalRenderer.h; sourceTree = "<group>"; };
+		C50FEF2321F598DD00946156 /* PerspectiveCamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PerspectiveCamera.h; sourceTree = "<group>"; };
+		C50FEF2421F598DD00946156 /* MetalTexture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalTexture.h; sourceTree = "<group>"; };
+		C50FEF2521F598DD00946156 /* VoxelGeometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VoxelGeometry.h; sourceTree = "<group>"; };
+		C50FEF2621F598DD00946156 /* PointLight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PointLight.h; sourceTree = "<group>"; };
+		C50FEF2721F598DD00946156 /* MeshGeometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MeshGeometry.h; sourceTree = "<group>"; };
+		C50FEF2821F598DD00946156 /* OBJLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OBJLoader.h; sourceTree = "<group>"; };
+		C50FEF2921F598DD00946156 /* OpenGLRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLRenderer.h; sourceTree = "<group>"; };
+		C50FEF2A21F598DD00946156 /* OpenGLBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLBuffer.h; sourceTree = "<group>"; };
+		C50FEF2B21F598DD00946156 /* OpenGLFramebuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLFramebuffer.h; sourceTree = "<group>"; };
+		C50FEF2C21F598DD00946156 /* OpenGLObjectProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLObjectProperties.h; sourceTree = "<group>"; };
+		C50FEF2D21F598DD00946156 /* OpenGL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGL.h; sourceTree = "<group>"; };
+		C50FEF2E21F598DD00946156 /* OpenGLRenderTarget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLRenderTarget.h; sourceTree = "<group>"; };
+		C50FEF2F21F598DD00946156 /* MeshLambertMaterial.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MeshLambertMaterial.h; sourceTree = "<group>"; };
+		C50FEF3021F598DD00946156 /* Light.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Light.h; sourceTree = "<group>"; };
+		C50FEF3121F598DD00946156 /* FBXLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FBXLoader.h; sourceTree = "<group>"; };
+		C50FEF3221F598DD00946156 /* Bone.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Bone.h; sourceTree = "<group>"; };
+		C50FEF3321F598DD00946156 /* Camera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
+		C50FEF3421F598DD00946156 /* OpenGLProgram.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLProgram.h; sourceTree = "<group>"; };
+		C50FEF3521F598DD00946156 /* VersionTrackedObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VersionTrackedObject.h; sourceTree = "<group>"; };
+		C50FEF3621F598DD00946156 /* MetalBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalBuffer.h; sourceTree = "<group>"; };
+		C50FEF3721F598DD00946156 /* OpenGLTexture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLTexture.h; sourceTree = "<group>"; };
+		C50FEF3821F598DD00946156 /* Material.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
+		C50FEF3921F598DD00946156 /* Matrix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Matrix.h; sourceTree = "<group>"; };
+		C50FEF3A21F598DD00946156 /* scoped_nsobject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = scoped_nsobject.h; sourceTree = "<group>"; };
+		C50FEF3B21F598DD00946156 /* CameraProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraProperties.h; sourceTree = "<group>"; };
+		C50FEF3C21F598DD00946156 /* OBJTokenKinds.def */ = {isa = PBXFileReference; lastKnownFileType = text; path = OBJTokenKinds.def; sourceTree = "<group>"; };
+		C50FEF3D21F598DD00946156 /* GLSLMaterial.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GLSLMaterial.h; sourceTree = "<group>"; };
+		C50FEF3E21F598DD00946156 /* PropertyMixer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PropertyMixer.h; sourceTree = "<group>"; };
+		C50FEF3F21F598DD00946156 /* SDLMetalRenderTarget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDLMetalRenderTarget.h; sourceTree = "<group>"; };
+		C50FEF4021F598DD00946156 /* logging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = logging.h; sourceTree = "<group>"; };
+		C50FEF4121F598DD00946156 /* SkinnedObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SkinnedObject.h; sourceTree = "<group>"; };
+		C50FEF4221F598DD00946156 /* GLSLTokenKinds.def */ = {isa = PBXFileReference; lastKnownFileType = text; path = GLSLTokenKinds.def; sourceTree = "<group>"; };
+		C50FEF4321F598DD00946156 /* MetalRenderPipelineState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalRenderPipelineState.h; sourceTree = "<group>"; };
+		C50FEF4421F598DD00946156 /* MetalObjectProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalObjectProperties.h; sourceTree = "<group>"; };
+		C50FEF4521F598DD00946156 /* AnimationAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnimationAction.h; sourceTree = "<group>"; };
+		C50FEF4621F598DD00946156 /* AnimationMixer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnimationMixer.h; sourceTree = "<group>"; };
+		C50FEF4721F598DD00946156 /* MetalRendererProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalRendererProperties.h; sourceTree = "<group>"; };
+		C50FEF4821F598DD00946156 /* GLSLPreprocessor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GLSLPreprocessor.h; sourceTree = "<group>"; };
+		C50FEF4921F598DD00946156 /* Ray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Ray.h; sourceTree = "<group>"; };
+		C50FEF4A21F598DD00946156 /* OpenGLRenderList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLRenderList.h; sourceTree = "<group>"; };
+		C50FEF4B21F598DD00946156 /* Object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Object.h; sourceTree = "<group>"; };
+		C50FEF4C21F598DD00946156 /* lexer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lexer.h; sourceTree = "<group>"; };
+		C50FEF4D21F598DD00946156 /* Texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
+		C50FEF4E21F598DD00946156 /* AnimationClip.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnimationClip.h; sourceTree = "<group>"; };
+		C50FEF4F21F598DD00946156 /* renderbox.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = renderbox.h; sourceTree = "<group>"; };
+		C50FEF5021F598DD00946156 /* OpenGLRendererProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLRendererProperties.h; sourceTree = "<group>"; };
+		C50FEF5121F598DD00946156 /* FBXParameterTypes.def */ = {isa = PBXFileReference; lastKnownFileType = text; path = FBXParameterTypes.def; sourceTree = "<group>"; };
+		C50FEF5221F598DD00946156 /* Vector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Vector.h; sourceTree = "<group>"; };
+		C50FEF5321F598DD00946156 /* bitmap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bitmap.h; sourceTree = "<group>"; };
+		C50FEF5421F598DD00946156 /* MetalDeviceRendererProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalDeviceRendererProperties.h; sourceTree = "<group>"; };
+		C50FEF5521F598DD00946156 /* ObjectProperties.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjectProperties.h; sourceTree = "<group>"; };
+		C50FEF5621F598DD00946156 /* platform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = platform.h; sourceTree = "<group>"; };
+		C50FEF5721F598DD00946156 /* MeshBasicMaterial.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MeshBasicMaterial.h; sourceTree = "<group>"; };
+		C50FEF5821F598DD00946156 /* GLFWOpenGLRenderTarget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GLFWOpenGLRenderTarget.h; sourceTree = "<group>"; };
+		C50FEF5921F598DD00946156 /* KeyframeTrack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyframeTrack.h; sourceTree = "<group>"; };
+		C50FEF5A21F598DD00946156 /* SDLOpenGLRenderTarget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDLOpenGLRenderTarget.h; sourceTree = "<group>"; };
+		C50FEF5B21F598DD00946156 /* Geometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Geometry.h; sourceTree = "<group>"; };
+		C50FEF5C21F598DD00946156 /* BoxGeometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BoxGeometry.h; sourceTree = "<group>"; };
+		C50FEF5D21F598DD00946156 /* MTLTokenKinds.def */ = {isa = PBXFileReference; lastKnownFileType = text; path = MTLTokenKinds.def; sourceTree = "<group>"; };
+		C50FEF5E21F598DD00946156 /* MetalRenderList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalRenderList.h; sourceTree = "<group>"; };
+		C50FEF5F21F598DD00946156 /* Scene.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Scene.h; sourceTree = "<group>"; };
+		C50FEF6021F598DD00946156 /* OpenGLVertexArray.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenGLVertexArray.h; sourceTree = "<group>"; };
+		C50FEF6421F598E500946156 /* MetalRenderer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalRenderer.mm; sourceTree = "<group>"; };
+		C50FEF6521F598E500946156 /* MetalTexture.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalTexture.mm; sourceTree = "<group>"; };
+		C50FEF6621F598E500946156 /* MetalRendererProperties.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalRendererProperties.mm; sourceTree = "<group>"; };
+		C50FEF6721F598E500946156 /* MetalRenderList.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalRenderList.mm; sourceTree = "<group>"; };
+		C50FEF6821F598E500946156 /* MetalRenderPipelineState.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalRenderPipelineState.mm; sourceTree = "<group>"; };
+		C50FEF6A21F598E500946156 /* SDLMetalRenderTarget.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SDLMetalRenderTarget.mm; sourceTree = "<group>"; };
+		C50FEF6C21F598E500946156 /* MetalLibrary.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = MetalLibrary.metal; sourceTree = "<group>"; };
+		C50FEF6D21F598E500946156 /* _mesh_lambert_frag.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = _mesh_lambert_frag.metal; sourceTree = "<group>"; };
+		C50FEF6E21F598E500946156 /* _mesh_basic_frag.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = _mesh_basic_frag.metal; sourceTree = "<group>"; };
+		C50FEF6F21F598E500946156 /* _mesh_basic.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = _mesh_basic.metal; sourceTree = "<group>"; };
+		C50FEF7021F598E500946156 /* _mesh_lambert.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = _mesh_lambert.metal; sourceTree = "<group>"; };
+		C50FEF7121F598E500946156 /* _mesh_lambert_vert.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = _mesh_lambert_vert.metal; sourceTree = "<group>"; };
+		C50FEF7221F598E500946156 /* _mesh_basic_vert.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = _mesh_basic_vert.metal; sourceTree = "<group>"; };
+		C50FEF7321F598E500946156 /* MetalBuffer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalBuffer.mm; sourceTree = "<group>"; };
+		C50FEF7421F598E500946156 /* MetalDeviceRendererProperties.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalDeviceRendererProperties.mm; sourceTree = "<group>"; };
+		C50FEF7521F598E500946156 /* MetalObjectProperties.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MetalObjectProperties.mm; sourceTree = "<group>"; };
+		C50FEF7721F598E500946156 /* OpenGLRenderList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLRenderList.cpp; sourceTree = "<group>"; };
+		C50FEF7821F598E500946156 /* OpenGLBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLBuffer.cpp; sourceTree = "<group>"; };
+		C50FEF7921F598E500946156 /* OpenGLRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLRenderer.cpp; sourceTree = "<group>"; };
+		C50FEF7A21F598E500946156 /* OpenGLTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLTexture.cpp; sourceTree = "<group>"; };
+		C50FEF7B21F598E500946156 /* OpenGLObjectProperties.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLObjectProperties.cpp; sourceTree = "<group>"; };
+		C50FEF7D21F598E500946156 /* SDLOpenGLRenderTarget.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SDLOpenGLRenderTarget.mm; sourceTree = "<group>"; };
+		C50FEF7E21F598E500946156 /* OpenGLRendererProperties.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLRendererProperties.cpp; sourceTree = "<group>"; };
+		C50FEF8021F598E500946156 /* GLFWOpenGLRenderTarget.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GLFWOpenGLRenderTarget.mm; sourceTree = "<group>"; };
+		C50FEF8121F598E500946156 /* OpenGLFramebuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLFramebuffer.cpp; sourceTree = "<group>"; };
+		C50FEF8221F598E500946156 /* OpenGLVertexArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLVertexArray.cpp; sourceTree = "<group>"; };
+		C50FEF8321F598E500946156 /* OpenGLProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLProgram.cpp; sourceTree = "<group>"; };
+		C50FEF8521F598E500946156 /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
+		C50FEF8721F598E500946156 /* Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Scene.cpp; sourceTree = "<group>"; };
+		C50FEF8921F598E500946156 /* MeshBasicMaterial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshBasicMaterial.cpp; sourceTree = "<group>"; };
+		C50FEF8A21F598E500946156 /* Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Material.cpp; sourceTree = "<group>"; };
+		C50FEF8B21F598E500946156 /* MeshLambertMaterial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshLambertMaterial.cpp; sourceTree = "<group>"; };
+		C50FEF8E21F598E500946156 /* mesh_basic_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mesh_basic_vert.glsl; sourceTree = "<group>"; };
+		C50FEF8F21F598E500946156 /* mesh_lambert_frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mesh_lambert_frag.glsl; sourceTree = "<group>"; };
+		C50FEF9021F598E500946156 /* mesh_basic_frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mesh_basic_frag.glsl; sourceTree = "<group>"; };
+		C50FEF9121F598E500946156 /* mesh_lambert_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mesh_lambert_vert.glsl; sourceTree = "<group>"; };
+		C50FEF9321F598E500946156 /* mesh_basic_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mesh_basic_vert.glsl; sourceTree = "<group>"; };
+		C50FEF9421F598E500946156 /* mesh_lambert_frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mesh_lambert_frag.glsl; sourceTree = "<group>"; };
+		C50FEF9521F598E500946156 /* mesh_basic_frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mesh_basic_frag.glsl; sourceTree = "<group>"; };
+		C50FEF9621F598E500946156 /* mesh_lambert_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mesh_lambert_vert.glsl; sourceTree = "<group>"; };
+		C50FEF9721F598E500946156 /* GLSLMaterial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLMaterial.cpp; sourceTree = "<group>"; };
+		C50FEF9921F598E500946156 /* Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Object.cpp; sourceTree = "<group>"; };
+		C50FEF9B21F598E500946156 /* AnimationAction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AnimationAction.cpp; sourceTree = "<group>"; };
+		C50FEF9C21F598E500946156 /* PropertyMixer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PropertyMixer.cpp; sourceTree = "<group>"; };
+		C50FEF9D21F598E500946156 /* AnimationMixer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AnimationMixer.cpp; sourceTree = "<group>"; };
+		C50FEF9F21F598E500946156 /* Bone.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Bone.cpp; sourceTree = "<group>"; };
+		C50FEFA021F598E500946156 /* SkinnedObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SkinnedObject.cpp; sourceTree = "<group>"; };
+		C50FEFA221F598E500946156 /* logging.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logging.cpp; sourceTree = "<group>"; };
+		C50FEFA421F598E500946156 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
+		C50FEFA521F598E500946156 /* PerspectiveCamera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PerspectiveCamera.cpp; sourceTree = "<group>"; };
+		C50FEFA721F598E500946156 /* Ray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Ray.cpp; sourceTree = "<group>"; };
+		C50FEFAA21F598E500946156 /* common.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = common.glsl; sourceTree = "<group>"; };
+		C50FEFAB21F598E500946156 /* lights_preamble.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = lights_preamble.glsl; sourceTree = "<group>"; };
+		C50FEFAC21F598E500946156 /* worldposition_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = worldposition_vert.glsl; sourceTree = "<group>"; };
+		C50FEFAD21F598E500946156 /* worldnormal_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = worldnormal_vert.glsl; sourceTree = "<group>"; };
+		C50FEFAE21F598E500946156 /* glposition_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = glposition_vert.glsl; sourceTree = "<group>"; };
+		C50FEFAF21F598E500946156 /* begin_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = begin_vert.glsl; sourceTree = "<group>"; };
+		C50FEFB021F598E500946156 /* GLSLPreprocessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSLPreprocessor.cpp; sourceTree = "<group>"; };
+		C50FEFB221F598E500946156 /* BoxGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BoxGeometry.cpp; sourceTree = "<group>"; };
+		C50FEFB321F598E500946156 /* MeshGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshGeometry.cpp; sourceTree = "<group>"; };
+		C50FEFB421F598E500946156 /* VoxelGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VoxelGeometry.cpp; sourceTree = "<group>"; };
+		C50FEFB621F598E500946156 /* OBJLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OBJLoader.cpp; sourceTree = "<group>"; };
+		C50FEFB721F598E500946156 /* FBXLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FBXLoader.cpp; sourceTree = "<group>"; };
+		C50FEFB921F598E500946156 /* PointLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PointLight.cpp; sourceTree = "<group>"; };
+		C50FEFBA21F598E500946156 /* Light.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Light.cpp; sourceTree = "<group>"; };
 		C53776C720A137F400DFD1D9 /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = ../../../vendor/sdl/Xcode/SDL/SDL.xcodeproj; sourceTree = "<group>"; };
 		C53978662065D862001AAFFE /* libRenderBox.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRenderBox.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C53F26AE2175197300EF9635 /* RenderBoxMetalLibrary.metallib */ = {isa = PBXFileReference; explicitFileType = "archive.metal-library"; includeInIndex = 0; path = RenderBoxMetalLibrary.metallib; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -247,338 +247,338 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		C52A240D21F56DDD0041CEB6 /* include */ = {
+		C50FEF2121F598DD00946156 /* include */ = {
 			isa = PBXGroup;
 			children = (
-				C52A240E21F56DDD0041CEB6 /* MetalRenderer.h */,
-				C52A240F21F56DDD0041CEB6 /* PerspectiveCamera.h */,
-				C52A241021F56DDD0041CEB6 /* MetalTexture.h */,
-				C52A241121F56DDD0041CEB6 /* VoxelGeometry.h */,
-				C52A241221F56DDD0041CEB6 /* PointLight.h */,
-				C52A241321F56DDD0041CEB6 /* MeshGeometry.h */,
-				C52A241421F56DDD0041CEB6 /* OBJLoader.h */,
-				C52A241521F56DDD0041CEB6 /* OpenGLRenderer.h */,
-				C52A241621F56DDD0041CEB6 /* OpenGLBuffer.h */,
-				C52A241721F56DDD0041CEB6 /* OpenGLFramebuffer.h */,
-				C52A241821F56DDD0041CEB6 /* OpenGLObjectProperties.h */,
-				C52A241921F56DDD0041CEB6 /* OpenGL.h */,
-				C52A241A21F56DDD0041CEB6 /* OpenGLRenderTarget.h */,
-				C52A241B21F56DDD0041CEB6 /* MeshLambertMaterial.h */,
-				C52A241C21F56DDD0041CEB6 /* Light.h */,
-				C52A241D21F56DDD0041CEB6 /* FBXLoader.h */,
-				C52A241E21F56DDD0041CEB6 /* Bone.h */,
-				C52A241F21F56DDD0041CEB6 /* Camera.h */,
-				C52A242021F56DDD0041CEB6 /* OpenGLProgram.h */,
-				C52A242121F56DDD0041CEB6 /* VersionTrackedObject.h */,
-				C52A242221F56DDD0041CEB6 /* MetalBuffer.h */,
-				C52A242321F56DDD0041CEB6 /* OpenGLTexture.h */,
-				C52A242421F56DDD0041CEB6 /* Material.h */,
-				C52A242521F56DDD0041CEB6 /* Matrix.h */,
-				C52A242621F56DDD0041CEB6 /* scoped_nsobject.h */,
-				C52A242721F56DDD0041CEB6 /* CameraProperties.h */,
-				C52A242821F56DDD0041CEB6 /* OBJTokenKinds.def */,
-				C52A242921F56DDD0041CEB6 /* GLSLMaterial.h */,
-				C52A242A21F56DDD0041CEB6 /* PropertyMixer.h */,
-				C52A242B21F56DDD0041CEB6 /* SDLMetalRenderTarget.h */,
-				C52A242C21F56DDD0041CEB6 /* logging.h */,
-				C52A242D21F56DDD0041CEB6 /* Mesh.h */,
-				C52A242E21F56DDD0041CEB6 /* GLSLTokenKinds.def */,
-				C52A242F21F56DDD0041CEB6 /* MetalRenderPipelineState.h */,
-				C52A243021F56DDD0041CEB6 /* MetalObjectProperties.h */,
-				C52A243121F56DDD0041CEB6 /* AnimationAction.h */,
-				C52A243221F56DDD0041CEB6 /* AnimationMixer.h */,
-				C52A243321F56DDD0041CEB6 /* MetalRendererProperties.h */,
-				C52A243421F56DDD0041CEB6 /* GLSLPreprocessor.h */,
-				C52A243521F56DDD0041CEB6 /* Ray.h */,
-				C52A243621F56DDD0041CEB6 /* OpenGLRenderList.h */,
-				C52A243721F56DDD0041CEB6 /* Object.h */,
-				C52A243821F56DDD0041CEB6 /* lexer.h */,
-				C52A243921F56DDD0041CEB6 /* Texture.h */,
-				C52A243A21F56DDD0041CEB6 /* AnimationClip.h */,
-				C52A243B21F56DDD0041CEB6 /* renderbox.h */,
-				C52A243C21F56DDD0041CEB6 /* OpenGLRendererProperties.h */,
-				C52A243D21F56DDD0041CEB6 /* FBXParameterTypes.def */,
-				C52A243E21F56DDD0041CEB6 /* Vector.h */,
-				C52A243F21F56DDD0041CEB6 /* bitmap.h */,
-				C52A244021F56DDD0041CEB6 /* MetalDeviceRendererProperties.h */,
-				C52A244121F56DDD0041CEB6 /* ObjectProperties.h */,
-				C52A244221F56DDD0041CEB6 /* platform.h */,
-				C52A244321F56DDD0041CEB6 /* MeshBasicMaterial.h */,
-				C52A244421F56DDD0041CEB6 /* GLFWOpenGLRenderTarget.h */,
-				C52A244521F56DDD0041CEB6 /* KeyframeTrack.h */,
-				C52A244621F56DDD0041CEB6 /* SDLOpenGLRenderTarget.h */,
-				C52A244721F56DDD0041CEB6 /* Geometry.h */,
-				C52A244821F56DDD0041CEB6 /* BoxGeometry.h */,
-				C52A244921F56DDD0041CEB6 /* MTLTokenKinds.def */,
-				C52A244A21F56DDD0041CEB6 /* MetalRenderList.h */,
-				C52A244B21F56DDD0041CEB6 /* Scene.h */,
-				C52A244C21F56DDD0041CEB6 /* OpenGLVertexArray.h */,
+				C50FEF2221F598DD00946156 /* MetalRenderer.h */,
+				C50FEF2321F598DD00946156 /* PerspectiveCamera.h */,
+				C50FEF2421F598DD00946156 /* MetalTexture.h */,
+				C50FEF2521F598DD00946156 /* VoxelGeometry.h */,
+				C50FEF2621F598DD00946156 /* PointLight.h */,
+				C50FEF2721F598DD00946156 /* MeshGeometry.h */,
+				C50FEF2821F598DD00946156 /* OBJLoader.h */,
+				C50FEF2921F598DD00946156 /* OpenGLRenderer.h */,
+				C50FEF2A21F598DD00946156 /* OpenGLBuffer.h */,
+				C50FEF2B21F598DD00946156 /* OpenGLFramebuffer.h */,
+				C50FEF2C21F598DD00946156 /* OpenGLObjectProperties.h */,
+				C50FEF2D21F598DD00946156 /* OpenGL.h */,
+				C50FEF2E21F598DD00946156 /* OpenGLRenderTarget.h */,
+				C50FEF2F21F598DD00946156 /* MeshLambertMaterial.h */,
+				C50FEF3021F598DD00946156 /* Light.h */,
+				C50FEF3121F598DD00946156 /* FBXLoader.h */,
+				C50FEF3221F598DD00946156 /* Bone.h */,
+				C50FEF3321F598DD00946156 /* Camera.h */,
+				C50FEF3421F598DD00946156 /* OpenGLProgram.h */,
+				C50FEF3521F598DD00946156 /* VersionTrackedObject.h */,
+				C50FEF3621F598DD00946156 /* MetalBuffer.h */,
+				C50FEF3721F598DD00946156 /* OpenGLTexture.h */,
+				C50FEF3821F598DD00946156 /* Material.h */,
+				C50FEF3921F598DD00946156 /* Matrix.h */,
+				C50FEF3A21F598DD00946156 /* scoped_nsobject.h */,
+				C50FEF3B21F598DD00946156 /* CameraProperties.h */,
+				C50FEF3C21F598DD00946156 /* OBJTokenKinds.def */,
+				C50FEF3D21F598DD00946156 /* GLSLMaterial.h */,
+				C50FEF3E21F598DD00946156 /* PropertyMixer.h */,
+				C50FEF3F21F598DD00946156 /* SDLMetalRenderTarget.h */,
+				C50FEF4021F598DD00946156 /* logging.h */,
+				C50FEF4121F598DD00946156 /* SkinnedObject.h */,
+				C50FEF4221F598DD00946156 /* GLSLTokenKinds.def */,
+				C50FEF4321F598DD00946156 /* MetalRenderPipelineState.h */,
+				C50FEF4421F598DD00946156 /* MetalObjectProperties.h */,
+				C50FEF4521F598DD00946156 /* AnimationAction.h */,
+				C50FEF4621F598DD00946156 /* AnimationMixer.h */,
+				C50FEF4721F598DD00946156 /* MetalRendererProperties.h */,
+				C50FEF4821F598DD00946156 /* GLSLPreprocessor.h */,
+				C50FEF4921F598DD00946156 /* Ray.h */,
+				C50FEF4A21F598DD00946156 /* OpenGLRenderList.h */,
+				C50FEF4B21F598DD00946156 /* Object.h */,
+				C50FEF4C21F598DD00946156 /* lexer.h */,
+				C50FEF4D21F598DD00946156 /* Texture.h */,
+				C50FEF4E21F598DD00946156 /* AnimationClip.h */,
+				C50FEF4F21F598DD00946156 /* renderbox.h */,
+				C50FEF5021F598DD00946156 /* OpenGLRendererProperties.h */,
+				C50FEF5121F598DD00946156 /* FBXParameterTypes.def */,
+				C50FEF5221F598DD00946156 /* Vector.h */,
+				C50FEF5321F598DD00946156 /* bitmap.h */,
+				C50FEF5421F598DD00946156 /* MetalDeviceRendererProperties.h */,
+				C50FEF5521F598DD00946156 /* ObjectProperties.h */,
+				C50FEF5621F598DD00946156 /* platform.h */,
+				C50FEF5721F598DD00946156 /* MeshBasicMaterial.h */,
+				C50FEF5821F598DD00946156 /* GLFWOpenGLRenderTarget.h */,
+				C50FEF5921F598DD00946156 /* KeyframeTrack.h */,
+				C50FEF5A21F598DD00946156 /* SDLOpenGLRenderTarget.h */,
+				C50FEF5B21F598DD00946156 /* Geometry.h */,
+				C50FEF5C21F598DD00946156 /* BoxGeometry.h */,
+				C50FEF5D21F598DD00946156 /* MTLTokenKinds.def */,
+				C50FEF5E21F598DD00946156 /* MetalRenderList.h */,
+				C50FEF5F21F598DD00946156 /* Scene.h */,
+				C50FEF6021F598DD00946156 /* OpenGLVertexArray.h */,
 			);
 			name = include;
 			path = ../../../include;
 			sourceTree = "<group>";
 		};
-		C52A24A721F56DED0041CEB6 /* src */ = {
+		C50FEF6121F598E500946156 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24A821F56DED0041CEB6 /* renderers */,
-				C52A24CA21F56DED0041CEB6 /* textures */,
-				C52A24CC21F56DED0041CEB6 /* scenes */,
-				C52A24CE21F56DED0041CEB6 /* materials */,
-				C52A24DE21F56DED0041CEB6 /* core */,
-				C52A24E021F56DED0041CEB6 /* animation */,
-				C52A24E421F56DED0041CEB6 /* objects */,
-				C52A24E721F56DED0041CEB6 /* utils */,
-				C52A24E921F56DED0041CEB6 /* cameras */,
-				C52A24EC21F56DED0041CEB6 /* math */,
-				C52A24EE21F56DED0041CEB6 /* glsl */,
-				C52A24F721F56DED0041CEB6 /* geometries */,
-				C52A24FB21F56DED0041CEB6 /* loaders */,
-				C52A24FE21F56DED0041CEB6 /* lights */,
+				C50FEF6221F598E500946156 /* renderers */,
+				C50FEF8421F598E500946156 /* textures */,
+				C50FEF8621F598E500946156 /* scenes */,
+				C50FEF8821F598E500946156 /* materials */,
+				C50FEF9821F598E500946156 /* core */,
+				C50FEF9A21F598E500946156 /* animation */,
+				C50FEF9E21F598E500946156 /* objects */,
+				C50FEFA121F598E500946156 /* utils */,
+				C50FEFA321F598E500946156 /* cameras */,
+				C50FEFA621F598E500946156 /* math */,
+				C50FEFA821F598E500946156 /* glsl */,
+				C50FEFB121F598E500946156 /* geometries */,
+				C50FEFB521F598E500946156 /* loaders */,
+				C50FEFB821F598E500946156 /* lights */,
 			);
 			name = src;
 			path = ../../../src;
 			sourceTree = "<group>";
 		};
-		C52A24A821F56DED0041CEB6 /* renderers */ = {
+		C50FEF6221F598E500946156 /* renderers */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24A921F56DED0041CEB6 /* metal */,
-				C52A24BC21F56DED0041CEB6 /* opengl */,
+				C50FEF6321F598E500946156 /* metal */,
+				C50FEF7621F598E500946156 /* opengl */,
 			);
 			path = renderers;
 			sourceTree = "<group>";
 		};
-		C52A24A921F56DED0041CEB6 /* metal */ = {
+		C50FEF6321F598E500946156 /* metal */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24AA21F56DED0041CEB6 /* MetalRenderer.mm */,
-				C52A24AB21F56DED0041CEB6 /* MetalTexture.mm */,
-				C52A24AC21F56DED0041CEB6 /* MetalRendererProperties.mm */,
-				C52A24AD21F56DED0041CEB6 /* MetalRenderList.mm */,
-				C52A24AE21F56DED0041CEB6 /* MetalRenderPipelineState.mm */,
-				C52A24AF21F56DED0041CEB6 /* sdl */,
-				C52A24B121F56DED0041CEB6 /* shaders */,
-				C52A24B921F56DED0041CEB6 /* MetalBuffer.mm */,
-				C52A24BA21F56DED0041CEB6 /* MetalDeviceRendererProperties.mm */,
-				C52A24BB21F56DED0041CEB6 /* MetalObjectProperties.mm */,
+				C50FEF6421F598E500946156 /* MetalRenderer.mm */,
+				C50FEF6521F598E500946156 /* MetalTexture.mm */,
+				C50FEF6621F598E500946156 /* MetalRendererProperties.mm */,
+				C50FEF6721F598E500946156 /* MetalRenderList.mm */,
+				C50FEF6821F598E500946156 /* MetalRenderPipelineState.mm */,
+				C50FEF6921F598E500946156 /* sdl */,
+				C50FEF6B21F598E500946156 /* shaders */,
+				C50FEF7321F598E500946156 /* MetalBuffer.mm */,
+				C50FEF7421F598E500946156 /* MetalDeviceRendererProperties.mm */,
+				C50FEF7521F598E500946156 /* MetalObjectProperties.mm */,
 			);
 			path = metal;
 			sourceTree = "<group>";
 		};
-		C52A24AF21F56DED0041CEB6 /* sdl */ = {
+		C50FEF6921F598E500946156 /* sdl */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24B021F56DED0041CEB6 /* SDLMetalRenderTarget.mm */,
+				C50FEF6A21F598E500946156 /* SDLMetalRenderTarget.mm */,
 			);
 			path = sdl;
 			sourceTree = "<group>";
 		};
-		C52A24B121F56DED0041CEB6 /* shaders */ = {
+		C50FEF6B21F598E500946156 /* shaders */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24B221F56DED0041CEB6 /* MetalLibrary.metal */,
-				C52A24B321F56DED0041CEB6 /* _mesh_lambert_frag.metal */,
-				C52A24B421F56DED0041CEB6 /* _mesh_basic_frag.metal */,
-				C52A24B521F56DED0041CEB6 /* _mesh_basic.metal */,
-				C52A24B621F56DED0041CEB6 /* _mesh_lambert.metal */,
-				C52A24B721F56DED0041CEB6 /* _mesh_lambert_vert.metal */,
-				C52A24B821F56DED0041CEB6 /* _mesh_basic_vert.metal */,
+				C50FEF6C21F598E500946156 /* MetalLibrary.metal */,
+				C50FEF6D21F598E500946156 /* _mesh_lambert_frag.metal */,
+				C50FEF6E21F598E500946156 /* _mesh_basic_frag.metal */,
+				C50FEF6F21F598E500946156 /* _mesh_basic.metal */,
+				C50FEF7021F598E500946156 /* _mesh_lambert.metal */,
+				C50FEF7121F598E500946156 /* _mesh_lambert_vert.metal */,
+				C50FEF7221F598E500946156 /* _mesh_basic_vert.metal */,
 			);
 			path = shaders;
 			sourceTree = "<group>";
 		};
-		C52A24BC21F56DED0041CEB6 /* opengl */ = {
+		C50FEF7621F598E500946156 /* opengl */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24BD21F56DED0041CEB6 /* OpenGLRenderList.cpp */,
-				C52A24BE21F56DED0041CEB6 /* OpenGLBuffer.cpp */,
-				C52A24BF21F56DED0041CEB6 /* OpenGLRenderer.cpp */,
-				C52A24C021F56DED0041CEB6 /* OpenGLTexture.cpp */,
-				C52A24C121F56DED0041CEB6 /* OpenGLObjectProperties.cpp */,
-				C52A24C221F56DED0041CEB6 /* sdl */,
-				C52A24C421F56DED0041CEB6 /* OpenGLRendererProperties.cpp */,
-				C52A24C521F56DED0041CEB6 /* glfw */,
-				C52A24C721F56DED0041CEB6 /* OpenGLFramebuffer.cpp */,
-				C52A24C821F56DED0041CEB6 /* OpenGLVertexArray.cpp */,
-				C52A24C921F56DED0041CEB6 /* OpenGLProgram.cpp */,
+				C50FEF7721F598E500946156 /* OpenGLRenderList.cpp */,
+				C50FEF7821F598E500946156 /* OpenGLBuffer.cpp */,
+				C50FEF7921F598E500946156 /* OpenGLRenderer.cpp */,
+				C50FEF7A21F598E500946156 /* OpenGLTexture.cpp */,
+				C50FEF7B21F598E500946156 /* OpenGLObjectProperties.cpp */,
+				C50FEF7C21F598E500946156 /* sdl */,
+				C50FEF7E21F598E500946156 /* OpenGLRendererProperties.cpp */,
+				C50FEF7F21F598E500946156 /* glfw */,
+				C50FEF8121F598E500946156 /* OpenGLFramebuffer.cpp */,
+				C50FEF8221F598E500946156 /* OpenGLVertexArray.cpp */,
+				C50FEF8321F598E500946156 /* OpenGLProgram.cpp */,
 			);
 			path = opengl;
 			sourceTree = "<group>";
 		};
-		C52A24C221F56DED0041CEB6 /* sdl */ = {
+		C50FEF7C21F598E500946156 /* sdl */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24C321F56DED0041CEB6 /* SDLOpenGLRenderTarget.mm */,
+				C50FEF7D21F598E500946156 /* SDLOpenGLRenderTarget.mm */,
 			);
 			path = sdl;
 			sourceTree = "<group>";
 		};
-		C52A24C521F56DED0041CEB6 /* glfw */ = {
+		C50FEF7F21F598E500946156 /* glfw */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24C621F56DED0041CEB6 /* GLFWOpenGLRenderTarget.mm */,
+				C50FEF8021F598E500946156 /* GLFWOpenGLRenderTarget.mm */,
 			);
 			path = glfw;
 			sourceTree = "<group>";
 		};
-		C52A24CA21F56DED0041CEB6 /* textures */ = {
+		C50FEF8421F598E500946156 /* textures */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24CB21F56DED0041CEB6 /* Texture.cpp */,
+				C50FEF8521F598E500946156 /* Texture.cpp */,
 			);
 			path = textures;
 			sourceTree = "<group>";
 		};
-		C52A24CC21F56DED0041CEB6 /* scenes */ = {
+		C50FEF8621F598E500946156 /* scenes */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24CD21F56DED0041CEB6 /* Scene.cpp */,
+				C50FEF8721F598E500946156 /* Scene.cpp */,
 			);
 			path = scenes;
 			sourceTree = "<group>";
 		};
-		C52A24CE21F56DED0041CEB6 /* materials */ = {
+		C50FEF8821F598E500946156 /* materials */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24CF21F56DED0041CEB6 /* MeshBasicMaterial.cpp */,
-				C52A24D021F56DED0041CEB6 /* Material.cpp */,
-				C52A24D121F56DED0041CEB6 /* MeshLambertMaterial.cpp */,
-				C52A24D221F56DED0041CEB6 /* opengl */,
-				C52A24DD21F56DED0041CEB6 /* GLSLMaterial.cpp */,
+				C50FEF8921F598E500946156 /* MeshBasicMaterial.cpp */,
+				C50FEF8A21F598E500946156 /* Material.cpp */,
+				C50FEF8B21F598E500946156 /* MeshLambertMaterial.cpp */,
+				C50FEF8C21F598E500946156 /* opengl */,
+				C50FEF9721F598E500946156 /* GLSLMaterial.cpp */,
 			);
 			path = materials;
 			sourceTree = "<group>";
 		};
-		C52A24D221F56DED0041CEB6 /* opengl */ = {
+		C50FEF8C21F598E500946156 /* opengl */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24D321F56DED0041CEB6 /* shaders */,
+				C50FEF8D21F598E500946156 /* shaders */,
 			);
 			path = opengl;
 			sourceTree = "<group>";
 		};
-		C52A24D321F56DED0041CEB6 /* shaders */ = {
+		C50FEF8D21F598E500946156 /* shaders */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24D421F56DED0041CEB6 /* mesh_basic_vert.glsl */,
-				C52A24D521F56DED0041CEB6 /* mesh_lambert_frag.glsl */,
-				C52A24D621F56DED0041CEB6 /* mesh_basic_frag.glsl */,
-				C52A24D721F56DED0041CEB6 /* mesh_lambert_vert.glsl */,
-				C52A24D821F56DED0041CEB6 /* es */,
+				C50FEF8E21F598E500946156 /* mesh_basic_vert.glsl */,
+				C50FEF8F21F598E500946156 /* mesh_lambert_frag.glsl */,
+				C50FEF9021F598E500946156 /* mesh_basic_frag.glsl */,
+				C50FEF9121F598E500946156 /* mesh_lambert_vert.glsl */,
+				C50FEF9221F598E500946156 /* es */,
 			);
 			path = shaders;
 			sourceTree = "<group>";
 		};
-		C52A24D821F56DED0041CEB6 /* es */ = {
+		C50FEF9221F598E500946156 /* es */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24D921F56DED0041CEB6 /* mesh_basic_vert.glsl */,
-				C52A24DA21F56DED0041CEB6 /* mesh_lambert_frag.glsl */,
-				C52A24DB21F56DED0041CEB6 /* mesh_basic_frag.glsl */,
-				C52A24DC21F56DED0041CEB6 /* mesh_lambert_vert.glsl */,
+				C50FEF9321F598E500946156 /* mesh_basic_vert.glsl */,
+				C50FEF9421F598E500946156 /* mesh_lambert_frag.glsl */,
+				C50FEF9521F598E500946156 /* mesh_basic_frag.glsl */,
+				C50FEF9621F598E500946156 /* mesh_lambert_vert.glsl */,
 			);
 			path = es;
 			sourceTree = "<group>";
 		};
-		C52A24DE21F56DED0041CEB6 /* core */ = {
+		C50FEF9821F598E500946156 /* core */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24DF21F56DED0041CEB6 /* Object.cpp */,
+				C50FEF9921F598E500946156 /* Object.cpp */,
 			);
 			path = core;
 			sourceTree = "<group>";
 		};
-		C52A24E021F56DED0041CEB6 /* animation */ = {
+		C50FEF9A21F598E500946156 /* animation */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24E121F56DED0041CEB6 /* AnimationAction.cpp */,
-				C52A24E221F56DED0041CEB6 /* PropertyMixer.cpp */,
-				C52A24E321F56DED0041CEB6 /* AnimationMixer.cpp */,
+				C50FEF9B21F598E500946156 /* AnimationAction.cpp */,
+				C50FEF9C21F598E500946156 /* PropertyMixer.cpp */,
+				C50FEF9D21F598E500946156 /* AnimationMixer.cpp */,
 			);
 			path = animation;
 			sourceTree = "<group>";
 		};
-		C52A24E421F56DED0041CEB6 /* objects */ = {
+		C50FEF9E21F598E500946156 /* objects */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24E521F56DED0041CEB6 /* Bone.cpp */,
-				C52A24E621F56DED0041CEB6 /* Mesh.cpp */,
+				C50FEF9F21F598E500946156 /* Bone.cpp */,
+				C50FEFA021F598E500946156 /* SkinnedObject.cpp */,
 			);
 			path = objects;
 			sourceTree = "<group>";
 		};
-		C52A24E721F56DED0041CEB6 /* utils */ = {
+		C50FEFA121F598E500946156 /* utils */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24E821F56DED0041CEB6 /* logging.cpp */,
+				C50FEFA221F598E500946156 /* logging.cpp */,
 			);
 			path = utils;
 			sourceTree = "<group>";
 		};
-		C52A24E921F56DED0041CEB6 /* cameras */ = {
+		C50FEFA321F598E500946156 /* cameras */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24EA21F56DED0041CEB6 /* Camera.cpp */,
-				C52A24EB21F56DED0041CEB6 /* PerspectiveCamera.cpp */,
+				C50FEFA421F598E500946156 /* Camera.cpp */,
+				C50FEFA521F598E500946156 /* PerspectiveCamera.cpp */,
 			);
 			path = cameras;
 			sourceTree = "<group>";
 		};
-		C52A24EC21F56DED0041CEB6 /* math */ = {
+		C50FEFA621F598E500946156 /* math */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24ED21F56DED0041CEB6 /* Ray.cpp */,
+				C50FEFA721F598E500946156 /* Ray.cpp */,
 			);
 			path = math;
 			sourceTree = "<group>";
 		};
-		C52A24EE21F56DED0041CEB6 /* glsl */ = {
+		C50FEFA821F598E500946156 /* glsl */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24EF21F56DED0041CEB6 /* shaders */,
-				C52A24F621F56DED0041CEB6 /* GLSLPreprocessor.cpp */,
+				C50FEFA921F598E500946156 /* shaders */,
+				C50FEFB021F598E500946156 /* GLSLPreprocessor.cpp */,
 			);
 			path = glsl;
 			sourceTree = "<group>";
 		};
-		C52A24EF21F56DED0041CEB6 /* shaders */ = {
+		C50FEFA921F598E500946156 /* shaders */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24F021F56DED0041CEB6 /* common.glsl */,
-				C52A24F121F56DED0041CEB6 /* lights_preamble.glsl */,
-				C52A24F221F56DED0041CEB6 /* worldposition_vert.glsl */,
-				C52A24F321F56DED0041CEB6 /* worldnormal_vert.glsl */,
-				C52A24F421F56DED0041CEB6 /* glposition_vert.glsl */,
-				C52A24F521F56DED0041CEB6 /* begin_vert.glsl */,
+				C50FEFAA21F598E500946156 /* common.glsl */,
+				C50FEFAB21F598E500946156 /* lights_preamble.glsl */,
+				C50FEFAC21F598E500946156 /* worldposition_vert.glsl */,
+				C50FEFAD21F598E500946156 /* worldnormal_vert.glsl */,
+				C50FEFAE21F598E500946156 /* glposition_vert.glsl */,
+				C50FEFAF21F598E500946156 /* begin_vert.glsl */,
 			);
 			path = shaders;
 			sourceTree = "<group>";
 		};
-		C52A24F721F56DED0041CEB6 /* geometries */ = {
+		C50FEFB121F598E500946156 /* geometries */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24F821F56DED0041CEB6 /* BoxGeometry.cpp */,
-				C52A24F921F56DED0041CEB6 /* MeshGeometry.cpp */,
-				C52A24FA21F56DED0041CEB6 /* VoxelGeometry.cpp */,
+				C50FEFB221F598E500946156 /* BoxGeometry.cpp */,
+				C50FEFB321F598E500946156 /* MeshGeometry.cpp */,
+				C50FEFB421F598E500946156 /* VoxelGeometry.cpp */,
 			);
 			path = geometries;
 			sourceTree = "<group>";
 		};
-		C52A24FB21F56DED0041CEB6 /* loaders */ = {
+		C50FEFB521F598E500946156 /* loaders */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24FC21F56DED0041CEB6 /* OBJLoader.cpp */,
-				C52A24FD21F56DED0041CEB6 /* FBXLoader.cpp */,
+				C50FEFB621F598E500946156 /* OBJLoader.cpp */,
+				C50FEFB721F598E500946156 /* FBXLoader.cpp */,
 			);
 			path = loaders;
 			sourceTree = "<group>";
 		};
-		C52A24FE21F56DED0041CEB6 /* lights */ = {
+		C50FEFB821F598E500946156 /* lights */ = {
 			isa = PBXGroup;
 			children = (
-				C52A24FF21F56DED0041CEB6 /* PointLight.cpp */,
-				C52A250021F56DED0041CEB6 /* Light.cpp */,
+				C50FEFB921F598E500946156 /* PointLight.cpp */,
+				C50FEFBA21F598E500946156 /* Light.cpp */,
 			);
 			path = lights;
 			sourceTree = "<group>";
@@ -616,8 +616,8 @@
 		C53979982065D95D001AAFFE /* RenderBox */ = {
 			isa = PBXGroup;
 			children = (
-				C52A240D21F56DDD0041CEB6 /* include */,
-				C52A24A721F56DED0041CEB6 /* src */,
+				C50FEF2121F598DD00946156 /* include */,
+				C50FEF6121F598E500946156 /* src */,
 			);
 			name = RenderBox;
 			sourceTree = "<group>";
@@ -745,50 +745,50 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C52A253021F56DED0041CEB6 /* OBJLoader.cpp in Sources */,
-				C52A252B21F56DED0041CEB6 /* Ray.cpp in Sources */,
-				C52A251421F56DED0041CEB6 /* OpenGLTexture.cpp in Sources */,
-				C52A252A21F56DED0041CEB6 /* PerspectiveCamera.cpp in Sources */,
-				C52A251C21F56DED0041CEB6 /* Texture.cpp in Sources */,
-				C52A250321F56DED0041CEB6 /* MetalRendererProperties.mm in Sources */,
-				C52A250F21F56DED0041CEB6 /* MetalDeviceRendererProperties.mm in Sources */,
-				C52A251521F56DED0041CEB6 /* OpenGLObjectProperties.cpp in Sources */,
-				C52A250421F56DED0041CEB6 /* MetalRenderList.mm in Sources */,
-				C52A251A21F56DED0041CEB6 /* OpenGLVertexArray.cpp in Sources */,
-				C52A252F21F56DED0041CEB6 /* VoxelGeometry.cpp in Sources */,
-				C52A251E21F56DED0041CEB6 /* MeshBasicMaterial.cpp in Sources */,
-				C52A253321F56DED0041CEB6 /* Light.cpp in Sources */,
-				C52A252621F56DED0041CEB6 /* Bone.cpp in Sources */,
-				C52A252021F56DED0041CEB6 /* MeshLambertMaterial.cpp in Sources */,
-				C52A251921F56DED0041CEB6 /* OpenGLFramebuffer.cpp in Sources */,
-				C52A250E21F56DED0041CEB6 /* MetalBuffer.mm in Sources */,
-				C52A251021F56DED0041CEB6 /* MetalObjectProperties.mm in Sources */,
-				C52A251321F56DED0041CEB6 /* OpenGLRenderer.cpp in Sources */,
-				C52A253221F56DED0041CEB6 /* PointLight.cpp in Sources */,
-				C52A252D21F56DED0041CEB6 /* BoxGeometry.cpp in Sources */,
-				C52A251721F56DED0041CEB6 /* OpenGLRendererProperties.cpp in Sources */,
-				C52A252C21F56DED0041CEB6 /* GLSLPreprocessor.cpp in Sources */,
-				C52A252E21F56DED0041CEB6 /* MeshGeometry.cpp in Sources */,
-				C52A252321F56DED0041CEB6 /* AnimationAction.cpp in Sources */,
-				C52A251D21F56DED0041CEB6 /* Scene.cpp in Sources */,
-				C52A250521F56DED0041CEB6 /* MetalRenderPipelineState.mm in Sources */,
-				C52A250121F56DED0041CEB6 /* MetalRenderer.mm in Sources */,
-				C52A250621F56DED0041CEB6 /* SDLMetalRenderTarget.mm in Sources */,
-				C52A252221F56DED0041CEB6 /* Object.cpp in Sources */,
-				C52A252821F56DED0041CEB6 /* logging.cpp in Sources */,
-				C52A252921F56DED0041CEB6 /* Camera.cpp in Sources */,
-				C52A251121F56DED0041CEB6 /* OpenGLRenderList.cpp in Sources */,
-				C52A250221F56DED0041CEB6 /* MetalTexture.mm in Sources */,
-				C52A252421F56DED0041CEB6 /* PropertyMixer.cpp in Sources */,
-				C52A253121F56DED0041CEB6 /* FBXLoader.cpp in Sources */,
-				C52A252721F56DED0041CEB6 /* Mesh.cpp in Sources */,
-				C52A251221F56DED0041CEB6 /* OpenGLBuffer.cpp in Sources */,
-				C52A251821F56DED0041CEB6 /* GLFWOpenGLRenderTarget.mm in Sources */,
-				C52A252521F56DED0041CEB6 /* AnimationMixer.cpp in Sources */,
-				C52A252121F56DED0041CEB6 /* GLSLMaterial.cpp in Sources */,
-				C52A251F21F56DED0041CEB6 /* Material.cpp in Sources */,
-				C52A251B21F56DED0041CEB6 /* OpenGLProgram.cpp in Sources */,
-				C52A251621F56DED0041CEB6 /* SDLOpenGLRenderTarget.mm in Sources */,
+				C50FEFEA21F598E500946156 /* OBJLoader.cpp in Sources */,
+				C50FEFE521F598E500946156 /* Ray.cpp in Sources */,
+				C50FEFCE21F598E500946156 /* OpenGLTexture.cpp in Sources */,
+				C50FEFE421F598E500946156 /* PerspectiveCamera.cpp in Sources */,
+				C50FEFD621F598E500946156 /* Texture.cpp in Sources */,
+				C50FEFBD21F598E500946156 /* MetalRendererProperties.mm in Sources */,
+				C50FEFC921F598E500946156 /* MetalDeviceRendererProperties.mm in Sources */,
+				C50FEFCF21F598E500946156 /* OpenGLObjectProperties.cpp in Sources */,
+				C50FEFE121F598E500946156 /* SkinnedObject.cpp in Sources */,
+				C50FEFBE21F598E500946156 /* MetalRenderList.mm in Sources */,
+				C50FEFE921F598E500946156 /* VoxelGeometry.cpp in Sources */,
+				C50FEFD421F598E500946156 /* OpenGLVertexArray.cpp in Sources */,
+				C50FEFED21F598E500946156 /* Light.cpp in Sources */,
+				C50FEFD821F598E500946156 /* MeshBasicMaterial.cpp in Sources */,
+				C50FEFE021F598E500946156 /* Bone.cpp in Sources */,
+				C50FEFDA21F598E500946156 /* MeshLambertMaterial.cpp in Sources */,
+				C50FEFD321F598E500946156 /* OpenGLFramebuffer.cpp in Sources */,
+				C50FEFC821F598E500946156 /* MetalBuffer.mm in Sources */,
+				C50FEFCA21F598E500946156 /* MetalObjectProperties.mm in Sources */,
+				C50FEFEC21F598E500946156 /* PointLight.cpp in Sources */,
+				C50FEFE721F598E500946156 /* BoxGeometry.cpp in Sources */,
+				C50FEFCD21F598E500946156 /* OpenGLRenderer.cpp in Sources */,
+				C50FEFE621F598E500946156 /* GLSLPreprocessor.cpp in Sources */,
+				C50FEFE821F598E500946156 /* MeshGeometry.cpp in Sources */,
+				C50FEFD121F598E500946156 /* OpenGLRendererProperties.cpp in Sources */,
+				C50FEFDD21F598E500946156 /* AnimationAction.cpp in Sources */,
+				C50FEFD721F598E500946156 /* Scene.cpp in Sources */,
+				C50FEFBF21F598E500946156 /* MetalRenderPipelineState.mm in Sources */,
+				C50FEFBB21F598E500946156 /* MetalRenderer.mm in Sources */,
+				C50FEFC021F598E500946156 /* SDLMetalRenderTarget.mm in Sources */,
+				C50FEFE221F598E500946156 /* logging.cpp in Sources */,
+				C50FEFE321F598E500946156 /* Camera.cpp in Sources */,
+				C50FEFDC21F598E500946156 /* Object.cpp in Sources */,
+				C50FEFCB21F598E500946156 /* OpenGLRenderList.cpp in Sources */,
+				C50FEFBC21F598E500946156 /* MetalTexture.mm in Sources */,
+				C50FEFEB21F598E500946156 /* FBXLoader.cpp in Sources */,
+				C50FEFDE21F598E500946156 /* PropertyMixer.cpp in Sources */,
+				C50FEFCC21F598E500946156 /* OpenGLBuffer.cpp in Sources */,
+				C50FEFD221F598E500946156 /* GLFWOpenGLRenderTarget.mm in Sources */,
+				C50FEFDF21F598E500946156 /* AnimationMixer.cpp in Sources */,
+				C50FEFDB21F598E500946156 /* GLSLMaterial.cpp in Sources */,
+				C50FEFD921F598E500946156 /* Material.cpp in Sources */,
+				C50FEFD521F598E500946156 /* OpenGLProgram.cpp in Sources */,
+				C50FEFD021F598E500946156 /* SDLOpenGLRenderTarget.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -796,7 +796,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C52A253421F56DFF0041CEB6 /* MetalLibrary.metal in Sources */,
+				C50FEFEF21F5991400946156 /* MetalLibrary.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

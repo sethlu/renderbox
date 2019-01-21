@@ -7,7 +7,7 @@
 #include "OpenGL.h"
 #include "Scene.h"
 #include "Camera.h"
-#include "Mesh.h"
+#include "SkinnedObject.h"
 #include "OpenGLRenderTarget.h"
 #include "OpenGLRendererProperties.h"
 #include "OpenGLRenderList.h"

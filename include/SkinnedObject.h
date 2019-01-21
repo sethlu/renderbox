@@ -7,13 +7,15 @@
 
 namespace renderbox {
 
-    class Mesh : public Object {
+    class SkinnedObject : public Object {
     public:
 
-        Mesh(std::shared_ptr<Geometry> const &geometry = nullptr, std::shared_ptr<Material> const &material = nullptr);
+        SkinnedObject(
+                std::shared_ptr<Geometry> const &geometry = nullptr,
+                std::shared_ptr<Material> const &material = nullptr);
 
         OBJECT_TYPE getObjectType() const override {
-            return MESH_OBJECT;
+            return SKINNED_OBJECT;
         };
 
         std::vector<std::shared_ptr<Bone>> bones;

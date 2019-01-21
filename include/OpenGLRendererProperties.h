@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <string>
 
-#include "Mesh.h"
+#include "SkinnedObject.h"
 #include "OpenGL.h"
 #include "OpenGLObjectProperties.h"
 

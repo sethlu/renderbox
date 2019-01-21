@@ -12,12 +12,12 @@
 namespace renderbox {
 
     enum OBJECT_TYPE {
-        GROUP_OBJECT  = 0x0,
-        MESH_OBJECT   = 0x1,
-        SCENE_OBJECT  = 0x2,
-        CAMERA_OBJECT = 0x4,
-        LIGHT_OBJECT  = 0x8,
-        BONE_OBJECT   = 0x10,
+        GROUP_OBJECT    = 0x0,
+        SKINNED_OBJECT  = 0x1,
+        SCENE_OBJECT    = 0x2,
+        CAMERA_OBJECT   = 0x4,
+        LIGHT_OBJECT    = 0x8,
+        BONE_OBJECT     = 0x10,
     };
 
     class Object : public VersionTrackedObject {
@@ -35,8 +35,8 @@ namespace renderbox {
             return GROUP_OBJECT;
         }
 
-        bool isMesh() const {
-            return (getObjectType() & MESH_OBJECT) != 0;
+        bool isSkinnedObject() const {
+            return (getObjectType() & SKINNED_OBJECT) != 0;
         }
 
         bool isLight() const {

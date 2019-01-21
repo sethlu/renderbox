@@ -8,7 +8,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Light.h"
-#include "Mesh.h"
+#include "SkinnedObject.h"
 #include "MeshGeometry.h"
 #include "MetalRenderList.h"
 #include "logging.h"
@@ -64,7 +64,8 @@ namespace renderbox {
                 if (object->hasGeometry() && object->hasMaterial() &&
                     object->getMaterial()->supportsGeometry(object->getGeometry())) {
                     renderList.addObject(deviceRendererProperties->getRenderPipelineState(object->getMaterial().get(),
-                                                                                          object->getGeometry().get()), object);
+                                                                                          object->getGeometry().get()),
+                                         object);
                 }
 
                 if (object->isLight()) {
@@ -133,7 +134,7 @@ namespace renderbox {
 
                     if (blankObjectProperties) {
                         objectProperties->uniformBuffer =
-                            [device newBufferWithLength:sizeof(Uniforms) options:MTLResourceOptionCPUCacheModeDefault];
+                                [device newBufferWithLength:sizeof(Uniforms) options:MTLResourceOptionCPUCacheModeDefault];
                     }
 
                     auto const &material = object->getMaterial();
@@ -202,11 +203,13 @@ namespace renderbox {
                     }
 
                     // Bones
-                    if (auto mesh = dynamic_cast<Mesh *>(object)) {
-                        auto numBones = mesh->bones.size();
+                    if (auto skinnedObject = dynamic_cast<SkinnedObject *>(object)) {
+                        auto numBones = skinnedObject->bones.size();
                         for (auto i = 0; i < numBones; i++) {
-                            auto boneMatrix = mesh->bones[i]->getBoneMatrix() * mesh->bones[i]->getBoundBoneMatrixInverse();
-                            memcpy(&uniforms.boneMatrics[i], glm::value_ptr(boneMatrix), sizeof(uniforms.boneMatrics[0]));
+                            auto boneMatrix = skinnedObject->bones[i]->getBoneMatrix() *
+                                              skinnedObject->bones[i]->getBoundBoneMatrixInverse();
+                            memcpy(&uniforms.boneMatrics[i], glm::value_ptr(boneMatrix),
+                                   sizeof(uniforms.boneMatrics[0]));
                         }
                     }
 

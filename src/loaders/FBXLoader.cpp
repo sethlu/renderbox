@@ -8,7 +8,7 @@
 
 #include <zlib.h>
 
-#include "Mesh.h"
+#include "SkinnedObject.h"
 #include "Bone.h"
 #include "MeshLambertMaterial.h"
 #include "logging.h"
@@ -623,7 +623,7 @@ break;
             }
         }
 
-        void parseMeshModelMeshGeometrySkinClusterDeformer(FBXDocument &doc, FBXNode const *node, Mesh *mesh, unsigned int clusterIndex) {
+        void parseMeshModelMeshGeometrySkinClusterDeformer(FBXDocument &doc, FBXNode const *node, SkinnedObject *object, unsigned int clusterIndex) {
             auto const &relationships = doc.connections.at(node);
             for (auto relationship : relationships.second) {
                 auto const &childNode = relationship.second;
@@ -636,13 +636,13 @@ break;
                         continue;
                     }
                     if (auto bone = std::dynamic_pointer_cast<Bone>(it->second)) {
-                        mesh->bones.emplace_back(bone);
+                        object->bones.emplace_back(bone);
                     }
                 }
             }
         }
 
-        void parseMeshModelMeshGeometrySkinDeformer(FBXDocument &doc, FBXNode const *node, Mesh *mesh) {
+        void parseMeshModelMeshGeometrySkinDeformer(FBXDocument &doc, FBXNode const *node, SkinnedObject *object) {
             auto const &relationships = doc.connections.at(node);
             unsigned int clusterIndex = 0;
             for (auto relationship : relationships.second) {
@@ -651,7 +651,7 @@ break;
                 auto const &type = getNodeAttrType(childNode);
                 if (childNode->name == "Deformer") {
                     if (type == "Cluster") {
-                        parseMeshModelMeshGeometrySkinClusterDeformer(doc, childNode, mesh, clusterIndex++);
+                        parseMeshModelMeshGeometrySkinClusterDeformer(doc, childNode, object, clusterIndex++);
                     }
                 }
             }
@@ -668,7 +668,7 @@ break;
 
                 auto const &type = getNodeAttrType(childNode);
                 if (type == "Mesh") {
-                    object = std::make_shared<Mesh>();
+                    object = std::make_shared<SkinnedObject>();
                 } else if (type == "LimbNode") {
                     object = std::make_shared<Bone>();
                 } else {
@@ -742,9 +742,9 @@ break;
                             auto const &type = getNodeAttrType(childNode);
                             if (childNode->name == "Deformer") {
                                 if (type == "Skin") {
-                                    if (object->isMesh()) {
-                                        if (auto mesh = dynamic_cast<Mesh *>(object.get())) {
-                                            parseMeshModelMeshGeometrySkinDeformer(doc, childNode, mesh);
+                                    if (object->isSkinnedObject()) {
+                                        if (auto skinnedObject = dynamic_cast<SkinnedObject *>(object.get())) {
+                                            parseMeshModelMeshGeometrySkinDeformer(doc, childNode, skinnedObject);
                                         }
                                     }
                                 }
