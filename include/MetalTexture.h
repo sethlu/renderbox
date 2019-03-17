@@ -2,11 +2,11 @@
 #define RENDERBOX_METALTEXTURE_H
 
 
-#import <memory>
+#include <memory>
 
 #import <Metal/Metal.h>
 
-#import "Texture.h"
+#include "Texture.h"
 
 namespace renderbox {
 

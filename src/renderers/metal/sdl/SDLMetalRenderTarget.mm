@@ -1,5 +1,5 @@
-#import "SDLMetalRenderTarget.h"
-#import "platform.h"
+#include "SDLMetalRenderTarget.h"
+#include "platform.h"
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
