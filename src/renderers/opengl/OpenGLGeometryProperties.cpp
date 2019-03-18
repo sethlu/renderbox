@@ -1,10 +1,10 @@
 #include <iostream>
-#include "OpenGLObjectProperties.h"
+#include "OpenGLGeometryProperties.h"
 
 
 namespace renderbox {
 
-    OpenGLBuffer *OpenGLObjectProperties::getBuffer(int index) {
+    OpenGLBuffer *OpenGLGeometryProperties::getBuffer(int index) {
 
         auto result = buffers.find(index);
         if (result != buffers.end()) {
@@ -18,7 +18,7 @@ namespace renderbox {
 
     }
 
-    OpenGLVertexArray *OpenGLObjectProperties::getVertexArray(int index) {
+    OpenGLVertexArray *OpenGLGeometryProperties::getVertexArray(int index) {
 
         auto result = vertexArrays.find(index);
         if (result != vertexArrays.end()) {
@@ -29,22 +29,6 @@ namespace renderbox {
         vertexArrays.insert(std::make_pair(index, std::unique_ptr<OpenGLVertexArray>(vertexArray)));
 
         return vertexArray;
-
-    }
-
-    OpenGLTexture *OpenGLObjectProperties::getTexture(int index, bool *blankTexture) {
-
-        auto result = textures.find(index);
-        if (result != textures.end()) {
-            if (blankTexture) *blankTexture = false;
-            return result->second.get();
-        }
-
-        auto texture = new OpenGLTexture();
-        textures.insert(std::make_pair(index, std::unique_ptr<OpenGLTexture>(texture)));
-
-        if (blankTexture) *blankTexture = true;
-        return texture;
 
     }
 

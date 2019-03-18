@@ -6,11 +6,8 @@
 #include <unordered_map>
 
 #include "Object.h"
-#include "ObjectProperties.h"
-#include "OpenGLObjectProperties.h"
-#include "OpenGLVertexArray.h"
 #include "PointLight.h"
-#include "Scene.h"
+
 
 namespace renderbox {
 

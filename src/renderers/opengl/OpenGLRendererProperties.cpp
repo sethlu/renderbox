@@ -2,6 +2,8 @@
 
 #include <sstream>
 #include <iostream>
+#include <OpenGLRendererProperties.h>
+
 
 #include "GLSLMaterial.h"
 #include "logging.h"
@@ -11,18 +13,36 @@ namespace renderbox {
 
     std::unordered_map<Material *, ObjectOpenGLProgram> OpenGLRendererProperties::programs;
 
-    OpenGLObjectProperties *OpenGLRendererProperties::getObjectProperties(Object *object, bool *blankObjectProperties) {
+    OpenGLGeometryProperties *
+    OpenGLRendererProperties::getGeometryProperties(Geometry const *geometry, bool *blankProperties) {
 
-        auto result = objectProperties.find(object->getObjectId());
-        if (result != objectProperties.end()) {
-            if (blankObjectProperties) *blankObjectProperties = false;
+        auto result = geometryProperties.find(geometry);
+        if (result != geometryProperties.end()) {
+            if (blankProperties) *blankProperties = false;
             return result->second.get();
         }
 
-        auto *properties = new OpenGLObjectProperties();
-        objectProperties.insert(std::pair<int, std::unique_ptr<OpenGLObjectProperties>>(object->getObjectId(), std::unique_ptr<OpenGLObjectProperties>(properties)));
+        auto *properties = new OpenGLGeometryProperties();
+        geometryProperties.insert(std::make_pair(geometry, std::unique_ptr<OpenGLGeometryProperties>(properties)));
 
-        if (blankObjectProperties) *blankObjectProperties = true;
+        if (blankProperties) *blankProperties = true;
+        return properties;
+
+    }
+
+    OpenGLMaterialProperties *
+    OpenGLRendererProperties::getMaterialProperties(Material const *material, bool *blankProperties) {
+
+        auto result = materialProperties.find(material);
+        if (result != materialProperties.end()) {
+            if (blankProperties) *blankProperties = false;
+            return result->second.get();
+        }
+
+        auto *properties = new OpenGLMaterialProperties();
+        materialProperties.insert(std::make_pair(material, std::unique_ptr<OpenGLMaterialProperties>(properties)));
+
+        if (blankProperties) *blankProperties = true;
         return properties;
 
     }

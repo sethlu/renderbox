@@ -7,7 +7,9 @@
 
 #include "SkinnedObject.h"
 #include "OpenGL.h"
-#include "OpenGLObjectProperties.h"
+#include "OpenGLGeometryProperties.h"
+#include "OpenGLMaterialProperties.h"
+
 
 namespace renderbox {
 
@@ -21,7 +23,9 @@ namespace renderbox {
 
         OpenGLProgram *getProgram(Material *material, bool forceRecompile = false);
 
-        OpenGLObjectProperties *getObjectProperties(Object *object, bool *blankObjectProperties = nullptr);
+        OpenGLGeometryProperties *getGeometryProperties(Geometry const *geometry, bool *blankProperties = nullptr);
+
+        OpenGLMaterialProperties *getMaterialProperties(Material const *material, bool *blankProperties = nullptr);
 
         unsigned numPointLights = 0;
 
@@ -31,7 +35,9 @@ namespace renderbox {
 
         static std::unordered_map<Material *, ObjectOpenGLProgram> programs;
 
-        std::unordered_map<int, std::unique_ptr<OpenGLObjectProperties>> objectProperties;
+        std::unordered_map<Geometry const *, std::unique_ptr<OpenGLGeometryProperties>> geometryProperties;
+
+        std::unordered_map<Material const *, std::unique_ptr<OpenGLMaterialProperties>> materialProperties;
 
     };
 

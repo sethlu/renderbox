@@ -98,11 +98,14 @@ namespace renderbox {
 
             for (Object *object : it.second) {
 
-                bool blankObjectProperties;
-                OpenGLObjectProperties *objectProperties =
-                        properties.getObjectProperties(object, &blankObjectProperties);
-
+                auto const &geometry = object->getGeometry();
                 auto const &material = object->getMaterial();
+
+                bool blankGeometryProperties;
+                auto geometryProperties = properties.getGeometryProperties(geometry.get(), &blankGeometryProperties);
+
+                bool blankMaterialProperties;
+                auto materialProperties = properties.getMaterialProperties(material.get(), &blankMaterialProperties);
 
                 // World projection matrix
                 mat4 worldProjectionMatrix = viewProjectionMatrix * object->getWorldMatrix();
@@ -141,7 +144,7 @@ namespace renderbox {
                 OpenGLTexture *ambientMap(nullptr);
                 if (material->isAmbientMaterial()) {
                     bool blankTexture;
-                    ambientMap = objectProperties->getTexture(0, &blankTexture);
+                    ambientMap = materialProperties->getTexture(0, &blankTexture);
                     if (blankTexture) {
                         if (auto ambientMaterial = dynamic_cast<AmbientMaterial *>(material.get())) {
                             auto texture = ambientMaterial->getAmbientMap(); // Need to check if texture exists
@@ -158,7 +161,7 @@ namespace renderbox {
                 OpenGLTexture *diffuseMap(nullptr);
                 if (material->isDiffuseMaterial()) {
                     bool blankTexture;
-                    diffuseMap = objectProperties->getTexture(1, &blankTexture);
+                    diffuseMap = materialProperties->getTexture(1, &blankTexture);
                     if (blankTexture) {
                         if (auto diffuseMaterial = dynamic_cast<DiffuseMaterial *>(material.get())) {
                             auto texture = diffuseMaterial->getDiffuseMap(); // Need to check if texture exists
@@ -172,26 +175,26 @@ namespace renderbox {
                     glUniform1i(program->materialDiffuseMap, 1);
                 }
 
-                if (auto geometry = dynamic_cast<MeshGeometry *>(object->getGeometry().get())) {
+                if (auto meshGeometry = dynamic_cast<MeshGeometry *>(geometry.get())) {
 
-                    OpenGLVertexArray *vertexArray = objectProperties->getVertexArray(0);
+                    OpenGLVertexArray *vertexArray = geometryProperties->getVertexArray(0);
 
-                    if (blankObjectProperties || objectProperties->geometryVersion != geometry->getVersion()) {
-                        objectProperties->geometryVersion = geometry->getVersion();
+                    if (blankGeometryProperties || geometryProperties->geometryVersion != meshGeometry->getVersion()) {
+                        geometryProperties->geometryVersion = meshGeometry->getVersion();
 
-                        objectProperties->getBuffer(0)->buffer(geometry->vertices);
+                        geometryProperties->getBuffer(0)->buffer(meshGeometry->vertices);
 
-                        if (geometry->uvs.size() == geometry->vertices.size())
-                            objectProperties->getBuffer(1)->buffer(geometry->uvs);
-                        else if (!geometry->uvs.empty()) throw 2;
+                        if (meshGeometry->uvs.size() == meshGeometry->vertices.size())
+                            geometryProperties->getBuffer(1)->buffer(meshGeometry->uvs);
+                        else if (!meshGeometry->uvs.empty()) throw 2;
 
-                        if (geometry->normals.size() == geometry->vertices.size())
-                            objectProperties->getBuffer(2)->buffer(geometry->normals);
-                        else if (!geometry->normals.empty()) throw 2;
+                        if (meshGeometry->normals.size() == meshGeometry->vertices.size())
+                            geometryProperties->getBuffer(2)->buffer(meshGeometry->normals);
+                        else if (!meshGeometry->normals.empty()) throw 2;
 
-                        objectProperties->getBuffer(3)->buffer(geometry->faces);
+                        geometryProperties->getBuffer(3)->buffer(meshGeometry->faces);
 
-                        vertexArray->setElementBuffer(objectProperties->getBuffer(3));
+                        vertexArray->setElementBuffer(geometryProperties->getBuffer(3));
 
                         goto UpdateVertexArray;
 
@@ -199,7 +202,7 @@ namespace renderbox {
 
                         UpdateVertexArray:
 
-                        auto buffer0(objectProperties->getBuffer(0));
+                        auto buffer0(geometryProperties->getBuffer(0));
                         if (buffer0->size) {
                             vertexArray->setAttributeBuffer(program, "rb_vertexPosition", buffer0);
                             vertexArray->enableAttribute(program, "rb_vertexPosition");
@@ -207,7 +210,7 @@ namespace renderbox {
                             vertexArray->disableAttribute(program, "rb_vertexPosition");
                         }
 
-                        auto buffer1(objectProperties->getBuffer(1));
+                        auto buffer1(geometryProperties->getBuffer(1));
                         if (buffer1->size) {
                             vertexArray->setAttributeBuffer(program, "rb_vertexUV", buffer1, 2);
                             vertexArray->enableAttribute(program, "rb_vertexUV");
@@ -215,7 +218,7 @@ namespace renderbox {
                             vertexArray->disableAttribute(program, "rb_vertexUV");
                         }
 
-                        auto buffer2(objectProperties->getBuffer(2));
+                        auto buffer2(geometryProperties->getBuffer(2));
                         if (buffer2->size) {
                             vertexArray->setAttributeBuffer(program, "rb_vertexNormal", buffer2);
                             vertexArray->enableAttribute(program, "rb_vertexNormal");
@@ -229,7 +232,7 @@ namespace renderbox {
                     vertexArray->bindVertexArray();
 
                     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                    glDrawElements(GL_TRIANGLES, (GLsizei) geometry->faces.size() * 3, GL_UNSIGNED_INT, 0);
+                    glDrawElements(GL_TRIANGLES, (GLsizei) meshGeometry->faces.size() * 3, GL_UNSIGNED_INT, 0);
 
                 } else {
                     NOTREACHED() << "Only mesh geometry is supported" << std::endl;
