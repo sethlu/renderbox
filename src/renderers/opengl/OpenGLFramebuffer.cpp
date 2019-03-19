@@ -3,7 +3,7 @@
 
 namespace renderbox {
 
-    OpenGLFramebuffer::OpenGLFramebuffer(int width, int height) {
+    OpenGLFramebuffer::OpenGLFramebuffer(unsigned int width, unsigned int height) {
         // Generate frame buffer
         glGenFramebuffers(1, &framebufferId);
         // Create texture buffer
@@ -28,15 +28,15 @@ namespace renderbox {
         setFramebufferSize(width, height);
     }
 
-    int OpenGLFramebuffer::getFramebufferWidth() const {
+    unsigned int OpenGLFramebuffer::getFramebufferWidth() const {
         return framebufferWidth;
     }
 
-    int OpenGLFramebuffer::getFramebufferHeight() const {
+    unsigned int OpenGLFramebuffer::getFramebufferHeight() const {
         return framebufferHeight;
     }
 
-    void OpenGLFramebuffer::setFramebufferSize(int width, int height) {
+    void OpenGLFramebuffer::setFramebufferSize(unsigned int width, unsigned int height) {
 
         this->framebufferWidth = width;
         this->framebufferHeight = height;

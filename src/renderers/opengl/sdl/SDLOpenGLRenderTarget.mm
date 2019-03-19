@@ -71,16 +71,16 @@ namespace renderbox {
         return window;
     }
 
-    int SDLOpenGLRenderTarget::getFramebufferWidth() const {
+    unsigned int SDLOpenGLRenderTarget::getFramebufferWidth() const {
 		int width;
 		SDL_GL_GetDrawableSize(window, &width, nullptr);
-        return width;
+        return static_cast<unsigned int>(width);
     }
 
-    int SDLOpenGLRenderTarget::getFramebufferHeight() const {
+    unsigned int SDLOpenGLRenderTarget::getFramebufferHeight() const {
 		int height;
 		SDL_GL_GetDrawableSize(window, nullptr, &height);
-        return height;
+        return static_cast<unsigned int>(height);
     }
     
     void SDLOpenGLRenderTarget::frameDidRender() {

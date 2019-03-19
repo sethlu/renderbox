@@ -15,9 +15,9 @@ namespace renderbox {
             return framebufferId;
         }
 
-        virtual int getFramebufferWidth() const = 0;
+        virtual unsigned int getFramebufferWidth() const = 0;
 
-        virtual int getFramebufferHeight() const = 0;
+        virtual unsigned int getFramebufferHeight() const = 0;
 
         virtual void frameDidRender() {
             frameCount++;

@@ -9,23 +9,23 @@ namespace renderbox {
     class OpenGLFramebuffer : public OpenGLRenderTarget {
     public:
 
-        OpenGLFramebuffer(int width, int height);
+        OpenGLFramebuffer(unsigned int width, unsigned int height);
 
-        int getFramebufferWidth() const override;
+        unsigned int getFramebufferWidth() const override;
 
-        int getFramebufferHeight() const override;
+        unsigned int getFramebufferHeight() const override;
 
     protected:
 
-        int framebufferWidth;
+        unsigned int framebufferWidth;
 
-        int framebufferHeight;
+        unsigned int framebufferHeight;
 
         GLuint renderedTexturebufferId;
 
         GLuint renderedDepthbufferId;
 
-        void setFramebufferSize(int width, int height);
+        void setFramebufferSize(unsigned int width, unsigned int height);
 
     };
 

@@ -53,28 +53,28 @@ namespace renderbox {
         return window;
     }
 
-    int GLFWOpenGLRenderTarget::getWindowWidth() const {
-        int width, height;
-        glfwGetWindowSize(window, &width, &height);
-        return width;
+    unsigned int GLFWOpenGLRenderTarget::getWindowWidth() const {
+        int width;
+        glfwGetWindowSize(window, &width, nullptr);
+        return static_cast<unsigned int>(width);
     }
 
-    int GLFWOpenGLRenderTarget::getWindowHeight() const {
-        int width, height;
-        glfwGetWindowSize(window, &width, &height);
-        return height;
+    unsigned int GLFWOpenGLRenderTarget::getWindowHeight() const {
+        int height;
+        glfwGetWindowSize(window, nullptr, &height);
+        return static_cast<unsigned int>(height);
     }
 
-    int GLFWOpenGLRenderTarget::getFramebufferWidth() const {
-        int width, height;
-        glfwGetFramebufferSize(window, &width, &height);
-        return width;
+    unsigned int GLFWOpenGLRenderTarget::getFramebufferWidth() const {
+        int width;
+        glfwGetFramebufferSize(window, &width, nullptr);
+        return static_cast<unsigned int>(width);
     }
 
-    int GLFWOpenGLRenderTarget::getFramebufferHeight() const {
-        int width, height;
-        glfwGetFramebufferSize(window, &width, &height);
-        return height;
+    unsigned int GLFWOpenGLRenderTarget::getFramebufferHeight() const {
+        int height;
+        glfwGetFramebufferSize(window, nullptr, &height);
+        return static_cast<unsigned int>(height);
     }
 
     void GLFWOpenGLRenderTarget::frameDidRender() {

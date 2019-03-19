@@ -21,13 +21,13 @@ namespace renderbox {
 
         GLFWwindow *getWindow() const;
 
-        int getWindowWidth() const;
+        unsigned int getWindowWidth() const;
 
-        int getWindowHeight() const;
+        unsigned int getWindowHeight() const;
 
-        int getFramebufferWidth() const override;
+        unsigned int getFramebufferWidth() const override;
 
-        int getFramebufferHeight() const override;
+        unsigned int getFramebufferHeight() const override;
 
         void frameDidRender() override;
 

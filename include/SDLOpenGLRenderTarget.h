@@ -17,9 +17,9 @@ namespace renderbox {
 
         SDL_Window *getWindow() const;
 
-        int getFramebufferWidth() const override;
+        unsigned int getFramebufferWidth() const override;
 
-        int getFramebufferHeight() const override;
+        unsigned int getFramebufferHeight() const override;
 
         void frameDidRender() override;
 
