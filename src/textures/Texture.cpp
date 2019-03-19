@@ -1,7 +1,9 @@
+#include "Texture.h"
+
+#include <memory>
 #include <ios>
 #include <fstream>
 
-#include "Texture.h"
 #include "bitmap.h"
 #include "logging.h"
 
@@ -23,14 +25,6 @@ namespace renderbox {
             : pixels(pixels), size(size), width(width), height(height), pixelFormat(pixelFormat),
               coordinates(coordinates) {
 
-    }
-
-    Texture::Texture(const Texture &texture)
-            : size(texture.size), width(texture.width), height(texture.height), pixelFormat(texture.pixelFormat),
-              coordinates(texture.coordinates) {
-        auto pixels_ = new unsigned char[texture.size];
-        memcpy(pixels_, texture.pixels.get(), texture.size);
-        pixels.reset(pixels_);
     }
 
     std::shared_ptr<Texture> Texture::fromFile(const char *filename) {
@@ -86,7 +80,7 @@ namespace renderbox {
 
     void Texture::saveBMPFile(std::string const &filename) {
         if (pixelFormat != TEXTURE_PIXEL_FORMAT_BGR_UNSIGNED_BYTE ||
-            coordinates != TEXTURE_COORDINATES_UR) {
+                coordinates != TEXTURE_COORDINATES_UR) {
             LOG(ERROR) << "Texture instance unsupported for saving as BMP";
             exit(EXIT_FAILURE);
         }
@@ -136,15 +130,15 @@ namespace renderbox {
 
         if (texture->pixelFormat != newPixelFormat) {
 
-            auto newSize = texture->size * texturePixelFormatSize(newPixelFormat) / texturePixelFormatSize(texture->pixelFormat);
-            newTexture.reset(new Texture(new unsigned char[newSize], newSize, texture->width, texture->height, texture->pixelFormat, texture->coordinates));
+            if (!newTexture) {
+                auto newSize = texture->size * texturePixelFormatSize(newPixelFormat) /
+                               texturePixelFormatSize(texture->pixelFormat);
+                newTexture.reset(new Texture(new unsigned char[newSize], newSize, texture->width, texture->height,
+                                             texture->pixelFormat, texture->coordinates));
+            }
 
-            if (newTexture->pixelFormat == newPixelFormat) {
-                // No conversion
-
-                memcpy(newTexture->pixels.get(), texture->pixels.get(), newTexture->size);
-
-            } if (newTexture->pixelFormat == TEXTURE_PIXEL_FORMAT_BGR_UNSIGNED_BYTE && newPixelFormat == TEXTURE_PIXEL_FORMAT_BGRA_UNSIGNED_BYTE) {
+            if (newTexture->pixelFormat == TEXTURE_PIXEL_FORMAT_BGR_UNSIGNED_BYTE &&
+                newPixelFormat == TEXTURE_PIXEL_FORMAT_BGRA_UNSIGNED_BYTE) {
 
                 auto newPixels = newTexture->pixels.get();
                 auto pixels = texture->pixels.get();
@@ -157,9 +151,9 @@ namespace renderbox {
                 }
 
             } else if ((newTexture->pixelFormat == TEXTURE_PIXEL_FORMAT_RGB_UNSIGNED_BYTE &&
-                 newPixelFormat == TEXTURE_PIXEL_FORMAT_BGR_UNSIGNED_BYTE) ||
-                (newTexture->pixelFormat == TEXTURE_PIXEL_FORMAT_BGR_UNSIGNED_BYTE &&
-                 newPixelFormat == TEXTURE_PIXEL_FORMAT_RGB_UNSIGNED_BYTE)) {
+                        newPixelFormat == TEXTURE_PIXEL_FORMAT_BGR_UNSIGNED_BYTE) ||
+                       (newTexture->pixelFormat == TEXTURE_PIXEL_FORMAT_BGR_UNSIGNED_BYTE &&
+                        newPixelFormat == TEXTURE_PIXEL_FORMAT_RGB_UNSIGNED_BYTE)) {
 
                 auto newPixels = newTexture->pixels.get();
                 auto pixels = texture->pixels.get();
@@ -171,22 +165,30 @@ namespace renderbox {
                 }
 
             } else {
-                fprintf(stderr, "Pixel format conversion not supported");
-                throw;
+                LOG(ERROR) << "Pixel format conversion not supported";
+                exit(EXIT_FAILURE);
             }
+
+            newTexture->pixelFormat = newPixelFormat;
 
         }
 
         if (newTexture->coordinates != newCoordinates) {
+
             unsigned pixelSize = 0; // Bytes
             switch (newTexture->pixelFormat) {
                 default:
-                    fprintf(stderr, "Coordinates conversion not supported for the given pixel format");
-                    break;
+                    LOG(ERROR) << "Coordinates conversion not supported for the given pixel format";
+                    exit(EXIT_FAILURE);
                 case TEXTURE_PIXEL_FORMAT_RGB_UNSIGNED_BYTE:
                 case TEXTURE_PIXEL_FORMAT_BGR_UNSIGNED_BYTE:
                     pixelSize = 3;
                     break;
+            }
+
+            if (!newTexture) {
+                newTexture.reset(new Texture(new unsigned char[texture->size], texture->size, texture->width,
+                                             texture->height, texture->pixelFormat, texture->coordinates));
             }
 
             if ((newTexture->coordinates == TEXTURE_COORDINATES_DR && newCoordinates == TEXTURE_COORDINATES_UR) ||
@@ -206,9 +208,12 @@ namespace renderbox {
                 }
 
             } else {
-                fprintf(stderr, "Coordinates conversion not supported");
-                throw;
+                LOG(ERROR) << "Coordinates conversion not supported";
+                exit(EXIT_FAILURE);
             }
+
+            newTexture->coordinates = newCoordinates;
+
         }
 
         return newTexture;

@@ -37,8 +37,6 @@ namespace renderbox {
         Texture(unsigned char const *pixels, unsigned size, unsigned width, unsigned height,
                 TEXTURE_PIXEL_FORMAT pixelFormat, TEXTURE_COORDINATES coordinates);
 
-        Texture(const Texture &texture);
-
         static std::shared_ptr<Texture> fromFile(const char *filename);
 
         static std::shared_ptr<Texture> fromFile(const std::string &filename);
