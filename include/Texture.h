@@ -45,6 +45,8 @@ namespace renderbox {
 
         static std::shared_ptr<Texture> fromBMPFile(const char *filename);
 
+        void saveBMPFile(std::string const &filename);
+
         static std::shared_ptr<Texture> convert(
                 std::shared_ptr<Texture> texture,
                 TEXTURE_PIXEL_FORMAT newPixelFormat,

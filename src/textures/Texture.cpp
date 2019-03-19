@@ -1,7 +1,9 @@
 #include <ios>
 #include <fstream>
+
 #include "Texture.h"
 #include "bitmap.h"
+#include "logging.h"
 
 
 namespace renderbox {
@@ -43,11 +45,11 @@ namespace renderbox {
 
         // Expect BMP pixel format to be TEXTURE_PIXEL_FORMAT_BGR_UNSIGNED_BYTE
 
-        std::ifstream file(filename, std::ios::binary);
+        std::ifstream file{filename, std::ios::binary};
 
         if (!file) {
-            // Fail to open file
-            throw;
+            LOG(ERROR) << "Failed to open file";
+            exit(EXIT_FAILURE);
         }
 
         BITMAPFILEHEADER header{};
@@ -57,8 +59,8 @@ namespace renderbox {
         file.read(reinterpret_cast<char *>(&info), sizeof(BITMAPINFOHEADER));
 
         if (header.bfType != 'MB') {
-            // Not a bitmap file
-            throw 2;
+            LOG(ERROR) << "Not a bitmap file";
+            exit(EXIT_FAILURE);
         }
 
         bool flipVerical = false;
@@ -80,6 +82,48 @@ namespace renderbox {
                 TEXTURE_PIXEL_FORMAT_BGR_UNSIGNED_BYTE,
                 flipVerical ? TEXTURE_COORDINATES_DR : TEXTURE_COORDINATES_UR));
 
+    }
+
+    void Texture::saveBMPFile(std::string const &filename) {
+        if (pixelFormat != TEXTURE_PIXEL_FORMAT_BGR_UNSIGNED_BYTE ||
+            coordinates != TEXTURE_COORDINATES_UR) {
+            LOG(ERROR) << "Texture instance unsupported for saving as BMP";
+            exit(EXIT_FAILURE);
+        }
+
+        std::ofstream file{filename, std::ofstream::binary | std::ofstream::trunc};
+
+        if (!file) {
+            LOG(ERROR) << "Failed to open file";
+            exit(EXIT_FAILURE);
+        }
+
+        BITMAPFILEHEADER header{};
+        BITMAPINFOHEADER info{};
+
+        header.bfType = 'MB';
+        header.bfSize = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + size;
+        header.bfReserved1 = 0;
+        header.bfReserved2 = 0;
+        header.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
+
+        info.biSize = sizeof(BITMAPINFOHEADER);
+        info.biWidth = width;
+        info.biHeight = height;
+        info.biPlanes = 1;
+        info.biBitCount = 24;
+        info.biCompression = 0;
+        info.biSizeImage = size;
+        info.biXPelsPerMeter = 2835;
+        info.biYPelsPerMeter = 2835;
+        info.biClrUsed = 0;
+        info.biClrImportant = 0;
+
+        file.write(reinterpret_cast<char const *>(&header), sizeof(BITMAPFILEHEADER));
+        file.write(reinterpret_cast<char const *>(&info), sizeof(BITMAPINFOHEADER));
+        file.write(reinterpret_cast<char const *>(pixels.get()), size);
+
+        file.close();
     }
 
     std::shared_ptr<Texture> Texture::convert(
@@ -154,8 +198,8 @@ namespace renderbox {
                 char t[rowSize];
                 for (int i = 0, h = newTexture->height / 2; i < h; ++i) {
                     unsigned char
-                        *a = pixels + i * rowSize,
-                        *b = pixels + (newTexture->height - 1 - i) * rowSize;
+                            *a = pixels + i * rowSize,
+                            *b = pixels + (newTexture->height - 1 - i) * rowSize;
                     memcpy(t, a, rowSize);
                     memcpy(a, b, rowSize);
                     memcpy(b, t, rowSize);
