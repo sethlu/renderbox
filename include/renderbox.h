@@ -13,6 +13,7 @@
 
 #include "Geometry.h"
 #include "BoxGeometry.h"
+#include "SphereGeometry.h"
 #include "VoxelGeometry.h"
 
 #include "Material.h"
