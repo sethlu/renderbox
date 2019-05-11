@@ -1,6 +1,8 @@
-#include <glm/geometric.hpp>
-#include "Vector.h"
 #include "BoxGeometry.h"
+
+#include <glm/geometric.hpp>
+
+#include "Vector.h"
 
 
 namespace renderbox {
