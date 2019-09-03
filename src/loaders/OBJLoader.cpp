@@ -1,9 +1,13 @@
-#define GLM_ENABLE_EXPERIMENTAL
+#include "OBJLoader.h"
+
 #include <iostream>
+
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/string_cast.hpp>
+
+#include "Vector.h"
 #include "Vector.h"
 #include "MeshLambertMaterial.h"
-#include "OBJLoader.h"
 
 
 #define INVALID_SYNTAX() \
@@ -36,7 +40,7 @@ namespace renderbox {
 
         if (sourceFiles.empty()) {
 
-            filename = _filename;
+            filename = std::string(_filename);
 
         } else {
             // Resolve relative path
@@ -69,7 +73,7 @@ namespace renderbox {
 
         if (sourceFiles.empty()) {
 
-            filename = _filename;
+            filename = std::string(_filename);
 
         } else {
             // Resolve relative path

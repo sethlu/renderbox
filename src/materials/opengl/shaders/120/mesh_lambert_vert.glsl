@@ -1,8 +1,6 @@
 R"(
 
-#version 300 es
-
-precision mediump float;
+#version 120
 
 #include <common>
 #include <lights_preamble>
@@ -14,13 +12,13 @@ uniform vec3 rb_sceneAmbientColor;
 uniform vec3 rb_materialAmbientColor;
 uniform vec3 rb_materialDiffuseColor;
 
-out vec3 vertexAmbientColor;
-out vec3 vertexDiffuseColor;
-out vec2 vertexUV;
+varying vec3 vertexAmbientColor;
+varying vec3 vertexDiffuseColor;
+varying vec2 vertexUV;
 
-in vec3 rb_vertexPosition;
-in vec3 rb_vertexNormal;
-in vec2 rb_vertexUV;
+attribute vec3 rb_vertexPosition;
+attribute vec3 rb_vertexNormal;
+attribute vec2 rb_vertexUV;
 
 void main() {
 
@@ -45,12 +43,12 @@ void main() {
 
     // Lighting
 
-	// Ambient
-	
-	vertexAmbientColor = rb_sceneAmbientColor * rb_materialAmbientColor;
-	
-	// Diffuse
-	
+    // Ambient
+
+    vertexAmbientColor = rb_sceneAmbientColor * rb_materialAmbientColor;
+
+    // Diffuse
+
     vertexDiffuseColor = vec3(0.0);
 
     #if RB_NUM_POINT_LIGHTS > 0
@@ -63,13 +61,15 @@ void main() {
         vec3 L = normalize(lightVector);
         float lightDistance = length(lightVector);
 
-        vertexDiffuseColor += rb_materialDiffuseColor * rb_pointLights[i].color *
+        vertexDiffuseColor += rb_pointLights[i].color *
             max(dot(N, L), 0.0) / (1.0 + (0.25 * lightDistance * lightDistance));
 
     }
+
+    vertexDiffuseColor *= rb_materialDiffuseColor;
 
     #endif
 
 }
 
-)"
+)";

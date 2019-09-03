@@ -3,9 +3,9 @@
 
 
 #include "platform.h"
-#ifdef RENDERBOX_OS_MACOS
+#if defined(RENDERBOX_OS_MACOS)
 #import <Cocoa/Cocoa.h>
-#else
+#elif defined(RENDERBOX_OS_IPHONEOS)
 #import <UIKit/UIView.h>
 #endif
 
@@ -20,7 +20,7 @@
 #include "scoped_nsobject.h"
 
 
-#ifdef RENDERBOX_OS_MACOS
+#if defined(RENDERBOX_OS_MACOS)
 
 @interface MetalView : NSView
 
@@ -28,7 +28,7 @@
 
 @end
 
-#else
+#elif defined(RENDERBOX_OS_IPHONEOS)
 
 @interface MetalView : UIView
 
@@ -66,9 +66,9 @@ namespace renderbox {
 
         SDL_SysWMinfo info;
 
-#ifdef RENDERBOX_OS_MACOS
+#if defined(RENDERBOX_OS_MACOS)
         NSView *sdlView;
-#else
+#elif defined(RENDERBOX_OS_IPHONEOS)
         UIView *sdlView;
 #endif
 

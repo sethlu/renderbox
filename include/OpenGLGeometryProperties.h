@@ -3,6 +3,7 @@
 
 
 #include <unordered_map>
+#include <memory>
 
 #include "VersionTrackedObject.h"
 #include "OpenGLBuffer.h"

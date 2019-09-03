@@ -5,7 +5,7 @@
 #define WINDOW_HEIGHT 600
 
 
-#ifdef RENDERBOX_OS_MACOS
+#if defined(RENDERBOX_OS_MACOS)
 
 @implementation MetalView
 
@@ -44,7 +44,7 @@
 
 @end
 
-#else
+#elif defined(RENDERBOX_OS_IPHONEOS)
 
 @implementation MetalView
 
@@ -98,11 +98,11 @@ namespace renderbox {
 
         // Create window
 
-#if RENDERBOX_OS_MACOS
+#if defined(RENDERBOX_OS_MACOS)
         sdlWindow = SDL_CreateWindow(nullptr, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                      WINDOW_WIDTH, WINDOW_HEIGHT,
                                      SDL_WINDOW_ALLOW_HIGHDPI);
-#else
+#elif defined(RENDERBOX_OS_IPHONEOS)
         SDL_DisplayMode displayMode;
         SDL_GetDesktopDisplayMode(0, &displayMode);
         
@@ -124,11 +124,11 @@ namespace renderbox {
 
         // Create Metal view
 
-#ifdef RENDERBOX_OS_MACOS
+#if defined(RENDERBOX_OS_MACOS)
         sdlView = info.info.cocoa.window.contentView;
         metalView = [[MetalView alloc] initWithFrame:sdlView.frame
                                                scale:info.info.cocoa.window.backingScaleFactor];
-#else
+#elif defined(RENDERBOX_OS_IPHONEOS)
         sdlView = info.info.uikit.window.rootViewController.view;
         metalView = [[MetalView alloc] initWithFrame:sdlView.frame scale:[UIScreen mainScreen].nativeScale];
 #endif
@@ -155,9 +155,9 @@ namespace renderbox {
     }
 
     int SDLMetalRenderTarget::getWindowWidth() const {
-#if RENDERBOX_OS_MACOS
+#if defined(RENDERBOX_OS_MACOS)
         return info.info.cocoa.window.contentView.frame.size.width;
-#else
+#elif defined(RENDERBOX_OS_IPHONEOS)
         return info.info.uikit.window.rootViewController.view.frame.size.width;
 #endif
     }
@@ -167,9 +167,9 @@ namespace renderbox {
         SDL_VERSION(&info.version);
         SDL_GetWindowWMInfo(sdlWindow, &info);
 
-#if RENDERBOX_OS_MACOS
+#if defined(RENDERBOX_OS_MACOS)
         return info.info.cocoa.window.contentView.frame.size.height;
-#else
+#elif defined(RENDERBOX_OS_IPHONEOS)
         return info.info.uikit.window.rootViewController.view.frame.size.height;
 #endif
     }

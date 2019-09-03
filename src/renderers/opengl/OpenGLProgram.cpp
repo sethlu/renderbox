@@ -208,7 +208,7 @@ namespace renderbox {
 
             auto log = new GLchar[length + 1];
             glGetShaderInfoLog(shaderId, length, &length, log);
-            fprintf(stderr, "Compilation error: %s\n", log);
+            LOG(ERROR) << "Shader compilation error" << std::endl << log << std::endl;
 
             throw 2;
         }

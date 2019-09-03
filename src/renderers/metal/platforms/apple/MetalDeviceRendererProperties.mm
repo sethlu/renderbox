@@ -42,9 +42,9 @@ namespace renderbox {
         if (!_defaultMetalLibrary) {
             NSError *err;
 
-#ifdef RENDERBOX_OS_MACOS
+#if defined(RENDERBOX_OS_MACOS)
             auto *libPath = [[NSBundle mainBundle] pathForResource:@"RenderBoxMetalLibrary" ofType:@"metallib"];
-#else
+#elif defined(RENDERBOX_OS_IPHONEOS)
             auto *libPath = [[NSBundle mainBundle] pathForResource:@"RenderBoxMetalLibrary-iOS" ofType:@"metallib"];
 #endif
 

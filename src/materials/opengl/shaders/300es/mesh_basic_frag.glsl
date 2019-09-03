@@ -1,6 +1,8 @@
 R"(
 
-#version 330
+#version 300 es
+
+precision mediump float;
 
 const float screenGamma = 2.2;
 
@@ -16,4 +18,4 @@ void main() {
 
 }
 
-)"
+)";

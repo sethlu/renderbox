@@ -1,6 +1,8 @@
+#include "GLSLPreprocessor.h"
+
 #include <iostream>
 #include <fstream>
-#include "GLSLPreprocessor.h"
+#include <cstring>
 
 
 namespace renderbox {
