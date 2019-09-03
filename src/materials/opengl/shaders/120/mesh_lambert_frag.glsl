@@ -1,6 +1,6 @@
 R"(
 
-#version 330
+#version 120
 
 #include <common>
 
@@ -14,29 +14,29 @@ uniform sampler2D rb_materialAmbientMap;
 uniform sampler2D rb_materialDiffuseMap;
 #endif
 
-out vec4 fragmentColor;
-
-in vec3 vertexAmbientColor;
-in vec3 vertexDiffuseColor;
-in vec2 vertexUV;
+varying vec3 vertexAmbientColor;
+varying vec3 vertexDiffuseColor;
+varying vec2 vertexUV;
 
 void main() {
 
     vec3 ambientColorLinear = vertexAmbientColor;
 #ifdef RB_MATERIAL_AMBIENT_MAP
-    ambientColorLinear *= gammaToLinear(texture(rb_materialAmbientMap, vertexUV).rgb, 2.2);
+    ambientColorLinear *= gammaToLinear(texture2D(rb_materialAmbientMap, vertexUV).rgb, 2.2);
 #endif
 
     vec3 diffuseColorLinear = vertexDiffuseColor;
 #ifdef RB_MATERIAL_DIFFUSE_MAP
-    diffuseColorLinear *= gammaToLinear(texture(rb_materialDiffuseMap, vertexUV).rgb, 2.2);
+    diffuseColorLinear *= gammaToLinear(texture2D(rb_materialDiffuseMap, vertexUV).rgb, 2.2);
 #endif
 
     vec3 colorLinear = ambientColorLinear + diffuseColorLinear;
 
     vec3 colorGammaCorrected = linearToGamma(colorLinear, screenGamma);
-    fragmentColor = vec4(colorGammaCorrected, 1);
+    vec4 fragmentColor = vec4(colorGammaCorrected, 1);
+
+    gl_FragColor = fragmentColor;
 
 }
 
-)"
+)";

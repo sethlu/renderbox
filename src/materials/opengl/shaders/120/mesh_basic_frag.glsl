@@ -1,21 +1,19 @@
 R"(
 
-#version 300 es
-
-precision mediump float;
+#version 120
 
 const float screenGamma = 2.2;
 
-out vec4 fragmentColor;
-
-in vec3 vertexColor;
+varying vec3 vertexColor;
 
 void main() {
 
     vec3 colorLinear = vertexColor;
     vec3 colorGammaCorrected = pow(colorLinear, vec3(1.0 / screenGamma));
-    fragmentColor = vec4(colorGammaCorrected, 1);
+    vec4 fragmentColor = vec4(colorGammaCorrected, 1);
+
+    gl_FragColor = fragmentColor;
 
 }
 
-)"
+)";

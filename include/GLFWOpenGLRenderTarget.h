@@ -2,9 +2,6 @@
 #define RENDERBOX_OPENGLGLFWRENDERER_H
 
 
-#include "platform.h"
-#if defined(RENDERBOX_OS_MACOS)
-
 #include "OpenGLRenderTarget.h"
 
 #define GLFW_INCLUDE_GLCOREARB
@@ -38,8 +35,6 @@ namespace renderbox {
     };
 
 }
-
-#endif //defined(RENDERBOX_OS_MACOS)
 
 
 #endif //RENDERBOX_OPENGLGLFWRENDERER_H

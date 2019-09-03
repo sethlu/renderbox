@@ -3,26 +3,36 @@
 #include "MeshGeometry.h"
 
 
+static char const * const GLSL_VERT_120 =
+#include "opengl/shaders/120/mesh_lambert_vert.glsl"
+
+static char const * const GLSL_VERT_330 =
+#include "opengl/shaders/330/mesh_lambert_vert.glsl"
+
+static char const * const GLSL_VERT_300ES =
+#include "opengl/shaders/300es/mesh_lambert_vert.glsl"
+
+static char const * const GLSL_FRAG_120 =
+#include "opengl/shaders/120/mesh_lambert_frag.glsl"
+
+static char const * const GLSL_FRAG_330 =
+#include "opengl/shaders/330/mesh_lambert_frag.glsl"
+
+static char const * const GLSL_FRAG_300ES =
+#include "opengl/shaders/300es/mesh_lambert_frag.glsl"
+
+#define _RETURN_SHADER(TYPE, VERSION) return GLSL_ ## TYPE ## _ ## VERSION
+#define RETURN_SHADER(...) _RETURN_SHADER(__VA_ARGS__)
+
+
 namespace renderbox {
 
     char const *MeshLambertMaterial::getOpenGLVertexShaderSource(Geometry *geometry) const {
-        return
-#if defined(RENDERBOX_OS_MACOS)
-#include "opengl/shaders/mesh_lambert_vert.glsl"
-#elif defined(RENDERBOX_OS_IPHONEOS)
-#include "opengl/shaders/es/mesh_lambert_vert.glsl"
-#endif
-                ;
+        RETURN_SHADER(VERT, RENDERBOX_OPENGL_GLSL_VERSION);
     }
 
     char const *MeshLambertMaterial::getOpenGLFragmentShaderSource(Geometry *geometry) const {
-        return
-#if defined(RENDERBOX_OS_MACOS)
-#include "opengl/shaders/mesh_lambert_frag.glsl"
-#elif defined(RENDERBOX_OS_IPHONEOS)
-#include "opengl/shaders/es/mesh_lambert_frag.glsl"
-#endif
-                ;
+        RETURN_SHADER(FRAG, RENDERBOX_OPENGL_GLSL_VERSION);
     }
 
     std::string MeshLambertMaterial::getMetalVertexFunctionName(Geometry *geometry) const {
