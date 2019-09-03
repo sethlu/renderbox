@@ -2,8 +2,6 @@
 
 #include <sstream>
 #include <iostream>
-#include <OpenGLRendererProperties.h>
-
 
 #include "GLSLMaterial.h"
 #include "logging.h"

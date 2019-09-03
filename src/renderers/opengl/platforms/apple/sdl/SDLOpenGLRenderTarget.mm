@@ -2,7 +2,7 @@
 
 #if defined(RENDERBOX_OS_MACOS)
 #import <AppKit/AppKit.h>
-#endif //defined(RENDERBOX_OS_MACOS)
+#endif // defined(RENDERBOX_OS_MACOS)
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
@@ -92,7 +92,7 @@ namespace renderbox {
         // The following is a rough fix to OpenGL drawing resulting in empty screen on macOS Mojave
         // Ref: https://github.com/glfw/glfw/issues/1334
         if (frameCount <= 2) [(__bridge NSOpenGLContext *) context update];
-#endif //defined(RENDERBOX_OS_MACOS)
+#endif // defined(RENDERBOX_OS_MACOS)
     }
 
 }
