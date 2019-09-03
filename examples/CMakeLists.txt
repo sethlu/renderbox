@@ -1,7 +1,7 @@
 
 cmake_minimum_required(VERSION 3.7)
 
-add_subdirectory(voxels)
-add_subdirectory(spectral)
-add_subdirectory(mrbrain)
-add_subdirectory(objloader)
+add_subdirectory(generic/voxels)
+add_subdirectory(generic/spectral)
+add_subdirectory(generic/mrbrain)
+add_subdirectory(generic/objloader)
