@@ -2,13 +2,13 @@
 #define RENDERBOX_CURVEGEOMETRY_H
 
 
-#include "Geometry.h"
+#include "MeshGeometry.h"
 #include "Curve.h"
 
 
 namespace renderbox {
 
-    class CurveGeometry : public Geometry {
+    class CurveGeometry : public MeshGeometry {
     public:
 
         explicit CurveGeometry(std::shared_ptr<Curve> curveDescriptor);

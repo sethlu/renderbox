@@ -27,7 +27,7 @@ float isolevel = 0.5f;
 std::shared_ptr<renderbox::Material> curveMaterial;
 std::shared_ptr<renderbox::CurveGeometry> curveGeometry;
 std::shared_ptr<renderbox::Object> curveObject;
-std::shared_ptr<renderbox::CatmullRomCurve> curve;
+std::shared_ptr<renderbox::CatmullRomSpline> curve;
 
 void init() {
 
@@ -77,7 +77,7 @@ void init() {
     // Curve
 
     curveMaterial = std::make_shared<renderbox::MeshLambertMaterial>();
-    curve = std::make_shared<renderbox::CatmullRomCurve>();
+    curve = std::make_shared<renderbox::CatmullRomSpline>();
     curveGeometry = std::make_shared<renderbox::CurveGeometry>(curve);
     curveGeometry->crossSection = {
             {1, 0},

@@ -4,73 +4,93 @@
 
 namespace renderbox {
 
-    CatmullRomCurve::CatmullRomCurve() = default;
+    vec3 Curve::getPointAtDistance(
+            float distance,
+            float hintLowerBoundT,
+            float hintUpperBoundT,
+            float epsilon,
+            float *t) const {
+        // Binary search for t such that distance(t) is around searchLength
 
-    inline float tj(float ti, vec3 pi, vec3 pj, float alpha) {
-        return pow(glm::distance(pi, pj), alpha) + ti;
-    }
+        float a = hintLowerBoundT;
+        float aDistance = getEstimatedDistance(a);
 
-    vec3 CatmullRomCurve::getPoint(float t) const {
-        LOG_ASSERT(0 <= t && t <= 1) << "t = " << t << std::endl;
+        float b = hintUpperBoundT;
+        float bDistance = getEstimatedDistance(b);
 
-        auto n = points.size();
+        size_t maxIterations = 50;
 
-        LOG_ASSERT(n >= 1);
+        while (maxIterations-- > 0 && bDistance - aDistance > epsilon) {
+            float mid = (a + b) / 2.f;
+            float midDistance = getEstimatedDistance(mid);
 
-        auto numSegments = n - 1;
-        auto tPerSegment = 1.f / numSegments;
-
-        int i = floor(t * (n - 1));
-        t = (t - i * tPerSegment) / tPerSegment;
-
-        vec3 p0 = points[i - 1 >= 0 ? i - 1 : 0];
-        vec3 p1 = points[i];
-        vec3 p2 = points[i + 1];
-        vec3 p3 = points[i + 2 <= n - 1 ? i + 2 : n - 1];
-
-        // Linear interpolation for first & last control points
-
-        if (i == 0 || i == n - 2) {
-            return (1 - t) * p1 + t * p2;
+            if (distance >= midDistance) {
+                a = mid;
+                aDistance = midDistance;
+            } else {
+                b = mid;
+                bDistance = midDistance;
+            }
         }
 
-        // Interpolate uniform Catmull-Rom curve [p0, p1, p2, p3] at t
+        if (maxIterations == 0) {
+            LOG(WARNING) << "Ran out of iterations" << std::endl;
+        }
 
-        auto v1 = p2 - p0;
-        auto v2 = p3 - p1;
-
-        auto t2 = t * t;
-        auto t3 = t2 * t;
-
-        auto c0 = p1;
-        auto c1 = v1;
-        auto c2 = -3.f * p1 + 3.f * p2 - 2.f * v1 - v2;
-        auto c3 = 2.f * p1 - 2.f * p2 + v1 + v2;
-
-        return c3 * t3 + c2 * t2 + c1 * t + c0;
+        // t = a is a good approximate
+        if (t) *t = a;
+        return getPoint(a);
     }
 
-    std::vector<vec3> CatmullRomCurve::getPoints(unsigned divisions) const {
+    std::vector<vec3> Curve::getPointsWithSegments(unsigned int divisions) const {
+        if (empty() || divisions <= 0) return {};
+
         std::vector<vec3> result;
-        if (empty()) return result;
-
-        if (divisions <= 0) {
-            divisions = (points.size() - 1) * 4;
+        for (unsigned int i = 0; i <= divisions; i++) {
+            result.emplace_back(getPoint(static_cast<float>(i) / static_cast<float>(divisions)));
         }
+        return result;
+    }
 
-        for (int i = 0; i <= divisions; i++) {
-            result.emplace_back(getPoint(1.f * i / divisions));
+    std::vector<vec3> Curve::getPointsWithInterval(float interval) const {
+        float estimatedTotalLength = getEstimatedDistance(1.f);
+
+        float searchLength = 0;
+        float epsilon = 0.001;
+
+        std::vector<vec3> result;
+
+        float prevT = 0;
+        while (searchLength < estimatedTotalLength) {
+            // Add point to result list
+            auto point = getPointAtDistance(searchLength, prevT, 1.f, epsilon, &prevT);
+            result.emplace_back(point);
+            // Update to find next location
+            searchLength += interval;
         }
 
         return result;
     }
 
-    vec3 CatmullRomCurve::getTangent(float t) const {
-        return renderbox::vec3();
-    }
+    std::vector<std::pair<vec3, vec3>> Curve::getPointsAndTangentsWithInterval(float interval) const {
+        float estimatedTotalLength = getEstimatedDistance(1.f);
 
-    bool CatmullRomCurve::empty() const {
-        return points.size() <= 1;
+        float searchLength = 0;
+        float epsilon = 0.001f;
+
+        std::vector<std::pair<vec3, vec3>> result;
+
+        float prevT = 0;
+        while (searchLength < estimatedTotalLength) {
+            // Add point to result list
+            auto point = getPointAtDistance(searchLength, prevT, 1.f, epsilon, &prevT);
+            auto tangent = getTangent(prevT);
+            result.emplace_back(std::make_pair(point, tangent));
+            // Update to find next location
+            searchLength += interval;
+        }
+
+        return result;
     }
 
 }
