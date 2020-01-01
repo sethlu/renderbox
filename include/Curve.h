@@ -5,6 +5,7 @@
 #import <vector>
 
 #include "Vector.h"
+#include "Matrix.h"
 
 
 namespace renderbox {
@@ -35,14 +36,16 @@ namespace renderbox {
 
         virtual std::vector<std::pair<vec3, vec3>> getPointsAndTangentsWithInterval(float interval) const;
 
+        virtual std::pair<std::shared_ptr<Curve>, std::shared_ptr<Curve>> split(float t) const = 0;
+
         virtual bool empty() const = 0;
 
     };
 
-    class CubicHermiteSpline : public Curve {
+    class CubicSpline : public Curve {
     public:
 
-        explicit CubicHermiteSpline(vec3 p0, vec3 v0, vec3 p1, vec3 v1);
+        CubicSpline(mat4 m, vec3 p0, vec3 p1, vec3 p2, vec3 p3);
 
         vec3 getPoint(float t) const override;
 
@@ -50,9 +53,42 @@ namespace renderbox {
 
         float getEstimatedDistance(float t) const override;
 
+        std::pair<std::shared_ptr<Curve>, std::shared_ptr<Curve>> split(float t) const override;
+
         bool empty() const override {
             return false;
         }
+
+        mat4 m;
+
+        vec3 p0;
+
+        vec3 p1;
+
+        vec3 p2;
+
+        vec3 p3;
+
+    };
+
+    class CubicHermiteSpline : public Curve {
+    public:
+
+        CubicHermiteSpline(vec3 p0, vec3 v0, vec3 p1, vec3 v1);
+
+        vec3 getPoint(float t) const override;
+
+        vec3 getTangent(float t) const override;
+
+        float getEstimatedDistance(float t) const override;
+
+        std::pair<std::shared_ptr<Curve>, std::shared_ptr<Curve>> split(float t) const override;
+
+        bool empty() const override {
+            return false;
+        }
+
+        CubicSpline toCubicSpline() const;
 
         vec3 p0;
 
@@ -67,7 +103,7 @@ namespace renderbox {
     class CatmullRomSpline : public Curve {
     public:
 
-        explicit CatmullRomSpline();
+        CatmullRomSpline();
 
         vec3 getPoint(float t) const override;
 
@@ -76,6 +112,8 @@ namespace renderbox {
         float getEstimatedDistance(float t) const override;
 
         std::vector<vec3> getPointsWithSegments(unsigned divisions) const override;
+
+        std::pair<std::shared_ptr<Curve>, std::shared_ptr<Curve>> split(float t) const override;
 
         bool empty() const override;
 

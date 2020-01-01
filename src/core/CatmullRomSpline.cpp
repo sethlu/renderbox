@@ -21,8 +21,8 @@ namespace renderbox {
         vec3 p1 = points[segmentIndex];
         vec3 p2 = points[segmentIndex + 1];
         vec3 p3 = points[segmentIndex + 2 <= n - 1 ? segmentIndex + 2 : n - 1];
-        auto v1 = p2 - p0;
-        auto v2 = p3 - p1;
+        auto v1 = (p2 - p0) * 0.5f;
+        auto v2 = (p3 - p1) * 0.5f;
 
         return CubicHermiteSpline(p1, v1, p2, v2).getPoint(segmentT);
     }
@@ -42,8 +42,8 @@ namespace renderbox {
         vec3 p1 = points[segmentIndex];
         vec3 p2 = points[segmentIndex + 1];
         vec3 p3 = points[segmentIndex + 2 <= n - 1 ? segmentIndex + 2 : n - 1];
-        auto v1 = p2 - p0;
-        auto v2 = p3 - p1;
+        auto v1 = (p2 - p0) * 0.5f;
+        auto v2 = (p3 - p1) * 0.5f;
 
         return CubicHermiteSpline(p1, v1, p2, v2).getTangent(segmentT);
     }
@@ -65,8 +65,8 @@ namespace renderbox {
             vec3 p1 = points[i];
             vec3 p2 = points[i + 1];
             vec3 p3 = points[i + 2 <= n - 1 ? i + 2 : n - 1];
-            auto v1 = p2 - p0;
-            auto v2 = p3 - p1;
+            auto v1 = (p2 - p0) * 0.5f;
+            auto v2 = (p3 - p1) * 0.5f;
 
             auto segmentSpline = CubicHermiteSpline(p1, v1, p2, v2);
             float segmentLength = segmentSpline.getEstimatedDistance(i == segmentIndex ? segmentT : 1.f);
@@ -82,6 +82,10 @@ namespace renderbox {
 
     bool CatmullRomSpline::empty() const {
         return points.size() < 2;
+    }
+
+    std::pair<std::shared_ptr<Curve>, std::shared_ptr<Curve>> CatmullRomSpline::split(float t) const {
+        return std::pair<std::shared_ptr<Curve>, std::shared_ptr<Curve>>();
     }
 
 }
