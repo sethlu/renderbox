@@ -93,11 +93,13 @@ namespace renderbox {
         return result;
     }
 
-    std::pair<std::shared_ptr<Curve>, std::shared_ptr<Curve>> split(std::shared_ptr<Curve> const &curve, float t) {
+    std::pair<std::shared_ptr<Curve>, std::shared_ptr<Curve>>
+    Curve::split(std::shared_ptr<Curve> const &curve, float t) {
         if (auto splittableCurve = dynamic_cast<SplittableCurveInterface *>(curve.get())) {
             return splittableCurve->split(t);
         }
         return std::make_pair(std::make_shared<ParameterMappedCurve>(curve, 0, t),
                               std::make_shared<ParameterMappedCurve>(curve, t, 1));
     }
+
 }

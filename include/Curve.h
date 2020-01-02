@@ -38,6 +38,8 @@ namespace renderbox {
 
         virtual bool empty() const = 0;
 
+        static std::pair<std::shared_ptr<Curve>, std::shared_ptr<Curve>> split(std::shared_ptr<Curve> const &curve, float t);
+
     };
 
     class SplittableCurveInterface {
@@ -148,8 +150,6 @@ namespace renderbox {
         float umap;
 
     };
-
-    std::pair<std::shared_ptr<Curve>, std::shared_ptr<Curve>> split(std::shared_ptr<Curve> const &curve, float t);
 
 }
 
