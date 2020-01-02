@@ -15,7 +15,7 @@ namespace renderbox {
         auto tPerSegment = 1.f / numSegments;
 
         int segmentIndex = fmin(numSegments - 1, floor(t * numSegments));
-        float segmentT = (t - segmentIndex * tPerSegment) * numSegments;
+        float segmentT = (t - static_cast<float>(segmentIndex) * tPerSegment) * numSegments;
 
         vec3 p0 = points[segmentIndex - 1 >= 0 ? segmentIndex - 1 : 0];
         vec3 p1 = points[segmentIndex];
@@ -36,7 +36,7 @@ namespace renderbox {
         auto tPerSegment = 1.f / numSegments;
 
         int segmentIndex = fmin(numSegments - 1, floor(t * numSegments));
-        float segmentT = (t - segmentIndex * tPerSegment) * numSegments;
+        float segmentT = (t - static_cast<float>(segmentIndex) * tPerSegment) * numSegments;
 
         vec3 p0 = points[segmentIndex - 1 >= 0 ? segmentIndex - 1 : 0];
         vec3 p1 = points[segmentIndex];
@@ -56,7 +56,7 @@ namespace renderbox {
         auto tPerSegment = 1.f / numSegments;
 
         int segmentIndex = fmin(numSegments - 1, floor(t * numSegments));
-        float segmentT = (t - segmentIndex * tPerSegment) * numSegments;
+        float segmentT = (t - static_cast<float>(segmentIndex) * tPerSegment) * numSegments;
 
         float length = 0;
 
@@ -82,10 +82,6 @@ namespace renderbox {
 
     bool CatmullRomSpline::empty() const {
         return points.size() < 2;
-    }
-
-    std::pair<std::shared_ptr<Curve>, std::shared_ptr<Curve>> CatmullRomSpline::split(float t) const {
-        return std::pair<std::shared_ptr<Curve>, std::shared_ptr<Curve>>();
     }
 
 }
