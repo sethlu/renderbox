@@ -7,8 +7,11 @@
 
 namespace renderbox {
 
+    typedef glm::mat2 mat2;
     typedef glm::mat3 mat3;
     typedef glm::mat4 mat4;
+
+    using glm::inverse;
 
 }
 

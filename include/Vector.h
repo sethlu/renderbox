@@ -20,6 +20,8 @@ namespace renderbox {
     typedef glm::uvec3 uvec3;
     typedef glm::uvec4 uvec4;
 
+    using glm::dot, glm::distance, glm::normalize, glm::length;
+
     inline vec3 dehomogenize(vec4 vector) {
         return vec3(vector) / vector.w;
     };

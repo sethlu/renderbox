@@ -12,9 +12,9 @@
 
 namespace renderbox {
 
-    Ray::Ray(vec3 origin, vec3 direction) {
-        this->origin = origin;
-        this->direction = direction;
+    Ray::Ray(vec3 const &origin, vec3 const &direction)
+        : origin(origin), direction(direction) {
+
     }
 
     vec3 Ray::getOrigin() const {
@@ -25,11 +25,57 @@ namespace renderbox {
         return direction;
     }
 
-    bool Ray::intersectTriangle(vec3 &v0, vec3 &v1, vec3 &v2, vec2 &baryPosition, float &distance) {
+    bool Ray::intersectTriangle(const vec3 &v0, const vec3 &v1, const vec3 &v2, vec2 &baryPosition, float &distance) const {
         return glm::intersectRayTriangle(origin, direction, v0, v1, v2, baryPosition, distance);
     }
 
-    bool Ray::intersectObject(Object *object, std::vector<vec3> &positions) {
+    bool Ray::intersectLine(vec3 const &lineOrigin, vec3 const &lineDirection, float epsilon, float &distance, float &rt, float &lt) const {
+        vec2 ts = inverse(mat2(
+                dot(direction, direction), - dot(lineDirection, direction),
+                - dot(direction, lineDirection), dot(lineDirection, lineDirection))) *
+                   vec2(dot(direction, - origin + lineOrigin),
+                        - dot(lineDirection, - origin + lineOrigin));
+
+        rt = ts[0];
+        lt = ts[1];
+
+        auto pr = origin + rt * direction;
+        auto pl = lineOrigin + lt * lineDirection;
+        distance = renderbox::distance(pl, pr);
+
+        return rt >= 0 && distance <= epsilon;
+    }
+
+    bool Ray::intersectLineSegment(vec3 const &a, vec3 const &b, float epsilon, float &distance, float &rt, float &lt) const {
+        auto ab = b - a;
+        return intersectLine(a, normalize(ab), epsilon, distance, rt, lt) && lt >= 0 && lt <= length(ab);
+    }
+
+    bool Ray::intersectCurve(Curve *curve, float epsilon, std::vector<vec3> &positions, float interval) const {
+        auto const &points = curve->getPointsWithInterval(interval);
+        size_t numPoints = points.size();
+
+        std::vector<float> rts;
+
+        float tempDistance, tempRt, tempLt;
+        for (size_t i = 0; i < numPoints - 1; i++) {
+            if (intersectLineSegment(points[i], points[i + 1], epsilon, tempDistance, tempRt, tempLt)) {
+                rts.emplace_back(tempRt);
+            }
+        }
+
+        positions.clear();
+        if (!rts.empty()) {
+            std::sort(rts.begin(), rts.end());
+            for (float rt : rts) {
+                positions.emplace_back(origin + rt * direction);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    bool Ray::intersectObject(Object *object, std::vector<vec3> &positions) const {
         auto geometry = dynamic_cast<MeshGeometry *>(object->getGeometry().get());
         if (!geometry) return false;
 
