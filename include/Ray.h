@@ -56,12 +56,27 @@ namespace renderbox {
 
         bool intersectObject(Object const *object, std::vector<vec3> &positions) const;
 
+        /**
+         * A special version of `intersectObject` that deals with curve geometry.
+         * Rather than testing intersections with the mesh faces, this method relies on distances to the curve
+         * descriptor that defines the geometry.
+         *
+         * Note: It's more efficient to use this method to repetitively test intersections with curves than
+         * `intersectCurve` because the rasterized points are cached in the curve geometry.
+         *
+         * @param object Object for testing intersection, expected to have a curve geometry
+         * @param epsilon Allowed error distance for intersection
+         * @param position Closest point on the object's curve descriptor in world coordinates
+         * @param t Parameter for the closest point on the ray
+         * @return If the ray intersects the object
+         */
+        bool intersectObjectWithCurveGeometry(const Object *object, float epsilon, vec3 &position, float &t) const;
+
     protected:
 
         vec3 origin;
 
         vec3 direction;
-
     };
 
     Ray operator*(const mat4 &matrix, const Ray &ray);

@@ -8,6 +8,7 @@
 #include <glm/gtx/intersect.hpp>
 
 #include "MeshGeometry.h"
+#include "CurveGeometry.h"
 
 
 namespace renderbox {
@@ -76,8 +77,8 @@ namespace renderbox {
     }
 
     bool Ray::intersectObject(Object const *object, std::vector<vec3> &positions) const {
-        auto geometry = dynamic_cast<MeshGeometry *>(object->getGeometry().get());
-        if (!geometry) return false;
+        auto meshGeometry = dynamic_cast<MeshGeometry *>(object->getGeometry().get());
+        if (!meshGeometry) return false;
 
         // Calculate ray in object coordinates
 
@@ -86,12 +87,10 @@ namespace renderbox {
 
         // Object geometry
 
-        int count = 0;
+        auto &vertices = meshGeometry->vertices;
+        auto &faces = meshGeometry->faces;
 
-        auto &vertices = geometry->vertices;
-        auto &faces = geometry->faces;
-
-        std::vector<float> distances;
+        std::vector<float> rayDistances;
 
         positions.clear();
         for (uvec3 face : faces) {
@@ -103,21 +102,59 @@ namespace renderbox {
                     vertices[face[2]],
                     intersectionBaryPosition,
                     intersectionDistance)) {
-                distances.push_back(intersectionDistance);
-                ++count;
+                rayDistances.emplace_back(intersectionDistance);
             }
         }
 
-        if (count > 0) {
+        if (!rayDistances.empty()) {
             // Sort all distances
-            std::sort(distances.begin(), distances.end());
-            for (float distance : distances) {
+            std::sort(rayDistances.begin(), rayDistances.end());
+            for (float distance : rayDistances) {
                 positions.emplace_back(dehomogenize(objectWorldMatrix * vec4(objectCoordRay.origin + objectCoordRay.direction * distance, 1)));
             }
             return true;
         }
         return false;
 
+    }
+
+    template<typename A, typename B>
+    static bool compFirstAsc(std::pair<A, B> const &a, std::pair<A, B> const &b) {
+        return a.first < b.first;
+    }
+
+    bool Ray::intersectObjectWithCurveGeometry(const Object *object, float epsilon, vec3 &position, float &t) const {
+        auto curveGeometry = dynamic_cast<CurveGeometry *>(object->getGeometry().get());
+        if (!curveGeometry) return false;
+
+        // Calculate ray in object coordinates
+
+        mat4 objectWorldMatrix = object->getWorldMatrix();
+        Ray objectCoordRay = glm::inverse(objectWorldMatrix) * *this;
+
+        // Object geometry
+
+        auto const &cachedPointsAndTangents = curveGeometry->cachedPointsAndTangents;
+        size_t numPoints = cachedPointsAndTangents.size();
+
+        std::vector<std::pair<float, vec3>> ts;
+
+        float tempDistance, tempRt, tempLt;
+        for (size_t i = 0; i < numPoints - 1; i++) {
+            auto const &a = cachedPointsAndTangents[i].first;
+            auto const &b = cachedPointsAndTangents[i + 1].first;
+            if (intersectLineSegment(a, b, epsilon, tempDistance, tempRt, tempLt)) {
+                ts.emplace_back(std::make_pair(tempRt, a + normalize(b - a) * tempLt));
+            }
+        }
+
+        if (!ts.empty()) {
+            std::sort(ts.begin(), ts.end(), compFirstAsc<float, vec3>);
+            t = ts[0].first;
+            position = ts[0].second;
+            return true;
+        }
+        return false;
     }
 
     Ray operator*(const mat4 &matrix, const Ray &ray) {

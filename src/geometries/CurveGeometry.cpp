@@ -23,13 +23,13 @@ namespace renderbox {
             return;
         }
 
-        const auto &pointsAndTangents = curveDescriptor->getPointsAndTangentsWithInterval(4.f);
+        cachedPointsAndTangents = curveDescriptor->getPointsAndTangentsWithInterval(4.f);
 
-        for (int i = 0; i < pointsAndTangents.size(); i++) {
+        for (int i = 0; i < cachedPointsAndTangents.size(); i++) {
 
             vec3 up(0, 0, 1);
-            vec3 point = pointsAndTangents[i].first;
-            vec3 tangent = glm::normalize(pointsAndTangents[i].second);
+            vec3 point = cachedPointsAndTangents[i].first;
+            vec3 tangent = glm::normalize(cachedPointsAndTangents[i].second);
 
             mat4 mat(vec4(glm::cross(up, -tangent), 0),
                      vec4(up, 0),

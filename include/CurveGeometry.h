@@ -9,6 +9,9 @@
 namespace renderbox {
 
     class CurveGeometry : public MeshGeometry {
+
+        friend class Ray;
+
     public:
 
         explicit CurveGeometry(std::shared_ptr<Curve> curveDescriptor);
@@ -18,6 +21,10 @@ namespace renderbox {
         std::vector<vec2> crossSection;
 
         void updateGeometry();
+
+    protected:
+
+        std::vector<std::pair<vec3, vec3>> cachedPointsAndTangents;
 
     };
 
