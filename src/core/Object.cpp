@@ -63,7 +63,7 @@ namespace renderbox {
         return !!geometry;
     }
 
-    std::shared_ptr<Geometry> Object::getGeometry() {
+    std::shared_ptr<Geometry> Object::getGeometry() const {
         return geometry;
     }
 
@@ -76,7 +76,7 @@ namespace renderbox {
         return !!material;
     }
 
-    std::shared_ptr<Material> Object::getMaterial() {
+    std::shared_ptr<Material> Object::getMaterial() const {
         return material;
     }
 

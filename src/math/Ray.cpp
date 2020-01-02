@@ -51,7 +51,7 @@ namespace renderbox {
         return intersectLine(a, normalize(ab), epsilon, distance, rt, lt) && lt >= 0 && lt <= length(ab);
     }
 
-    bool Ray::intersectCurve(Curve *curve, float epsilon, std::vector<vec3> &positions, float interval) const {
+    bool Ray::intersectCurve(Curve const *curve, float epsilon, std::vector<vec3> &positions, float interval) const {
         auto const &points = curve->getPointsWithInterval(interval);
         size_t numPoints = points.size();
 
@@ -75,7 +75,7 @@ namespace renderbox {
         return false;
     }
 
-    bool Ray::intersectObject(Object *object, std::vector<vec3> &positions) const {
+    bool Ray::intersectObject(Object const *object, std::vector<vec3> &positions) const {
         auto geometry = dynamic_cast<MeshGeometry *>(object->getGeometry().get());
         if (!geometry) return false;
 

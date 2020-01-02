@@ -52,9 +52,9 @@ namespace renderbox {
          * @param interval Resolution for curve rasterization
          * @return If the ray intersects the curve
          */
-        bool intersectCurve(Curve *curve, float epsilon, std::vector<vec3> &positions, float interval) const;
+        bool intersectCurve(Curve const *curve, float epsilon, std::vector<vec3> &positions, float interval) const;
 
-        bool intersectObject(Object *object, std::vector<vec3> &positions) const;
+        bool intersectObject(Object const *object, std::vector<vec3> &positions) const;
 
     protected:
 

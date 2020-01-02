@@ -74,7 +74,7 @@ namespace renderbox {
 
         bool hasGeometry();
 
-        std::shared_ptr<Geometry> getGeometry();
+        std::shared_ptr<Geometry> getGeometry() const;
 
         void setGeometry(std::shared_ptr<Geometry> const &geometry);
 
@@ -82,7 +82,7 @@ namespace renderbox {
 
         bool hasMaterial();
 
-        std::shared_ptr<Material> getMaterial();
+        std::shared_ptr<Material> getMaterial() const;
 
         void setMaterial(std::shared_ptr<Material> const &material);
 
