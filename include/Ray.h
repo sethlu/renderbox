@@ -22,34 +22,41 @@ namespace renderbox {
 
         bool intersectTriangle(const vec3 &v0, const vec3 &v1, const vec3 &v2, vec2 &baryPosition, float &distance) const;
 
+        bool intersectSphere(vec3 const &center, float radius, float &distance) const;
+
+        bool intersectPoint(vec3 const &position, float epsilon, float &errorDistance, float &rt) const;
+
         /**
          * @param lineOrigin Origin of the line for testing intersection
          * @param lineDirection Direction of the line for testing intersection (normalized)
          * @param epsilon Allowed error distance for intersection
-         * @param distance Closest distance between the ray (as a line) and the line
+         * @param errorDistance Closest distance between the ray (as a line) and the line
          * @param rt Parameter for closest point on the ray
          * @param lt Parameter for closest point on the line
          * @return If the ray intersects the line
          */
-        bool intersectLine(vec3 const &lineOrigin, vec3 const &lineDirection, float epsilon, float &distance, float &rt, float &lt) const;
+        bool intersectLine(vec3 const &lineOrigin, vec3 const &lineDirection, float epsilon, float &errorDistance,
+                           float &rt, float &lt) const;
 
         /**
          * @param a A point for the line segment
          * @param b Another point for the line segment
          * @param epsilon Allowed error distance for intersection
-         * @param distance Closest distance between the ray (as a line) and the line segment
+         * @param errorDistance Closest distance between the ray (as a line) and the line segment
          * @param rt Parameter for closest point on the ray
          * @param lt Parameter for closest point on the line segment
+         * @param capsule Whether the line segment should be considered to have rounded ends
          * @return If the ray intersects the line segment
          */
-        bool intersectLineSegment(vec3 const &a, vec3 const &b, float epsilon, float &distance, float &rt, float &lt) const;
+        bool intersectLineSegment(vec3 const &a, vec3 const &b, float epsilon, float &errorDistance,
+                                  float &rt, float &lt, bool capsule = true) const;
 
         /**
          * Rasterizes curve into mini line segments and tests intersection in each
          *
          * @param curve Curve for testing intersections
          * @param epsilon Allowed error distance for intersection
-         * @param positions To which vector to store all intersecting positions (sorted by distance to ray origin)
+         * @param positions To which vector to store all intersecting positions (sorted by error distance)
          * @param interval Resolution for curve rasterization
          * @return If the ray intersects the curve
          */
