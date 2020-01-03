@@ -92,7 +92,6 @@ namespace renderbox {
 
         std::vector<float> rayDistances;
 
-        positions.clear();
         for (uvec3 face : faces) {
             vec2 intersectionBaryPosition;
 			float intersectionDistance;
@@ -106,6 +105,7 @@ namespace renderbox {
             }
         }
 
+        positions.clear();
         if (!rayDistances.empty()) {
             // Sort all distances
             std::sort(rayDistances.begin(), rayDistances.end());
@@ -123,7 +123,7 @@ namespace renderbox {
         return a.first < b.first;
     }
 
-    bool Ray::intersectObjectWithCurveGeometry(const Object *object, float epsilon, vec3 &position, float &t) const {
+    bool Ray::intersectObjectWithCurveGeometry(const Object *object, float epsilon, vec3 &closestPosition) const {
         auto curveGeometry = dynamic_cast<CurveGeometry *>(object->getGeometry().get());
         if (!curveGeometry) return false;
 
@@ -150,8 +150,7 @@ namespace renderbox {
 
         if (!ts.empty()) {
             std::sort(ts.begin(), ts.end(), compFirstAsc<float, vec3>);
-            t = ts[0].first;
-            position = ts[0].second;
+            closestPosition = ts[0].second;
             return true;
         }
         return false;

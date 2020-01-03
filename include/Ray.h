@@ -48,7 +48,7 @@ namespace renderbox {
          *
          * @param curve Curve for testing intersections
          * @param epsilon Allowed error distance for intersection
-         * @param positions To which vector to store all intersecting positions (sorted)
+         * @param positions To which vector to store all intersecting positions (sorted by distance to ray origin)
          * @param interval Resolution for curve rasterization
          * @return If the ray intersects the curve
          */
@@ -66,11 +66,11 @@ namespace renderbox {
          *
          * @param object Object for testing intersection, expected to have a curve geometry
          * @param epsilon Allowed error distance for intersection
-         * @param position Closest point on the object's curve descriptor in world coordinates
+         * @param closestPosition Closest point on the object's curve descriptor rasterized in world coordinates
          * @param t Parameter for the closest point on the ray
          * @return If the ray intersects the object
          */
-        bool intersectObjectWithCurveGeometry(const Object *object, float epsilon, vec3 &position, float &t) const;
+        bool intersectObjectWithCurveGeometry(const Object *object, float epsilon, vec3 &closestPosition) const;
 
     protected:
 
