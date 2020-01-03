@@ -5,6 +5,7 @@
 #include "Object.h"
 #include "Curve.h"
 
+
 namespace renderbox {
 
     class Ray {
@@ -77,6 +78,7 @@ namespace renderbox {
         vec3 origin;
 
         vec3 direction;
+
     };
 
     Ray operator*(const mat4 &matrix, const Ray &ray);
