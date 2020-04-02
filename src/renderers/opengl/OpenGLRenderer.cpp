@@ -16,6 +16,7 @@ namespace renderbox {
         // Prepass scene
 
         OpenGLRenderList renderList;
+        std::vector<Object *> tempRenderObjects;
 
         std::queue<Object *> frontier;
         frontier.push(static_cast<Object *>(scene));
@@ -30,7 +31,7 @@ namespace renderbox {
             // Do not add objects without geometry or material
             if (object->hasGeometry() && object->hasMaterial() &&
                 object->getMaterial()->supportsGeometry(object->getGeometry())) {
-                renderList.addObject(object->getMaterial().get(), object);
+                tempRenderObjects.emplace_back(object);
             }
 
             if (object->isLight()) {
@@ -44,12 +45,16 @@ namespace renderbox {
 
         // Observe state changes
 
-        bool invalidatePrograms = false;
-
         properties.numPointLights = static_cast<unsigned>(renderList.pointLights.size());
         if (properties.numPointLights != properties.lastNumPointLights) {
             properties.lastNumPointLights = properties.numPointLights;
-            invalidatePrograms = true;
+        }
+
+        // Refresh programs
+
+        for (auto const &object : tempRenderObjects) {
+            auto program = properties.getProgram(object->getMaterial().get(), object->getGeometry().get());
+            renderList.addObject(program, object);
         }
 
         // Prepare
@@ -73,7 +78,7 @@ namespace renderbox {
         for (const auto &it : renderList.objects) {
 
             // Use program
-            OpenGLProgram *program = properties.getProgram(it.first, invalidatePrograms);
+            OpenGLProgram const *program = it.first;
             program->useProgram();
 
             if (!program->pointLights.empty() && properties.numPointLights) {
@@ -196,11 +201,8 @@ namespace renderbox {
 
                         vertexArray->setElementBuffer(geometryProperties->getBuffer(3));
 
-                        goto UpdateVertexArray;
-
-                    } else if (invalidatePrograms) {
-
-                        UpdateVertexArray:
+                        // TODO: Double check this part
+                        // The program may be updated but the underlying geometry doesn't change
 
                         auto buffer0(geometryProperties->getBuffer(0));
                         if (buffer0->size) {

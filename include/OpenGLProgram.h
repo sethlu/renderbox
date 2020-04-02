@@ -44,7 +44,7 @@ namespace renderbox {
             glUseProgram(programId);
         }
 
-        inline void useProgram() {
+        inline void useProgram() const {
             useProgram(programId);
         }
 

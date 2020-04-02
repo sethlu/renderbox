@@ -22,19 +22,19 @@ namespace renderbox {
         glBindVertexArray(0);
     }
 
-    void OpenGLVertexArray::enableAttribute(OpenGLProgram *program, const char *name) {
+    void OpenGLVertexArray::enableAttribute(OpenGLProgram const *program, const char *name) {
         bindVertexArray();
         glEnableVertexAttribArray((GLuint) program->getAttributeLocation(name));
         unbindVertexArray();
     }
 
-    void OpenGLVertexArray::disableAttribute(OpenGLProgram *program, const char *name) {
+    void OpenGLVertexArray::disableAttribute(OpenGLProgram const *program, const char *name) {
         bindVertexArray();
         glDisableVertexAttribArray((GLuint) program->getAttributeLocation(name));
         unbindVertexArray();
     }
 
-    void OpenGLVertexArray::setAttributeBuffer(OpenGLProgram *program, const char *name, OpenGLBuffer *buffer,
+    void OpenGLVertexArray::setAttributeBuffer(OpenGLProgram const *program, const char *name, OpenGLBuffer *buffer,
                                                GLint size, GLenum type, GLsizei stride, const GLvoid *pointer) {
         setAttributeBuffer((GLuint) program->getAttributeLocation(name),
                            buffer, size, type, stride, pointer);

@@ -29,7 +29,9 @@ namespace renderbox {
 
         virtual ~Material() = default;
 
-        int getMaterialId();
+        inline int getMaterialId() const {
+            return materialId;
+        }
 
         virtual unsigned int getMaterialType() const = 0;
 
@@ -106,9 +108,13 @@ namespace renderbox {
     class OpenGLMaterial {
     public:
 
-        virtual char const *getOpenGLVertexShaderSource(Geometry *geometry) const = 0;
+        virtual std::string getOpenGLVertexShaderTag(Geometry const *geometry) const = 0;
 
-        virtual char const *getOpenGLFragmentShaderSource(Geometry *geometry) const = 0;
+        virtual char const *getOpenGLVertexShaderSource(Geometry const *geometry) const = 0;
+
+        virtual std::string getOpenGLFragmentShaderTag(Geometry const *geometry) const = 0;
+
+        virtual char const *getOpenGLFragmentShaderSource(Geometry const *geometry) const = 0;
 
     };
 

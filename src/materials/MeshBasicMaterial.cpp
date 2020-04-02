@@ -27,11 +27,19 @@ static char const * const GLSL_FRAG_300ES =
 
 namespace renderbox {
 
-    char const *MeshBasicMaterial::getOpenGLVertexShaderSource(Geometry *geometry) const {
+    std::string MeshBasicMaterial::getOpenGLVertexShaderTag(Geometry const *geometry) const {
+        return "basic";
+    }
+
+    char const *MeshBasicMaterial::getOpenGLVertexShaderSource(Geometry const *geometry) const {
         RETURN_SHADER(VERT, RENDERBOX_OPENGL_GLSL_VERSION);
     }
 
-    char const *MeshBasicMaterial::getOpenGLFragmentShaderSource(Geometry *geometry) const {
+    std::string MeshBasicMaterial::getOpenGLFragmentShaderTag(Geometry const *geometry) const {
+        return "basic";
+    }
+
+    char const *MeshBasicMaterial::getOpenGLFragmentShaderSource(Geometry const *geometry) const {
         RETURN_SHADER(FRAG, RENDERBOX_OPENGL_GLSL_VERSION);
     }
 

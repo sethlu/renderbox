@@ -24,9 +24,13 @@ namespace renderbox {
             return MESH_MATERIAL | AMBIENT_MATERIAL | DIFFUSE_MATERIAL;
         };
 
-        char const *getOpenGLVertexShaderSource(Geometry *geometry) const override;
+        std::string getOpenGLVertexShaderTag(Geometry const *geometry) const override;
 
-        char const *getOpenGLFragmentShaderSource(Geometry *geometry) const override;
+        char const *getOpenGLVertexShaderSource(Geometry const *geometry) const override;
+
+        std::string getOpenGLFragmentShaderTag(Geometry const *geometry) const override;
+
+        char const *getOpenGLFragmentShaderSource(Geometry const *geometry) const override;
 
         std::string getMetalVertexFunctionName(Geometry *geometry) const override;
 

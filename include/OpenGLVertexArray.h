@@ -23,9 +23,9 @@ namespace renderbox {
 
         static void unbindVertexArray();
 
-        void enableAttribute(OpenGLProgram *program, const char *name);
+        void enableAttribute(OpenGLProgram const *program, const char *name);
 
-        void disableAttribute(OpenGLProgram *program, const char *name);
+        void disableAttribute(OpenGLProgram const *program, const char *name);
 
         void setAttributeBuffer(GLuint index,
                                 OpenGLBuffer *buffer,
@@ -34,7 +34,7 @@ namespace renderbox {
                                 GLsizei stride = 0,
                                 const GLvoid *pointer = (GLvoid *) 0);
 
-        void setAttributeBuffer(OpenGLProgram *program,
+        void setAttributeBuffer(OpenGLProgram const *program,
                                 const char *name,
                                 OpenGLBuffer *buffer,
                                 GLint size = 3,
