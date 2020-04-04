@@ -12,6 +12,14 @@ namespace std {
         }
     };
 
+    template<typename T1, typename T2>
+    struct hash<std::pair<T1, T2>> {
+    public:
+        size_t operator()(std::pair<T1, T2> const &x) const {
+            return x.first + x.second;
+        }
+    };
+
 }
 
 #endif //RENDERBOX_STD_H

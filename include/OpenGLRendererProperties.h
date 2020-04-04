@@ -37,16 +37,16 @@ namespace renderbox {
 
     private:
 
-        static std::unordered_map<std::pair<Material const *, Geometry const *>, ObjectOpenGLProgram>
+        static std::unordered_map<std::pair<Material::id_type , Geometry::id_type>, ObjectOpenGLProgram>
                 _objectOpenGLPrograms;
 
         static std::unordered_map<std::string, std::shared_ptr<OpenGLProgram>> _cachedOpenGLPrograms;
 
-        std::unordered_map<int, std::unique_ptr<OpenGLObjectProperties>> objectProperties;
+        std::unordered_map<Object::id_type, std::unique_ptr<OpenGLObjectProperties>> objectProperties;
 
-        std::unordered_map<Geometry const *, std::unique_ptr<OpenGLGeometryProperties>> geometryProperties;
+        std::unordered_map<Geometry::id_type, std::unique_ptr<OpenGLGeometryProperties>> geometryProperties;
 
-        std::unordered_map<Material const *, std::unique_ptr<OpenGLMaterialProperties>> materialProperties;
+        std::unordered_map<Material::id_type, std::unique_ptr<OpenGLMaterialProperties>> materialProperties;
 
     };
 

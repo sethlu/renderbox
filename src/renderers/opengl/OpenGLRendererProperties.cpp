@@ -9,7 +9,7 @@
 
 namespace renderbox {
 
-    std::unordered_map<std::pair<Material const *, Geometry const *>, ObjectOpenGLProgram>
+    std::unordered_map<std::pair<Material::id_type , Geometry::id_type>, ObjectOpenGLProgram>
             OpenGLRendererProperties::_objectOpenGLPrograms;
 
     std::unordered_map<std::string, std::shared_ptr<OpenGLProgram>>
@@ -17,7 +17,7 @@ namespace renderbox {
 
     OpenGLObjectProperties *OpenGLRendererProperties::getObjectProperties(Object const *object, bool *blankProperties) {
 
-        int objectId = object->getObjectId();
+        auto objectId = object->getObjectId();
 
         auto result = objectProperties.find(objectId);
         if (result != objectProperties.end()) {
@@ -36,14 +36,16 @@ namespace renderbox {
     OpenGLGeometryProperties *
     OpenGLRendererProperties::getGeometryProperties(Geometry const *geometry, bool *blankProperties) {
 
-        auto result = geometryProperties.find(geometry);
+        auto geometryId = geometry->getGeometryId();
+
+        auto result = geometryProperties.find(geometryId);
         if (result != geometryProperties.end()) {
             if (blankProperties) *blankProperties = false;
             return result->second.get();
         }
 
         auto *properties = new OpenGLGeometryProperties();
-        geometryProperties.insert(std::make_pair(geometry, std::unique_ptr<OpenGLGeometryProperties>(properties)));
+        geometryProperties.insert(std::make_pair(geometryId, std::unique_ptr<OpenGLGeometryProperties>(properties)));
 
         if (blankProperties) *blankProperties = true;
         return properties;
@@ -53,14 +55,16 @@ namespace renderbox {
     OpenGLMaterialProperties *
     OpenGLRendererProperties::getMaterialProperties(Material const *material, bool *blankProperties) {
 
-        auto result = materialProperties.find(material);
+        auto materialId = material->getMaterialId();
+
+        auto result = materialProperties.find(materialId);
         if (result != materialProperties.end()) {
             if (blankProperties) *blankProperties = false;
             return result->second.get();
         }
 
         auto *properties = new OpenGLMaterialProperties();
-        materialProperties.insert(std::make_pair(material, std::unique_ptr<OpenGLMaterialProperties>(properties)));
+        materialProperties.insert(std::make_pair(materialId, std::unique_ptr<OpenGLMaterialProperties>(properties)));
 
         if (blankProperties) *blankProperties = true;
         return properties;
@@ -87,7 +91,7 @@ namespace renderbox {
             exit(EXIT_FAILURE);
         }
 
-        auto const &materialGeometryPair = std::make_pair(material, geometry);
+        auto const &materialGeometryPair = std::make_pair(material->getMaterialId(), geometry->getGeometryId());
 
         // There's one ObjectOpenGLProgram per object
         // It caches the pointer to the OpenGLProgram,

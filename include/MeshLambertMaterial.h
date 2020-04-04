@@ -32,9 +32,9 @@ namespace renderbox {
 
         char const *getOpenGLFragmentShaderSource(Geometry const *geometry) const override;
 
-        std::string getMetalVertexFunctionName(Geometry *geometry) const override;
+        std::string getMetalVertexFunctionName(Geometry const *geometry) const override;
 
-        std::string getMetalFragmentFunctionName(Geometry *geometry) const override;
+        std::string getMetalFragmentFunctionName(Geometry const *geometry) const override;
 
     };
 

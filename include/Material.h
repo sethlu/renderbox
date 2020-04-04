@@ -123,9 +123,9 @@ namespace renderbox {
     class MetalMaterial {
     public:
 
-        virtual std::string getMetalVertexFunctionName(Geometry *geometry) const = 0;
+        virtual std::string getMetalVertexFunctionName(Geometry const *geometry) const = 0;
 
-        virtual std::string getMetalFragmentFunctionName(Geometry *geometry) const = 0;
+        virtual std::string getMetalFragmentFunctionName(Geometry const *geometry) const = 0;
 
     };
 
