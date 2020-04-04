@@ -3,6 +3,6 @@
 
 namespace renderbox {
 
-    int Material::count = 0;
+    unsigned int Material::count = 0;
 
 }

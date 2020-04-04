@@ -3,14 +3,12 @@
 
 namespace renderbox {
 
-    void OpenGLRenderList::addObject(OpenGLProgram const *program, Object *object) {
+    void OpenGLRenderList::addObject(OpenGLProgram const *program, Object const *object) {
         auto result = objects.find(program);
         if (result != objects.end()) {
             result->second.insert(result->second.end(), object);
         } else {
-            std::vector<Object *> objectList;
-            objectList.insert(objectList.end(), object);
-            objects.insert(std::make_pair(program, objectList));
+            objects.insert(std::make_pair(program, std::vector<Object const *>{object}));
         }
     }
 

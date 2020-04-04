@@ -12,7 +12,19 @@ namespace renderbox {
     class Geometry : public VersionTrackedObject {
     public:
 
+        typedef unsigned int id_type;
+
         virtual ~Geometry() = default;
+
+        inline id_type getGeometryId() const {
+            return geometryId;
+        }
+
+    protected:
+
+        static unsigned int count;
+
+        id_type geometryId = ++count;
 
     };
 

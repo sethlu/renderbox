@@ -27,9 +27,11 @@ namespace renderbox {
     class Material : public VersionTrackedObject {
     public:
 
+        typedef unsigned int id_type;
+
         virtual ~Material() = default;
 
-        inline int getMaterialId() const {
+        inline id_type getMaterialId() const {
             return materialId;
         }
 
@@ -57,9 +59,9 @@ namespace renderbox {
 
     protected:
 
-        static int count;
+        static unsigned int count;
 
-        int materialId = ++count;
+        id_type materialId = ++count;
 
     };
 

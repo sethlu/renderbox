@@ -15,6 +15,24 @@ namespace renderbox {
     std::unordered_map<std::string, std::shared_ptr<OpenGLProgram>>
             OpenGLRendererProperties::_cachedOpenGLPrograms;
 
+    OpenGLObjectProperties *OpenGLRendererProperties::getObjectProperties(Object const *object, bool *blankProperties) {
+
+        int objectId = object->getObjectId();
+
+        auto result = objectProperties.find(objectId);
+        if (result != objectProperties.end()) {
+            if (blankProperties) *blankProperties = false;
+            return result->second.get();
+        }
+
+        auto *properties = new OpenGLObjectProperties();
+        objectProperties.insert(std::make_pair(objectId, std::unique_ptr<OpenGLObjectProperties>(properties)));
+
+        if (blankProperties) *blankProperties = true;
+        return properties;
+
+    }
+
     OpenGLGeometryProperties *
     OpenGLRendererProperties::getGeometryProperties(Geometry const *geometry, bool *blankProperties) {
 
@@ -85,10 +103,10 @@ namespace renderbox {
                     objectOpenGLProgram->numPointLights == numPointLights) {
                     return result->second.program;
                 } else {
-                    LOG(VERBOSE) << "getProgram: OBJECT MISS (invalidated)" << std::endl;
+                    LOG(VERBOSE) << "getProgram: LOCAL MISS (invalidated)" << std::endl;
                 }
             } else {
-                LOG(VERBOSE) << "getProgram: OBJECT MISS (cold)" << std::endl;
+                LOG(VERBOSE) << "getProgram: LOCAL MISS (cold)" << std::endl;
             }
         }
 
