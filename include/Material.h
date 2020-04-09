@@ -27,9 +27,13 @@ namespace renderbox {
     class Material : public VersionTrackedObject {
     public:
 
+        typedef unsigned int id_type;
+
         virtual ~Material() = default;
 
-        int getMaterialId();
+        inline id_type getMaterialId() const {
+            return materialId;
+        }
 
         virtual unsigned int getMaterialType() const = 0;
 
@@ -55,9 +59,9 @@ namespace renderbox {
 
     protected:
 
-        static int count;
+        static unsigned int count;
 
-        int materialId = ++count;
+        id_type materialId = ++count;
 
     };
 
@@ -106,18 +110,22 @@ namespace renderbox {
     class OpenGLMaterial {
     public:
 
-        virtual char const *getOpenGLVertexShaderSource(Geometry *geometry) const = 0;
+        virtual std::string getOpenGLVertexShaderTag(Geometry const *geometry) const = 0;
 
-        virtual char const *getOpenGLFragmentShaderSource(Geometry *geometry) const = 0;
+        virtual char const *getOpenGLVertexShaderSource(Geometry const *geometry) const = 0;
+
+        virtual std::string getOpenGLFragmentShaderTag(Geometry const *geometry) const = 0;
+
+        virtual char const *getOpenGLFragmentShaderSource(Geometry const *geometry) const = 0;
 
     };
 
     class MetalMaterial {
     public:
 
-        virtual std::string getMetalVertexFunctionName(Geometry *geometry) const = 0;
+        virtual std::string getMetalVertexFunctionName(Geometry const *geometry) const = 0;
 
-        virtual std::string getMetalFragmentFunctionName(Geometry *geometry) const = 0;
+        virtual std::string getMetalFragmentFunctionName(Geometry const *geometry) const = 0;
 
     };
 

@@ -16,6 +16,7 @@ namespace renderbox {
         // Prepass scene
 
         OpenGLRenderList renderList;
+        std::vector<Object *> tempRenderObjects;
 
         std::queue<Object *> frontier;
         frontier.push(static_cast<Object *>(scene));
@@ -30,7 +31,7 @@ namespace renderbox {
             // Do not add objects without geometry or material
             if (object->hasGeometry() && object->hasMaterial() &&
                 object->getMaterial()->supportsGeometry(object->getGeometry())) {
-                renderList.addObject(object->getMaterial().get(), object);
+                tempRenderObjects.emplace_back(object);
             }
 
             if (object->isLight()) {
@@ -44,12 +45,13 @@ namespace renderbox {
 
         // Observe state changes
 
-        bool invalidatePrograms = false;
-
         properties.numPointLights = static_cast<unsigned>(renderList.pointLights.size());
-        if (properties.numPointLights != properties.lastNumPointLights) {
-            properties.lastNumPointLights = properties.numPointLights;
-            invalidatePrograms = true;
+
+        // Refresh programs
+
+        for (auto const &object : tempRenderObjects) {
+            auto program = properties.getProgram(object->getMaterial().get(), object->getGeometry().get());
+            renderList.addObject(program, object);
         }
 
         // Prepare
@@ -73,7 +75,7 @@ namespace renderbox {
         for (const auto &it : renderList.objects) {
 
             // Use program
-            OpenGLProgram *program = properties.getProgram(it.first, invalidatePrograms);
+            OpenGLProgram const *program = it.first;
             program->useProgram();
 
             if (!program->pointLights.empty() && properties.numPointLights) {
@@ -96,16 +98,26 @@ namespace renderbox {
                             properties.numPointLights);
             }
 
-            for (Object *object : it.second) {
+            for (auto object : it.second) {
 
                 auto const &geometry = object->getGeometry();
                 auto const &material = object->getMaterial();
 
+                // The object properties class tracks which program most recently drew the geometry
+                bool blankObjectProperties;
+                auto objectProperties = properties.getObjectProperties(object, &blankObjectProperties);
+
+                // The geometry properties class manages the buffers and vertex arrays
                 bool blankGeometryProperties;
                 auto geometryProperties = properties.getGeometryProperties(geometry.get(), &blankGeometryProperties);
 
+                // The material properties class manages the texture buffers
                 bool blankMaterialProperties;
                 auto materialProperties = properties.getMaterialProperties(material.get(), &blankMaterialProperties);
+
+                //
+                // Update matrices for the object
+                //
 
                 // World projection matrix
                 mat4 worldProjectionMatrix = viewProjectionMatrix * object->getWorldMatrix();
@@ -141,6 +153,13 @@ namespace renderbox {
                                        glm::value_ptr(worldProjectionMatrix));
                 }
 
+                //
+                // Update textures for the material
+                //
+                // Currently, this is a bit redundant because the checks are performed per object.
+                // We may batch process the textures earlier.
+                //
+
                 OpenGLTexture *ambientMap(nullptr);
                 if (material->isAmbientMaterial()) {
                     bool blankTexture;
@@ -175,12 +194,19 @@ namespace renderbox {
                     glUniform1i(program->materialDiffuseMap, 1);
                 }
 
+                //
+                // Draw the geometry
+                //
+
                 if (auto meshGeometry = dynamic_cast<MeshGeometry *>(geometry.get())) {
 
                     OpenGLVertexArray *vertexArray = geometryProperties->getVertexArray(0);
 
-                    if (blankGeometryProperties || geometryProperties->geometryVersion != meshGeometry->getVersion()) {
-                        geometryProperties->geometryVersion = meshGeometry->getVersion();
+                    // Update buffers if geometry is updated
+                    if (blankGeometryProperties ||
+                        geometryProperties->geometryVersion != geometry->getVersion()) {
+
+                        geometryProperties->geometryVersion = geometry->getVersion();
 
                         geometryProperties->getBuffer(0)->buffer(meshGeometry->vertices);
 
@@ -196,11 +222,17 @@ namespace renderbox {
 
                         vertexArray->setElementBuffer(geometryProperties->getBuffer(3));
 
-                        goto UpdateVertexArray;
+                    }
 
-                    } else if (invalidatePrograms) {
+                    // Update vertex array if program/geometry is updated
+                    if (blankObjectProperties ||
+                        objectProperties->openglProgramId != program->getProgramId() ||
+                        objectProperties->geometryId != geometry->getGeometryId() ||
+                        objectProperties->geometryVersion != geometry->getVersion()) {
 
-                        UpdateVertexArray:
+                        objectProperties->openglProgramId = program->getProgramId();
+                        objectProperties->geometryId = geometry->getGeometryId();
+                        objectProperties->geometryVersion = geometry->getVersion();
 
                         auto buffer0(geometryProperties->getBuffer(0));
                         if (buffer0->size) {

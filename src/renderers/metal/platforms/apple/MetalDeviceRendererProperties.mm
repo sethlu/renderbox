@@ -115,7 +115,7 @@ namespace renderbox {
             exit(EXIT_FAILURE);
         };
 
-        auto const &materialGeometryPair = std::make_pair(material, geometry);
+        auto const &materialGeometryPair = std::make_pair(material->getMaterialId(), geometry->getGeometryId());
 
         ObjectMetalRenderPipelineState *objectMetalRenderPipelineState = nullptr;
 

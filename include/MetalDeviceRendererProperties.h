@@ -4,24 +4,11 @@
 
 #import <Metal/Metal.h>
 
+#include "std.h"
 #include "MetalObjectProperties.h"
 #include "MetalRenderPipelineState.h"
 #include "Object.h"
 #include "VersionTrackedObject.h"
-
-
-namespace std {
-
-    template<typename T1, typename T2>
-    struct hash<std::pair<T1 *, T2 *>> {
-    public:
-        size_t operator()(std::pair<T1 *, T2 *> const &x) const {
-            size_t h = reinterpret_cast<size_t>(x.first) + reinterpret_cast<size_t>(x.second);
-            return h;
-        }
-    };
-
-}
 
 
 namespace renderbox {
@@ -58,9 +45,11 @@ namespace renderbox {
 
         std::unordered_map<int, std::unique_ptr<MetalObjectProperties>> _objectProperties;
 
-        std::unordered_map<std::string, std::shared_ptr<MetalRenderPipelineState>> _cachedRenderPipelineStates;
+        std::unordered_map<std::string, std::shared_ptr<MetalRenderPipelineState>>
+                _cachedRenderPipelineStates;
 
-        std::unordered_map<std::pair<Material *, Geometry *>, ObjectMetalRenderPipelineState> _renderPipelineStates;
+        std::unordered_map<std::pair<Material::id_type, Geometry::id_type>, ObjectMetalRenderPipelineState>
+                _renderPipelineStates;
 
         id <MTLLibrary> getDefaultMetalLibrary();
 

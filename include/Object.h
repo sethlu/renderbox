@@ -23,13 +23,17 @@ namespace renderbox {
     class Object : public VersionTrackedObject {
     public:
 
+        typedef unsigned int id_type;
+
         typedef vec3 translation_type;
 
         explicit Object(std::shared_ptr<Geometry> geometry = nullptr, std::shared_ptr<Material> material = nullptr);
 
         virtual ~Object();
 
-        int getObjectId() const;
+        id_type getObjectId() const {
+            return objectId;
+        }
 
         virtual OBJECT_TYPE getObjectType() const {
             return GROUP_OBJECT;
@@ -74,7 +78,7 @@ namespace renderbox {
 
         bool hasGeometry();
 
-        std::shared_ptr<Geometry> getGeometry();
+        std::shared_ptr<Geometry> getGeometry() const;
 
         void setGeometry(std::shared_ptr<Geometry> const &geometry);
 
@@ -82,7 +86,7 @@ namespace renderbox {
 
         bool hasMaterial();
 
-        std::shared_ptr<Material> getMaterial();
+        std::shared_ptr<Material> getMaterial() const;
 
         void setMaterial(std::shared_ptr<Material> const &material);
 
@@ -138,12 +142,12 @@ namespace renderbox {
          * @var Global object count
          * @static
          */
-        static int count;
+        static unsigned int count;
 
         /**
          * @var Global unique object ID
          */
-        int objectId = ++count;
+        id_type objectId = ++count;
 
         // Object transformation
 

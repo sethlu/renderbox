@@ -63,9 +63,10 @@ namespace renderbox {
                 // Do not add objects without geometry or material
                 if (object->hasGeometry() && object->hasMaterial() &&
                     object->getMaterial()->supportsGeometry(object->getGeometry())) {
-                    renderList.addObject(deviceRendererProperties->getRenderPipelineState(object->getMaterial().get(),
-                                                                                          object->getGeometry().get()),
-                                         object);
+                    auto program = deviceRendererProperties->getRenderPipelineState(
+                            object->getMaterial().get(),
+                            object->getGeometry().get());
+                    renderList.addObject(program, object);
                 }
 
                 if (object->isLight()) {

@@ -13,9 +13,9 @@ namespace renderbox {
 
     struct OpenGLRenderList {
 
-        std::unordered_map<Material *, std::vector<Object *>> objects;
+        std::unordered_map<OpenGLProgram const *, std::vector<Object const *>> objects;
 
-        void addObject(Material *material, Object *object);
+        void addObject(OpenGLProgram const *program, Object const *object);
 
         std::vector<PointLight *> pointLights;
 

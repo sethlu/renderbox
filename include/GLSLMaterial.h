@@ -13,9 +13,13 @@ namespace renderbox {
 
         GLSLMaterial(const std::string &vertexShaderSource, const std::string &fragmentShaderSource);
 
-        char const *getOpenGLVertexShaderSource(Geometry *geometry) const override;
+        std::string getOpenGLVertexShaderTag(Geometry const *geometry) const override;
 
-        char const *getOpenGLFragmentShaderSource(Geometry *geometry) const override;
+        char const *getOpenGLVertexShaderSource(Geometry const *geometry) const override;
+
+        std::string getOpenGLFragmentShaderTag(Geometry const *geometry) const override;
+
+        char const *getOpenGLFragmentShaderSource(Geometry const *geometry) const override;
 
         unsigned int getMaterialType() const override {
             return MESH_MATERIAL;

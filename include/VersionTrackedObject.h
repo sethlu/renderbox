@@ -13,7 +13,7 @@ namespace renderbox {
             version_++;
         }
 
-        version_type getVersion() {
+        version_type getVersion() const {
             return version_;
         }
 

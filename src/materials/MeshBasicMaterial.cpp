@@ -27,16 +27,24 @@ static char const * const GLSL_FRAG_300ES =
 
 namespace renderbox {
 
-    char const *MeshBasicMaterial::getOpenGLVertexShaderSource(Geometry *geometry) const {
+    std::string MeshBasicMaterial::getOpenGLVertexShaderTag(Geometry const *geometry) const {
+        return "basic";
+    }
+
+    char const *MeshBasicMaterial::getOpenGLVertexShaderSource(Geometry const *geometry) const {
         RETURN_SHADER(VERT, RENDERBOX_OPENGL_GLSL_VERSION);
     }
 
-    char const *MeshBasicMaterial::getOpenGLFragmentShaderSource(Geometry *geometry) const {
+    std::string MeshBasicMaterial::getOpenGLFragmentShaderTag(Geometry const *geometry) const {
+        return "basic";
+    }
+
+    char const *MeshBasicMaterial::getOpenGLFragmentShaderSource(Geometry const *geometry) const {
         RETURN_SHADER(FRAG, RENDERBOX_OPENGL_GLSL_VERSION);
     }
 
-    std::string MeshBasicMaterial::getMetalVertexFunctionName(Geometry *geometry) const {
-        auto const &meshGeometry = dynamic_cast<MeshGeometry *>(geometry);
+    std::string MeshBasicMaterial::getMetalVertexFunctionName(Geometry const *geometry) const {
+        auto const &meshGeometry = dynamic_cast<MeshGeometry const *>(geometry);
 
         std::string vertexFunctionName = "mesh_basic_vert";
 
@@ -54,7 +62,7 @@ namespace renderbox {
 
     }
 
-    std::string MeshBasicMaterial::getMetalFragmentFunctionName(Geometry *geometry) const {
+    std::string MeshBasicMaterial::getMetalFragmentFunctionName(Geometry const *geometry) const {
 
         std::string fragmentFunctionName = "mesh_basic_frag";
 

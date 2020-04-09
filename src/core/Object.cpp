@@ -11,7 +11,7 @@
 
 namespace renderbox {
 
-    int Object::count = 0;
+    unsigned int Object::count = 0;
 
     Object::Object(std::shared_ptr<Geometry> geometry, std::shared_ptr<Material> material)
             : geometry(std::move(geometry)), material(std::move(material)) {
@@ -23,10 +23,6 @@ namespace renderbox {
         for (const auto &child : children) {
             child->parent = nullptr;
         }
-    }
-
-    int Object::getObjectId() const {
-        return objectId;
     }
 
     std::shared_ptr<Object> Object::clone() {
@@ -63,7 +59,7 @@ namespace renderbox {
         return !!geometry;
     }
 
-    std::shared_ptr<Geometry> Object::getGeometry() {
+    std::shared_ptr<Geometry> Object::getGeometry() const {
         return geometry;
     }
 
@@ -76,7 +72,7 @@ namespace renderbox {
         return !!material;
     }
 
-    std::shared_ptr<Material> Object::getMaterial() {
+    std::shared_ptr<Material> Object::getMaterial() const {
         return material;
     }
 
