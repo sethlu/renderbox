@@ -22,8 +22,6 @@ float cameraVelocity[] = {0.0f, 0.0f}; // Relative to the camera forward directi
 
 float lastTime = (float) glfwGetTime();
 
-float isolevel = 0.5f;
-
 void init() {
 
     std::random_device dev;

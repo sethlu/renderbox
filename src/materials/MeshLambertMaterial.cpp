@@ -43,8 +43,8 @@ namespace renderbox {
         RETURN_SHADER(FRAG, RENDERBOX_OPENGL_GLSL_VERSION);
     }
 
-    std::string MeshLambertMaterial::getMetalVertexFunctionName(Geometry *geometry) const {
-        auto const &meshGeometry = dynamic_cast<MeshGeometry *>(geometry);
+    std::string MeshLambertMaterial::getMetalVertexFunctionName(Geometry const *geometry) const {
+        auto const &meshGeometry = dynamic_cast<MeshGeometry const *>(geometry);
 
         std::string vertexFunctionName = "mesh_lambert_vert";
 
@@ -62,7 +62,7 @@ namespace renderbox {
 
     }
 
-    std::string MeshLambertMaterial::getMetalFragmentFunctionName(Geometry *geometry) const {
+    std::string MeshLambertMaterial::getMetalFragmentFunctionName(Geometry const *geometry) const {
 
         std::string fragmentFunctionName = "mesh_lambert_frag";
 

@@ -48,7 +48,7 @@ namespace renderbox {
         std::unordered_map<std::string, std::shared_ptr<MetalRenderPipelineState>>
                 _cachedRenderPipelineStates;
 
-        std::unordered_map<std::pair<Material *, Geometry *>, ObjectMetalRenderPipelineState>
+        std::unordered_map<std::pair<Material::id_type, Geometry::id_type>, ObjectMetalRenderPipelineState>
                 _renderPipelineStates;
 
         id <MTLLibrary> getDefaultMetalLibrary();
