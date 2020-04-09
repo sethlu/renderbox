@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 file(GLOB_RECURSE SOURCE_FILES src/*.cpp)
 
-add_executable(voxels ${SOURCE_FILES})
-target_link_libraries(voxels renderbox)
+add_executable(example-voxels ${SOURCE_FILES})
+target_link_libraries(example-voxels renderbox)
 
-install(TARGETS voxels DESTINATION bin)
+install(TARGETS example-voxels DESTINATION bin)

@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 file(GLOB_RECURSE SOURCE_FILES src/*.cpp)
 
-add_executable(objloader ${SOURCE_FILES})
-target_link_libraries(objloader renderbox)
+add_executable(example-objloader ${SOURCE_FILES})
+target_link_libraries(example-objloader renderbox)
 
-install(TARGETS objloader DESTINATION bin)
+install(TARGETS example-objloader DESTINATION bin)

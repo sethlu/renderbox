@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 file(GLOB_RECURSE SOURCE_FILES src/*.cpp)
 
-add_executable(mrbrain ${SOURCE_FILES})
-target_link_libraries(mrbrain renderbox)
+add_executable(example-mrbrain ${SOURCE_FILES})
+target_link_libraries(example-mrbrain renderbox)
 
-install(TARGETS mrbrain DESTINATION bin)
+install(TARGETS example-mrbrain DESTINATION bin)

@@ -7,5 +7,7 @@ set(CMAKE_CXX_STANDARD 11)
 
 file(GLOB_RECURSE SOURCE_FILES src/*.cpp)
 
-add_executable(spectral ${SOURCE_FILES})
-target_link_libraries(spectral renderbox)
+add_executable(example-spectral ${SOURCE_FILES})
+target_link_libraries(example-spectral renderbox)
+
+install(TARGETS example-spectral DESTINATION bin)
