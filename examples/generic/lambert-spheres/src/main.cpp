@@ -33,14 +33,15 @@ void init() {
     scene = std::make_shared<renderbox::Scene>();
     scene->setAmbientColor(glm::vec3(0.05f));
 
-    // Boxes
-    auto boxGeometry = std::make_shared<renderbox::SphereGeometry>(dis1(gen) / 2);
+    // Spheres
+    auto sphereGeometry = std::make_shared<renderbox::SphereGeometry>();
     for (int i = 0; i < 1000; i++) {
-        auto boxMaterial = std::make_shared<renderbox::MeshBasicMaterial>(
+        auto material = std::make_shared<renderbox::MeshBasicMaterial>(
                 renderbox::vec3(dis1(gen), dis1(gen), dis1(gen)));
-        auto box = std::make_shared<renderbox::Object>(boxGeometry, boxMaterial);
-        box->setTranslation({dis20(gen), dis20(gen), dis20(gen)});
-        scene->addChild(box);
+        auto sphere = std::make_shared<renderbox::Object>(sphereGeometry, material);
+        sphere->setTranslation({dis20(gen), dis20(gen), dis20(gen)});
+        sphere->setScale(renderbox::vec3(dis1(gen) / 2));
+        scene->addChild(sphere);
     }
 
     // Camera
